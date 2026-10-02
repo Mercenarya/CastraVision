@@ -1,0 +1,12 @@
+.git
+.venv
+.uv-cache
+.tmp
+tmp
+**/__pycache__
+**/*.pyc
+CastraView/node_modules
+CastraView/dist
+.env
+db.sqlite3
+

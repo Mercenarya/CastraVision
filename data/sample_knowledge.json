@@ -1,0 +1,24 @@
+[
+  {
+    "source": "meta",
+    "external_id": "meta-sme-awareness",
+    "title": "Meta awareness baseline",
+    "content": "Meta phù hợp để mở rộng nhận biết và retarget nhóm khách hàng đã tương tác. Với SME, nên bắt đầu bằng thông điệp lợi ích rõ ràng, hai biến thể creative và theo dõi CTR, CPA theo từng nhóm đối tượng.",
+    "metadata": {"channel": "Meta", "language": "vi"}
+  },
+  {
+    "source": "google_ads",
+    "external_id": "google-high-intent",
+    "title": "Google Ads high-intent baseline",
+    "content": "Google Search phù hợp với nhu cầu đã hình thành. Nhóm từ khóa theo ý định, liên kết quảng cáo với landing page sát thông điệp và loại trừ truy vấn không liên quan để kiểm soát CPA.",
+    "metadata": {"channel": "Google Ads", "language": "vi"}
+  },
+  {
+    "source": "tiktok",
+    "external_id": "tiktok-creative-test",
+    "title": "TikTok creative testing baseline",
+    "content": "TikTok phù hợp với nội dung video ngắn và nhóm khách hàng trẻ. Ba giây đầu cần nêu vấn đề hoặc lợi ích, sau đó thử nghiệm nhiều hook và đo tỷ lệ xem hết cùng CPA.",
+    "metadata": {"channel": "TikTok", "language": "vi"}
+  }
+]
+

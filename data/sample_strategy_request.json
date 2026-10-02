@@ -1,0 +1,21 @@
+{
+  "business_name": "Castra Coffee",
+  "industry": "F&B",
+  "business_size": "Small",
+  "product_service": "Cà phê rang xay giao tận nơi",
+  "target_audience": "Nhân viên văn phòng 22-35 tuổi tại TP.HCM",
+  "campaign_goal": "Tăng đơn hàng trực tuyến",
+  "budget": 30000000,
+  "currency": "VND",
+  "preferred_channels": ["Meta", "TikTok"],
+  "historical_data": [
+    {
+      "channel": "Meta",
+      "period": "2026-Q3",
+      "ctr": 1.8,
+      "cpa": 85000,
+      "roas": 2.4,
+      "notes": "Creative video ngắn hoạt động tốt hơn ảnh tĩnh."
+    }
+  ]
+}
