@@ -16,3 +16,4 @@ htmlcov/
 CastraView/node_modules/
 CastraView/.vite/
 CastraView/dist/
+/supabase/.temp/
