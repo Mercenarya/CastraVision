@@ -1,10 +1,12 @@
 import json
 
+from django.contrib.auth import authenticate, get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from .models import KnowledgeChunk
+from .models import BusinessAccount, KnowledgeChunk
 from .rag import ingest_document, search_knowledge
 
 VALID_PROFILE = {
@@ -206,3 +208,52 @@ class SprintOneAccountFlowTests(TestCase):
             {"file": SimpleUploadedFile("bad.csv", bad, content_type="text/csv")},
         )
         self.assertEqual(invalid.json()["error_count"], 1)
+
+    def test_sandbox_sync_returns_report_and_persists_import(self):
+        self.client.post(
+            reverse("castra_services:register"),
+            data=json.dumps(
+                {
+                    "email": "sandbox@example.com",
+                    "password": "A-strong-passphrase-2026",
+                }
+            ),
+            content_type="application/json",
+        )
+
+        response = self.client.post(
+            reverse("castra_services:campaign-import-sandbox")
+        )
+
+        self.assertEqual(response.status_code, 201)
+        payload = response.json()
+        self.assertEqual(payload["source"], "sandbox")
+        self.assertEqual(payload["success_count"], 9)
+        self.assertEqual(payload["failed_count"], 0)
+        self.assertEqual(len(payload["preview"]), 5)
+        history = self.client.get(
+            reverse("castra_services:campaign-imports")
+        ).json()
+        self.assertEqual(history["imports"][0]["filename"], payload["filename"])
+        self.assertEqual(history["imports"][0]["row_count"], 9)
+
+
+class SeedDemoUsersCommandTests(TestCase):
+    def test_command_is_repeatable_and_creates_login_ready_profiles(self):
+        password = "Demo-command-password-2026!"
+
+        call_command("seed_demo_users", password=password)
+        call_command("seed_demo_users", password=password)
+
+        User = get_user_model()
+        self.assertEqual(
+            User.objects.filter(username__endswith="@demo.castravision.vn").count(),
+            3,
+        )
+        self.assertEqual(BusinessAccount.objects.count(), 3)
+        self.assertIsNotNone(
+            authenticate(
+                username="owner@demo.castravision.vn",
+                password=password,
+            )
+        )

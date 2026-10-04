@@ -78,26 +78,39 @@ function Overview({ profile, imports, strategy, setPage }) { return <><Heading e
 function ImportScreen({ imports, onImported, notify }) {
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
+  const [report, setReport] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const input = useRef(null)
   async function stage(selected) {
     if (!selected) return
-    setFile(selected); setPreview(null); setError(''); setBusy(true)
+    setFile(selected); setPreview(null); setReport(null); setError(''); setBusy(true)
     try { const body = new FormData(); body.append('file', selected); setPreview(await api('campaign-imports/upload/', { method: 'POST', body })) }
     catch (cause) { setError(cause.message) }
     finally { setBusy(false) }
   }
   async function commit() {
     setBusy(true); setError('')
-    try { const body = new FormData(); body.append('file', file); body.append('mode', 'commit'); const data = await api('campaign-imports/upload/', { method: 'POST', body }); await onImported(); notify(`${data.row_count} dòng dữ liệu đã được nhập.`); setFile(null); setPreview(null); if (input.current) input.current.value = '' }
+    try { const body = new FormData(); body.append('file', file); body.append('mode', 'commit'); const data = await api('campaign-imports/upload/', { method: 'POST', body }); await onImported(); setReport(data); notify(`${data.success_count} dòng dữ liệu đã được nhập.`); setFile(null); setPreview(null); if (input.current) input.current.value = '' }
     catch (cause) { setError(cause.message) }
     finally { setBusy(false) }
   }
+  async function syncSandbox() {
+    setBusy(true); setError(''); setFile(null); setPreview(null); setReport(null)
+    if (input.current) input.current.value = ''
+    try {
+      const data = await api('campaign-imports/sandbox/', { method: 'POST' })
+      setReport(data)
+      setPreview({ row_count: data.row_count, error_count: data.failed_count, errors: data.errors, preview: data.preview })
+      await onImported()
+      notify(`Đã đồng bộ ${data.success_count} dòng từ Sandbox.`)
+    } catch (cause) { setError(cause.message) }
+    finally { setBusy(false) }
+  }
   function downloadSample() { const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500000,320,18000,25,3900000\nGoogle Ads,2026-09,1000000,240,12000,18,2800000\n'; const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' })); link.download = 'castravision_sample.csv'; link.click(); URL.revokeObjectURL(link.href) }
-  return <><Heading eyebrow="DATA INGESTION HUB" title="Nhập dữ liệu chiến dịch" subtitle="Tải lên dữ liệu hiệu suất để làm giàu chiến lược marketing." /><div className={`upload-zone card ${file ? 'has-file' : ''}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); stage(e.dataTransfer.files[0]) }}><div className="upload-icon">⇧</div><h2>Kéo thả tệp vào đây</h2><p>hoặc chọn tệp từ thiết bị</p><span className="upload-separator">OR</span><button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>⇧ Chọn tệp CSV / Excel</button><input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} /><small>Tối đa 5 MB · CSV UTF-8 hoặc XLSX</small><button type="button" className="inline-link" onClick={downloadSample}>↓ Tải CSV mẫu</button></div>
+  return <><Heading eyebrow="DATA INGESTION HUB" title="Nhập dữ liệu chiến dịch" subtitle="Tải lên dữ liệu hiệu suất hoặc đồng bộ bộ dữ liệu mẫu để làm giàu chiến lược marketing." /><div className={`upload-zone card ${file ? 'has-file' : ''}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); stage(e.dataTransfer.files[0]) }}><div className="upload-icon">⇧</div><h2>Kéo thả tệp vào đây</h2><p>hoặc chọn một nguồn dữ liệu bên dưới</p><span className="upload-separator">NGUỒN DỮ LIỆU</span><div className="upload-actions"><button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>⇧ Chọn tệp CSV / Excel</button><button className="button subtle sandbox-button" type="button" onClick={syncSandbox} disabled={busy}>↻ Đồng bộ từ Sandbox</button></div><input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} /><small>Tối đa 5 MB · CSV UTF-8 hoặc XLSX</small><button type="button" className="inline-link" onClick={downloadSample}>↓ Tải CSV mẫu</button></div>
     {file && <div className="file-card card"><div className="file-success">✓</div><div className="file-info"><span className="mini-label">TỆP ĐÃ CHỌN · {(file.size / 1024 / 1024).toFixed(2)} MB</span><strong>{file.name}</strong><small>{busy ? 'Đang kiểm tra…' : preview ? `${preview.row_count} dòng hợp lệ · ${preview.error_count} dòng lỗi` : 'Chưa xác thực'}</small></div><div className="file-actions"><button className="button coral" type="button" onClick={() => { setFile(null); setPreview(null); setError('') }}>Gỡ bỏ</button><button className="button primary" type="button" disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0} onClick={commit}>Nhập dữ liệu →</button></div></div>}
-    {error && <Notice>{error}</Notice>}{preview?.errors?.length > 0 && <div className="card validation-card"><h3>Cần sửa {preview.error_count} dòng trước khi nhập</h3>{preview.errors.map((item) => <p key={item.row}>Dòng {item.row}: {item.message}</p>)}</div>}{preview?.preview?.length > 0 && <div className="card preview-card"><h3>Xem trước dữ liệu chuẩn hóa</h3><div className="table-wrap"><table><thead><tr>{['Kênh', 'Kỳ', 'Chi phí', 'Clicks', 'Hiển thị', 'Chuyển đổi', 'Doanh thu'].map((value) => <th key={value}>{value}</th>)}</tr></thead><tbody>{preview.preview.map((row, index) => <tr key={index}><td>{row.channel}</td><td>{row.period}</td><td>{row.spend.toLocaleString('vi-VN')}</td><td>{row.clicks}</td><td>{row.impressions}</td><td>{row.conversions}</td><td>{row.revenue.toLocaleString('vi-VN')}</td></tr>)}</tbody></table></div></div>}
+    {error && <Notice>{error}</Notice>}{report && <section className="card import-report" role="status" aria-live="polite"><div className="report-heading"><div><span className="mini-label">BÁO CÁO NHẬP DỮ LIỆU</span><h3>{report.source === 'sandbox' ? 'Đồng bộ Sandbox hoàn tất' : 'Nhập tệp hoàn tất'}</h3></div><span className="report-badge">✓ Thành công</span></div><div className="report-stats"><div className="report-stat success"><strong>{report.success_count}</strong><span>Dòng thành công</span></div><div className="report-stat failure"><strong>{report.failed_count}</strong><span>Dòng thất bại</span></div></div><div className="report-meta"><span>Nguồn: <b>{report.source === 'sandbox' ? 'Sandbox' : report.filename}</b></span><span>Mã lần nhập: <b>#{report.import_id}</b></span></div></section>}{preview?.errors?.length > 0 && <div className="card validation-card"><h3>Cần sửa {preview.error_count} dòng trước khi nhập</h3>{preview.errors.map((item) => <p key={item.row}>Dòng {item.row}: {item.message}</p>)}</div>}{preview?.preview?.length > 0 && <div className="card preview-card"><h3>Xem trước dữ liệu chuẩn hóa</h3><div className="table-wrap"><table><thead><tr>{['Kênh', 'Kỳ', 'Chi phí', 'Clicks', 'Hiển thị', 'Chuyển đổi', 'Doanh thu'].map((value) => <th key={value}>{value}</th>)}</tr></thead><tbody>{preview.preview.map((row, index) => <tr key={index}><td>{row.channel}</td><td>{row.period}</td><td>{row.spend.toLocaleString('vi-VN')}</td><td>{row.clicks}</td><td>{row.impressions}</td><td>{row.conversions}</td><td>{row.revenue.toLocaleString('vi-VN')}</td></tr>)}</tbody></table></div></div>}
     <div className="benefit-grid"><div className="card"><b>▣</b><strong>Định dạng chuẩn</strong><p>Tự ánh xạ cột chi phí, lượt nhấp, hiển thị và chuyển đổi.</p></div><div className="card"><b>♢</b><strong>Kiểm tra tự động</strong><p>Phát hiện cột thiếu, số âm và dòng không hợp lệ trước khi lưu.</p></div><div className="card"><b>ϟ</b><strong>Dùng cho phân tích</strong><p>Chỉ số từ tệp đã nhập được đưa vào yêu cầu tạo chiến lược.</p></div></div>{imports.length > 0 && <div className="card import-history"><h3>Lần nhập gần đây</h3>{imports.map((item) => <div key={item.id}><span>{item.filename}</span><small>{item.row_count} dòng · {new Date(item.created_at).toLocaleDateString('vi-VN')}</small></div>)}</div>}</>
 }
 
@@ -120,18 +133,59 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
 function ContentScreen({ result, profile, setPage, notify }) {
   const [channels, setChannels] = useState(CHANNELS)
   const [tone, setTone] = useState('Năng động & táo bạo')
-  const [version, setVersion] = useState(0)
+  const [versions, setVersions] = useState({ Meta: 0, 'Google Ads': 0, TikTok: 0 })
   const [edits, setEdits] = useState({})
   const [editing, setEditing] = useState(null)
   const message = result?.strategy.message || ''
   const drafts = {
-    Meta: { title: `${profile.business_name} — Khám phá điều khác biệt`, body: version % 2 ? `Một lựa chọn mới cho bạn. ${message}` : `${message} Khám phá ngay và tìm cảm hứng cho hành trình tiếp theo.`, cta: 'Tìm hiểu thêm' },
-    'Google Ads': { title: `${profile.business_name} | ${profile.industry} phù hợp với bạn`, body: `${profile.product_service || profile.business_name}. Xem giải pháp cho ${profile.target_customers}.`, cta: 'Truy cập website' },
-    TikTok: { title: `Hook 0–3s · ${profile.business_name}`, body: version % 2 ? `Mở đầu bằng câu hỏi của ${profile.target_customers}. Chuyển cảnh nhanh sang giải pháp: ${profile.product_service || profile.business_name}.` : `Bắt đầu bằng tình huống gần gũi với ${profile.target_customers}. Giới thiệu lợi ích chính và kết bằng lời mời tìm hiểu thêm.`, cta: 'Xem ngay' },
+    Meta: { title: versions.Meta % 2 ? `${profile.business_name} — Ưu đãi dành riêng cho bạn` : `${profile.business_name} — Khám phá điều khác biệt`, body: versions.Meta % 2 ? `Một lựa chọn mới cho bạn. ${message}` : `${message} Khám phá ngay và tìm cảm hứng cho hành trình tiếp theo.`, cta: versions.Meta % 2 ? 'Khám phá ngay' : 'Tìm hiểu thêm' },
+    'Google Ads': { title: versions['Google Ads'] % 2 ? `${profile.business_name} | Giải pháp đáng tin cậy` : `${profile.business_name} | ${profile.industry} phù hợp với bạn`, body: versions['Google Ads'] % 2 ? `${message} Tìm hiểu lựa chọn phù hợp với nhu cầu của bạn.` : `${profile.product_service || profile.business_name}. Xem giải pháp cho ${profile.target_customers}.`, cta: versions['Google Ads'] % 2 ? 'Xem giải pháp' : 'Truy cập website' },
+    TikTok: { title: versions.TikTok % 2 ? `Bạn đã biết điều này về ${profile.business_name}?` : `Hook 0–3s · ${profile.business_name}`, body: versions.TikTok % 2 ? `Mở đầu bằng câu hỏi của ${profile.target_customers}. Chuyển cảnh nhanh sang giải pháp: ${profile.product_service || profile.business_name}.` : `Bắt đầu bằng tình huống gần gũi với ${profile.target_customers}. Giới thiệu lợi ích chính và kết bằng lời mời tìm hiểu thêm.`, cta: versions.TikTok % 2 ? 'Thử ngay hôm nay' : 'Xem ngay' },
   }
   const toggle = (channel) => setChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel])
+  const effective = (channel) => ({ ...drafts[channel], ...(edits[channel] || {}) })
+  const updateField = (channel, field, value) => setEdits((current) => ({ ...current, [channel]: { ...effective(channel), ...current[channel], [field]: value } }))
+  const regenerate = (channel) => {
+    setVersions((current) => ({ ...current, [channel]: current[channel] + 1 }))
+    setEdits((current) => { const next = { ...current }; delete next[channel]; return next })
+    setEditing(null)
+    notify(`Đã tạo lại nội dung cho kênh ${channel}.`)
+  }
+  const regenerateAll = () => {
+    setVersions((current) => Object.fromEntries(CHANNELS.map((channel) => [channel, current[channel] + 1])))
+    setEdits({}); setEditing(null); notify('Đã làm mới bản nháp nội dung.')
+  }
   async function copy(value) { try { await navigator.clipboard.writeText(value); notify('Đã sao chép nội dung.') } catch { notify('Không thể sao chép trên trình duyệt này.') } }
-  return <><Heading eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO" title="Tạo nội dung" subtitle="Phác thảo nội dung đa kênh từ chiến lược vừa tạo." /><div className="content-notice"><span>ⓘ</span><p>Đây là bản nháp nội dung theo mẫu, chưa phải hệ thống sinh nội dung AI chuyên biệt. Hãy biên tập và kiểm tra trước khi đăng.</p></div>{!result ? <div className="card content-empty"><span>✦</span><h2>Hãy tạo chiến lược trước</h2><p>Content Studio sử dụng phân khúc và thông điệp từ đề xuất chiến lược của bạn.</p><button className="button primary" onClick={() => setPage('strategy')}>Đến màn hình chiến lược →</button></div> : <><div className="content-steps">{['Chiến lược', 'Kênh', 'Đối tượng', 'Tạo nháp', 'Rà soát'].map((step, index) => <div key={step}><b>{index + 1}</b>{step}</div>)}</div><div className="card content-controls"><div><span className="mini-label">CHIẾN LƯỢC</span><strong>{profile.business_name}</strong></div><div className="control-channels"><span className="mini-label">KÊNH MỤC TIÊU</span><div>{CHANNELS.map((channel) => <button type="button" key={channel} onClick={() => toggle(channel)} className={channels.includes(channel) ? 'selected' : ''}>{channel} {channels.includes(channel) && '✓'}</button>)}</div></div><div><span className="mini-label">KHÁCH HÀNG</span><strong>{result.strategy.segment}</strong></div><label>GIỌNG ĐIỆU<select value={tone} onChange={(e) => setTone(e.target.value)}><option>Năng động & táo bạo</option><option>Thân thiện & gần gũi</option><option>Chuyên nghiệp & rõ ràng</option></select></label><div className="content-control-actions"><button className="button coral" onClick={() => { setChannels(CHANNELS); setTone('Năng động & táo bạo'); setEdits({}) }}>↻ Đặt lại</button><button className="button primary" onClick={() => { setVersion(version + 1); setEdits({}); notify('Đã làm mới bản nháp nội dung.') }}>✦ Tạo bản nháp</button></div></div><div className="content-results-heading"><h2>Bản nháp theo kênh <span>{channels.length} kênh</span></h2><small>Giọng điệu: {tone}</small></div><div className="content-grid">{channels.map((channel) => { const item = drafts[channel]; const value = edits[channel] ?? item.body; return <div className="card content-card" key={channel}><div className="content-card-top"><span>{channel === 'Meta' ? 'Facebook Feed' : channel === 'Google Ads' ? 'Google Search Ads' : 'TikTok / Reels'}</span><small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small></div><span className="mini-label">TIÊU ĐỀ / HOOK</span><h3>{item.title}</h3><span className="mini-label">NỘI DUNG CHÍNH</span>{editing === channel ? <textarea value={value} onChange={(e) => setEdits({ ...edits, [channel]: e.target.value })} rows={7} /> : <p>{value}</p>}<div className="content-preview"><span>{channel === 'TikTok' ? '0s Hook · 8s Lợi ích · 15s CTA' : item.cta}</span><strong>{channel === 'Google Ads' ? '✓ Thông điệp nhất quán' : '✦ Bản nháp sẵn để rà soát'}</strong></div><div className="content-card-actions"><button className="button subtle" onClick={() => setEditing(editing === channel ? null : channel)}>{editing === channel ? '✓ Xong' : '✎ Sửa'}</button><button className="button subtle" onClick={() => copy(`${item.title}\n\n${value}\n\n${item.cta}`)}>⧉ Sao chép</button></div></div> })}</div><div className="content-bottom card"><strong>{channels.length} / 3 kênh được chọn</strong><span>Rà soát nội dung và tuân thủ chính sách quảng cáo trước khi xuất bản.</span></div></>}</>
+  return <>
+    <Heading eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO" title="Tạo nội dung" subtitle="Phác thảo nội dung đa kênh từ chiến lược vừa tạo." />
+    <div className="content-notice"><span>ⓘ</span><p>Đây là bản nháp nội dung theo mẫu. Hãy biên tập và kiểm tra trước khi đăng.</p></div>
+    {!result ? <div className="card content-empty"><span>✦</span><h2>Hãy tạo chiến lược trước</h2><p>Content Studio sử dụng phân khúc và thông điệp từ đề xuất chiến lược của bạn.</p><button className="button primary" onClick={() => setPage('strategy')}>Đến màn hình chiến lược →</button></div> : <>
+      <div className="content-steps">{['Chiến lược', 'Kênh', 'Đối tượng', 'Tạo nháp', 'Rà soát'].map((step, index) => <div key={step}><b>{index + 1}</b>{step}</div>)}</div>
+      <div className="card content-controls">
+        <div><span className="mini-label">CHIẾN LƯỢC</span><strong>{profile.business_name}</strong></div>
+        <div className="control-channels"><span className="mini-label">KÊNH MỤC TIÊU</span><div>{CHANNELS.map((channel) => <button type="button" key={channel} onClick={() => toggle(channel)} className={channels.includes(channel) ? 'selected' : ''}>{channel} {channels.includes(channel) && '✓'}</button>)}</div></div>
+        <div><span className="mini-label">KHÁCH HÀNG</span><strong>{result.strategy.segment}</strong></div>
+        <label>GIỌNG ĐIỆU<select value={tone} onChange={(e) => setTone(e.target.value)}><option>Năng động & táo bạo</option><option>Thân thiện & gần gũi</option><option>Chuyên nghiệp & rõ ràng</option></select></label>
+        <div className="content-control-actions"><button className="button coral" onClick={() => { setChannels(CHANNELS); setTone('Năng động & táo bạo'); setEdits({}); setEditing(null) }}>↻ Đặt lại</button><button className="button primary" onClick={regenerateAll}>✦ Tạo bản nháp</button></div>
+      </div>
+      <div className="content-results-heading"><h2>Bản nháp theo kênh <span>{channels.length} kênh</span></h2><small>Giọng điệu: {tone}</small></div>
+      <div className="content-grid">{channels.map((channel) => {
+        const item = effective(channel)
+        const isEditing = editing === channel
+        return <article className="card content-card" key={channel}>
+          <div className="content-card-top"><span>{channel === 'Meta' ? 'Facebook Feed' : channel === 'Google Ads' ? 'Google Search Ads' : 'TikTok / Reels'}</span><small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small></div>
+          {isEditing ? <div className="inline-editor">
+            <label>TIÊU ĐỀ / HOOK<input value={item.title} maxLength={120} onChange={(event) => updateField(channel, 'title', event.target.value)} /></label>
+            <label>NỘI DUNG CHÍNH<textarea value={item.body} maxLength={1000} onChange={(event) => updateField(channel, 'body', event.target.value)} rows={7} /></label>
+            <label>KÊU GỌI HÀNH ĐỘNG<input value={item.cta} maxLength={80} onChange={(event) => updateField(channel, 'cta', event.target.value)} /></label>
+          </div> : <><span className="mini-label">TIÊU ĐỀ / HOOK</span><h3>{item.title}</h3><span className="mini-label">NỘI DUNG CHÍNH</span><p>{item.body}</p></>}
+          <div className="content-preview"><span>{channel === 'TikTok' ? `0s Hook · 8s Lợi ích · CTA: ${item.cta}` : item.cta}</span><strong>{channel === 'Google Ads' ? '✓ Thông điệp nhất quán' : '✦ Bản nháp sẵn để rà soát'}</strong></div>
+          <div className="content-card-actions"><button className="button subtle" onClick={() => setEditing(isEditing ? null : channel)}>{isEditing ? '✓ Lưu' : '✎ Sửa'}</button><button className="button subtle" onClick={() => regenerate(channel)}>↻ Tạo lại</button><button className="button subtle" onClick={() => copy(`${item.title}\n\n${item.body}\n\n${item.cta}`)}>⧉ Sao chép</button></div>
+        </article>
+      })}</div>
+      <div className="content-bottom card"><strong>{channels.length} / 3 kênh được chọn</strong><span>Rà soát nội dung và tuân thủ chính sách quảng cáo trước khi xuất bản.</span></div>
+    </>}
+  </>
 }
 
 function App() {

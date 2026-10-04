@@ -15,4 +15,9 @@ urlpatterns = [
     path("business-profile/", account_api.profile, name="business-profile"),
     path("campaign-imports/", account_api.import_history, name="campaign-imports"),
     path("campaign-imports/upload/", account_api.import_file, name="campaign-import-upload"),
+    path(
+        "campaign-imports/sandbox/",
+        account_api.sandbox_import,
+        name="campaign-import-sandbox",
+    ),
 ]

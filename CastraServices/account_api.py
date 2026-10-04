@@ -19,6 +19,89 @@ from .views import error_response
 
 CHANNELS = {"Meta", "Google Ads", "TikTok"}
 SIZES = {"Micro", "Small", "Medium", "Large"}
+SANDBOX_ROWS = [
+    {
+        "channel": "Meta",
+        "period": "2026-10-01",
+        "spend": 1_850_000,
+        "clicks": 438,
+        "impressions": 28_400,
+        "conversions": 31,
+        "revenue": 5_420_000,
+    },
+    {
+        "channel": "Meta",
+        "period": "2026-10-08",
+        "spend": 1_720_000,
+        "clicks": 412,
+        "impressions": 26_900,
+        "conversions": 29,
+        "revenue": 5_080_000,
+    },
+    {
+        "channel": "Meta",
+        "period": "2026-10-15",
+        "spend": 1_960_000,
+        "clicks": 471,
+        "impressions": 30_600,
+        "conversions": 34,
+        "revenue": 5_940_000,
+    },
+    {
+        "channel": "Google Ads",
+        "period": "2026-10-02",
+        "spend": 1_540_000,
+        "clicks": 356,
+        "impressions": 15_800,
+        "conversions": 27,
+        "revenue": 5_180_000,
+    },
+    {
+        "channel": "Google Ads",
+        "period": "2026-10-09",
+        "spend": 1_610_000,
+        "clicks": 372,
+        "impressions": 16_400,
+        "conversions": 28,
+        "revenue": 5_390_000,
+    },
+    {
+        "channel": "Google Ads",
+        "period": "2026-10-16",
+        "spend": 1_680_000,
+        "clicks": 391,
+        "impressions": 17_100,
+        "conversions": 30,
+        "revenue": 5_760_000,
+    },
+    {
+        "channel": "TikTok",
+        "period": "2026-10-03",
+        "spend": 1_320_000,
+        "clicks": 681,
+        "impressions": 64_500,
+        "conversions": 18,
+        "revenue": 2_750_000,
+    },
+    {
+        "channel": "TikTok",
+        "period": "2026-10-10",
+        "spend": 1_410_000,
+        "clicks": 724,
+        "impressions": 68_900,
+        "conversions": 20,
+        "revenue": 3_080_000,
+    },
+    {
+        "channel": "TikTok",
+        "period": "2026-10-17",
+        "spend": 1_460_000,
+        "clicks": 746,
+        "impressions": 71_200,
+        "conversions": 21,
+        "revenue": 3_220_000,
+    },
+]
 ALIASES = {
     "channel": {"channel", "platform", "source", "kenh"},
     "period": {"period", "date", "month", "ngay"},
@@ -297,4 +380,34 @@ def import_file(request):
         normalized_rows=rows,
     )
     result["import_id"] = saved.pk
+    result["success_count"] = len(rows)
+    result["failed_count"] = 0
+    result["source"] = "file_upload"
     return JsonResponse(result, status=201)
+
+
+@require_POST
+def sandbox_import(request):
+    if not request.user.is_authenticated:
+        return error_response("AUTH_REQUIRED", "Vui lòng đăng nhập.", 401)
+
+    rows = [dict(row) for row in SANDBOX_ROWS]
+    saved = CampaignImport.objects.create(
+        user=request.user,
+        filename="sandbox_campaigns_2026-10.json",
+        row_count=len(rows),
+        normalized_rows=rows,
+    )
+    return JsonResponse(
+        {
+            "source": "sandbox",
+            "import_id": saved.pk,
+            "filename": saved.filename,
+            "row_count": len(rows),
+            "success_count": len(rows),
+            "failed_count": 0,
+            "errors": [],
+            "preview": rows[:5],
+        },
+        status=201,
+    )
