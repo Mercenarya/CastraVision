@@ -1,26 +1,36 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
+import { useAuth } from './auth/AuthContext'
+import { ROLE_LABELS, can, defaultPage } from './auth/permissions'
+import { backendApi as api } from './lib/api'
+import {
+  createWorkspaceAndProfile,
+  loadWorkspaceData,
+  saveBusinessProfile,
+} from './lib/workspace'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
 const SIZES = { Micro: '1–10 nhân sự', Small: '11–50 nhân sự', Medium: '51–250 nhân sự', Large: 'Trên 250 nhân sự' }
 const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'VND' }
-const NAV = [
-  ['overview', '▦', 'Tổng quan'], ['strategy', '◈', 'Chiến lược & phân tích'],
-  ['content', '✦', 'Content Studio'], ['import', '⇥', 'Nhập dữ liệu chiến dịch'],
-  ['profile', '☷', 'Hồ sơ doanh nghiệp'],
+const FEATURE_NAV = [
+  ['strategy', '◈', 'Chiến lược & phân tích', 'strategy:read'],
+  ['content', '✦', 'Content Studio', 'content:write'],
+  ['import', '⇥', 'Nhập dữ liệu chiến dịch', 'campaign:import'],
+  ['profile', '☷', 'Hồ sơ doanh nghiệp', 'business:write'],
+  ['members', '♙', 'Thành viên & vai trò', 'members:manage'],
+  ['approvals', '✓', 'Phê duyệt', 'approval:write'],
 ]
 
-function csrfToken() { return decodeURIComponent(document.cookie.split('; ').find((part) => part.startsWith('csrftoken='))?.split('=')[1] || '') }
-async function api(path, options = {}) {
-  const headers = { ...(options.headers || {}) }
-  if (!(options.body instanceof FormData) && options.body !== undefined) headers['Content-Type'] = 'application/json'
-  if (options.method && options.method !== 'GET') headers['X-CSRFToken'] = csrfToken()
-  let response
-  try { response = await fetch(`/api/${path}`, { credentials: 'same-origin', ...options, headers }) }
-  catch { throw new Error('Không kết nối được máy chủ. Hãy kiểm tra backend ở cổng 8000.') }
-  const data = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(data.error?.message || `Yêu cầu thất bại (${response.status}).`)
-  return data
+function navigationFor(role) {
+  const dashboardLabels = {
+    admin: 'Quản trị Workspace',
+    manager: 'Điều hành chiến dịch',
+    member: 'Không gian nội dung',
+  }
+  return [
+    [defaultPage(role), '▦', dashboardLabels[role] || 'Tổng quan', 'overview'],
+    ...FEATURE_NAV.filter((item) => can(role, item[3])),
+  ]
 }
 
 function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
@@ -28,7 +38,7 @@ function Heading({ eyebrow, title, subtitle, children }) { return <div className
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Đóng thông báo">×</button></div> }
 
-function AuthScreen({ mode, setMode, onAuth, backendError }) {
+function AuthScreen({ mode, setMode, signIn, signUp, backendError }) {
   const signup = mode === 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -40,7 +50,7 @@ function AuthScreen({ mode, setMode, onAuth, backendError }) {
     event.preventDefault(); setError('')
     if (signup && password !== confirm) return setError('Mật khẩu xác nhận không khớp.')
     setBusy(true)
-    try { const data = await api(`auth/${signup ? 'register' : 'login'}/`, { method: 'POST', body: JSON.stringify({ email, password }) }); onAuth(data.user) }
+    try { if (signup) await signUp(email, password); else await signIn(email, password) }
     catch (cause) { setError(cause.message) }
     finally { setBusy(false) }
   }
@@ -51,9 +61,36 @@ function AuthScreen({ mode, setMode, onAuth, backendError }) {
   </div></main><footer className="auth-footer"><span>© 2026 CastraVision · Sprint 1</span><span>AI marketing workspace for SMBs</span></footer></div>
 }
 
-function Shell({ user, profile, page, setPage, logout, children }) {
-  const current = NAV.find(([key]) => key === page)?.[2] || 'Tổng quan'
-  return <div className="shell"><aside className="sidebar"><div className="sidebar-brand"><Brand /><span className="sme-tag">SME AI</span></div><div className="workspace-switch"><span className="workspace-avatar">{(profile?.business_name || user.email).slice(0, 2).toUpperCase()}</span><span><strong>{profile?.business_name || 'Không gian mới'}</strong><small>CastraVision Workspace</small></span><span>⌄</span></div><div className="nav-caption">ENGINE NAVIGATION</div><nav aria-label="Điều hướng chính">{NAV.map(([key, icon, label]) => <button key={key} className={`nav-item ${page === key ? 'active' : ''}`} onClick={() => setPage(key)} aria-current={page === key ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</button>)}</nav><div className="sidebar-bottom"><div><i /> Sprint 1 workspace <strong>Online</strong></div><div className="quota-line"><span /></div><small>FR12 · FR08 · FR01</small></div></aside><div className="main-wrap"><header className="app-topbar"><span className="mobile-brand"><Brand /></span><div className="topbar-context"><i /> {current.toUpperCase()}</div><div className="topbar-actions"><span className="sprint-label">SPRINT 1</span><span className="user-avatar">{user.email[0].toUpperCase()}</span><span className="user-email">{user.email}</span><button onClick={logout} className="text-button" type="button">Đăng xuất</button></div></header><main className="app-content">{children}</main></div></div>
+function Shell({ user, role, profile, page, setPage, logout, children }) {
+  const navigation = navigationFor(role)
+  const current = navigation.find(([key]) => key === page)?.[2] || 'Tổng quan'
+  return <div className="shell"><aside className="sidebar"><div className="sidebar-brand"><Brand /><span className="sme-tag">SME AI</span></div><div className="workspace-switch"><span className="workspace-avatar">{(profile?.business_name || user.email).slice(0, 2).toUpperCase()}</span><span><strong>{profile?.business_name || 'Không gian mới'}</strong><small>{ROLE_LABELS[role] || 'Đang thiết lập'} · CastraVision</small></span><span>⌄</span></div><div className="nav-caption">ENGINE NAVIGATION</div><nav aria-label="Điều hướng chính">{navigation.map(([key, icon, label]) => <button key={key} className={`nav-item ${page === key ? 'active' : ''}`} onClick={() => setPage(key)} aria-current={page === key ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</button>)}</nav><div className="sidebar-bottom"><div><i /> Sprint 1 workspace <strong>Online</strong></div><div className="quota-line"><span /></div><small>FR12 · FR08 · FR01</small></div></aside><div className="main-wrap"><header className="app-topbar"><span className="mobile-brand"><Brand /></span><div className="topbar-context"><i /> {current.toUpperCase()}</div><div className="topbar-actions"><span className="sprint-label">{ROLE_LABELS[role] || 'SPRINT 1'}</span><span className="user-avatar">{user.email[0].toUpperCase()}</span><span className="user-email">{user.email}</span><button onClick={logout} className="text-button" type="button">Đăng xuất</button></div></header><main className="app-content">{children}</main></div></div>
+}
+
+function RoleDashboard({ role, profile, imports, strategy, setPage }) {
+  const definitions = {
+    admin: {
+      eyebrow: 'ADMIN GOVERNANCE', title: 'Quản trị CastraVision',
+      subtitle: 'Quản lý Workspace, phân quyền, dữ liệu chiến dịch và các quyết định cần phê duyệt.',
+      cards: [['members', 'Thành viên & vai trò', 'Quản lý Admin, Manager và Member.'], ['approvals', 'Hàng chờ phê duyệt', 'Kiểm soát nội dung và đề xuất ngân sách.'], ['import', 'Dữ liệu chiến dịch', `${imports.length} nguồn dữ liệu gần đây.`]],
+    },
+    manager: {
+      eyebrow: 'MANAGER OPERATIONS', title: 'Điều hành chiến dịch',
+      subtitle: 'Đồng bộ dữ liệu, tạo chiến lược và điều phối nội dung đa kênh.',
+      cards: [['import', 'Nhập dữ liệu', 'CSV, XLSX hoặc Sandbox.'], ['strategy', 'Tạo chiến lược', strategy ? 'Đã có chiến lược đang hoạt động.' : 'Sẵn sàng phân tích dữ liệu mới.'], ['content', 'Content Studio', 'Biên tập nội dung theo từng kênh.']],
+    },
+    member: {
+      eyebrow: 'MEMBER WORKSPACE', title: 'Không gian nội dung',
+      subtitle: 'Theo dõi chiến lược được chia sẻ và hoàn thiện nội dung trong phạm vi được giao.',
+      cards: [['strategy', 'Chiến lược được chia sẻ', strategy ? 'Xem đề xuất mới nhất.' : 'Chưa có chiến lược được chia sẻ.'], ['content', 'Content Studio', 'Soạn và chỉnh sửa bản nháp đa kênh.']],
+    },
+  }
+  const view = definitions[role] || definitions.member
+  return <><Heading eyebrow={view.eyebrow} title={view.title} subtitle={view.subtitle} /><div className="benefit-grid">{view.cards.map(([target, title, text]) => <button type="button" className="card" key={target} onClick={() => setPage(target)}><strong>{title}</strong><p>{text}</p></button>)}</div><div className="card"><strong>{profile.business_name}</strong><p>{profile.industry} · {ROLE_LABELS[role]}</p></div></>
+}
+
+function PlaceholderPage({ title, subtitle }) {
+  return <><Heading eyebrow="SPRINT 1 · ROLE CONTROL" title={title} subtitle={subtitle} /><div className="card result-empty"><span>◈</span><h3>Phân quyền đã được áp dụng</h3><p>Dữ liệu chi tiết sẽ được tải từ Supabase sau khi migration role-aware được áp dụng.</p></div></>
 }
 
 function ChannelPicker({ channels, toggle }) { return <div className="channel-grid">{CHANNELS.map((channel) => <button type="button" key={channel} className={`channel-card ${channels.includes(channel) ? 'selected' : ''}`} onClick={() => toggle(channel)}><span className="channel-glyph">{channel === 'Meta' ? '∞' : channel === 'TikTok' ? '♪' : 'G'}</span><strong>{channel}</strong><span className="check-box">{channels.includes(channel) ? '✓' : ''}</span></button>)}</div> }
@@ -73,9 +110,7 @@ function ProfileScreen({ profile, onboarding, saveProfile, busy, error, cancel }
     {error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={step === 2 ? () => setStep(1) : cancel}>{step === 2 ? '← Quay lại' : 'Hủy'}</button><button className="button primary" disabled={busy}>{busy ? 'Đang lưu…' : step === 1 ? 'Tiếp tục →' : 'Lưu hồ sơ ✓'}</button></div></form><div className="under-card"><span>◈ Hồ sơ có thể cập nhật sau trong phần cài đặt.</span><span>Dữ liệu gắn với tài khoản của bạn</span></div></>
 }
 
-function Overview({ profile, imports, strategy, setPage }) { return <><Heading eyebrow="CAMPAIGN WORKSPACE" title={`Xin chào, ${profile.business_name}`} subtitle="Từ dữ liệu doanh nghiệp đến chiến lược marketing có thể hành động." /><div className="overview-hero card"><div><span className="mini-label">SPRINT 1 · MARKETING INTELLIGENCE</span><h2>Một quy trình rõ ràng cho chiến lược tốt hơn.</h2><p>Ba khối tính năng cốt lõi đã được nối thành một luồng làm việc.</p></div><span className="hero-orbit" aria-hidden="true">✣</span></div><div className="overview-grid"><button className="overview-card card" onClick={() => setPage('profile')}><span className="overview-number">01 / FR12</span><span className="overview-icon violet">▣</span><strong>Hồ sơ doanh nghiệp</strong><p>{profile.industry} · {SIZES[profile.business_size] || profile.business_size}</p><span className="card-link">Xem hồ sơ →</span></button><button className="overview-card card" onClick={() => setPage('import')}><span className="overview-number">02 / FR08</span><span className="overview-icon cyan">⇥</span><strong>Nhập dữ liệu chiến dịch</strong><p>{imports.length ? `${imports[0].row_count} dòng dữ liệu đã nhập` : 'CSV / XLSX · kiểm tra & chuẩn hóa'}</p><span className="card-link">{imports.length ? 'Xem dữ liệu' : 'Bắt đầu nhập'} →</span></button><button className="overview-card card" onClick={() => setPage('strategy')}><span className="overview-number">03 / FR01</span><span className="overview-icon violet">◈</span><strong>Tạo chiến lược AI</strong><p>{strategy ? `Kênh đề xuất: ${strategy.strategy.recommended_channel}` : 'Kết hợp hồ sơ và lịch sử chiến dịch'}</p><span className="card-link">{strategy ? 'Xem đề xuất' : 'Tạo chiến lược'} →</span></button></div><div className="overview-note card"><span>ⓘ</span><div><strong>Về Content Studio</strong><p>Màn hình Figma được đưa vào dưới dạng bản nháp nội dung từ chiến lược. Sinh nội dung AI chuyên biệt nằm ngoài phạm vi Sprint 1.</p></div><button className="button subtle" onClick={() => setPage('content')}>Xem màn hình →</button></div></> }
-
-function ImportScreen({ imports, onImported, notify }) {
+export function ImportScreen({ imports, onImported, notify }) {
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const [report, setReport] = useState(null)
@@ -130,7 +165,7 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
   return <><Heading eyebrow="STRATEGY ENGINE" title="Tạo chiến lược" subtitle="Đặt mục tiêu và đối tượng để xây dựng đề xuất marketing dựa trên dữ liệu.">{latestRows.length > 0 && <span className="data-chip">✓ {latestRows.length} dòng lịch sử được sử dụng</span>}</Heading><div className="strategy-grid"><form className="card strategy-form" onSubmit={generate}><div className="section-head"><h2><i /> Thiết lập chiến dịch</h2><span className="step-badge">FR01 · Sprint 1</span></div><label>Mục tiêu chiến dịch<input value={draft.campaign_goal} onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })} minLength={3} required placeholder="Ví dụ: Tăng doanh số mùa hè" /></label><label>Khách hàng mục tiêu<input value={draft.target_audience} onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })} minLength={3} required placeholder="Ví dụ: Người trẻ 18–28 tuổi" /></label><label>Ngân sách tháng ({profile.currency})<input type="number" min="1" value={draft.budget} onChange={(e) => setDraft({ ...draft, budget: e.target.value })} required placeholder="30000000" /></label><div className="field-title">Kênh dự kiến</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} />{error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={() => setDraft(initial())}>↻ Đặt lại</button><button className="button primary" disabled={busy || !draft.preferred_channels.length}>{busy ? 'Đang phân tích…' : 'ϟ Tạo chiến lược'}</button></div></form><div className="card result-card"><div className="section-head"><div><h2>Đề xuất chiến lược AI</h2><p>Dựa trên hồ sơ và dữ liệu lịch sử của bạn</p></div>{result && <span className="active-badge">{result.strategy.confidence}% tin cậy</span>}</div>{!result ? <div className="result-empty"><span>◈</span><h3>Chưa có đề xuất</h3><p>Hoàn thành biểu mẫu và nhấn “Tạo chiến lược” để xem kênh, thông điệp và phân bổ ngân sách.</p></div> : <><div className="insight-box"><span className="mini-label">TRỌNG TÂM CHIẾN LƯỢC</span><p>{result.strategy.rationale}</p></div><div className="insight-box"><div className="allocation-head"><span className="mini-label">PHÂN BỔ ĐỀ XUẤT</span><span>{money(100)} tổng</span></div><div className="stacked-bar">{result.strategy.budget_allocation.map((item, index) => <span key={index} style={{ width: `${item.percentage}%` }} />)}</div><div className="allocation-grid">{result.strategy.budget_allocation.map((item, index) => <div key={index}><i className={`legend-dot d${index}`} /><strong>{item.channel}</strong><small>{item.percentage}% · {money(item.percentage)}</small></div>)}</div></div><div className="insight-box"><span className="mini-label">THÔNG ĐIỆP & PHÂN KHÚC</span><p>“{result.strategy.message}”</p><small>{result.strategy.segment}</small></div><div className="insight-box"><span className="mini-label">HÀNH ĐỘNG TIẾP THEO</span><ol>{result.strategy.actions.map((action, index) => <li key={index}>{action}</li>)}</ol></div><div className="result-footer"><span>{result.provider === 'openai' ? 'OpenAI' : 'Bản dự phòng có quy tắc'} · {result.context_sources.length} nguồn tham chiếu</span><button className="button subtle" type="button" onClick={generate} disabled={busy}>↻ Phân tích lại</button></div>{result.warning && <Notice kind="warning">{result.warning}</Notice>}</>}</div></div></>
 }
 
-function ContentScreen({ result, profile, setPage, notify }) {
+export function ContentScreen({ result, profile, setPage, notify }) {
   const [channels, setChannels] = useState(CHANNELS)
   const [tone, setTone] = useState('Năng động & táo bạo')
   const [versions, setVersions] = useState({ Meta: 0, 'Google Ads': 0, TikTok: 0 })
@@ -189,10 +224,10 @@ function ContentScreen({ result, profile, setPage, notify }) {
 }
 
 function App() {
-  const [ready, setReady] = useState(false)
+  const auth = useAuth()
+  const { ready, user, membership, workspaceId, needsOnboarding } = auth
   const [backendError, setBackendError] = useState('')
   const [authMode, setAuthMode] = useState('login')
-  const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [page, setPage] = useState('overview')
   const [imports, setImports] = useState([])
@@ -201,15 +236,17 @@ function App() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
-  async function refreshData() { const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')]); setProfile(business.profile); setImports(history.imports); setLatestRows(history.latest_rows); setPage(business.profile ? 'overview' : 'onboarding') }
-  useEffect(() => { async function boot() { try { await api('auth/csrf/'); const session = await api('auth/session/'); if (session.user) { setUser(session.user); await refreshData() } } catch (cause) { setBackendError(cause.message) } finally { setReady(true) } } boot() }, [])
-  async function handleAuth(account) { setUser(account); setBackendError(''); try { await refreshData() } catch (cause) { setBackendError(cause.message) } }
-  async function saveProfile(draft) { setBusy(true); setError(''); try { const data = await api('business-profile/', { method: 'PUT', body: JSON.stringify(draft) }); setProfile(data.profile); setPage('overview'); setToast('Hồ sơ doanh nghiệp đã được lưu.') } catch (cause) { setError(cause.message) } finally { setBusy(false) } }
-  async function logout() { try { await api('auth/logout/', { method: 'POST' }) } finally { setUser(null); setProfile(null); setStrategy(null); setPage('overview') } }
-  async function onImported() { const data = await api('campaign-imports/'); setImports(data.imports); setLatestRows(data.latest_rows) }
+  const refreshData = useCallback(async (targetWorkspaceId = workspaceId) => { if (!targetWorkspaceId) return; const data = await loadWorkspaceData(targetWorkspaceId); setProfile(data.profile); setImports(data.imports); setLatestRows(data.latestRows); setPage(data.profile ? defaultPage(auth.role) : 'onboarding') }, [auth.role, workspaceId])
+  // Loading remote workspace state is the synchronization performed by this effect.
+  // oxlint-disable-next-line react/set-state-in-effect
+  useEffect(() => { if (user && membership) refreshData().catch((cause) => setBackendError(cause.message)) }, [membership, refreshData, user])
+  async function saveProfile(draft) { setBusy(true); setError(''); try { let targetWorkspaceId = workspaceId; if (!targetWorkspaceId) { targetWorkspaceId = await createWorkspaceAndProfile(draft); await auth.refreshMembership() } else { await saveBusinessProfile(targetWorkspaceId, draft) } await refreshData(targetWorkspaceId); setPage(defaultPage(auth.role || 'admin')); setToast('Hồ sơ doanh nghiệp đã được lưu.') } catch (cause) { setError(cause.message) } finally { setBusy(false) } }
+  async function logout() { try { await auth.signOut() } finally { setProfile(null); setStrategy(null); setPage(defaultPage('member')) } }
+  async function onImported() { await refreshData() }
   if (!ready) return <div className="loading-screen"><Brand /><span>Đang kết nối không gian làm việc…</span></div>
-  if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} onAuth={handleAuth} backendError={backendError} />
-  return <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>{backendError && <Notice>{backendError}</Notice>}{(!profile || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />}{profile && page === 'overview' && <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && page === 'import' && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && page === 'strategy' && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}<Toast message={toast} clear={() => setToast('')} /></Shell>
+  const visibleError = backendError || auth.error
+  if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} signIn={auth.signIn} signUp={auth.signUp} backendError={visibleError} />
+  return <Shell user={user} role={auth.role} profile={profile} page={page} setPage={setPage} logout={logout}>{visibleError && <Notice>{visibleError}</Notice>}{(!profile || needsOnboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage(defaultPage(auth.role)) : logout} />}{profile && page === defaultPage(auth.role) && <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}{profile && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}{profile && page === 'members' && can(auth.role, 'members:manage') && <PlaceholderPage title="Thành viên & vai trò" subtitle="Chỉ Admin có thể quản lý thành viên của Workspace." />}{profile && page === 'approvals' && can(auth.role, 'approval:write') && <PlaceholderPage title="Hàng chờ phê duyệt" subtitle="Chỉ Admin có thể phê duyệt hoặc từ chối đề xuất." />}<Toast message={toast} clear={() => setToast('')} /></Shell>
 }
 
 export default App
