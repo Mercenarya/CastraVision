@@ -7,6 +7,7 @@
 django==6.0.6
 django-cors-headers==4.9.0
 dj-database-url==3.1.2
+gunicorn==23.0.0
 fastapi==0.141.1
 uvicorn[standard]==0.54.0
 pydantic==2.13.5
@@ -43,6 +44,7 @@ reportlab==5.0.1
 openpyxl==3.1.5
 
 # --- Security & Auth (NFR02) ---
+PyJWT[crypto]==2.15.1
 python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
 cryptography==50.0.1
