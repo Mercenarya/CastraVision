@@ -1,7 +1,9 @@
 # CastraVision Role-Based Workspaces Design
 
 Date: 2026-10-06  
-Status: Approved design
+Status: Superseded by `2026-10-06-supabase-auth-rls-design.md`
+
+> This Django-session RBAC design is retained for decision history only. Do not implement it.
 
 ## 1. Problem
 
