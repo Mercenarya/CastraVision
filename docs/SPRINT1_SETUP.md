@@ -45,6 +45,11 @@ docker compose up --build
 Compose tạo năm service: `frontend`, `backend`, `celery_worker`, `postgres` có pgvector và `redis`.
 Migration `CastraServices.0001_initial` tự chạy `CREATE EXTENSION IF NOT EXISTS vector` trên PostgreSQL.
 
+Backend chạy bằng Gunicorn; frontend được build tĩnh và phục vụ bằng Nginx. Compose dùng
+`requirements-runtime.txt` để image backend chỉ chứa dependency runtime. Các biến
+`DOCKER_DATABASE_URL`, `DOCKER_REDIS_URL`, `DOCKER_CELERY_BROKER_URL` và
+`DOCKER_CELERY_RESULT_BACKEND` chỉ cần điền khi muốn ghi đè service nội bộ của Compose.
+
 ## Nạp dữ liệu lịch sử / doanh nghiệp
 
 File JSON đầu vào là một array, mỗi record có dạng:
@@ -104,6 +109,7 @@ ruff check CastraVision CastraServices
 pytest --cov=CastraServices
 cd CastraView
 npm run lint
+npm test
 npm run build
 ```
 
@@ -114,4 +120,4 @@ CI chạy cùng các bước với PostgreSQL pgvector và Redis service contain
 - Đồng bộ trực tiếp Meta/Google Ads/TikTok và ba agent chuyên biệt trong sơ đồ.
 - Reranker, hybrid search, evaluation dataset và monitoring chất lượng retrieval.
 - Lưu lịch sử chiến lược theo người dùng/RBAC.
-- Production web server, HTTPS, secret manager và backup automation.
+- HTTPS termination, secret manager và backup automation cho production.

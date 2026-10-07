@@ -11,6 +11,8 @@ __pycache__/
 *.log
 db.sqlite3
 .env
+.env.*
+!.env.example
 .coverage
 htmlcov/
 CastraView/node_modules/
