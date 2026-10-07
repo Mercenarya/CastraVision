@@ -9,16 +9,17 @@ export const CAPABILITIES = {
     'overview', 'business:read', 'business:write', 'campaign:read',
     'campaign:import', 'strategy:read', 'strategy:generate', 'content:write',
     'budget:write', 'approval:write', 'reports:write', 'members:manage',
-    'audit:read', 'notifications:read',
+    'audit:read', 'notifications:read', 'competitor:read',
   ]),
   manager: new Set([
     'overview', 'business:read', 'campaign:read', 'campaign:import',
     'strategy:read', 'strategy:generate', 'content:write', 'budget:write',
-    'reports:write', 'notifications:read',
+    'reports:write', 'notifications:read', 'approval:write', 'competitor:read',
   ]),
   member: new Set([
-    'overview', 'business:read', 'strategy:read', 'content:write',
-    'budget:read', 'reports:read', 'notifications:read',
+    'overview', 'business:read', 'campaign:read', 'campaign:import',
+    'strategy:read', 'content:write', 'budget:read', 'reports:read',
+    'notifications:read', 'competitor:read',
   ]),
 }
 

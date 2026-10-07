@@ -9,18 +9,19 @@ describe('actor permission map', () => {
     expect(can('admin', 'approval:write')).toBe(true)
   })
 
-  it('allows Manager operations but not governance', () => {
+  it('allows Manager operations and proposal governance', () => {
     expect(can('manager', 'campaign:import')).toBe(true)
     expect(can('manager', 'strategy:generate')).toBe(true)
     expect(can('manager', 'members:manage')).toBe(false)
-    expect(can('manager', 'approval:write')).toBe(false)
+    expect(can('manager', 'approval:write')).toBe(true)
   })
 
   it('limits Member to shared strategy and content work', () => {
     expect(can('member', 'strategy:read')).toBe(true)
     expect(can('member', 'content:write')).toBe(true)
-    expect(can('member', 'campaign:import')).toBe(false)
+    expect(can('member', 'campaign:import')).toBe(true)
     expect(can('member', 'strategy:generate')).toBe(false)
+    expect(can('member', 'approval:write')).toBe(false)
   })
 
   it('uses a distinct default dashboard for each actor', () => {
@@ -30,5 +31,7 @@ describe('actor permission map', () => {
   it('locks navigation to onboarding until the business profile exists', () => {
     expect(navigationFor('admin', true).map(([page]) => page)).toEqual(['onboarding'])
     expect(navigationFor('admin', false).map(([page]) => page)).toContain('members')
+    expect(navigationFor('manager', false).map(([page]) => page)).toContain('approvals')
+    expect(navigationFor('member', false).map(([page]) => page)).not.toContain('approvals')
   })
 })

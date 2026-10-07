@@ -1,9 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
+import './actor-ui/actor-ui.css'
 import { useAuth } from './auth/AuthContext'
 import { ROLE_LABELS, can, defaultPage } from './auth/permissions'
 import { navigationFor } from './navigation'
 import { backendApi as api } from './lib/api'
+import {
+  ApprovalQueuePage,
+  AuditLogPage,
+  BudgetOptimizationPage,
+  CompetitorInsightsPage,
+  MembersPage,
+  PerformanceDashboardPage,
+  ReportsPage,
+  RoleManagementPage,
+} from './actor-ui/ActorPages'
 import {
   createWorkspaceAndProfile,
   loadWorkspaceData,
@@ -228,7 +239,25 @@ function App() {
   const visibleError = backendError || auth.error
   if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} signIn={auth.signIn} signUp={auth.signUp} backendError={visibleError} />
   const onboarding = !profile || needsOnboarding
-  return <Shell user={user} role={auth.role} profile={profile} page={onboarding ? 'onboarding' : page} setPage={setPage} logout={logout} onboarding={onboarding}>{visibleError && <Notice>{visibleError}</Notice>}{(onboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage(defaultPage(auth.role)) : logout} />}{profile && !onboarding && page === defaultPage(auth.role) && <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && !onboarding && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && !onboarding && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && !onboarding && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}{profile && !onboarding && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}{profile && !onboarding && page === 'members' && can(auth.role, 'members:manage') && <PlaceholderPage title="Thành viên & vai trò" subtitle="Chỉ Admin có thể quản lý thành viên của Workspace." />}{profile && !onboarding && page === 'approvals' && can(auth.role, 'approval:write') && <PlaceholderPage title="Hàng chờ phê duyệt" subtitle="Chỉ Admin có thể phê duyệt hoặc từ chối đề xuất." />}<Toast message={toast} clear={() => setToast('')} /></Shell>
+  return <Shell user={user} role={auth.role} profile={profile} page={onboarding ? 'onboarding' : page} setPage={setPage} logout={logout} onboarding={onboarding}>
+    {visibleError && <Notice>{visibleError}</Notice>}
+    {(onboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage(defaultPage(auth.role)) : logout} />}
+    {profile && !onboarding && page === defaultPage(auth.role) && (auth.role === 'manager'
+      ? <PerformanceDashboardPage setPage={setPage} imports={imports} />
+      : <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />)}
+    {profile && !onboarding && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}
+    {profile && !onboarding && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}
+    {profile && !onboarding && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}
+    {profile && !onboarding && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}
+    {profile && !onboarding && page === 'members' && can(auth.role, 'members:manage') && <MembersPage profile={profile} notify={setToast} />}
+    {profile && !onboarding && page === 'roles' && can(auth.role, 'members:manage') && <RoleManagementPage />}
+    {profile && !onboarding && page === 'audit' && can(auth.role, 'audit:read') && <AuditLogPage />}
+    {profile && !onboarding && page === 'approvals' && can(auth.role, 'approval:write') && <ApprovalQueuePage notify={setToast} />}
+    {profile && !onboarding && page === 'budget' && can(auth.role, 'budget:write') && <BudgetOptimizationPage notify={setToast} />}
+    {profile && !onboarding && page === 'reports' && can(auth.role, 'reports:write') && <ReportsPage profile={profile} notify={setToast} />}
+    {profile && !onboarding && page === 'insights' && can(auth.role, 'competitor:read') && <CompetitorInsightsPage notify={setToast} />}
+    <Toast message={toast} clear={() => setToast('')} />
+  </Shell>
 }
 
 export default App
