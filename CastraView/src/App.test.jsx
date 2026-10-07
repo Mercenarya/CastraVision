@@ -13,7 +13,7 @@ vi.mock('./lib/supabase', () => ({
   }),
 }))
 
-import { ContentScreen, ImportScreen } from './App'
+import { ContentScreen, ImportScreen, RoleDashboard } from './App'
 
 const profile = {
   business_name: 'Cafe Ông Bụt',
@@ -31,6 +31,19 @@ const strategy = {
 
 afterEach(() => {
   vi.restoreAllMocks()
+})
+
+describe('RoleDashboard', () => {
+  it('renders styled Admin actions and opens the selected feature', async () => {
+    const setPage = vi.fn()
+    const user = userEvent.setup()
+    render(<RoleDashboard role="admin" profile={profile} imports={[]} strategy={null} setPage={setPage} />)
+
+    const members = screen.getByRole('button', { name: /Thành viên & vai trò/ })
+    expect(members).toHaveClass('overview-card')
+    await user.click(members)
+    expect(setPage).toHaveBeenCalledWith('members')
+  })
 })
 
 describe('ContentScreen', () => {

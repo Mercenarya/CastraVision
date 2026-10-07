@@ -47,7 +47,7 @@ function Shell({ user, role, profile, page, setPage, logout, onboarding = false,
   return <div className="shell"><aside className="sidebar"><div className="sidebar-brand"><Brand /><span className="sme-tag">SME AI</span></div><div className="workspace-switch"><span className="workspace-avatar">{(profile?.business_name || user.email).slice(0, 2).toUpperCase()}</span><span><strong>{profile?.business_name || 'Không gian mới'}</strong><small>{ROLE_LABELS[role] || 'Đang thiết lập'} · CastraVision</small></span><span>⌄</span></div><div className="nav-caption">ENGINE NAVIGATION</div><nav aria-label="Điều hướng chính">{navigation.map(([key, icon, label]) => <button key={key} className={`nav-item ${page === key ? 'active' : ''}`} onClick={() => setPage(key)} aria-current={page === key ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</button>)}</nav><div className="sidebar-bottom"><div><i /> Sprint 1 workspace <strong>Online</strong></div><div className="quota-line"><span /></div><small>FR12 · FR08 · FR01</small></div></aside><div className="main-wrap"><header className="app-topbar"><span className="mobile-brand"><Brand /></span><div className="topbar-context"><i /> {current.toUpperCase()}</div><div className="topbar-actions"><span className="sprint-label">{ROLE_LABELS[role] || 'SPRINT 1'}</span><span className="user-avatar">{user.email[0].toUpperCase()}</span><span className="user-email">{user.email}</span><button onClick={logout} className="text-button" type="button">Đăng xuất</button></div></header><main className="app-content">{children}</main></div></div>
 }
 
-function RoleDashboard({ role, profile, imports, strategy, setPage }) {
+export function RoleDashboard({ role, profile, imports, strategy, setPage }) {
   const definitions = {
     admin: {
       eyebrow: 'ADMIN GOVERNANCE', title: 'Quản trị CastraVision',
@@ -66,7 +66,8 @@ function RoleDashboard({ role, profile, imports, strategy, setPage }) {
     },
   }
   const view = definitions[role] || definitions.member
-  return <><Heading eyebrow={view.eyebrow} title={view.title} subtitle={view.subtitle} /><div className="benefit-grid">{view.cards.map(([target, title, text]) => <button type="button" className="card" key={target} onClick={() => setPage(target)}><strong>{title}</strong><p>{text}</p></button>)}</div><div className="card"><strong>{profile.business_name}</strong><p>{profile.industry} · {ROLE_LABELS[role]}</p></div></>
+  const icons = { members: '♙', approvals: '✓', import: '⇥', strategy: '◈', content: '✦' }
+  return <><Heading eyebrow={view.eyebrow} title={view.title} subtitle={view.subtitle} /><div className="overview-grid">{view.cards.map(([target, title, text], index) => <button type="button" className="card overview-card" key={target} onClick={() => setPage(target)}><span className="overview-number">0{index + 1}</span><span className={`overview-icon ${index % 2 ? 'cyan' : 'violet'}`} aria-hidden="true">{icons[target] || '◈'}</span><strong>{title}</strong><p>{text}</p><span className="card-link">Mở chức năng →</span></button>)}</div><div className="card overview-note"><span aria-hidden="true">◈</span><div><strong>{profile.business_name}</strong><p>{profile.industry} · Vai trò {ROLE_LABELS[role]}</p></div></div></>
 }
 
 function PlaceholderPage({ title, subtitle }) {
