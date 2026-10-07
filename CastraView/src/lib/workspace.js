@@ -13,6 +13,21 @@ const CHANNEL_FROM_DATABASE = {
   tiktok: 'TikTok',
 }
 
+export function explainWorkspaceError(action, error) {
+  const code = error?.code || ''
+  const detail = (error?.message || '').toLowerCase()
+  if (code === 'PGRST204' || code === '42703' || detail.includes('schema cache')) {
+    return `${action} Cấu trúc dữ liệu Supabase chưa được đồng bộ.`
+  }
+  if (code === '42P10' || detail.includes('unique or exclusion constraint')) {
+    return `${action} Database chưa có ràng buộc duy nhất cho Workspace.`
+  }
+  if (code === '42501' || detail.includes('row-level security')) {
+    return `${action} Tài khoản không có quyền thực hiện thao tác này.`
+  }
+  return `${action}${code ? ` (mã lỗi ${code})` : ''}`
+}
+
 function mapBusinessProfile(workspace, row) {
   if (!row) return null
   return {
@@ -56,7 +71,7 @@ export async function loadWorkspaceData(workspaceId) {
       .order('record_date', { ascending: false }).limit(30),
   ])
   const error = workspaceResult.error || profileResult.error || campaignResult.error
-  if (error) throw new Error('Không thể tải dữ liệu không gian làm việc.')
+  if (error) throw new Error(explainWorkspaceError('Không thể tải dữ liệu không gian làm việc.', error))
   const rows = (campaignResult.data || []).map(mapCampaignRow)
   const imports = rows.length ? [{
     id: 'supabase-campaign-data',
@@ -77,7 +92,7 @@ export async function createWorkspaceAndProfile(draft) {
     workspace_name: draft.business_name.trim(),
   })
   if (error || !data?.[0]?.workspace_id) {
-    throw new Error('Không thể tạo không gian làm việc.')
+    throw new Error(explainWorkspaceError('Không thể tạo không gian làm việc.', error))
   }
   await saveBusinessProfile(data[0].workspace_id, draft, false)
   return data[0].workspace_id
@@ -88,7 +103,7 @@ export async function saveBusinessProfile(workspaceId, draft, updateWorkspace = 
   if (updateWorkspace) {
     const { error: workspaceError } = await client.from('workspaces')
       .update({ name: draft.business_name.trim() }).eq('id', workspaceId)
-    if (workspaceError) throw new Error('Không thể cập nhật tên không gian làm việc.')
+    if (workspaceError) throw new Error(explainWorkspaceError('Không thể cập nhật tên không gian làm việc.', workspaceError))
   }
   const payload = {
     workspace_id: workspaceId,
@@ -106,5 +121,5 @@ export async function saveBusinessProfile(workspaceId, draft, updateWorkspace = 
     payload,
     { onConflict: 'workspace_id' },
   )
-  if (error) throw new Error('Không thể lưu hồ sơ doanh nghiệp.')
+  if (error) throw new Error(explainWorkspaceError('Không thể lưu hồ sơ doanh nghiệp.', error))
 }
