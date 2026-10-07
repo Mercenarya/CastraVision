@@ -4,11 +4,23 @@ import { describe, expect, it, vi } from 'vitest'
 
 import {
   ApprovalQueuePage,
+  AdminDashboardPage,
   MembersPage,
   PerformanceDashboardPage,
 } from './ActorPages'
 
 describe('role-specific actor pages', () => {
+  it('renders the complete Admin console and routes governance actions', async () => {
+    const user = userEvent.setup()
+    const setPage = vi.fn()
+    render(<AdminDashboardPage profile={{ business_name: 'SneakerVN', industry: 'Thời trang', business_size: 'SME' }} imports={[]} setPage={setPage} notify={vi.fn()} />)
+
+    expect(screen.getByRole('heading', { name: 'Admin Console' })).toBeVisible()
+    expect(screen.getByText('48 sự kiện')).toBeVisible()
+    await user.click(screen.getByRole('button', { name: /Mở hàng chờ/ }))
+    expect(setPage).toHaveBeenCalledWith('approvals')
+  })
+
   it('lets Admin open the invitation workflow and select a role', async () => {
     const user = userEvent.setup()
     const notify = vi.fn()

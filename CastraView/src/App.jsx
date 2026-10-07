@@ -7,6 +7,7 @@ import { navigationFor } from './navigation'
 import { backendApi as api } from './lib/api'
 import {
   ApprovalQueuePage,
+  AdminDashboardPage,
   AuditLogPage,
   BudgetOptimizationPage,
   CompetitorInsightsPage,
@@ -242,9 +243,11 @@ function App() {
   return <Shell user={user} role={auth.role} profile={profile} page={onboarding ? 'onboarding' : page} setPage={setPage} logout={logout} onboarding={onboarding}>
     {visibleError && <Notice>{visibleError}</Notice>}
     {(onboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage(defaultPage(auth.role)) : logout} />}
-    {profile && !onboarding && page === defaultPage(auth.role) && (auth.role === 'manager'
-      ? <PerformanceDashboardPage setPage={setPage} imports={imports} />
-      : <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />)}
+    {profile && !onboarding && page === defaultPage(auth.role) && (auth.role === 'admin'
+      ? <AdminDashboardPage profile={profile} imports={imports} setPage={setPage} notify={setToast} />
+      : auth.role === 'manager'
+        ? <PerformanceDashboardPage setPage={setPage} imports={imports} />
+        : <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />)}
     {profile && !onboarding && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}
     {profile && !onboarding && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}
     {profile && !onboarding && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}

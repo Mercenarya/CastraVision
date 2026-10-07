@@ -85,6 +85,40 @@ export function AuditLogPage() {
   return <><PageIntro code="FR11 · IMMUTABLE LEDGER" title="Nhật ký kiểm toán hệ thống" subtitle="Theo dõi hành động, thay đổi vai trò và quyết định phê duyệt trong Workspace." action={<button className="button subtle">⇩ Xuất CSV</button>} /><div className="actor-summary"><div><strong>1.482</strong><span>Sự kiện 30 ngày</span></div><div><strong className="success-text">100%</strong><span>Toàn vẹn dữ liệu</span></div><div><strong>3</strong><span>Người vận hành</span></div><div><strong className="code-text">9b4f…aa03</strong><span>Hash cuối</span></div></div><Panel title="Audit events" meta="SHA-256 verified"><div className="actor-table-wrap"><table className="actor-table"><thead><tr><th>Thời gian</th><th>Actor</th><th>Hành động</th><th>Đối tượng</th><th>Module</th></tr></thead><tbody>{events.map((event) => <tr key={event.join('-')}><td className="code-text">{event[0]} UTC</td><td>{event[1]}</td><td><Badge tone={event[2].includes('phê') ? 'approved' : 'manager'}>{event[2]}</Badge></td><td>{event[3]}</td><td>{event[4]}</td></tr>)}</tbody></table></div><footer className="ledger-footer"><span>● Tất cả hash đã xác minh</span><span>Retention: 7 năm</span></footer></Panel></>
 }
 
+export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
+  const [pending, setPending] = useState([
+    ['PRP-8402', 'Nội dung đa kênh Q4', 'CONTENT', 'AI Content Engine · Mai Lan'],
+    ['PRP-8403', 'Tái phân bổ ngân sách động', 'BUDGET', 'Budget Optimizer · Hà Ngọc Minh'],
+    ['PRP-8404', 'Chuỗi nội dung nuôi dưỡng', 'CONTENT', 'AI Content Engine · Mai Lan'],
+  ])
+  const audit = [
+    ['FR06 RBAC', 'Đổi vai trò: Mai Lan được nâng lên Manager', '14 phút trước', 'Lê Thành Đạt · Admin'],
+    ['FR04 APPROVAL', 'Đã phê duyệt PRP-8401 Creative Retargeting', '1 giờ trước', 'Hà Ngọc Minh · Manager'],
+    ['FR06 INVITE', 'Đã mời content@demo.castravision.vn', '3 giờ trước', 'Lê Thành Đạt · Admin'],
+    ['FR08 IMPORT', `Đã nhập dữ liệu chiến dịch (${imports.length || 3} nguồn)`, '5 giờ trước', 'Hà Ngọc Minh · Manager'],
+  ]
+  function approve(id) {
+    setPending((current) => current.filter((row) => row[0] !== id))
+    notify?.(`${id} đã được phê duyệt và ghi vào Audit Log.`)
+  }
+  return <>
+    <PageIntro code="ADMIN · LIVE NODE" title="Admin Console" subtitle={`Quản trị ${profile.business_name}, phân quyền thành viên, phê duyệt đề xuất và giám sát nhật ký tuân thủ.`} action={<div className="admin-quick-actions"><button className="button subtle" onClick={() => setPage('members')}>♙ Mời thành viên</button><button className="button subtle" onClick={() => setPage('roles')}>◈ Quản lý vai trò</button><button className="button primary" onClick={() => notify?.('Tính năng tạo Workspace mới đã sẵn sàng để kết nối API.')}>＋ Tạo Workspace</button></div>} />
+    <div className="admin-kpi-grid">
+      <article><span>Workspace hiện tại</span><div className="admin-kpi-title"><strong>{profile.business_name}</strong><i>▦</i></div><p>{profile.industry || 'Doanh nghiệp'} · {profile.business_size || 'SME'}</p><small>Trạng thái <b className="success-text">Active</b></small></article>
+      <article><span>Thành viên Workspace</span><div className="admin-kpi-title"><strong>4 thành viên</strong><i>♙</i></div><p>1 Admin · 1 Manager · 2 Member</p><button onClick={() => setPage('members')}>Quản lý thành viên →</button></article>
+      <article><span>Đang chờ phê duyệt</span><div className="admin-kpi-title"><strong>{pending.length} đề xuất</strong><i>✓</i></div><p>Content và Budget cần ký duyệt</p><button onClick={() => setPage('approvals')}>Mở hàng chờ →</button></article>
+      <article><span>Audit events · 24h</span><div className="admin-kpi-title"><strong>48 sự kiện</strong><i>♢</i></div><p>100% được ghi nhận bằng hash</p><button onClick={() => setPage('audit')}>Xem Audit Log →</button></article>
+    </div>
+    <div className="admin-console-grid">
+      <div>
+        <Panel title="Quản lý Workspace & sức khỏe tài nguyên" meta="Active · Healthy"><div className="resource-health"><div className="resource-facts"><span><small>Đơn vị tổ chức</small><strong>{profile.business_name}</strong></span><span><small>Gói đang dùng</small><strong>SME Pro</strong></span></div><div className="health-meter"><span><b>AI Engine orchestration</b><em>68% capacity</em></span><div><i style={{ width: '68%' }} /></div></div><div className="health-meter green"><span><b>Audit ledger throughput</b><em>Optimal · 0,24ms</em></span><div><i style={{ width: '92%' }} /></div></div><div className="resource-actions"><button onClick={() => setPage('members')}>♙ Thành viên</button><button onClick={() => setPage('roles')}>▦ Ma trận quyền</button><button onClick={() => setPage('profile')}>☷ Cài đặt Workspace</button></div></div></Panel>
+        <Panel title="Governance đang chờ phê duyệt · FR04" meta={`${pending.length} pending review`}><div className="governance-list">{pending.length ? pending.map(([id, title, type, author]) => <article key={id}><span className="proposal-symbol">{type === 'BUDGET' ? '▣' : '▤'}</span><div><small>{id} · {type}</small><strong>{title}</strong><span>{author}</span></div><div><button className="row-action" onClick={() => setPage('approvals')}>Xem xét</button><button className="approve-action" onClick={() => approve(id)}>Phê duyệt</button></div></article>) : <div className="admin-empty">✓ Không còn đề xuất chờ phê duyệt.</div>}</div></Panel>
+      </div>
+      <Panel title="Audit Trail gần đây · FR11" meta="● Live"><div className="recent-audit">{audit.map(([code, text, time, actor]) => <article key={code + time}><div><Badge tone={code.includes('APPROVAL') ? 'admin' : code.includes('IMPORT') ? 'active' : 'manager'}>{code}</Badge><time>{time}</time></div><p>{text}</p><small>◎ {actor}</small></article>)}</div><button className="audit-footer-button" onClick={() => setPage('audit')}>▤ Xem toàn bộ Audit Log</button></Panel>
+    </div>
+  </>
+}
+
 export function PerformanceDashboardPage({ setPage, imports = [] }) {
   const channels = [['Google Search', '1,84M', '4,15%', '21.200 ₫', '4,20×', 88], ['Meta Ads', '2,10M', '3,10%', '26.400 ₫', '3,65×', 73], ['TikTok Video', '880K', '2,45%', '29.100 ₫', '2,80×', 56]]
   return <><PageIntro code="FR05 · PERFORMANCE MONITORING" title="Dashboard hiệu suất chiến dịch" subtitle="Theo dõi các kênh marketing theo mục tiêu hiệu quả đã xác lập." action={<button className="button subtle">↻ Làm mới dữ liệu</button>} /><div className="metric-grid"><article><span>Impressions</span><strong>4,82M</strong><small className="success-text">↗ +12,4% kỳ trước</small></article><article><span>CTR</span><strong>3,42%</strong><small>Benchmark 2,80%</small></article><article><span>CPA</span><strong>24.800 ₫</strong><small>Thấp hơn mục tiêu 3.200 ₫</small></article><article><span>ROAS</span><strong>3,85×</strong><small className="success-text">Vượt mục tiêu</small></article></div><div className="dashboard-split"><Panel title="Hiệu suất theo kênh" meta={`${imports.length || 3} nguồn dữ liệu`}><div className="channel-performance">{channels.map((row, index) => <div className="performance-row" key={row[0]}><div><strong>{row[0]}</strong><small>{index === 0 ? 'High intent' : index === 1 ? 'Retargeting' : 'Cần tối ưu'}</small></div>{row.slice(1, 5).map((value) => <b key={value}>{value}</b>)}<div className="mini-progress"><span style={{ width: `${row[5]}%` }} /></div></div>)}</div></Panel><Panel title="Cảnh báo tối ưu" className="alert-panel"><Badge tone="rejected">Alert trigger</Badge><h3>TikTok CPA vượt ngưỡng</h3><p>CPA hiện tại cao hơn mục tiêu. Nên cân bằng lại ngân sách để bảo vệ biên lợi nhuận.</p><button className="button primary full" onClick={() => setPage('budget')}>Mở trình tối ưu ngân sách</button></Panel></div></>
