@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { can, defaultPage } from './permissions'
+import { navigationFor } from '../navigation'
 
 describe('actor permission map', () => {
   it('gives Admin governance permissions', () => {
@@ -24,5 +25,10 @@ describe('actor permission map', () => {
 
   it('uses a distinct default dashboard for each actor', () => {
     expect(new Set(['admin', 'manager', 'member'].map(defaultPage)).size).toBe(3)
+  })
+
+  it('locks navigation to onboarding until the business profile exists', () => {
+    expect(navigationFor('admin', true).map(([page]) => page)).toEqual(['onboarding'])
+    expect(navigationFor('admin', false).map(([page]) => page)).toContain('members')
   })
 })

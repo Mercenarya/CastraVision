@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 import { useAuth } from './auth/AuthContext'
 import { ROLE_LABELS, can, defaultPage } from './auth/permissions'
+import { navigationFor } from './navigation'
 import { backendApi as api } from './lib/api'
 import {
   createWorkspaceAndProfile,
@@ -12,27 +13,6 @@ import {
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
 const SIZES = { Micro: '1–10 nhân sự', Small: '11–50 nhân sự', Medium: '51–250 nhân sự', Large: 'Trên 250 nhân sự' }
 const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'VND' }
-const FEATURE_NAV = [
-  ['strategy', '◈', 'Chiến lược & phân tích', 'strategy:read'],
-  ['content', '✦', 'Content Studio', 'content:write'],
-  ['import', '⇥', 'Nhập dữ liệu chiến dịch', 'campaign:import'],
-  ['profile', '☷', 'Hồ sơ doanh nghiệp', 'business:write'],
-  ['members', '♙', 'Thành viên & vai trò', 'members:manage'],
-  ['approvals', '✓', 'Phê duyệt', 'approval:write'],
-]
-
-function navigationFor(role) {
-  const dashboardLabels = {
-    admin: 'Quản trị Workspace',
-    manager: 'Điều hành chiến dịch',
-    member: 'Không gian nội dung',
-  }
-  return [
-    [defaultPage(role), '▦', dashboardLabels[role] || 'Tổng quan', 'overview'],
-    ...FEATURE_NAV.filter((item) => can(role, item[3])),
-  ]
-}
-
 function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
 function Heading({ eyebrow, title, subtitle, children }) { return <div className="page-heading"><div><div className="eyebrow"><i /> {eyebrow}</div><h1>{title}</h1><p>{subtitle}</p></div>{children}</div> }
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
@@ -61,8 +41,8 @@ function AuthScreen({ mode, setMode, signIn, signUp, backendError }) {
   </div></main><footer className="auth-footer"><span>© 2026 CastraVision · Sprint 1</span><span>AI marketing workspace for SMBs</span></footer></div>
 }
 
-function Shell({ user, role, profile, page, setPage, logout, children }) {
-  const navigation = navigationFor(role)
+function Shell({ user, role, profile, page, setPage, logout, onboarding = false, children }) {
+  const navigation = navigationFor(role, onboarding)
   const current = navigation.find(([key]) => key === page)?.[2] || 'Tổng quan'
   return <div className="shell"><aside className="sidebar"><div className="sidebar-brand"><Brand /><span className="sme-tag">SME AI</span></div><div className="workspace-switch"><span className="workspace-avatar">{(profile?.business_name || user.email).slice(0, 2).toUpperCase()}</span><span><strong>{profile?.business_name || 'Không gian mới'}</strong><small>{ROLE_LABELS[role] || 'Đang thiết lập'} · CastraVision</small></span><span>⌄</span></div><div className="nav-caption">ENGINE NAVIGATION</div><nav aria-label="Điều hướng chính">{navigation.map(([key, icon, label]) => <button key={key} className={`nav-item ${page === key ? 'active' : ''}`} onClick={() => setPage(key)} aria-current={page === key ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</button>)}</nav><div className="sidebar-bottom"><div><i /> Sprint 1 workspace <strong>Online</strong></div><div className="quota-line"><span /></div><small>FR12 · FR08 · FR01</small></div></aside><div className="main-wrap"><header className="app-topbar"><span className="mobile-brand"><Brand /></span><div className="topbar-context"><i /> {current.toUpperCase()}</div><div className="topbar-actions"><span className="sprint-label">{ROLE_LABELS[role] || 'SPRINT 1'}</span><span className="user-avatar">{user.email[0].toUpperCase()}</span><span className="user-email">{user.email}</span><button onClick={logout} className="text-button" type="button">Đăng xuất</button></div></header><main className="app-content">{children}</main></div></div>
 }
@@ -246,7 +226,8 @@ function App() {
   if (!ready) return <div className="loading-screen"><Brand /><span>Đang kết nối không gian làm việc…</span></div>
   const visibleError = backendError || auth.error
   if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} signIn={auth.signIn} signUp={auth.signUp} backendError={visibleError} />
-  return <Shell user={user} role={auth.role} profile={profile} page={page} setPage={setPage} logout={logout}>{visibleError && <Notice>{visibleError}</Notice>}{(!profile || needsOnboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage(defaultPage(auth.role)) : logout} />}{profile && page === defaultPage(auth.role) && <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}{profile && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}{profile && page === 'members' && can(auth.role, 'members:manage') && <PlaceholderPage title="Thành viên & vai trò" subtitle="Chỉ Admin có thể quản lý thành viên của Workspace." />}{profile && page === 'approvals' && can(auth.role, 'approval:write') && <PlaceholderPage title="Hàng chờ phê duyệt" subtitle="Chỉ Admin có thể phê duyệt hoặc từ chối đề xuất." />}<Toast message={toast} clear={() => setToast('')} /></Shell>
+  const onboarding = !profile || needsOnboarding
+  return <Shell user={user} role={auth.role} profile={profile} page={onboarding ? 'onboarding' : page} setPage={setPage} logout={logout} onboarding={onboarding}>{visibleError && <Notice>{visibleError}</Notice>}{(onboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage(defaultPage(auth.role)) : logout} />}{profile && !onboarding && page === defaultPage(auth.role) && <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && !onboarding && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && !onboarding && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && !onboarding && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}{profile && !onboarding && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}{profile && !onboarding && page === 'members' && can(auth.role, 'members:manage') && <PlaceholderPage title="Thành viên & vai trò" subtitle="Chỉ Admin có thể quản lý thành viên của Workspace." />}{profile && !onboarding && page === 'approvals' && can(auth.role, 'approval:write') && <PlaceholderPage title="Hàng chờ phê duyệt" subtitle="Chỉ Admin có thể phê duyệt hoặc từ chối đề xuất." />}<Toast message={toast} clear={() => setToast('')} /></Shell>
 }
 
 export default App
