@@ -73,6 +73,7 @@ def update_data_to_dataframe(file_path:str, new_data:str, index:int):
     except Exception as e:
         print(f"Error occurred while updating data to DataFrame: {e}")
 
+
 # xoá dữ liệu khỏi DataFrame hiện có
 def delete_data(file_path:str, row_index:int):
     """
@@ -91,6 +92,7 @@ def delete_data(file_path:str, row_index:int):
     except Exception as e:
         print(f"Error occurred while deleting data from DataFrame: {e}")
 
+# Deep shit
 def clean_data_store(file_path:str):
     """
     Xóa tất cả dữ liệu trong DataFrame hiện có.

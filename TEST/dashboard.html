@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CastraVision Dashboard - Marketing Analytics</title>
+    <meta name="description" content="CastraVision Marketing Dashboard - Tổng quan hiệu suất chiến dịch theo kênh">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>CV</text></svg>">
+
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --navy: #1e3a8a;
+            --lavender: #8b5cf6;
+            --cyan: #06b6d4;
+
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+
+            --radius-xs: 4px;
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+            --badge-ok-bg: #dcfce7;
+            --badge-ok-fg: #166534;
+            --badge-warn-bg: #fef3c7;
+            --badge-warn-fg: #92400e;
+        }
+
+        /* Dark mode: chỉ cần đổi biến, không cần override từng class */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --gray-50: #0f172a;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+                --gray-300: #475569;
+                --gray-400: #64748b;
+                --gray-500: #94a3b8;
+                --gray-600: #cbd5e1;
+                --gray-700: #e2e8f0;
+                --gray-800: #f1f5f9;
+
+                --navy: #3b82f6;
+                --lavender: #a78bfa;
+                --cyan: #22d3ee;
+
+                --badge-ok-bg: #166534;
+                --badge-ok-fg: #dcfce7;
+                --badge-warn-bg: #92400e;
+                --badge-warn-fg: #fef3c7;
+            }
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            background-color: var(--gray-100);
+            color: var(--gray-800);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--navy), var(--lavender));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--navy), var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            background-color: var(--lavender);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .user-role {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        /* Layout: sidebar + main */
+        .dashboard-wrapper {
+            display: flex;
+            gap: 1.75rem;
+            align-items: flex-start;
+        }
+
+        .sidebar {
+            width: 260px;
+            flex-shrink: 0;
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--gray-500);
+            font-weight: 500;
+            font-size: 0.875rem;
+            transition: all var(--transition);
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: var(--gray-100);
+            color: var(--navy);
+            border-left-color: var(--navy);
+        }
+
+        .nav-item.active {
+            background-color: var(--navy);
+            color: #fff;
+            border-left-color: var(--navy);
+        }
+
+        .nav-icon {
+            width: 22px;
+            display: flex;
+            justify-content: center;
+            margin-right: 0.75rem;
+        }
+
+        main {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            gap: 1.75rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--gray-50);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background-color: var(--gray-100);
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+
+        /* Metrics */
+        .metric-card {
+            background: var(--gray-50);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all var(--transition);
+            border: 1px solid var(--gray-200);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .metric-label {
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--gray-500);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .metric-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--gray-800);
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .metric-value-number {
+            font-feature-settings: "tnum";
+        }
+
+        .metric-change {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-xs);
+        }
+
+        .change-positive {
+            background-color: var(--badge-ok-bg);
+            color: var(--badge-ok-fg);
+        }
+
+        /* Chart placeholder */
+        .chart-container {
+            height: 220px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            background-color: var(--gray-100);
+            border: 1px solid var(--gray-200);
+        }
+
+        .chart-placeholder {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .chart-placeholder-icon {
+            font-size: 2.5rem;
+            opacity: 0.7;
+        }
+
+        .chart-placeholder-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-600);
+        }
+
+        .chart-placeholder-subtitle {
+            font-size: 0.8125rem;
+            color: var(--gray-500);
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 0.875rem;
+        }
+
+        .data-table th {
+            background-color: var(--gray-100);
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            border-bottom-width: 2px;
+        }
+
+        .data-table tbody tr {
+            transition: background-color var(--transition);
+        }
+
+        .data-table tbody tr:hover {
+            background-color: var(--gray-100);
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.3125rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            white-space: nowrap;
+        }
+
+        .status-active {
+            background-color: var(--badge-ok-bg);
+            color: var(--badge-ok-fg);
+        }
+
+        .status-warning {
+            background-color: var(--badge-warn-bg);
+            color: var(--badge-warn-fg);
+        }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.75rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            font-family: inherit;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--navy);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.15);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-800);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--gray-300);
+        }
+
+        .btn-outline {
+            border: 1.5px solid var(--gray-300);
+            color: var(--gray-600);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background-color: var(--gray-200);
+            border-color: var(--gray-400);
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--navy);
+            outline-offset: 2px;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .chart-loading {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .container {
+                padding: 1rem;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .dashboard-wrapper {
+                flex-direction: column;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                padding: 0.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff;
+                color: #000;
+            }
+
+            .card,
+            .sidebar,
+            .actions {
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">CV</div>
+                <div class="logo-text">CastraVision</div>
+            </div>
+            <div class="user-info">
+                <div class="user-details">
+                    <div class="user-name">Nguyễn Văn A</div>
+                    <div class="user-role">Quản trị viên</div>
+                </div>
+                <div class="user-avatar">NV</div>
+            </div>
+        </header>
+
+        <div class="dashboard-wrapper">
+            <aside class="sidebar">
+                <nav>
+                    <a href="#" class="nav-item active" aria-current="page">
+                        <div class="nav-icon">📊</div>
+                        <div>Dashboard</div>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <div class="nav-icon">🎯</div>
+                        <div>Chiến lược</div>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <div class="nav-icon">📝</div>
+                        <div>Nội dung</div>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <div class="nav-icon">📤</div>
+                        <div>Nhập dữ liệu</div>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <div class="nav-icon">⚙️</div>
+                        <div>Cài đặt</div>
+                    </a>
+                </nav>
+            </aside>
+
+            <main>
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Tổng chi tiêu</div>
+                        <div class="metric-value"><span class="metric-value-number">25,000,000</span> VND</div>
+                        <div class="metric-change change-positive">▲ 12% so với tháng trước</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">ROAS trung bình</div>
+                        <div class="metric-value"><span class="metric-value-number">2.8</span>x</div>
+                        <div class="metric-change change-positive">▲ 0.3x so với tháng trước</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">CPA trung bình</div>
+                        <div class="metric-value"><span class="metric-value-number">42,000</span> VND</div>
+                        <!-- CPA giảm là tín hiệu tốt nên dùng màu xanh -->
+                        <div class="metric-change change-positive">▼ 8% so với tháng trước</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Tổng chuyển đổi</div>
+                        <div class="metric-value"><span class="metric-value-number">596</span></div>
+                        <div class="metric-change change-positive">▲ 18% so với tháng trước</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Channel performance -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><span>📈</span> Hiệu suất theo kênh</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-container">
+                                <div class="chart-placeholder chart-loading">
+                                    <div class="chart-placeholder-icon">📊</div>
+                                    <div class="chart-placeholder-title">Biểu đồ cột: ROAS theo kênh</div>
+                                    <div class="chart-placeholder-subtitle">Meta • Google Ads • TikTok</div>
+                                </div>
+                            </div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Kênh</th>
+                                        <th>Chi tiêu</th>
+                                        <th>ROAS</th>
+                                        <th>CTR</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Meta</td>
+                                        <td>10,000,000 VND</td>
+                                        <td>2.5x</td>
+                                        <td>1.8%</td>
+                                        <td><span class="status-badge status-active">Hoạt động tốt</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Google Ads</td>
+                                        <td>8,000,000 VND</td>
+                                        <td>3.2x</td>
+                                        <td>2.4%</td>
+                                        <td><span class="status-badge status-active">Hoạt động tốt</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TikTok</td>
+                                        <td>7,000,000 VND</td>
+                                        <td>2.7x</td>
+                                        <td>3.1%</td>
+                                        <td><span class="status-badge status-warning">Cần tối ưu</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Budget allocation -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><span>🥧</span> Phân bổ ngân sách</div>
+                        </div>
+                        <div class="card-content">
+                            <div class="chart-container">
+                                <div class="chart-placeholder chart-loading">
+                                    <div class="chart-placeholder-icon">📊</div>
+                                    <div class="chart-placeholder-title">Biểu đồ tròn: Phân bổ ngân sách</div>
+                                    <div class="chart-placeholder-subtitle">40% • 32% • 28%</div>
+                                </div>
+                            </div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Kênh</th>
+                                        <th>%</th>
+                                        <th>Ngân sách</th>
+                                        <th>Hiệu quả</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Meta</td>
+                                        <td>40%</td>
+                                        <td>10,000,000 VND</td>
+                                        <td>2.5x ROAS</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Google Ads</td>
+                                        <td>32%</td>
+                                        <td>8,000,000 VND</td>
+                                        <td>3.2x ROAS</td>
+                                    </tr>
+                                    <tr>
+                                        <td>TikTok</td>
+                                        <td>28%</td>
+                                        <td>7,000,000 VND</td>
+                                        <td>2.7x ROAS</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent activity -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title"><span>🕒</span> Hoạt động gần đây</div>
+                        </div>
+                        <div class="card-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Thời gian</th>
+                                        <th>Hành động</th>
+                                        <th>Chi tiết</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>10:30</td>
+                                        <td>Tạo chiến lược mới</td>
+                                        <td>Chiến lược Q4 2026</td>
+                                        <td><span class="status-badge status-active">Hoàn thành</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>09:15</td>
+                                        <td>Nhập dữ liệu chiến dịch</td>
+                                        <td>Tháng 9/2026 - Meta</td>
+                                        <td><span class="status-badge status-active">Đã xử lý</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>08:45</td>
+                                        <td>Gửi báo cáo</td>
+                                        <td>Báo cáo hàng tuần</td>
+                                        <td><span class="status-badge status-active">Đã gửi</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Hôm qua</td>
+                                        <td>Cập nhật ngân sách</td>
+                                        <td>Tăng 15% cho Google Ads</td>
+                                        <td><span class="status-badge status-warning">Chờ duyệt</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary"><span>➕</span> Tạo chiến lược mới</button>
+                    <button class="btn btn-outline"><span>📤</span> Nhập dữ liệu chiến dịch</button>
+                    <button class="btn btn-secondary"><span>📥</span> Xuất báo cáo</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Điều hướng sidebar
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                item.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    navItems.forEach(i => {
+                        i.classList.remove('active');
+                        i.removeAttribute('aria-current');
+                    });
+                    this.classList.add('active');
+                    this.setAttribute('aria-current', 'page');
+                });
+
+                item.addEventListener('keydown', function (e) {
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        navItems[(index + 1) % navItems.length].focus();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        navItems[(index - 1 + navItems.length) % navItems.length].focus();
+                    }
+                });
+            });
+
+            // Giả lập tải biểu đồ (delay nằm ngoài hàm callback)
+            document.querySelectorAll('.chart-placeholder').forEach((placeholder, index) => {
+                setTimeout(() => {
+                    const title = placeholder.querySelector('.chart-placeholder-title')?.textContent || 'Biểu đồ';
+                    const subtitle = placeholder.querySelector('.chart-placeholder-subtitle')?.textContent || '';
+                    placeholder.classList.remove('chart-loading');
+                    placeholder.innerHTML = `
+                        <div class="chart-placeholder-icon">📊</div>
+                        <div class="chart-placeholder-title">${title}</div>
+                        <div class="chart-placeholder-subtitle">${subtitle}</div>`;
+                }, 1500 * (index + 1));
+            });
+
+            // Hiệu ứng ripple cho nút
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function (e) {
+                    const rect = this.getBoundingClientRect();
+                    const ripple = document.createElement('span');
+                    Object.assign(ripple.style, {
+                        position: 'absolute',
+                        left: `${e.clientX - rect.left}px`,
+                        top: `${e.clientY - rect.top}px`,
+                        width: '0px',
+                        height: '0px',
+                        borderRadius: '50%',
+                        background: 'rgba(255, 255, 255, 0.3)',
+                        pointerEvents: 'none',
+                        transform: 'translate(-50%, -50%)',
+                        transition: 'width 0.4s ease, height 0.4s ease, opacity 0.4s ease'
+                    });
+                    this.appendChild(ripple);
+
+                    requestAnimationFrame(() => {
+                        ripple.style.width = '200px';
+                        ripple.style.height = '200px';
+                        ripple.style.opacity = '0';
+                    });
+                    setTimeout(() => ripple.remove(), 400);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
