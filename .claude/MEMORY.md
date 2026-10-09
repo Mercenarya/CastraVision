@@ -1,0 +1,2 @@
+- [Created project configurations for CastraVision](created-project-configurations.md) — Created rule and skill files for CastraVision project in .claude directory
+- [Created Vietnamese project configurations for CastraVision](created-project-configurations.vi.md) — Created Vietnamese versions of rule and skill files for CastraVision project in .claude directory
