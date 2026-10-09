@@ -156,6 +156,7 @@ memberships, workspaces, or domain rows.
 
 - `CastraVision/settings.py`
 - `requirements.txt`
+- `requirements-runtime.txt`
 - `.env.example`
 
 **Actions:**
