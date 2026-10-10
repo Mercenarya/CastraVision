@@ -7,6 +7,7 @@ app_name = "castra_services"
 urlpatterns = [
     path("health/", views.health, name="health"),
     path("strategies/generate/", views.strategy_generate, name="strategy-generate"),
+    path("supabase/test/", views.supabase_test, name="supabase-test"),
     path("auth/csrf/", account_api.csrf, name="csrf"),
     path("auth/session/", account_api.session, name="session"),
     path("auth/register/", account_api.register, name="register"),
