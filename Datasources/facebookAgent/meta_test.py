@@ -12,11 +12,11 @@ from facebook_business.adobjects.adcreative import AdCreative
 from facebook_business.adobjects.campaign import Campaign
 
 
-my_app_id = '4642039079359148'
+my_app_id = ''
 my_app_secret = None
-my_access_token = 'EAAeuz6mgI9oBSnpbxTmkvWqSowxiMmRkITch0KBslRMFK34GfDzkDyxFerb3QiXl8bixWBDNQP9Fkf70ZCC16lzcZCp0uZBX8EpalHgLg56jkOZClejQ2jZBF0EXeP76gJE0W1WvuYeC39GOCo9YgPTTGnfRAfXpVZBy8jVNiX8gNJuB7vzaZAcz3f4KNzOof7t2fDV8bIPfAwRyIQSslZCMURQjDMeuG2HK8BVOkLj2aMhxjrvzxEQQkvIWzyZAicZBS3qUrO8BVw0fIckaqxZAys8iFGZBAU0lGNTHZAZCYZD'
+my_access_token = ''
 FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
-my_account = AdAccount('act_1459980572331391')
+my_account = AdAccount('')
 campaigns = my_account.get_campaigns()
 print(campaigns)
 
