@@ -12,7 +12,7 @@ ads_csv_sample = os.path.join(ROOT,"test_output","ads_sample.csv")
 from data_preprocessing import check_dir_exists, adding_new_data_to_csv
 from data_preprocessing import convert_data_to_dataframe, update_data_to_dataframe
 from data_preprocessing import clean_data_store
-from TEST.facebookAgent.meta_test import check_campaigns, get_insights, get_ads, get_ads_content
+from Datasources.facebookAgent.meta_test import check_campaigns, get_insights, get_ads, get_ads_content
 
 # tự động tạo các Commands trong pipeline
 def auto_generate_tasks(filepath:str, commands:list):
