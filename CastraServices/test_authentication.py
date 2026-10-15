@@ -76,3 +76,41 @@ class JWTVerificationTests(SimpleTestCase):
         with self.assertRaises(AuthenticationError) as caught:
             _verified_subject("bad-token")
         self.assertEqual(str(caught.exception), "The access token is invalid.")
+
+    @override_settings(
+        SUPABASE_JWT_ALGORITHMS=["HS256"],
+        SUPABASE_URL="https://example.supabase.co",
+        SUPABASE_PUBLISHABLE_KEY="publishable-test-key",
+    )
+    @patch("CastraServices.authentication.httpx.get")
+    @patch("CastraServices.authentication.jwt.get_unverified_header")
+    def test_verifies_hs256_token_through_supabase_auth(self, get_header, get):
+        get_header.return_value = {"alg": "HS256"}
+        expected = UUID("11111111-1111-1111-1111-111111111111")
+        get.return_value.status_code = 200
+        get.return_value.json.return_value = {"id": str(expected)}
+
+        self.assertEqual(_verified_subject("legacy-signed-token"), expected)
+        get.assert_called_once_with(
+            "https://example.supabase.co/auth/v1/user",
+            headers={
+                "apikey": "publishable-test-key",
+                "Authorization": "Bearer legacy-signed-token",
+            },
+            timeout=10,
+        )
+
+    @override_settings(
+        SUPABASE_JWT_ALGORITHMS=["HS256"],
+        SUPABASE_URL="https://example.supabase.co",
+        SUPABASE_PUBLISHABLE_KEY="publishable-test-key",
+    )
+    @patch("CastraServices.authentication.httpx.get")
+    @patch("CastraServices.authentication.jwt.get_unverified_header")
+    def test_rejects_hs256_token_rejected_by_supabase(self, get_header, get):
+        get_header.return_value = {"alg": "HS256"}
+        get.return_value.status_code = 401
+
+        with self.assertRaises(AuthenticationError) as caught:
+            _verified_subject("rejected-token")
+        self.assertEqual(caught.exception.code, "INVALID_TOKEN")

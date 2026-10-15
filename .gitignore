@@ -11,6 +11,8 @@ __pycache__/
 *.log
 db.sqlite3
 .env
+supabase/.branches/
+supabase/.temp/
 .coverage
 htmlcov/
 CastraView/node_modules/

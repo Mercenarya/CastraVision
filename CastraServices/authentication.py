@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from uuid import UUID
 
+import httpx
 import jwt
 from django.conf import settings
 from django.http import HttpRequest
@@ -60,12 +61,45 @@ def _bearer_token(request: HttpRequest) -> str:
     return token.strip()
 
 
+def _verified_hs256_subject(token: str) -> UUID:
+    """Verify legacy symmetric Supabase tokens without distributing the JWT secret."""
+    if not settings.SUPABASE_URL or not settings.SUPABASE_PUBLISHABLE_KEY:
+        raise AuthenticationError(
+            "AUTH_UNAVAILABLE", "Authentication could not be completed."
+        )
+    try:
+        response = httpx.get(
+            f"{settings.SUPABASE_URL}/auth/v1/user",
+            headers={
+                "apikey": settings.SUPABASE_PUBLISHABLE_KEY,
+                "Authorization": f"Bearer {token}",
+            },
+            timeout=settings.SUPABASE_HTTP_TIMEOUT_SECONDS,
+        )
+    except httpx.RequestError as exc:
+        raise AuthenticationError(
+            "AUTH_UNAVAILABLE", "Authentication could not be completed."
+        ) from exc
+    if response.status_code in {401, 403}:
+        raise AuthenticationError("INVALID_TOKEN", "The access token is invalid.")
+    if response.status_code != 200:
+        raise AuthenticationError(
+            "AUTH_UNAVAILABLE", "Authentication could not be completed."
+        )
+    try:
+        return UUID(str(response.json()["id"]))
+    except (KeyError, TypeError, ValueError) as exc:
+        raise AuthenticationError("INVALID_TOKEN", "The access token is invalid.") from exc
+
+
 def _verified_subject(token: str) -> UUID:
     try:
         header = jwt.get_unverified_header(token)
         algorithm = str(header.get("alg", ""))
         if algorithm not in settings.SUPABASE_JWT_ALGORITHMS:
             raise AuthenticationError("INVALID_TOKEN", "The token algorithm is not allowed.")
+        if algorithm == "HS256":
+            return _verified_hs256_subject(token)
         signing_key = _jwk_client(settings.SUPABASE_JWKS_URL).get_signing_key_from_jwt(
             token
         )

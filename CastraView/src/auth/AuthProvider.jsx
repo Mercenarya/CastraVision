@@ -90,14 +90,16 @@ export function AuthProvider({ children }) {
     needsOnboarding: Boolean(session?.user && !membership),
     refreshMembership,
     async signIn(email, password) {
-      const { error: authError } = await requireSupabase().auth.signInWithPassword({ email, password })
+      const normalizedEmail = email.trim().toLowerCase()
+      const { error: authError } = await requireSupabase().auth.signInWithPassword({ email: normalizedEmail, password })
       if (authError) throw new Error('Email hoặc mật khẩu không đúng.')
     },
     async signUp(email, password, fullName = '') {
+      const normalizedEmail = email.trim().toLowerCase()
       const { data, error: authError } = await requireSupabase().auth.signUp({
-        email,
+        email: normalizedEmail,
         password,
-        options: { data: { full_name: fullName } },
+        options: { data: { full_name: fullName.trim() } },
       })
       if (authError) throw new Error(authError.message)
       return data
