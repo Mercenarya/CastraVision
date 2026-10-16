@@ -1,4 +1,5 @@
 import { requireSupabase } from './supabase'
+import { getActiveWorkspaceId } from './activeWorkspace'
 
 const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 
@@ -11,6 +12,8 @@ export async function backendApi(path, options = {}) {
     ...(options.headers || {}),
     Authorization: `Bearer ${session.access_token}`,
   }
+  const workspaceId = getActiveWorkspaceId(session.user?.id)
+  if (workspaceId) headers['X-Workspace-ID'] = workspaceId
   if (!(options.body instanceof FormData) && options.body !== undefined) {
     headers['Content-Type'] = 'application/json'
   }

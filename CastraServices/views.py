@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 from pydantic import ValidationError
 
+from .permissions import require_workspace_member
 from .schemas import BusinessProfile
 from .strategy import generate_strategy
 
@@ -24,6 +25,7 @@ def health(request):
 
 @csrf_exempt
 @require_POST
+@require_workspace_member
 def strategy_generate(request):
     if len(request.body) > 1_000_000:
         return error_response("PAYLOAD_TOO_LARGE", "Payload must be under 1 MB.", 413)

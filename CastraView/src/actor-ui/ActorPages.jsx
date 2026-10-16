@@ -119,6 +119,31 @@ export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
   </>
 }
 
+export function AdminWorkspaceDashboard({ workspaces = [], activeWorkspaceId, onSelectWorkspace, onCreateWorkspace }) {
+  const active = workspaces.find((item) => item.workspaceId === activeWorkspaceId)
+  const totalMembers = workspaces.reduce((sum, item) => sum + item.memberCount, 0)
+  return <>
+    <PageIntro code="ADMIN · MULTI-WORKSPACE" title="Admin Console" subtitle="Theo dõi trạng thái vận hành tổng hợp của các doanh nghiệp mà không hiển thị thông tin cá nhân hoặc dữ liệu bảo mật của nhân viên." action={<button className="button primary" type="button" onClick={onCreateWorkspace}>＋ Tạo Workspace</button>} />
+    <div className="admin-kpi-grid">
+      <article><span>Workspace quản lý</span><div className="admin-kpi-title"><strong>{workspaces.length}</strong><i>▦</i></div><p>Nhiều doanh nghiệp trong một tài khoản Admin</p></article>
+      <article><span>Tổng thành viên</span><div className="admin-kpi-title"><strong>{totalMembers}</strong><i>♙</i></div><p>Chỉ hiển thị số lượng tổng hợp</p></article>
+      <article><span>Workspace đang chọn</span><div className="admin-kpi-title"><strong>{active?.workspaceName || 'Chưa chọn'}</strong><i>✓</i></div><p>Trạng thái <b className="success-text">Active</b></p></article>
+      <article><span>Phạm vi dữ liệu</span><div className="admin-kpi-title"><strong>An toàn</strong><i>◇</i></div><p>Không tải email, user ID hoặc dữ liệu bảo mật</p></article>
+    </div>
+    <Panel title="Danh sách doanh nghiệp" meta="Dữ liệu tổng hợp, không chứa PII">
+      <div className="admin-workspace-list">
+        {workspaces.map((item) => <article className={item.workspaceId === activeWorkspaceId ? 'selected' : ''} key={item.workspaceId}>
+          <div><strong>{item.workspaceName}</strong><small>Tạo ngày {new Date(item.createdAt).toLocaleDateString('vi-VN')}</small></div>
+          <div className="workspace-counts"><span>{item.memberCount} thành viên</span><span>{item.adminCount} Admin</span><span>{item.managerCount} Manager</span><span>{item.standardMemberCount} Member</span></div>
+          <div><Badge tone="active">Active</Badge><button className="row-action" type="button" disabled={item.workspaceId === activeWorkspaceId} onClick={() => onSelectWorkspace(item.workspaceId)}>{item.workspaceId === activeWorkspaceId ? 'Đang xem' : 'Chọn Workspace'}</button></div>
+        </article>)}
+        {!workspaces.length && <div className="admin-empty">Chưa có Workspace nào được cấp quyền Admin.</div>}
+      </div>
+    </Panel>
+    <div className="actor-policy"><b>Nguyên tắc riêng tư:</b> Admin chỉ xem trạng thái và số lượng tổng hợp. Email, hồ sơ cá nhân, mã người dùng và thông tin bảo mật của nhân viên không được tải vào màn hình này.</div>
+  </>
+}
+
 export function PerformanceDashboardPage({ setPage, imports = [] }) {
   const channels = [['Google Search', '1,84M', '4,15%', '21.200 ₫', '4,20×', 88], ['Meta Ads', '2,10M', '3,10%', '26.400 ₫', '3,65×', 73], ['TikTok Video', '880K', '2,45%', '29.100 ₫', '2,80×', 56]]
   return <><PageIntro code="FR05 · PERFORMANCE MONITORING" title="Dashboard hiệu suất chiến dịch" subtitle="Theo dõi các kênh marketing theo mục tiêu hiệu quả đã xác lập." action={<button className="button subtle">↻ Làm mới dữ liệu</button>} /><div className="metric-grid"><article><span>Impressions</span><strong>4,82M</strong><small className="success-text">↗ +12,4% kỳ trước</small></article><article><span>CTR</span><strong>3,42%</strong><small>Benchmark 2,80%</small></article><article><span>CPA</span><strong>24.800 ₫</strong><small>Thấp hơn mục tiêu 3.200 ₫</small></article><article><span>ROAS</span><strong>3,85×</strong><small className="success-text">Vượt mục tiêu</small></article></div><div className="dashboard-split"><Panel title="Hiệu suất theo kênh" meta={`${imports.length || 3} nguồn dữ liệu`}><div className="channel-performance">{channels.map((row, index) => <div className="performance-row" key={row[0]}><div><strong>{row[0]}</strong><small>{index === 0 ? 'High intent' : index === 1 ? 'Retargeting' : 'Cần tối ưu'}</small></div>{row.slice(1, 5).map((value) => <b key={value}>{value}</b>)}<div className="mini-progress"><span style={{ width: `${row[5]}%` }} /></div></div>)}</div></Panel><Panel title="Cảnh báo tối ưu" className="alert-panel"><Badge tone="rejected">Alert trigger</Badge><h3>TikTok CPA vượt ngưỡng</h3><p>CPA hiện tại cao hơn mục tiêu. Nên cân bằng lại ngân sách để bảo vệ biên lợi nhuận.</p><button className="button primary full" onClick={() => setPage('budget')}>Mở trình tối ưu ngân sách</button></Panel></div></>

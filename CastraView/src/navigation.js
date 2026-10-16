@@ -2,13 +2,7 @@ import { can, defaultPage } from './auth/permissions'
 
 const ROLE_NAVIGATION = {
   admin: [
-    ['members', '♙', 'Thành viên Workspace', 'members:manage'],
-    ['roles', '⚙', 'Quản lý vai trò', 'members:manage'],
-    ['audit', '▤', 'Nhật ký kiểm toán', 'audit:read'],
-    ['approvals', '✓', 'Phê duyệt', 'approval:write'],
-    ['import', '⇥', 'Nhập dữ liệu', 'campaign:import'],
-    ['content', '✦', 'Content Studio', 'content:write'],
-    ['profile', '☷', 'Hồ sơ doanh nghiệp', 'business:write'],
+    ['profile', '☷', 'Hồ sơ Workspace', 'business:write'],
   ],
   manager: [
     ['strategy', '◈', 'Chiến lược', 'strategy:read'],

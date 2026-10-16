@@ -1,55 +1,67 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AuthContext } from './AuthContext'
+import { getActiveWorkspaceId, setActiveWorkspaceId } from '../lib/activeWorkspace'
 import { requireSupabase, supabaseConfigurationError } from '../lib/supabase'
 
-async function fetchMembership(client, userId) {
+async function fetchMemberships(client, userId) {
   const { data, error } = await client
     .from('workspace_members')
-    .select('workspace_id,role,workspaces(id,name)')
+    .select('workspace_id,role,joined_at,workspaces(id,name)')
     .eq('user_id', userId)
-    .limit(2)
+    .order('joined_at', { ascending: true })
   if (error) throw new Error('Không thể tải phân quyền không gian làm việc.')
-  if (!data?.length) return null
-  if (data.length !== 1) {
-    throw new Error('Sprint 1 yêu cầu mỗi tài khoản chỉ có một không gian đang hoạt động.')
-  }
-  const item = data[0]
-  if (!['admin', 'manager', 'member'].includes(item.role)) {
-    throw new Error('Vai trò không gian làm việc không hợp lệ.')
-  }
-  return {
-    workspaceId: item.workspace_id,
-    workspaceName: item.workspaces?.name || 'CastraVision Workspace',
-    role: item.role,
-  }
+  return (data || []).map((item) => {
+    if (!['admin', 'manager', 'member'].includes(item.role)) {
+      throw new Error('Vai trò không gian làm việc không hợp lệ.')
+    }
+    return {
+      workspaceId: item.workspace_id,
+      workspaceName: item.workspaces?.name || 'CastraVision Workspace',
+      role: item.role,
+    }
+  })
 }
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null)
+  const [memberships, setMemberships] = useState([])
   const [membership, setMembership] = useState(null)
   const [ready, setReady] = useState(Boolean(supabaseConfigurationError))
   const [error, setError] = useState(supabaseConfigurationError)
 
-  const loadMembership = useCallback(async (activeSession) => {
+  const loadMembership = useCallback(async (activeSession, preferredWorkspaceId = null) => {
     if (!activeSession?.user) {
+      setMemberships([])
       setMembership(null)
       return null
     }
-    const value = await fetchMembership(requireSupabase(), activeSession.user.id)
+    const values = await fetchMemberships(requireSupabase(), activeSession.user.id)
+    const requestedId = preferredWorkspaceId || getActiveWorkspaceId(activeSession.user.id)
+    const value = values.find((item) => item.workspaceId === requestedId)
+      || values.find((item) => item.role === 'admin')
+      || values[0]
+      || null
+    setMemberships(values)
     setMembership(value)
+    setActiveWorkspaceId(activeSession.user.id, value?.workspaceId || null)
     return value
   }, [])
 
   const refreshMembership = useCallback(
-    () => loadMembership(session),
+    (preferredWorkspaceId = null) => loadMembership(session, preferredWorkspaceId),
     [loadMembership, session],
   )
 
+  const selectWorkspace = useCallback((workspaceId) => {
+    const next = memberships.find((item) => item.workspaceId === workspaceId)
+    if (!next || !session?.user) throw new Error('Không gian làm việc không hợp lệ.')
+    setMembership(next)
+    setActiveWorkspaceId(session.user.id, next.workspaceId)
+  }, [memberships, session])
+
   useEffect(() => {
-    if (supabaseConfigurationError) {
-      return undefined
-    }
+    if (supabaseConfigurationError) return undefined
     const client = requireSupabase()
     let active = true
     async function boot() {
@@ -84,20 +96,24 @@ export function AuthProvider({ children }) {
     error,
     session,
     user: session?.user || null,
+    memberships,
     membership,
     role: membership?.role || null,
     workspaceId: membership?.workspaceId || null,
-    needsOnboarding: Boolean(session?.user && !membership),
+    needsOnboarding: Boolean(session?.user && memberships.length === 0),
     refreshMembership,
+    selectWorkspace,
     async signIn(email, password) {
-      const { error: authError } = await requireSupabase().auth.signInWithPassword({ email, password })
+      const normalizedEmail = email.trim().toLowerCase()
+      const { error: authError } = await requireSupabase().auth.signInWithPassword({ email: normalizedEmail, password })
       if (authError) throw new Error('Email hoặc mật khẩu không đúng.')
     },
     async signUp(email, password, fullName = '') {
+      const normalizedEmail = email.trim().toLowerCase()
       const { data, error: authError } = await requireSupabase().auth.signUp({
-        email,
+        email: normalizedEmail,
         password,
-        options: { data: { full_name: fullName } },
+        options: { data: { full_name: fullName.trim() } },
       })
       if (authError) throw new Error(authError.message)
       return data
@@ -106,7 +122,7 @@ export function AuthProvider({ children }) {
       const { error: authError } = await requireSupabase().auth.signOut()
       if (authError) throw new Error('Không thể đăng xuất an toàn.')
     },
-  }), [error, membership, ready, refreshMembership, session])
+  }), [error, membership, memberships, ready, refreshMembership, selectWorkspace, session])
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

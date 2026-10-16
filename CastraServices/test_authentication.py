@@ -4,7 +4,14 @@ from uuid import UUID
 import jwt
 from django.test import RequestFactory, SimpleTestCase, override_settings
 
-from .authentication import AuthenticationError, _bearer_token, _verified_subject
+from .authentication import (
+    AuthenticationError,
+    WorkspaceAuthorizationError,
+    _bearer_token,
+    _verified_subject,
+    authenticate_request,
+)
+from .supabase_client import WorkspaceMembership
 
 
 class BearerTokenTests(SimpleTestCase):
@@ -27,6 +34,47 @@ class BearerTokenTests(SimpleTestCase):
             "/api/test", HTTP_AUTHORIZATION="Bearer signed-token"
         )
         self.assertEqual(_bearer_token(request), "signed-token")
+
+
+class ActiveWorkspaceTests(SimpleTestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user_id = UUID("11111111-1111-1111-1111-111111111111")
+        self.workspace_id = UUID("22222222-2222-2222-2222-222222222222")
+
+    @patch("CastraServices.authentication.user_client")
+    @patch("CastraServices.authentication._verified_subject")
+    def test_verifies_the_explicit_active_workspace(
+        self, verified_subject, user_client
+    ):
+        verified_subject.return_value = self.user_id
+        user_client.return_value.workspace_membership.return_value = (
+            WorkspaceMembership(workspace_id=self.workspace_id, role="admin")
+        )
+        request = self.factory.get(
+            "/api/test",
+            HTTP_AUTHORIZATION="Bearer signed-token",
+            HTTP_X_WORKSPACE_ID=str(self.workspace_id),
+        )
+
+        context = authenticate_request(request)
+
+        self.assertEqual(context.workspace_id, self.workspace_id)
+        user_client.return_value.workspace_membership.assert_called_once_with(
+            self.user_id, self.workspace_id
+        )
+
+    @patch("CastraServices.authentication._verified_subject")
+    def test_requires_an_active_workspace_header(self, verified_subject):
+        verified_subject.return_value = self.user_id
+        request = self.factory.get(
+            "/api/test", HTTP_AUTHORIZATION="Bearer signed-token"
+        )
+
+        with self.assertRaises(WorkspaceAuthorizationError) as caught:
+            authenticate_request(request)
+
+        self.assertEqual(caught.exception.code, "WORKSPACE_REQUIRED")
 
 
 @override_settings(
@@ -76,3 +124,41 @@ class JWTVerificationTests(SimpleTestCase):
         with self.assertRaises(AuthenticationError) as caught:
             _verified_subject("bad-token")
         self.assertEqual(str(caught.exception), "The access token is invalid.")
+
+    @override_settings(
+        SUPABASE_JWT_ALGORITHMS=["HS256"],
+        SUPABASE_URL="https://example.supabase.co",
+        SUPABASE_PUBLISHABLE_KEY="publishable-test-key",
+    )
+    @patch("CastraServices.authentication.httpx.get")
+    @patch("CastraServices.authentication.jwt.get_unverified_header")
+    def test_verifies_hs256_token_through_supabase_auth(self, get_header, get):
+        get_header.return_value = {"alg": "HS256"}
+        expected = UUID("11111111-1111-1111-1111-111111111111")
+        get.return_value.status_code = 200
+        get.return_value.json.return_value = {"id": str(expected)}
+
+        self.assertEqual(_verified_subject("legacy-signed-token"), expected)
+        get.assert_called_once_with(
+            "https://example.supabase.co/auth/v1/user",
+            headers={
+                "apikey": "publishable-test-key",
+                "Authorization": "Bearer legacy-signed-token",
+            },
+            timeout=10,
+        )
+
+    @override_settings(
+        SUPABASE_JWT_ALGORITHMS=["HS256"],
+        SUPABASE_URL="https://example.supabase.co",
+        SUPABASE_PUBLISHABLE_KEY="publishable-test-key",
+    )
+    @patch("CastraServices.authentication.httpx.get")
+    @patch("CastraServices.authentication.jwt.get_unverified_header")
+    def test_rejects_hs256_token_rejected_by_supabase(self, get_header, get):
+        get_header.return_value = {"alg": "HS256"}
+        get.return_value.status_code = 401
+
+        with self.assertRaises(AuthenticationError) as caught:
+            _verified_subject("rejected-token")
+        self.assertEqual(caught.exception.code, "INVALID_TOKEN")

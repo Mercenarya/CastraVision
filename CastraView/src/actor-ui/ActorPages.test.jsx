@@ -5,11 +5,24 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   ApprovalQueuePage,
   AdminDashboardPage,
+  AdminWorkspaceDashboard,
   MembersPage,
   PerformanceDashboardPage,
 } from './ActorPages'
 
 describe('role-specific actor pages', () => {
+  it('shows Admin multi-workspace aggregates without employee PII', () => {
+    render(<AdminWorkspaceDashboard workspaces={[{
+      workspaceId: 'workspace-1', workspaceName: 'GreenStep Việt Nam',
+      createdAt: '2026-10-01T00:00:00Z', memberCount: 4,
+      adminCount: 1, managerCount: 1, standardMemberCount: 2,
+    }]} activeWorkspaceId="workspace-1" onSelectWorkspace={vi.fn()} onCreateWorkspace={vi.fn()} />)
+
+    expect(screen.getAllByText('GreenStep Việt Nam')).toHaveLength(2)
+    expect(screen.getByText('4 thành viên')).toBeVisible()
+    expect(screen.queryByText(/@/)).not.toBeInTheDocument()
+  })
+
   it('renders the complete Admin console and routes governance actions', async () => {
     const user = userEvent.setup()
     const setPage = vi.fn()

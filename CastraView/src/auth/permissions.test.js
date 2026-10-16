@@ -30,7 +30,8 @@ describe('actor permission map', () => {
 
   it('locks navigation to onboarding until the business profile exists', () => {
     expect(navigationFor('admin', true).map(([page]) => page)).toEqual(['onboarding'])
-    expect(navigationFor('admin', false).map(([page]) => page)).toContain('members')
+    expect(navigationFor('admin', false).map(([page]) => page)).not.toContain('members')
+    expect(navigationFor('admin', false).map(([page]) => page)).not.toContain('audit')
     expect(navigationFor('manager', false).map(([page]) => page)).toContain('approvals')
     expect(navigationFor('member', false).map(([page]) => page)).not.toContain('approvals')
   })

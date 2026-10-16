@@ -18,10 +18,6 @@ class MembershipNotFound(SupabaseAPIError):
     pass
 
 
-class MembershipAmbiguous(SupabaseAPIError):
-    pass
-
-
 @dataclass(frozen=True)
 class WorkspaceMembership:
     workspace_id: UUID
@@ -66,20 +62,21 @@ class SupabaseDataClient:
         except (httpx.HTTPError, ValueError) as exc:
             raise SupabaseAPIError("Supabase Data API request failed.") from exc
 
-    def single_workspace_membership(self, user_id: UUID) -> WorkspaceMembership:
+    def workspace_membership(
+        self, user_id: UUID, workspace_id: UUID
+    ) -> WorkspaceMembership:
         rows = self.request(
             "GET",
             "workspace_members",
             params={
                 "select": "workspace_id,role",
                 "user_id": f"eq.{user_id}",
-                "limit": "2",
+                "workspace_id": f"eq.{workspace_id}",
+                "limit": "1",
             },
         )
         if not isinstance(rows, list) or not rows:
             raise MembershipNotFound("No workspace membership exists for this user.")
-        if len(rows) != 1:
-            raise MembershipAmbiguous("Sprint 1 requires exactly one workspace membership.")
         row = rows[0]
         try:
             workspace_id = UUID(str(row["workspace_id"]))
