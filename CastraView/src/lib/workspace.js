@@ -101,9 +101,23 @@ export async function loadWorkspaceData(workspaceId) {
   }
 }
 
-export async function loadAdminWorkspaceOverview() {
+export async function loadAdminWorkspaceOverview(fallbackMemberships = []) {
   const { data, error } = await requireSupabase().rpc('admin_workspace_overview')
   if (error) {
+    if (error.code === 'PGRST202' || error.code === '42883') {
+      return fallbackMemberships
+        .filter((item) => item.role === 'admin')
+        .map((item) => ({
+          workspaceId: item.workspaceId,
+          workspaceName: item.workspaceName,
+          createdAt: null,
+          memberCount: null,
+          adminCount: null,
+          managerCount: null,
+          standardMemberCount: null,
+          lastActivityAt: null,
+        }))
+    }
     throw new Error(explainWorkspaceError('Không thể tải tổng quan Workspace.', error))
   }
   return (data || []).map((row) => ({

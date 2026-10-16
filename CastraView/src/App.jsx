@@ -239,7 +239,7 @@ function App() {
   const [toast, setToast] = useState('')
   const [adminWorkspaces, setAdminWorkspaces] = useState([])
   const [creatingWorkspace, setCreatingWorkspace] = useState(false)
-  const refreshData = useCallback(async (targetWorkspaceId = workspaceId) => { if (!targetWorkspaceId) return; const data = await loadWorkspaceData(targetWorkspaceId); setProfile(data.profile); setImports(data.imports); setLatestRows(data.latestRows); setStrategy(null); setPage(data.profile ? defaultPage(auth.role) : 'onboarding'); if (auth.role === 'admin') setAdminWorkspaces(await loadAdminWorkspaceOverview()) }, [auth.role, workspaceId])
+  const refreshData = useCallback(async (targetWorkspaceId = workspaceId) => { if (!targetWorkspaceId) return; const data = await loadWorkspaceData(targetWorkspaceId); setProfile(data.profile); setImports(data.imports); setLatestRows(data.latestRows); setStrategy(null); setPage(data.profile ? defaultPage(auth.role) : 'onboarding'); if (auth.role === 'admin') setAdminWorkspaces(await loadAdminWorkspaceOverview(auth.memberships)) }, [auth.memberships, auth.role, workspaceId])
   // Loading remote workspace state is the synchronization performed by this effect.
   // oxlint-disable-next-line react/set-state-in-effect
   useEffect(() => { if (user && membership) refreshData().catch((cause) => setBackendError(cause.message)) }, [membership, refreshData, user])

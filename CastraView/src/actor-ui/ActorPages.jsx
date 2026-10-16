@@ -121,20 +121,21 @@ export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
 
 export function AdminWorkspaceDashboard({ workspaces = [], activeWorkspaceId, onSelectWorkspace, onCreateWorkspace }) {
   const active = workspaces.find((item) => item.workspaceId === activeWorkspaceId)
-  const totalMembers = workspaces.reduce((sum, item) => sum + item.memberCount, 0)
+  const knownMemberCounts = workspaces.filter((item) => Number.isFinite(item.memberCount))
+  const totalMembers = knownMemberCounts.reduce((sum, item) => sum + item.memberCount, 0)
   return <>
     <PageIntro code="ADMIN · MULTI-WORKSPACE" title="Admin Console" subtitle="Theo dõi trạng thái vận hành tổng hợp của các doanh nghiệp mà không hiển thị thông tin cá nhân hoặc dữ liệu bảo mật của nhân viên." action={<button className="button primary" type="button" onClick={onCreateWorkspace}>＋ Tạo Workspace</button>} />
     <div className="admin-kpi-grid">
       <article><span>Workspace quản lý</span><div className="admin-kpi-title"><strong>{workspaces.length}</strong><i>▦</i></div><p>Nhiều doanh nghiệp trong một tài khoản Admin</p></article>
-      <article><span>Tổng thành viên</span><div className="admin-kpi-title"><strong>{totalMembers}</strong><i>♙</i></div><p>Chỉ hiển thị số lượng tổng hợp</p></article>
+      <article><span>Tổng thành viên</span><div className="admin-kpi-title"><strong>{knownMemberCounts.length ? totalMembers : '—'}</strong><i>♙</i></div><p>Chỉ hiển thị số lượng tổng hợp</p></article>
       <article><span>Workspace đang chọn</span><div className="admin-kpi-title"><strong>{active?.workspaceName || 'Chưa chọn'}</strong><i>✓</i></div><p>Trạng thái <b className="success-text">Active</b></p></article>
       <article><span>Phạm vi dữ liệu</span><div className="admin-kpi-title"><strong>An toàn</strong><i>◇</i></div><p>Không tải email, user ID hoặc dữ liệu bảo mật</p></article>
     </div>
     <Panel title="Danh sách doanh nghiệp" meta="Dữ liệu tổng hợp, không chứa PII">
       <div className="admin-workspace-list">
         {workspaces.map((item) => <article className={item.workspaceId === activeWorkspaceId ? 'selected' : ''} key={item.workspaceId}>
-          <div><strong>{item.workspaceName}</strong><small>Tạo ngày {new Date(item.createdAt).toLocaleDateString('vi-VN')}</small></div>
-          <div className="workspace-counts"><span>{item.memberCount} thành viên</span><span>{item.adminCount} Admin</span><span>{item.managerCount} Manager</span><span>{item.standardMemberCount} Member</span></div>
+          <div><strong>{item.workspaceName}</strong><small>{item.createdAt ? `Tạo ngày ${new Date(item.createdAt).toLocaleDateString('vi-VN')}` : 'Đang chờ đồng bộ thống kê'}</small></div>
+          <div className="workspace-counts"><span>{item.memberCount ?? '—'} thành viên</span><span>{item.adminCount ?? '—'} Admin</span><span>{item.managerCount ?? '—'} Manager</span><span>{item.standardMemberCount ?? '—'} Member</span></div>
           <div><Badge tone="active">Active</Badge><button className="row-action" type="button" disabled={item.workspaceId === activeWorkspaceId} onClick={() => onSelectWorkspace(item.workspaceId)}>{item.workspaceId === activeWorkspaceId ? 'Đang xem' : 'Chọn Workspace'}</button></div>
         </article>)}
         {!workspaces.length && <div className="admin-empty">Chưa có Workspace nào được cấp quyền Admin.</div>}
