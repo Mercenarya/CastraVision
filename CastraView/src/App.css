@@ -43,6 +43,15 @@ textarea { resize:vertical; min-height:73px; line-height:1.5; }
 .auth-switch button,.inline-link { background:none; border:0; color:#a7a6ff; text-decoration:underline; font-weight:700; }
 .auth-footer { display:flex; justify-content:space-between; gap:12px; padding:21px clamp(24px,6vw,90px); border-top:1px solid #33405a; color:#7786a4; font-size:12px; }
 
+/* Refactored AuthScreen – new classes */
+.auth-password-wrap { position:relative; }
+.auth-show-pw { position:absolute; right:13px; top:50%; transform:translateY(-50%); background:none; border:0; color:var(--cv-muted, #9ca8c4); font-size:12px; font-weight:600; padding:4px 6px; z-index:2; }
+.auth-show-pw:hover { color:var(--cv-green, #22c55e); }
+.auth-error { display:flex; align-items:flex-start; gap:10px; padding:12px 15px; border-radius:10px; background:color-mix(in srgb, var(--cv-red, #ef4444) 12%, transparent); border:1px solid color-mix(in srgb, var(--cv-red, #ef4444) 40%, transparent); color:color-mix(in srgb, var(--cv-red, #ef4444) 80%, #fff); font-size:13px; line-height:1.5; }
+.auth-error-icon { font-size:16px; flex:none; margin-top:1px; }
+.auth-submit-btn { width:100%; margin-top:5px; }
+.auth-footer-note { text-align:center; color:#7786a4; font-size:12px; padding-top:4px; }
+
 
 /* Shared application frame. */
 .shell { min-height:100vh; display:grid; grid-template-columns:300px minmax(0,1fr); }

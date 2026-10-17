@@ -9,6 +9,8 @@ import {
   BudgetOptimizationPage,
   ReportsPage,
   CompetitorInsightsPage,
+  FloatingInput,
+  Button,
 } from './actor-ui/ActorPages'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
@@ -42,37 +44,101 @@ function Heading({ eyebrow, title, subtitle, children }) { return <div className
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Close notification">×</button></div> }
 
-function AuthScreen({ mode, setMode, onAuth, backendError }) {
-  const signup = mode === 'signup'
+function AuthScreen({ onAuth, backendError }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+
   async function submit(event) {
-    event.preventDefault(); setError('')
-    if (signup && password !== confirm) return setError('Password confirmation does not match.')
+    event.preventDefault()
+    setError('')
     setBusy(true)
-    try { const data = await api(`auth/${signup ? 'register' : 'login'}/`, { method: 'POST', body: JSON.stringify({ email, password }) }); onAuth(data.user) }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+    try {
+      const data = await api('auth/login/', { method: 'POST', body: JSON.stringify({ email, password }) })
+      onAuth(data.user)
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
-  return <div className="auth-page"><header className="auth-top"><Brand /></header><main className="auth-main"><div className="auth-card">
-    <div className="auth-heading"><Brand /><span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span><h1>{signup ? 'Create your account' : 'Welcome back'}</h1><p>{signup ? 'Start orchestrating intelligent campaigns in minutes.' : 'Sign in to manage your marketing strategy and workspace.'}</p></div>
-    <form className="auth-form" onSubmit={submit}><label>Work Email<input type="email" autoComplete="email" placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required /></label><label>Password<div className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Hide password' : 'Show password'}>{showPassword ? 'Hide' : 'Show'}</button></div></label>{signup && <label>Confirm Password<input type={showPassword ? 'text' : 'password'} autoComplete="new-password" minLength={8} placeholder="Repeat password" value={confirm} onChange={(e) => setConfirm(e.target.value)} required /></label>}{(error || backendError) && <Notice>{error || backendError}</Notice>}<button className="button primary full" disabled={busy}>{busy ? 'Processing…' : signup ? 'Create Account →' : 'Sign In →'}</button></form>
-    {signup && <p className="auth-terms">Secured by enterprise encryption and single-tenant security model.</p>}<div className="auth-switch">{signup ? 'Already have an account?' : 'Need an account?'} <button type="button" onClick={() => { setError(''); setMode(signup ? 'login' : 'signup') }}>{signup ? 'Sign In' : 'Sign Up'}</button></div>
-    <div style={{ marginTop: '18px', borderTop: '1px solid #28344e', paddingTop: '16px', textAlign: 'center' }}>
-      <button
-        type="button"
-        className="button subtle full"
-        style={{ color: '#55d9fb', borderColor: '#354361', fontWeight: 600 }}
-        onClick={() => onAuth({ email: 'admin@castravision.vn', role: 'admin' }, { business_name: 'Acme Studios', industry: 'Footwear & Fashion', business_size: 'SME', currency: 'USD' }, 'audit')}
-      >
-        ⚡ Explore System Audit Log (FR11) Demo
-      </button>
+
+  const displayError = error || backendError
+
+  return (
+    <div className="auth-page">
+      <header className="auth-top"><Brand /></header>
+      <main className="auth-main">
+        <div className="auth-card">
+          <div className="auth-heading">
+            <Brand />
+            <span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span>
+            <h1>Welcome back</h1>
+            <p>Sign in to manage your marketing strategy and workspace.</p>
+          </div>
+
+          <form className="auth-form" onSubmit={submit} noValidate>
+            <FloatingInput
+              label="Work Email"
+              name="auth-email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
+              required
+            />
+
+            <div className="auth-password-wrap">
+              <FloatingInput
+                label="Password"
+                name="auth-password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                className="auth-show-pw"
+                onClick={() => setShowPassword(v => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+
+            {displayError && (
+              <div className="auth-error" role="alert">
+                <span className="auth-error-icon">⚠</span>
+                <span>{displayError}</span>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={busy}
+              loading={busy}
+              className="auth-submit-btn"
+            >
+              {busy ? 'Signing in…' : 'Sign In →'}
+            </Button>
+
+            <div className="auth-footer-note">
+              Access is by invitation only. Contact your administrator if you need access.
+            </div>
+          </form>
+        </div>
+      </main>
+      <footer className="auth-footer">
+        <span>© 2026 CastraVision · Enterprise Platform</span>
+        <span>AI marketing workspace for SMBs</span>
+      </footer>
     </div>
-  </div></main><footer className="auth-footer"><span>© 2026 CastraVision · Enterprise Platform</span><span>AI marketing workspace for SMBs</span></footer></div>
+  )
 }
 
 function Shell({ user, profile, page, setPage, logout, children }) {
@@ -818,7 +884,7 @@ function App() {
   }
 
   if (!user) {
-    return <AuthScreen mode={authMode} setMode={setAuthMode} onAuth={handleAuth} backendError={backendError} />
+    return <AuthScreen onAuth={handleAuth} backendError={backendError} />
   }
 
   return (
