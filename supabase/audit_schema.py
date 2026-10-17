@@ -12,6 +12,8 @@ from dotenv import load_dotenv
 
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 EXPECTED_BUSINESS_TABLES = {
     "profiles",
@@ -59,9 +61,11 @@ EXPECTED_SECURITY_FUNCTIONS = {
 
 
 def main() -> int:
-    database_url = os.getenv("DATABASE_URL")
+    database_url = os.getenv("SUPABASE_DB_URL") or os.getenv("DATABASE_URL")
     if not database_url:
-        raise SystemExit("DATABASE_URL is required in .env or the process environment.")
+        raise SystemExit(
+            "SUPABASE_DB_URL or DATABASE_URL is required in .env or the process environment."
+        )
 
     failures: list[str] = []
     parsed = urlparse(database_url)
@@ -75,7 +79,11 @@ def main() -> int:
         dbname=parsed.path[1:],
         user=unquote(parsed.username),
         password=unquote(parsed.password),
-        sslmode="require",
+        sslmode=(
+            "disable"
+            if parsed.hostname in {"127.0.0.1", "localhost"}
+            else "require"
+        ),
         connect_timeout=10,
     ) as connection:
         connection.set_session(readonly=True)

@@ -26,6 +26,8 @@ except ImportError as exc:
 
 ROOT = Path(__file__).resolve().parents[1]
 load_dotenv(ROOT / ".env")
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
 
 URL = os.getenv(
     "SUPABASE_URL", "https://oviqgptccjjdaaqxabwv.supabase.co"

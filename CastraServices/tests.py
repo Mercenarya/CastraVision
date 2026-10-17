@@ -47,6 +47,25 @@ class StrategyApiTests(TestCase):
         response = self.client.get(reverse("castra_services:health"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "ok")
+        self.assertEqual(response.json()["check"], "liveness")
+
+    @patch("CastraServices.views._redis_ready", return_value=True)
+    @patch("CastraServices.views._supabase_ready", return_value=True)
+    @patch("CastraServices.views._database_ready", return_value=True)
+    def test_readiness_endpoint_reports_ready(self, *_checks):
+        response = self.client.get(reverse("castra_services:readiness"))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["status"], "ready")
+        self.assertTrue(all(response.json()["dependencies"].values()))
+
+    @patch("CastraServices.views._redis_ready", return_value=False)
+    @patch("CastraServices.views._supabase_ready", return_value=True)
+    @patch("CastraServices.views._database_ready", return_value=True)
+    def test_readiness_endpoint_reports_degraded(self, *_checks):
+        response = self.client.get(reverse("castra_services:readiness"))
+        self.assertEqual(response.status_code, 503)
+        self.assertEqual(response.json()["status"], "degraded")
+        self.assertFalse(response.json()["dependencies"]["redis"])
 
     def test_rejects_invalid_profile(self):
         response = self.client.post(

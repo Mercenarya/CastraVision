@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, Dat]
   pull_request:
-    branches: [main, develop]
+    branches: [main, develop, Dat]
 
 jobs:
   lint-test-backend:
@@ -36,8 +36,6 @@ jobs:
           cache: pip
       - name: Install dependencies
         run: pip install -r requirements.txt
-      - name: Remove dependencies Cache
-        run: pip cache purge
       - name: Lint
         run: ruff check CastraVision CastraServices
       - name: Migrate and test

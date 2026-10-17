@@ -41,11 +41,10 @@ select throws_ok(
   'demoting the last admin is blocked'
 );
 
-select set_config(
-  'request.jwt.claims',
-  '{"sub":"12000000-0000-0000-0000-000000000003","role":"authenticated"}',
-  true
-);
+-- Test the trigger independently of client-facing RLS. The privacy migration
+-- intentionally limits authenticated users to selecting their own membership;
+-- cross-member role changes must go through a privileged API/RPC.
+reset role;
 select lives_ok(
   $$update public.workspace_members set role = 'manager' where workspace_id = '22000000-0000-0000-0000-000000000002' and user_id = '12000000-0000-0000-0000-000000000002'$$,
   'one of two admins can be demoted'
@@ -62,7 +61,6 @@ select throws_ok(
   'the remaining admin cannot be demoted'
 );
 
-reset role;
 select lives_ok(
   $$delete from public.workspaces where id = '22000000-0000-0000-0000-000000000002'$$,
   'deleting a workspace is allowed to cascade through memberships'
