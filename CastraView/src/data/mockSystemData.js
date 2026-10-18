@@ -1,0 +1,90 @@
+/**
+ * mockSystemData.js — Mock data for System Admin views
+ *
+ * Used by PlatformOverview and CompanyManagement pages.
+ * Schema follows the design reference: id, name, tenantId, email,
+ * status ("Active" | "Inactive"), employeeCount, createdAt, tier.
+ */
+
+export const MOCK_COMPANIES = [
+  {
+    id: 'c1',
+    name: 'Acme Corporation',
+    tenantId: 'TENANT-ACME-001',
+    email: 'contact@acme.com',
+    status: 'Active',
+    employeeCount: 248,
+    createdAt: '2023-10-14',
+    tier: 'Enterprise Marketing',
+  },
+  {
+    id: 'c2',
+    name: 'Globex Industries',
+    tenantId: 'TENANT-GLBX-082',
+    email: 'admin@globex.io',
+    status: 'Active',
+    employeeCount: 1420,
+    createdAt: '2023-08-22',
+    tier: 'Enterprise Pro',
+  },
+  {
+    id: 'c3',
+    name: 'Soylent Technologies',
+    tenantId: 'TENANT-SOYL-419',
+    email: 'ops@soylent.net',
+    status: 'Inactive',
+    employeeCount: 64,
+    createdAt: '2024-01-09',
+    tier: 'Starter',
+  },
+  {
+    id: 'c4',
+    name: 'Initech Dynamics',
+    tenantId: 'TENANT-INIT-104',
+    email: 'support@initech-dyn.com',
+    status: 'Active',
+    employeeCount: 512,
+    createdAt: '2023-11-30',
+    tier: 'Enterprise Marketing',
+  },
+  {
+    id: 'c5',
+    name: 'Umbrella Group',
+    tenantId: 'TENANT-UMBR-990',
+    email: 'secure@umbrella-group.global',
+    status: 'Active',
+    employeeCount: 3120,
+    createdAt: '2023-06-05',
+    tier: 'Enterprise Pro',
+  },
+  {
+    id: 'c6',
+    name: 'Massive Dynamic',
+    tenantId: 'TENANT-MDYN-551',
+    email: 'root@massivedynamic.org',
+    status: 'Active',
+    employeeCount: 890,
+    createdAt: '2023-09-18',
+    tier: 'Enterprise Marketing',
+  },
+  {
+    id: 'c7',
+    name: 'Cyberdyne Systems',
+    tenantId: 'TENANT-CYBR-711',
+    email: 'sys@cyberdyne.net',
+    status: 'Inactive',
+    employeeCount: 18,
+    createdAt: '2024-03-25',
+    tier: 'Starter',
+  },
+  {
+    id: 'c8',
+    name: 'Wayne Enterprises',
+    tenantId: 'TENANT-WAYN-009',
+    email: 'contact@wayne-enterprises.corp',
+    status: 'Active',
+    employeeCount: 4820,
+    createdAt: '2023-05-11',
+    tier: 'Enterprise Pro',
+  },
+]

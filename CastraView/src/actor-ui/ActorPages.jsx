@@ -20,6 +20,9 @@ import { AuthContext } from '../auth/AuthContext'
 import { requireSupabase } from '../lib/supabase'
 import { navigationFor, navCaption, roleLabel, defaultPage } from '../navigation'
 import './actor-ui.css'
+import './system-admin/system-admin.css'
+import PlatformOverview from './system-admin/PlatformOverview'
+import CompanyManagement from './system-admin/CompanyManagement'
 
 // ─── Design-token helpers ────────────────────────────────────────────────────
 const money = (value) => new Intl.NumberFormat('vi-VN').format(value) + ' ₫'
@@ -175,7 +178,7 @@ function SystemAdminLayout({ user, onSignOut, notify }) {
   const navItems = navigationFor('system_admin')
 
   const pageTitle = {
-    'sa-dashboard':    'Platform Overview',
+    'sa-dashboard': 'Platform Overview',
     'sa-company-mgmt': 'Company Management',
   }[page] || 'System Admin'
 
@@ -195,8 +198,8 @@ function SystemAdminLayout({ user, onSignOut, notify }) {
           subtitle="CastraVision Platform Administration"
         />
         <main className="app-content">
-          {page === 'sa-dashboard'    && <SystemAdminDashboardPage setPage={setPage} notify={notify} />}
-          {page === 'sa-company-mgmt' && <SystemAdminCompanyMgmtPage notify={notify} />}
+          {page === 'sa-dashboard' && <PlatformOverview setPage={setPage} notify={notify} />}
+          {page === 'sa-company-mgmt' && <CompanyManagement notify={notify} />}
         </main>
       </div>
     </div>
@@ -213,10 +216,10 @@ function CompanyAdminLayout({ user, onSignOut, companyName, notify }) {
   const navItems = navigationFor('company_admin')
 
   const pageTitle = {
-    'ca-overview':   'Company Overview',
-    'ca-employees':  'Employee Management',
+    'ca-overview': 'Company Overview',
+    'ca-employees': 'Employee Management',
     'ca-workgroups': 'Workgroup Management',
-    'ca-workspace':  'Workspace Management',
+    'ca-workspace': 'Workspace Management',
   }[page] || 'Company Admin'
 
   return (
@@ -235,10 +238,10 @@ function CompanyAdminLayout({ user, onSignOut, companyName, notify }) {
           subtitle={companyName || 'Your Company'}
         />
         <main className="app-content">
-          {page === 'ca-overview'   && <CompanyOverviewPage setPage={setPage} notify={notify} companyName={companyName} />}
-          {page === 'ca-employees'  && <EmployeeManagementPage notify={notify} />}
+          {page === 'ca-overview' && <CompanyOverviewPage setPage={setPage} notify={notify} companyName={companyName} />}
+          {page === 'ca-employees' && <EmployeeManagementPage notify={notify} />}
           {page === 'ca-workgroups' && <WorkgroupManagementPage notify={notify} />}
-          {page === 'ca-workspace'  && <WorkspaceManagementPage notify={notify} />}
+          {page === 'ca-workspace' && <WorkspaceManagementPage notify={notify} />}
         </main>
       </div>
     </div>
@@ -261,18 +264,18 @@ function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName,
   }, [role, needsOnboarding])
 
   const pageTitle = {
-    'emp-dashboard':     'Dashboard',
-    'emp-strategy':      'Strategy Creation',
-    'emp-content':       'Content Generation',
-    'emp-import':        'Campaign Data Import',
-    'emp-performance':   'Performance Monitoring',
-    'emp-budget':        'Budget Optimization',
-    'emp-competitor':    'Competitor Analysis',
-    'emp-reports':       'Reports',
-    'emp-approvals':     'Approval Queue',
+    'emp-dashboard': 'Dashboard',
+    'emp-strategy': 'Strategy Creation',
+    'emp-content': 'Content Generation',
+    'emp-import': 'Campaign Data Import',
+    'emp-performance': 'Performance Monitoring',
+    'emp-budget': 'Budget Optimization',
+    'emp-competitor': 'Competitor Analysis',
+    'emp-reports': 'Reports',
+    'emp-approvals': 'Approval Queue',
     'emp-notifications': 'Notifications',
-    'emp-profile':       'My Profile',
-    'emp-onboarding':    'Complete Your Profile',
+    'emp-profile': 'My Profile',
+    'emp-onboarding': 'Complete Your Profile',
   }[page] || 'Workspace'
 
   return (
@@ -299,17 +302,17 @@ function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName,
           {/* ── Regular employee pages (only when onboarding is done) ── */}
           {!needsOnboarding && (
             <>
-              {page === 'emp-dashboard'     && <PerformanceDashboardPage setPage={setPage} imports={imports} />}
-              {page === 'emp-strategy'      && <StrategyCreationPage notify={notify} />}
-              {page === 'emp-content'       && <ContentGenerationPage notify={notify} />}
-              {page === 'emp-import'        && <CampaignDataImportPage notify={notify} />}
-              {page === 'emp-performance'   && <PerformanceDashboardPage setPage={setPage} imports={imports} />}
-              {page === 'emp-budget'        && <BudgetOptimizationPage notify={notify} />}
-              {page === 'emp-competitor'    && <CompetitorInsightsPage notify={notify} />}
-              {page === 'emp-reports'       && <ReportsPage notify={notify} />}
-              {page === 'emp-approvals'     && <ApprovalQueuePage notify={notify} />}
+              {page === 'emp-dashboard' && <PerformanceDashboardPage setPage={setPage} imports={imports} />}
+              {page === 'emp-strategy' && <StrategyCreationPage notify={notify} />}
+              {page === 'emp-content' && <ContentGenerationPage notify={notify} />}
+              {page === 'emp-import' && <CampaignDataImportPage notify={notify} />}
+              {page === 'emp-performance' && <PerformanceDashboardPage setPage={setPage} imports={imports} />}
+              {page === 'emp-budget' && <BudgetOptimizationPage notify={notify} />}
+              {page === 'emp-competitor' && <CompetitorInsightsPage notify={notify} />}
+              {page === 'emp-reports' && <ReportsPage notify={notify} />}
+              {page === 'emp-approvals' && <ApprovalQueuePage notify={notify} />}
               {page === 'emp-notifications' && <NotificationsPage notify={notify} />}
-              {page === 'emp-profile'       && <MyProfilePage user={user} profile={profile} notify={notify} />}
+              {page === 'emp-profile' && <MyProfilePage user={user} profile={profile} notify={notify} />}
             </>
           )}
         </main>
@@ -331,9 +334,9 @@ export function RoleLayout({ notify }) {
   const { user, role, membership, needsOnboarding } = auth || {}
 
   // Determine actor type from role string
-  const isSystemAdmin  = role === 'system_admin'
+  const isSystemAdmin = role === 'system_admin'
   const isCompanyAdmin = role === 'company_admin'
-  const isEmployee     = ['admin', 'manager', 'member'].includes(role)
+  const isEmployee = ['admin', 'manager', 'member'].includes(role)
 
   async function handleSignOut() {
     try { await auth?.signOut() } catch { /* handled by AuthProvider */ }
@@ -389,156 +392,23 @@ export function RoleLayout({ notify }) {
 }
 
 // ─── SYSTEM ADMIN PAGES ───────────────────────────────────────────────────────
-
-const DEMO_COMPANIES = [
-  { id: 'c1', name: 'Acme Studios',      email: 'admin@acme.com',        status: 'active',   employees: 12 },
-  { id: 'c2', name: 'SneakerVN',         email: 'admin@sneakervn.com',   status: 'active',   employees: 8  },
-  { id: 'c3', name: 'Bloom Retail Co.',  email: 'admin@bloom.com',       status: 'inactive', employees: 3  },
-  { id: 'c4', name: 'TechForge Asia',    email: 'contact@techforge.vn',  status: 'active',   employees: 21 },
-]
-
-function SystemAdminDashboardPage({ setPage, notify }) {
-  const active   = DEMO_COMPANIES.filter(c => c.status === 'active').length
-  const inactive = DEMO_COMPANIES.filter(c => c.status === 'inactive').length
-  const totalEmp = DEMO_COMPANIES.reduce((s, c) => s + c.employees, 0)
-
-  return (
-    <>
-      {/* KPI cards */}
-      <div className="actor-summary" style={{ gridTemplateColumns: 'repeat(4, minmax(0,1fr))', marginBottom: 24 }}>
-        <div><strong>{DEMO_COMPANIES.length}</strong><span>Total Companies</span></div>
-        <div><strong style={{ color: 'var(--cv-green)' }}>{active}</strong><span>Active Companies</span></div>
-        <div><strong style={{ color: 'var(--cv-muted)' }}>{inactive}</strong><span>Inactive Companies</span></div>
-        <div><strong>{totalEmp}</strong><span>Total Employees</span></div>
-      </div>
-
-      {/* Company summary table */}
-      <section className="actor-panel">
-        <header>
-          <h2>Registered Companies</h2>
-          <div style={{ display: 'flex', gap: 10 }}>
-            <Button variant="secondary" onClick={() => notify?.('Data refreshed.')}>↻ Refresh</Button>
-            <Button variant="primary" onClick={() => notify?.('Create Company modal — coming next sprint.')}>+ Create Company</Button>
-          </div>
-        </header>
-        <div className="actor-table-wrap">
-          <table className="actor-table">
-            <thead>
-              <tr>
-                <th>Company Name</th>
-                <th>Account Email</th>
-                <th>Status</th>
-                <th>Employees</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {DEMO_COMPANIES.map(c => (
-                <tr key={c.id}>
-                  <td><strong>{c.name}</strong></td>
-                  <td><small style={{ fontFamily: 'monospace', color: 'var(--cv-muted)' }}>{c.email}</small></td>
-                  <td><StatusBadge status={c.status} /></td>
-                  <td>{c.employees}</td>
-                  <td>
-                    <Button variant="secondary" onClick={() => notify?.(`Viewing ${c.name} overview.`)}>
-                      View Overview
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </>
-  )
-}
-
-function SystemAdminCompanyMgmtPage({ notify }) {
-  const [search, setSearch] = useState('')
-  const [filter, setFilter] = useState('all')
-  const visible = DEMO_COMPANIES.filter(c => {
-    const matchSearch = c.name.toLowerCase().includes(search.toLowerCase()) || c.email.toLowerCase().includes(search.toLowerCase())
-    const matchFilter = filter === 'all' || c.status === filter
-    return matchSearch && matchFilter
-  })
-
-  return (
-    <>
-      <section className="actor-panel">
-        <header>
-          <h2>All Companies</h2>
-          <div style={{ display: 'flex', gap: 10 }}>
-            <Button variant="secondary" onClick={() => notify?.('Data refreshed.')}>↻ Refresh</Button>
-            <Button variant="primary" onClick={() => notify?.('Create Company modal — coming next sprint.')}>+ Create Company</Button>
-          </div>
-        </header>
-
-        {/* Filters */}
-        <div style={{ display: 'flex', gap: 12, padding: '14px 18px', borderBottom: '1px solid var(--cv-border)' }}>
-          <FloatingInput
-            label="Search companies"
-            name="company-search"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
-          <select
-            value={filter}
-            onChange={e => setFilter(e.target.value)}
-            style={{ minWidth: 140, fontSize: 13 }}
-          >
-            <option value="all">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-          </select>
-        </div>
-
-        <div className="actor-table-wrap">
-          <table className="actor-table">
-            <thead>
-              <tr>
-                <th>Company Name</th>
-                <th>Account Email</th>
-                <th>Activity Status</th>
-                <th>Employees</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.length === 0 && (
-                <tr><td colSpan={5} style={{ textAlign: 'center', padding: 48, color: 'var(--cv-muted)' }}>No companies found.</td></tr>
-              )}
-              {visible.map(c => (
-                <tr key={c.id}>
-                  <td><strong>{c.name}</strong></td>
-                  <td><span style={{ fontFamily: 'monospace', fontSize: 12 }}>{c.email}</span></td>
-                  <td><StatusBadge status={c.status} /></td>
-                  <td>{c.employees}</td>
-                  <td>
-                    <Button variant="secondary" onClick={() => notify?.(`Viewing ${c.name}.`)}>View Overview</Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    </>
-  )
-}
+// Moved to src/actor-ui/system-admin/
+// PlatformOverview.jsx  → imported as PlatformOverview
+// CompanyManagement.jsx → imported as CompanyManagement
+// CreateCompanyModal.jsx → used internally by CompanyManagement
 
 // ─── COMPANY ADMIN PAGES ──────────────────────────────────────────────────────
 
 const DEMO_EMPLOYEES = [
-  { id: 'e1', name: 'Alex Johnson',  email: 'alex@acme.com',    role: 'admin',   workgroup: 'Marketing',  status: 'completed'  },
-  { id: 'e2', name: 'Sara Williams', email: 'sara@acme.com',    role: 'manager', workgroup: 'Content',     status: 'completed'  },
-  { id: 'e3', name: 'Tom Lee',       email: 'tom@acme.com',     role: 'member',  workgroup: 'Analytics',   status: 'incomplete' },
-  { id: 'e4', name: '—',             email: 'new@acme.com',     role: 'member',  workgroup: '—',           status: 'incomplete' },
+  { id: 'e1', name: 'Alex Johnson', email: 'alex@acme.com', role: 'admin', workgroup: 'Marketing', status: 'completed' },
+  { id: 'e2', name: 'Sara Williams', email: 'sara@acme.com', role: 'manager', workgroup: 'Content', status: 'completed' },
+  { id: 'e3', name: 'Tom Lee', email: 'tom@acme.com', role: 'member', workgroup: 'Analytics', status: 'incomplete' },
+  { id: 'e4', name: '—', email: 'new@acme.com', role: 'member', workgroup: '—', status: 'incomplete' },
 ]
 const DEMO_WORKGROUPS = [
-  { id: 'w1', name: 'Marketing',  members: 2 },
-  { id: 'w2', name: 'Content',    members: 1 },
-  { id: 'w3', name: 'Analytics',  members: 1 },
+  { id: 'w1', name: 'Marketing', members: 2 },
+  { id: 'w2', name: 'Content', members: 1 },
+  { id: 'w3', name: 'Analytics', members: 1 },
 ]
 
 function CompanyOverviewPage({ setPage, notify, companyName }) {
@@ -581,11 +451,11 @@ function CompanyOverviewPage({ setPage, notify, companyName }) {
 
 function EmployeeManagementPage({ notify }) {
   const [employees, setEmployees] = useState(DEMO_EMPLOYEES)
-  const [search, setSearch]       = useState('')
-  const [addOpen, setAddOpen]     = useState(false)
-  const [newEmail, setNewEmail]   = useState('')
+  const [search, setSearch] = useState('')
+  const [addOpen, setAddOpen] = useState(false)
+  const [newEmail, setNewEmail] = useState('')
   const [emailError, setEmailError] = useState('')
-  const [addBusy, setAddBusy]     = useState(false)
+  const [addBusy, setAddBusy] = useState(false)
 
   const visible = employees.filter(e =>
     e.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -691,10 +561,10 @@ function EmployeeManagementPage({ notify }) {
 
 function WorkgroupManagementPage({ notify }) {
   const [workgroups, setWorkgroups] = useState(DEMO_WORKGROUPS)
-  const [search, setSearch]         = useState('')
+  const [search, setSearch] = useState('')
   const [createOpen, setCreateOpen] = useState(false)
-  const [wgName, setWgName]         = useState('')
-  const [wgError, setWgError]       = useState('')
+  const [wgName, setWgName] = useState('')
+  const [wgError, setWgError] = useState('')
 
   const visible = workgroups.filter(w => w.name.toLowerCase().includes(search.toLowerCase()))
 
@@ -865,7 +735,7 @@ function EmployeeOnboardingPage({ user, notify }) {
       <p>Please fill in your details to get started.</p>
       <form onSubmit={handleSave} style={{ marginTop: 24 }}>
         <FloatingInput label="Full Name" name="full-name" value={fullName} onChange={e => setFullName(e.target.value)} error={nameError} required />
-        <FloatingInput label="Email Address" name="email-ro" type="email" value={user?.email || ''} onChange={() => {}} disabled />
+        <FloatingInput label="Email Address" name="email-ro" type="email" value={user?.email || ''} onChange={() => { }} disabled />
         <div style={{ marginTop: 20 }}>
           <Button variant="primary" type="submit" loading={busy}>Save Profile</Button>
         </div>
@@ -1049,10 +919,10 @@ function MyProfilePage({ user, profile, notify }) {
       <header><h2>My Profile</h2></header>
       <form onSubmit={save} style={{ padding: '24px 22px', display: 'flex', flexDirection: 'column', gap: 16 }}>
         <FloatingInput label="Full Name" name="profile-name" value={fullName} onChange={e => setFullName(e.target.value)} />
-        <FloatingInput label="Email Address" name="profile-email" type="email" value={user?.email || ''} onChange={() => {}} disabled />
-        <FloatingInput label="Company" name="profile-company" value={profile?.companyName || '—'} onChange={() => {}} disabled />
-        <FloatingInput label="Workgroup" name="profile-workgroup" value={profile?.workgroup || '—'} onChange={() => {}} disabled />
-        <FloatingInput label="Workspace Role" name="profile-role" value={profile?.role || '—'} onChange={() => {}} disabled />
+        <FloatingInput label="Email Address" name="profile-email" type="email" value={user?.email || ''} onChange={() => { }} disabled />
+        <FloatingInput label="Company" name="profile-company" value={profile?.companyName || '—'} onChange={() => { }} disabled />
+        <FloatingInput label="Workgroup" name="profile-workgroup" value={profile?.workgroup || '—'} onChange={() => { }} disabled />
+        <FloatingInput label="Workspace Role" name="profile-role" value={profile?.role || '—'} onChange={() => { }} disabled />
         <div>
           <Button variant="primary" type="submit" loading={busy}>Save Profile</Button>
         </div>
@@ -1077,10 +947,10 @@ function NotificationsPage({ notify }) {
 // They will be progressively migrated to the new actor-page structure.
 
 const legacyMembers = [
-  ['LT', 'Lê Thành Đạt',  'lthanhdat85@gmail.com',          'Admin',   'active'],
-  ['HN', 'Hà Ngọc Minh',  'manager@demo.castravision.vn',   'Manager', 'active'],
-  ['ML', 'Mai Lan',        'member@demo.castravision.vn',    'Member',  'active'],
-  ['TN', 'Trần Ngọc',     'content@demo.castravision.vn',   'Member',  'pending'],
+  ['LT', 'Lê Thành Đạt', 'lthanhdat85@gmail.com', 'Admin', 'active'],
+  ['HN', 'Hà Ngọc Minh', 'manager@demo.castravision.vn', 'Manager', 'active'],
+  ['ML', 'Mai Lan', 'member@demo.castravision.vn', 'Member', 'active'],
+  ['TN', 'Trần Ngọc', 'content@demo.castravision.vn', 'Member', 'pending'],
 ]
 
 function PageIntro({ code, title, subtitle, action }) {
@@ -1195,7 +1065,7 @@ export function RoleManagementPage() {
             <Badge tone={r.toLowerCase()}>{r} · {tier}</Badge>
             <h2>{r} Role</h2>
             <p>{desc}</p>
-            <ul>{capabilities.filter(row => row[['Admin','Manager','Member'].indexOf(r)+1] !== 'None').slice(0,4).map(row => <li key={row[0]}>✓ {row[0]}</li>)}</ul>
+            <ul>{capabilities.filter(row => row[['Admin', 'Manager', 'Member'].indexOf(r) + 1] !== 'None').slice(0, 4).map(row => <li key={row[0]}>✓ {row[0]}</li>)}</ul>
           </article>
         ))}
       </div>
@@ -1228,7 +1098,7 @@ export function ApprovalQueuePage({ notify }) {
   const [reason, setReason] = useState('')
   const visible = rows.filter(r => filter === 'all' || r[4] === filter)
   function setStatus(id, status) {
-    setRows(c => c.map(r => r[0] === id ? [...r.slice(0,4), status] : r))
+    setRows(c => c.map(r => r[0] === id ? [...r.slice(0, 4), status] : r))
     setSelected(null)
     notify?.(`${id} has been ${status === 'approved' ? 'approved' : 'rejected'}.`)
   }
@@ -1238,13 +1108,13 @@ export function ApprovalQueuePage({ notify }) {
       <div className="actor-policy"><b>Access control active.</b> Admin and Manager can review, edit, approve or reject. Members have no access.</div>
       <div className="actor-summary">
         <div><strong>{rows.length}</strong><span>Total Proposals</span></div>
-        <div><strong>{rows.filter(r => r[4]==='pending').length}</strong><span>Pending</span></div>
-        <div><strong>{rows.filter(r => r[4]==='approved').length}</strong><span>Approved</span></div>
-        <div><strong>{rows.filter(r => r[4]==='rejected').length}</strong><span>Rejected</span></div>
+        <div><strong>{rows.filter(r => r[4] === 'pending').length}</strong><span>Pending</span></div>
+        <div><strong>{rows.filter(r => r[4] === 'approved').length}</strong><span>Approved</span></div>
+        <div><strong>{rows.filter(r => r[4] === 'rejected').length}</strong><span>Rejected</span></div>
       </div>
       <Panel title="Proposals" meta={`${visible.length} records`}>
         <div className="actor-filters">
-          {['all','pending','approved','rejected'].map(f => <button className={filter===f?'active':''} onClick={() => setFilter(f)} key={f}>{f==='all'?'All':f}</button>)}
+          {['all', 'pending', 'approved', 'rejected'].map(f => <button className={filter === f ? 'active' : ''} onClick={() => setFilter(f)} key={f}>{f === 'all' ? 'All' : f}</button>)}
         </div>
         <div className="actor-table-wrap">
           <table className="actor-table">
@@ -1252,7 +1122,7 @@ export function ApprovalQueuePage({ notify }) {
             <tbody>{visible.map(r => (
               <tr key={r[0]}>
                 <td><strong>{r[1]}</strong><small>{r[0]}</small></td>
-                <td><Badge tone={r[2]==='Budget'?'manager':'admin'}>{r[2]}</Badge></td>
+                <td><Badge tone={r[2] === 'Budget' ? 'manager' : 'admin'}>{r[2]}</Badge></td>
                 <td>{r[3]}</td>
                 <td><Badge tone={r[4]}>{r[4]}</Badge></td>
                 <td><button className="row-action" onClick={() => setSelected(r)}>Review</button></td>
@@ -1335,7 +1205,7 @@ export function ReportsPage({ notify }) {
       <div className="report-layout">
         <Panel title="Select Period" meta="">
           <div className="period-options">
-            {periods.map(p => <button className={period===p?'selected':''} key={p} onClick={() => setPeriod(p)}>{p}</button>)}
+            {periods.map(p => <button className={period === p ? 'selected' : ''} key={p} onClick={() => setPeriod(p)}>{p}</button>)}
           </div>
         </Panel>
         <Panel title="Available Reports">
@@ -1494,8 +1364,8 @@ export function PerformanceDashboardPage({ setPage, imports = [] }) {
           <div className="channel-performance">
             {channels.map((row, i) => (
               <div className="performance-row" key={row[0]}>
-                <div><strong>{row[0]}</strong><small>{i===0?'High intent':i===1?'Retargeting':'Needs optimization'}</small></div>
-                {row.slice(1,5).map(v => <b key={v}>{v}</b>)}
+                <div><strong>{row[0]}</strong><small>{i === 0 ? 'High intent' : i === 1 ? 'Retargeting' : 'Needs optimization'}</small></div>
+                {row.slice(1, 5).map(v => <b key={v}>{v}</b>)}
                 <div className="mini-progress"><span style={{ width: `${row[5]}%` }} /></div>
               </div>
             ))}
@@ -1539,17 +1409,17 @@ const DATE_OPTS = [
 ]
 const LOG_PAGE = 6
 function fr11Ago(days) { if (!days) return null; const d = new Date(); d.setDate(d.getDate() - days); return d.toISOString() }
-function fr11Date(iso) { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric', timeZone:'UTC' }) + ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit', second:'2-digit', timeZone:'UTC' }) + ' UTC' }
-function fr11Initials(name) { if (!name) return '?'; return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?' }
-function fr11Diff(before, after) { const keys = new Set([...Object.keys(before||{}), ...Object.keys(after||{})]); return [...keys].map(k=>({ key:k, before:(before||{})[k], after:(after||{})[k], added:!(k in (before||{})), removed:!(k in (after||{})), changed:JSON.stringify((before||{})[k])!==JSON.stringify((after||{})[k]) })).filter(d=>d.changed) }
-function fr11Csv(logs) { const rows = logs.map(l=>[l.created_at,(l.actor?.full_name||'System').replace(/,/g,' '),l.action,l.entity_type,l.entity_id||''].join(',')); const csv = ['Timestamp (UTC),Actor,Action,Entity Type,Entity ID',...rows].join('\n'); const blob = new Blob(['\uFEFF',csv],{type:'text/csv;charset=utf-8'}); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href=url; a.download='audit_log.csv'; a.click(); URL.revokeObjectURL(url) }
-async function fr11Fetch(wid, page, action, entityType, dateFrom) { const from = (page-1)*LOG_PAGE, to = from+LOG_PAGE-1; let q = requireSupabase().from('audit_logs').select('id,action,entity_type,entity_id,before_value,after_value,created_at,actor_id',{count:'exact'}).eq('workspace_id',wid).order('created_at',{ascending:false}).range(from,to); if (action) q=q.eq('action',action); if (entityType) q=q.eq('entity_type',entityType); if (dateFrom) q=q.gte('created_at',dateFrom); const {data:rows,count,error}=await q; if(error) throw error; const ids=[...new Set((rows||[]).map(r=>r.actor_id).filter(Boolean))]; const aMap={}; if(ids.length){const{data:profiles}=await requireSupabase().from('profiles').select('id,full_name').in('id',ids);(profiles||[]).forEach(p=>{aMap[p.id]=p.full_name})} return {data:(rows||[]).map(r=>({...r,actor:{full_name:aMap[r.actor_id]||null}})),total:count||0} }
+function fr11Date(iso) { if (!iso) return '—'; const d = new Date(iso); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'UTC' }) + ' ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' }) + ' UTC' }
+function fr11Initials(name) { if (!name) return '?'; return name.split(' ').slice(0, 2).map(w => w[0] || '').join('').toUpperCase() || '?' }
+function fr11Diff(before, after) { const keys = new Set([...Object.keys(before || {}), ...Object.keys(after || {})]); return [...keys].map(k => ({ key: k, before: (before || {})[k], after: (after || {})[k], added: !(k in (before || {})), removed: !(k in (after || {})), changed: JSON.stringify((before || {})[k]) !== JSON.stringify((after || {})[k]) })).filter(d => d.changed) }
+function fr11Csv(logs) { const rows = logs.map(l => [l.created_at, (l.actor?.full_name || 'System').replace(/,/g, ' '), l.action, l.entity_type, l.entity_id || ''].join(',')); const csv = ['Timestamp (UTC),Actor,Action,Entity Type,Entity ID', ...rows].join('\n'); const blob = new Blob(['\uFEFF', csv], { type: 'text/csv;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'audit_log.csv'; a.click(); URL.revokeObjectURL(url) }
+async function fr11Fetch(wid, page, action, entityType, dateFrom) { const from = (page - 1) * LOG_PAGE, to = from + LOG_PAGE - 1; let q = requireSupabase().from('audit_logs').select('id,action,entity_type,entity_id,before_value,after_value,created_at,actor_id', { count: 'exact' }).eq('workspace_id', wid).order('created_at', { ascending: false }).range(from, to); if (action) q = q.eq('action', action); if (entityType) q = q.eq('entity_type', entityType); if (dateFrom) q = q.gte('created_at', dateFrom); const { data: rows, count, error } = await q; if (error) throw error; const ids = [...new Set((rows || []).map(r => r.actor_id).filter(Boolean))]; const aMap = {}; if (ids.length) { const { data: profiles } = await requireSupabase().from('profiles').select('id,full_name').in('id', ids); (profiles || []).forEach(p => { aMap[p.id] = p.full_name }) } return { data: (rows || []).map(r => ({ ...r, actor: { full_name: aMap[r.actor_id] || null } })), total: count || 0 } }
 
 const DEMO_AUDIT_LOGS = [
-  { id:'3a4b9c1d-8e7f-4a2b-9c1d-8e7f4a2b9c1d', action:'approve', entity_type:'ad_content', entity_id:'PRP-8401', created_at:'2026-10-14T09:41:22Z', ageDays:0, actor_id:'usr-001', actor:{full_name:'Sara Williams'}, before_value:{status:'pending_review',review_notes:null,approved_by:null}, after_value:{status:'approved',review_notes:'All compliance guardrails passed (12/12). Ready for publishing.',approved_by:'Sara Williams'} },
-  { id:'7f2c8d1e-9a3b-4c5d-6e7f-8a9b0c1d2e3f', action:'edit', entity_type:'budget_proposal', entity_id:'BUD-2026-Q4', created_at:'2026-10-14T08:15:04Z', ageDays:0, actor_id:'usr-002', actor:{full_name:'Alex Johnson'}, before_value:{total_budget:10000000,google_allocation:40,meta_allocation:40,tiktok_allocation:20}, after_value:{total_budget:12500000,google_allocation:50,meta_allocation:35,tiktok_allocation:15} },
-  { id:'1e8d9c2b-3a4f-5e6d-7c8b-9a0f1e2d3c4b', action:'invite', entity_type:'workspace_member', entity_id:'USR-9921', created_at:'2026-10-14T07:30:19Z', ageDays:0, actor_id:'usr-003', actor:{full_name:'Alex Johnson'}, before_value:null, after_value:{email:'new@acme.com',assigned_role:'Member',status:'pending_invitation'} },
-  { id:'9c3a4b5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d', action:'create', entity_type:'strategy', entity_id:'STR-1104', created_at:'2026-10-13T23:12:45Z', ageDays:1, actor_id:'usr-bot', actor:{full_name:'AI Engine'}, before_value:null, after_value:{title:'Q4 Growth Strategy',recommended_channel:'Meta & Google Ads',target_audience:'22-35, urban',budget:30000000} },
+  { id: '3a4b9c1d-8e7f-4a2b-9c1d-8e7f4a2b9c1d', action: 'approve', entity_type: 'ad_content', entity_id: 'PRP-8401', created_at: '2026-10-14T09:41:22Z', ageDays: 0, actor_id: 'usr-001', actor: { full_name: 'Sara Williams' }, before_value: { status: 'pending_review', review_notes: null, approved_by: null }, after_value: { status: 'approved', review_notes: 'All compliance guardrails passed (12/12). Ready for publishing.', approved_by: 'Sara Williams' } },
+  { id: '7f2c8d1e-9a3b-4c5d-6e7f-8a9b0c1d2e3f', action: 'edit', entity_type: 'budget_proposal', entity_id: 'BUD-2026-Q4', created_at: '2026-10-14T08:15:04Z', ageDays: 0, actor_id: 'usr-002', actor: { full_name: 'Alex Johnson' }, before_value: { total_budget: 10000000, google_allocation: 40, meta_allocation: 40, tiktok_allocation: 20 }, after_value: { total_budget: 12500000, google_allocation: 50, meta_allocation: 35, tiktok_allocation: 15 } },
+  { id: '1e8d9c2b-3a4f-5e6d-7c8b-9a0f1e2d3c4b', action: 'invite', entity_type: 'workspace_member', entity_id: 'USR-9921', created_at: '2026-10-14T07:30:19Z', ageDays: 0, actor_id: 'usr-003', actor: { full_name: 'Alex Johnson' }, before_value: null, after_value: { email: 'new@acme.com', assigned_role: 'Member', status: 'pending_invitation' } },
+  { id: '9c3a4b5d-6e7f-8a9b-0c1d-2e3f4a5b6c7d', action: 'create', entity_type: 'strategy', entity_id: 'STR-1104', created_at: '2026-10-13T23:12:45Z', ageDays: 1, actor_id: 'usr-bot', actor: { full_name: 'AI Engine' }, before_value: null, after_value: { title: 'Q4 Growth Strategy', recommended_channel: 'Meta & Google Ads', target_audience: '22-35, urban', budget: 30000000 } },
 ]
 
 export function AuditLogPage({ notify }) {
@@ -1571,14 +1441,14 @@ export function AuditLogPage({ notify }) {
     let filtered = DEMO_AUDIT_LOGS
     if (fAction) filtered = filtered.filter(l => l.action === fAction)
     if (fModule) filtered = filtered.filter(l => l.entity_type === fModule)
-    if (fDays) filtered = filtered.filter(l => (l.ageDays||0) <= fDays)
-    const from = (page-1)*LOG_PAGE
-    return { data: filtered.slice(from, from+LOG_PAGE), total: filtered.length }
+    if (fDays) filtered = filtered.filter(l => (l.ageDays || 0) <= fDays)
+    const from = (page - 1) * LOG_PAGE
+    return { data: filtered.slice(from, from + LOG_PAGE), total: filtered.length }
   }, [workspaceId, page, fAction, fModule, fDays])
 
-  const logs  = demoResult ? demoResult.data  : remoteLogs
+  const logs = demoResult ? demoResult.data : remoteLogs
   const total = demoResult ? demoResult.total : remoteTotal
-  const totalPages = Math.max(1, Math.ceil(total/LOG_PAGE))
+  const totalPages = Math.max(1, Math.ceil(total / LOG_PAGE))
 
   useEffect(() => {
     if (!workspaceId) return
@@ -1594,13 +1464,13 @@ export function AuditLogPage({ notify }) {
     return () => { alive = false }
   }, [workspaceId, page, fAction, fModule, fDays])
 
-  function applyFilter(key, val) { if(key==='action') setFAction(val); else if(key==='module') setFModule(val); else if(key==='days') setFDays(+val); setPage(1); setSelected(null) }
+  function applyFilter(key, val) { if (key === 'action') setFAction(val); else if (key === 'module') setFModule(val); else if (key === 'days') setFDays(+val); setPage(1); setSelected(null) }
   function reset() { setFAction(''); setFModule(''); setFDays(30); setSearch(''); setPage(1); setSelected(null) }
-  function goPage(p) { if(p<1||p>totalPages) return; setPage(p); setSelected(null) }
+  function goPage(p) { if (p < 1 || p > totalPages) return; setPage(p); setSelected(null) }
 
-  const visible = search.trim() ? logs.filter(l => [l.actor?.full_name,l.action,l.entity_type,l.entity_id].some(v => (v||'').toLowerCase().includes(search.toLowerCase()))) : logs
-  const rowFrom = (page-1)*LOG_PAGE+1
-  const rowTo   = Math.min(page*LOG_PAGE, total)
+  const visible = search.trim() ? logs.filter(l => [l.actor?.full_name, l.action, l.entity_type, l.entity_id].some(v => (v || '').toLowerCase().includes(search.toLowerCase()))) : logs
+  const rowFrom = (page - 1) * LOG_PAGE + 1
+  const rowTo = Math.min(page * LOG_PAGE, total)
 
   return (
     <>
@@ -1609,38 +1479,38 @@ export function AuditLogPage({ notify }) {
         title="System Audit Log"
         subtitle="Immutable event log — SHA-256 — tracking every action, role change and approval in the Workspace."
         action={
-          <div style={{ display:'flex', gap:10, flexWrap:'wrap', justifyContent:'flex-end' }}>
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button className="button subtle" onClick={() => fr11Csv(logs)} disabled={!logs.length}>⇩ Export Audit Log (CSV)</button>
             <button className="button subtle" disabled title="Requires backend cryptographic service (FR11 backend)">✓ Verify Cryptographic Hashes</button>
           </div>
         }
       />
       <div className="actor-summary">
-        <div><strong>{total.toLocaleString()}</strong><span>Total Events ({DATE_OPTS.find(o=>o.days===fDays)?.label||'All Time'})</span></div>
+        <div><strong>{total.toLocaleString()}</strong><span>Total Events ({DATE_OPTS.find(o => o.days === fDays)?.label || 'All Time'})</span></div>
         <div><strong className="success-text">100%</strong><span>Data Integrity</span></div>
-        <div><strong>{[...new Set(logs.map(l=>l.actor_id).filter(Boolean))].length||'—'}</strong><span>Actors</span></div>
-        <div><strong className="code-text">{logs[0]?.id ? logs[0].id.slice(0,8)+'…' : '—'}</strong><span>Latest Hash</span></div>
+        <div><strong>{[...new Set(logs.map(l => l.actor_id).filter(Boolean))].length || '—'}</strong><span>Actors</span></div>
+        <div><strong className="code-text">{logs[0]?.id ? logs[0].id.slice(0, 8) + '…' : '—'}</strong><span>Latest Hash</span></div>
       </div>
       <Panel title="Audit Events" meta="SHA-256 verified">
         <div className="audit-filter-bar">
-          <div style={{ position:'relative' }}>
-            <span style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'#7888a3', pointerEvents:'none' }}>⌕</span>
-            <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Filter by user, action, entity ID..." style={{ paddingLeft:36, fontSize:13 }} />
+          <div style={{ position: 'relative' }}>
+            <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#7888a3', pointerEvents: 'none' }}>⌕</span>
+            <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Filter by user, action, entity ID..." style={{ paddingLeft: 36, fontSize: 13 }} />
           </div>
-          <select value={fAction} onChange={e=>applyFilter('action',e.target.value)} style={{fontSize:13}}>
+          <select value={fAction} onChange={e => applyFilter('action', e.target.value)} style={{ fontSize: 13 }}>
             <option value="">All Actions</option>
-            {Object.entries(ACTION_META).map(([k,v]) => <option key={k} value={k}>{v.label}</option>)}
+            {Object.entries(ACTION_META).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
           </select>
-          <select value={fModule} onChange={e=>applyFilter('module',e.target.value)} style={{fontSize:13}}>
+          <select value={fModule} onChange={e => applyFilter('module', e.target.value)} style={{ fontSize: 13 }}>
             <option value="">All Modules</option>
-            {[...new Map(Object.entries(MODULE_META).map(([k,v])=>[v.label,k])).entries()].map(([label,k]) => <option key={k} value={k}>{label}</option>)}
+            {[...new Map(Object.entries(MODULE_META).map(([k, v]) => [v.label, k])).entries()].map(([label, k]) => <option key={k} value={k}>{label}</option>)}
           </select>
-          <select value={fDays} onChange={e=>applyFilter('days',e.target.value)} style={{fontSize:13}}>
+          <select value={fDays} onChange={e => applyFilter('days', e.target.value)} style={{ fontSize: 13 }}>
             {DATE_OPTS.map(o => <option key={o.days} value={o.days}>{o.label}</option>)}
           </select>
-          <button className="button subtle" style={{minHeight:38,padding:'0 14px',fontSize:13}} onClick={reset}>↺ Reset</button>
+          <button className="button subtle" style={{ minHeight: 38, padding: '0 14px', fontSize: 13 }} onClick={reset}>↺ Reset</button>
         </div>
-        {error && <div style={{padding:'16px 18px',color:'#ffd7da',background:'#462b3a',borderBottom:'1px solid #a8586a',fontSize:13}}>⚠ {error}</div>}
+        {error && <div style={{ padding: '16px 18px', color: '#ffd7da', background: '#462b3a', borderBottom: '1px solid #a8586a', fontSize: 13 }}>⚠ {error}</div>}
         <div className="actor-table-wrap">
           <table className="actor-table">
             <thead>
@@ -1654,20 +1524,20 @@ export function AuditLogPage({ notify }) {
               </tr>
             </thead>
             <tbody>
-              {loading && <tr><td colSpan={6} style={{textAlign:'center',padding:48,color:'#7888a3'}}>Loading audit log…</td></tr>}
-              {!loading && visible.length===0 && <tr><td colSpan={6} style={{textAlign:'center',padding:48,color:'#7888a3'}}>No events match the current filters.</td></tr>}
+              {loading && <tr><td colSpan={6} style={{ textAlign: 'center', padding: 48, color: '#7888a3' }}>Loading audit log…</td></tr>}
+              {!loading && visible.length === 0 && <tr><td colSpan={6} style={{ textAlign: 'center', padding: 48, color: '#7888a3' }}>No events match the current filters.</td></tr>}
               {!loading && visible.map(log => {
-                const aM = ACTION_META[log.action]||{label:log.action,tone:'neutral'}
-                const mM = MODULE_META[log.entity_type]||{label:log.entity_type,tone:'neutral'}
-                const name = log.actor?.full_name||'System'
+                const aM = ACTION_META[log.action] || { label: log.action, tone: 'neutral' }
+                const mM = MODULE_META[log.entity_type] || { label: log.entity_type, tone: 'neutral' }
+                const name = log.actor?.full_name || 'System'
                 return (
-                  <tr key={log.id} style={{cursor:'pointer'}} onClick={() => setSelected(log)} title="View record details">
-                    <td className="code-text" style={{fontSize:12,whiteSpace:'nowrap'}}>{fr11Date(log.created_at)}</td>
-                    <td><div className="actor-person"><b style={{background:'#685cf4',fontStyle:'normal',fontSize:12,flexShrink:0}}>{fr11Initials(name)}</b><span><strong>{name}</strong><small>{log.actor_id?log.actor_id.slice(0,8)+'…':'system'}</small></span></div></td>
+                  <tr key={log.id} style={{ cursor: 'pointer' }} onClick={() => setSelected(log)} title="View record details">
+                    <td className="code-text" style={{ fontSize: 12, whiteSpace: 'nowrap' }}>{fr11Date(log.created_at)}</td>
+                    <td><div className="actor-person"><b style={{ background: '#685cf4', fontStyle: 'normal', fontSize: 12, flexShrink: 0 }}>{fr11Initials(name)}</b><span><strong>{name}</strong><small>{log.actor_id ? log.actor_id.slice(0, 8) + '…' : 'system'}</small></span></div></td>
                     <td><Badge tone={aM.tone}>{aM.label}</Badge></td>
-                    <td style={{fontFamily:'ui-monospace,monospace',fontSize:12,color:'#67dcf5'}}>{log.entity_id?log.entity_id.slice(0,8)+'…':<span style={{color:'#4a5a78'}}>{log.entity_type}</span>}</td>
+                    <td style={{ fontFamily: 'ui-monospace,monospace', fontSize: 12, color: '#67dcf5' }}>{log.entity_id ? log.entity_id.slice(0, 8) + '…' : <span style={{ color: '#4a5a78' }}>{log.entity_type}</span>}</td>
                     <td><Badge tone={mM.tone}>{mM.label}</Badge></td>
-                    <td style={{fontSize:12,color:'#9ca8c4'}}><span>{log.action} · {log.entity_type}</span><div style={{fontFamily:'ui-monospace,monospace',fontSize:11,color:'#3a4d6a',marginTop:3}}>hash: {log.id.slice(0,4)}…{log.id.slice(-4)}</div></td>
+                    <td style={{ fontSize: 12, color: '#9ca8c4' }}><span>{log.action} · {log.entity_type}</span><div style={{ fontFamily: 'ui-monospace,monospace', fontSize: 11, color: '#3a4d6a', marginTop: 3 }}>hash: {log.id.slice(0, 4)}…{log.id.slice(-4)}</div></td>
                   </tr>
                 )
               })}
@@ -1675,15 +1545,15 @@ export function AuditLogPage({ notify }) {
           </table>
         </div>
         <div className="audit-pagination">
-          <span>{loading?'Loading…':total>0?`Showing ${rowFrom}–${rowTo} / ${total.toLocaleString()} entries · All hashes verified (SHA-256)`:'No results'}</span>
+          <span>{loading ? 'Loading…' : total > 0 ? `Showing ${rowFrom}–${rowTo} / ${total.toLocaleString()} entries · All hashes verified (SHA-256)` : 'No results'}</span>
           <div className="audit-page-btns">
-            <button onClick={() => goPage(page-1)} disabled={page<=1}>‹</button>
-            {Array.from({length:Math.min(totalPages,5)},(_,i) => {
-              const p = totalPages<=5 ? i+1 : page<=3 ? i+1 : page>=totalPages-2 ? totalPages-4+i : page-2+i
-              return <button key={p} className={p===page?'active':''} onClick={() => goPage(p)}>{p}</button>
+            <button onClick={() => goPage(page - 1)} disabled={page <= 1}>‹</button>
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              const p = totalPages <= 5 ? i + 1 : page <= 3 ? i + 1 : page >= totalPages - 2 ? totalPages - 4 + i : page - 2 + i
+              return <button key={p} className={p === page ? 'active' : ''} onClick={() => goPage(p)}>{p}</button>
             })}
-            {totalPages>5 && page<totalPages-2 && <><span style={{padding:'0 4px',color:'#4a5a78'}}>…</span><button onClick={() => goPage(totalPages)}>{totalPages}</button></>}
-            <button onClick={() => goPage(page+1)} disabled={page>=totalPages}>›</button>
+            {totalPages > 5 && page < totalPages - 2 && <><span style={{ padding: '0 4px', color: '#4a5a78' }}>…</span><button onClick={() => goPage(totalPages)}>{totalPages}</button></>}
+            <button onClick={() => goPage(page + 1)} disabled={page >= totalPages}>›</button>
           </div>
         </div>
       </Panel>
