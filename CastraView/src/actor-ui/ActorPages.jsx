@@ -20,9 +20,7 @@ import { AuthContext } from '../auth/AuthContext'
 import { requireSupabase } from '../lib/supabase'
 import { navigationFor, navCaption, roleLabel, defaultPage } from '../navigation'
 import './actor-ui.css'
-import './system-admin/system-admin.css'
-import PlatformOverview from './system-admin/PlatformOverview'
-import CompanyManagement from './system-admin/CompanyManagement'
+import { SystemAdminLayout as OfficialSystemAdminLayout } from '../system-admin/SystemAdminLayout'
 
 // ─── Design-token helpers ────────────────────────────────────────────────────
 const money = (value) => new Intl.NumberFormat('vi-VN').format(value) + ' ₫'
@@ -173,37 +171,8 @@ function Header({ title, subtitle, actions }) {
  * Renders the correct page shell for the System Admin actor.
  * Pages available: sa-dashboard, sa-company-mgmt
  */
-function SystemAdminLayout({ user, onSignOut, notify }) {
-  const [page, setPage] = useState('sa-dashboard')
-  const navItems = navigationFor('system_admin')
-
-  const pageTitle = {
-    'sa-dashboard': 'Platform Overview',
-    'sa-company-mgmt': 'Company Management',
-  }[page] || 'System Admin'
-
-  return (
-    <div className="shell">
-      <Sidebar
-        role="system_admin"
-        navItems={navItems}
-        currentPage={page}
-        onNavigate={setPage}
-        user={user}
-        onSignOut={onSignOut}
-      />
-      <div className="main-wrap">
-        <Header
-          title={pageTitle}
-          subtitle="CastraVision Platform Administration"
-        />
-        <main className="app-content">
-          {page === 'sa-dashboard' && <PlatformOverview setPage={setPage} notify={notify} />}
-          {page === 'sa-company-mgmt' && <CompanyManagement notify={notify} />}
-        </main>
-      </div>
-    </div>
-  )
+export function SystemAdminLayout({ user, onSignOut, notify }) {
+  return <OfficialSystemAdminLayout user={user} onLogout={onSignOut} notify={notify} />
 }
 
 /**
@@ -391,11 +360,8 @@ export function RoleLayout({ notify }) {
   )
 }
 
-// ─── SYSTEM ADMIN PAGES ───────────────────────────────────────────────────────
-// Moved to src/actor-ui/system-admin/
-// PlatformOverview.jsx  → imported as PlatformOverview
-// CompanyManagement.jsx → imported as CompanyManagement
-// CreateCompanyModal.jsx → used internally by CompanyManagement
+// ─── SYSTEM ADMIN (CONSOLIDATED) ──────────────────────────────────────────────
+// System Admin is consolidated under src/system-admin/ (SystemAdminLayout)
 
 // ─── COMPANY ADMIN PAGES ──────────────────────────────────────────────────────
 

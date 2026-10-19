@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import CompanyAdminLayout from './company-admin/CompanyAdminLayout'
+import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
 import {
   ApprovalQueuePage,
   BudgetOptimizationPage,
@@ -130,31 +131,45 @@ function AuthScreen({ onAuth, backendError }) {
 
             <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--cv-border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div style={{ fontSize: 11, color: 'var(--cv-muted)', textAlign: 'center', fontWeight: 600, letterSpacing: '.05em' }}>DEVELOPER PREVIEW &amp; TEST ACCESS</div>
-              <div style={{ display: 'flex', gap: 8 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <Button
                   type="button"
                   variant="secondary"
-                  style={{ flex: 1, fontSize: 12 }}
+                  style={{ width: '100%', fontSize: 12, borderColor: '#10b981', color: '#10b981', fontWeight: 600 }}
                   onClick={() => onAuth(
-                    { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
-                    { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
-                    'overview'
+                    { email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' },
+                    null,
+                    'sa-dashboard'
                   )}
                 >
-                  Enter as Company Admin →
+                  Enter as System Admin 🛡 →
                 </Button>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  style={{ flex: 1, fontSize: 12 }}
-                  onClick={() => onAuth(
-                    { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
-                    { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
-                    'overview'
-                  )}
-                >
-                  Enter as Member →
-                </Button>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 12 }}
+                    onClick={() => onAuth(
+                      { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Enter as Company Admin →
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 12 }}
+                    onClick={() => onAuth(
+                      { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Enter as Member →
+                  </Button>
+                </div>
               </div>
             </div>
           </form>
@@ -845,7 +860,15 @@ function App() {
         const session = await api('auth/session/')
         if (session.user) {
           setUser(session.user)
-          await refreshData()
+          if (session.user.role !== 'system_admin' && session.user.role !== 'sys_admin') {
+            await refreshData()
+          }
+        } else {
+          // Optional dev shortcut via query params
+          const params = new URLSearchParams(window.location.search)
+          if (params.get('role') === 'system_admin' || params.get('sa') === 'true') {
+            setUser({ email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' })
+          }
         }
       } catch (cause) {
         setBackendError(cause.message)
@@ -859,6 +882,9 @@ function App() {
   async function handleAuth(account, demoProfile = null, initialPage = 'overview') {
     setUser(account)
     setBackendError('')
+    if (account?.role === 'system_admin' || account?.role === 'sys_admin') {
+      return
+    }
     if (demoProfile) {
       setProfile(demoProfile)
       setPage(initialPage)
@@ -912,6 +938,10 @@ function App() {
 
   if (!user) {
     return <AuthScreen onAuth={handleAuth} backendError={backendError} />
+  }
+
+  if (user?.role === 'system_admin' || user?.role === 'sys_admin') {
+    return <SystemAdminLayout user={user} onLogout={logout} notify={setToast} />
   }
 
   if (isAdmin || user?.role === 'company_admin') {
