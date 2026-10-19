@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import CompanyAdminLayout from './company-admin/CompanyAdminLayout'
 import {
-  AdminDashboardPage,
-  AuditLogPage,
-  MembersPage,
-  RoleManagementPage,
   ApprovalQueuePage,
   BudgetOptimizationPage,
   ReportsPage,
@@ -129,6 +126,36 @@ function AuthScreen({ onAuth, backendError }) {
 
             <div className="auth-footer-note">
               Access is by invitation only. Contact your administrator if you need access.
+            </div>
+
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--cv-border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ fontSize: 11, color: 'var(--cv-muted)', textAlign: 'center', fontWeight: 600, letterSpacing: '.05em' }}>DEVELOPER PREVIEW &amp; TEST ACCESS</div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  style={{ flex: 1, fontSize: 12 }}
+                  onClick={() => onAuth(
+                    { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
+                    { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                    'overview'
+                  )}
+                >
+                  Enter as Company Admin →
+                </Button>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  style={{ flex: 1, fontSize: 12 }}
+                  onClick={() => onAuth(
+                    { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
+                    { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                    'overview'
+                  )}
+                >
+                  Enter as Member →
+                </Button>
+              </div>
             </div>
           </form>
         </div>
@@ -887,39 +914,43 @@ function App() {
     return <AuthScreen onAuth={handleAuth} backendError={backendError} />
   }
 
+  if (isAdmin || user?.role === 'company_admin') {
+    return (
+      <CompanyAdminLayout
+        user={user}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        onSignOut={logout}
+        notify={setToast}
+      >
+        {backendError && <Notice>{backendError}</Notice>}
+
+        {/* Core Workflow Pages & Tools wrapped inside Company Admin Layout */}
+        {(!profile || page === 'onboarding' || page === 'profile') && (
+          <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
+        )}
+        {profile && page === 'import' && (
+          <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+        )}
+        {profile && page === 'strategy' && (
+          <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />
+        )}
+        {profile && page === 'content' && (
+          <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />
+        )}
+        {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
+        {page === 'reports' && <ReportsPage profile={profile || { business_name: 'Acme Studios' }} notify={setToast} />}
+        {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
+
+        <Toast message={toast} clear={() => setToast('')} />
+      </CompanyAdminLayout>
+    )
+  }
+
   return (
     <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>
       {backendError && <Notice>{backendError}</Notice>}
-
-      {/* Admin Protected Routes (FR11 & Admin Console) */}
-      {page === 'audit' && (
-        isAdmin ? (
-          <AuditLogPage notify={setToast} />
-        ) : (
-          <Notice kind="error">Access Denied: The Audit Log Viewer (FR11) is restricted to users with the Admin role.</Notice>
-        )
-      )}
-      {page === 'admin' && (
-        isAdmin ? (
-          <AdminDashboardPage profile={profile || { business_name: 'Acme Studios', industry: 'Footwear & Apparel', business_size: 'SME' }} imports={imports} setPage={setPage} notify={setToast} />
-        ) : (
-          <Notice kind="error">Access Denied: The Admin Console is restricted to users with the Admin role.</Notice>
-        )
-      )}
-      {page === 'members' && (
-        isAdmin ? (
-          <MembersPage profile={profile || { business_name: 'Acme Studios' }} notify={setToast} />
-        ) : (
-          <Notice kind="error">Access Denied: Member management is restricted to users with the Admin role.</Notice>
-        )
-      )}
-      {page === 'roles' && (
-        isAdmin ? (
-          <RoleManagementPage />
-        ) : (
-          <Notice kind="error">Access Denied: Role management is restricted to users with the Admin role.</Notice>
-        )
-      )}
 
       {/* Operations & Governance */}
       {page === 'approvals' && <ApprovalQueuePage notify={setToast} />}
