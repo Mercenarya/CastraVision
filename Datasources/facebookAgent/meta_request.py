@@ -35,7 +35,7 @@ logger = logging.getLogger("fb_ads_fetch")
 # ---------------------------------------------------------------
 # 1. INPUT: Cấu hình & tham số đầu vào
 # ---------------------------------------------------------------
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"))
 
 APP_ID = os.getenv("FB_APP_ID")
 APP_SECRET = os.getenv("FB_APP_SECRET")
