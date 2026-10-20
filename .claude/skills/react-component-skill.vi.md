@@ -24,10 +24,10 @@ Sử dụng kỹ năng này khi bạn cần tạo một thành phần React mớ
 
 ### 3. Cấu trúc Thành phần
 - [ ] Sử dụng thành phần chức năng với hooks (tránh thành phần lớp trừ khi duy trì mã héritage)
-- [ ] Import React ở đầu: `import React from 'react';`
+- [ ] Không cần `import React` (React 19 dùng automatic JSX runtime)
 - [ ] Import bất kỳ hooks nào bạn sẽ sử dụng: `import { useState, useEffect } from 'react';`
 - [ ] Import bất kỳ thư viện bên ngoài hoặc thành phần nào
-- [ ] Import CSS modules hoặc styles nếu cần
+- [ ] Import `cn` từ `@/lib/utils` và các component từ `@/components/ui/` nếu cần
 - [ ] Xuất thành phần dưới dạng mặc định hoặc đặt tên dựa trên cách sử dụng
 
 ### 4. Định nghĩa Props
@@ -70,13 +70,13 @@ Sử dụng kỹ năng này khi bạn cần tạo một thành phần React mớ
 - [ ] Xem xét việc sử dụng hook tùy chỉnh cho logic hiệu ứng phụ có thể tái sử dụng
 
 ### 9. Phong cách (Styling)
-- [ ] Sử dụng CSS modules để tạo kiểu có phạm vi thành phần (đề xuất)
-- [ ] Hoặc sử dụng styled-components, emotion, hoặc các giải pháp CSS-in-JS khác
-- [ ] Tránh sử dụng kiểu inline cho phong cách phức tạp
-- [ ] Sử dụng framework CSS utility-first như Tailwind nếu được áp dụng bởi dự án
-- [ ] Tuân theo quy ước đặt tên BEM hoặc tương tự cho các lớp CSS
-- [ ] Sử dụng biến CSS cho màu chủ đề và khoảng cách
-- [ ] Đảm bảo xem xét thiết kế responsive
+- [ ] Dùng class Tailwind trong JSX; ưu tiên component shadcn trong `components/ui/`
+- [ ] Thêm component nền bằng `npx shadcn@latest add <tên>`, không tự chép code
+- [ ] Dùng `cva` cho biến thể và `cn()` để gộp class
+- [ ] Màu/khoảng cách lấy từ token theme (`tokens.css`), không hard-code hex
+- [ ] Không tạo file `.css` riêng, không dùng CSS modules/styled-components cho code mới
+- [ ] Không dùng style inline cho giao diện phức tạp
+- [ ] Đảm bảo responsive (`sm:`, `md:`, `lg:`)
 
 ### 10. Tối ưu Hiệu suất
 - [ ] Sử dụng `React.memo` cho các thành phần render thường xuyên với cùng props
@@ -113,29 +113,26 @@ Sử dụng kỹ năng này khi bạn cần tạo một thành phần React mớ
 
 ### Thành phần Trình bày (Presentational Component)
 ```jsx
-import React from 'react';
-import PropTypes from 'prop-types';
-import styles from './Button.module.css';
+import PropTypes from 'prop-types'
+import { cn } from '@/lib/utils'
+import { Button as UiButton } from '@/components/ui/button'
 
-const Button = ({ variant = 'primary', size = 'medium', children, onClick }) => {
-  return (
-    <button 
-      className={`${styles.button} ${styles[variant]} ${styles[size]}`} 
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-};
+// Nút hành động chính của trang; bọc shadcn Button để thống nhất API trong dự án.
+const ActionButton = ({ variant = 'default', size = 'default', className, children, onClick }) => (
+  <UiButton variant={variant} size={size} className={cn('gap-2', className)} onClick={onClick}>
+    {children}
+  </UiButton>
+)
 
-Button.propTypes = {
-  variant: PropTypes.oneOf(['primary', 'secondary', 'outline']),
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+ActionButton.propTypes = {
+  variant: PropTypes.oneOf(['default', 'secondary', 'outline']),
+  size: PropTypes.oneOf(['sm', 'default', 'lg']),
+  className: PropTypes.string,
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
-};
+}
 
-export default Button;
+export default ActionButton
 ```
 
 ### Thành phần chứa (Container Component) (Lấy dữ liệu)
@@ -266,69 +263,32 @@ export default useForm;
 
 ## Cách tiếp cận Phong cách
 
-### CSS Modules
-```css
-/* Button.module.css */
-.button {
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
+CastraView dùng **Tailwind CSS v4 + shadcn/ui** (JavaScript, không TypeScript).
 
-.button-primary {
-  background-color: #007bff;
-  color: white;
-}
+- Thêm component nền: `npx shadcn@latest add button` (sinh vào `src/components/ui/`).
+- Component tự viết nằm ở `src/components/`, ghép từ các component trong `ui/`.
+- Biến thể dùng `cva`; gộp class dùng `cn()` (`src/lib/utils.js`).
+- Token màu nằm ở `src/styles/tokens.css` (biến theme của shadcn + `success`/`warning`/`info`/`violet`/`coral`), không hard-code màu.
+- Không tạo file `.css` riêng cho từng component mới.
 
-.button-primary:hover {
-  background-color: #0056b3;
-}
-
-.button-outline {
-  background-color: transparent;
-  border: 1px solid #007bff;
-  color: #007bff;
-}
-
-.button-outline:hover {
-  background-color: rgba(0, 123, 255, 0.1);
-}
-```
-
-### Styled Components
+### Ví dụ biến thể bằng cva
 ```jsx
-import styled from 'styled-components';
+import { cva } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
 
-const Button = styled.button`
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+const badgeVariants = cva('inline-flex rounded-full px-2 py-0.5 text-xs font-medium', {
+  variants: {
+    tone: {
+      success: 'bg-success/15 text-success',
+      danger: 'bg-destructive/15 text-destructive',
+    },
+  },
+  defaultVariants: { tone: 'success' },
+})
 
-  ${props => props.variant === 'primary' && `
-    background-color: #007bff;
-    color: white;
-    
-    &:hover {
-      background-color: #0056b3;
-    }
-  `};
-
-  ${props => props.variant === 'outline' && `
-    background-color: transparent;
-    border: 1px solid #007bff;
-    color: #007bff;
-    
-    &:hover {
-      background-color: rgba(0, 123, 255, 0.1);
-    }
-  `};
-`;
+export default function StatusBadge({ tone, className, children }) {
+  return <span className={cn(badgeVariants({ tone }), className)}>{children}</span>
+}
 ```
 
 ## Các cân nhắc Hiệu suất
@@ -436,8 +396,8 @@ test('useForm updates values on change', () => {
 - Sử dụng tiền tố `on` cho các trình xử lý sự kiện: `onClick`, `onChange`
 - Sử dụng tiền tố `is` hoặc `has` cho các giá trị boolean: `isVisible`, `hasError`
 
-### Lớp CSS
-- Sử dụng kebab-case cho tên lớp CSS: `.button-primary`
-- Sử dụng tên kiểu BEM: `.card__title`, `.card__title--large`
-- Giới hạn kiểu phạm vi thành phần khi sử dụng CSS modules
-- Tránh sử dụng selector quá cụ thể gây khó khăn cho việc tái sử dụng
+### Lớp CSS (Tailwind)
+- Dùng class tiện ích Tailwind trực tiếp trong JSX; không đặt tên lớp BEM mới
+- Gộp class có điều kiện bằng `cn()` từ `@/lib/utils`
+- Màu/khoảng cách lấy từ token theme (`bg-primary`, `text-muted-foreground`), không dùng giá trị hex tự do
+- Lặp lại một nhóm class ở nhiều nơi thì tách thành component hoặc variant `cva`

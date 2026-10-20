@@ -38,9 +38,10 @@
 - Lưu trữ kết quả tính toán tốn kém với `useMemo`/`useCallback`
 
 ### 2. Phong cách (Styling)
-- Sử dụng модуль CSS hoặc styled-components để tạo kiểu có phạm vi
-- Tuân theo quy ước đặt tên BEM cho các lớp CSS
-- Sử dụng biến CSS cho màu chủ đề
+- Dùng class tiện ích Tailwind CSS và component shadcn/ui (`components/ui/`)
+- Gộp class bằng `cn()`; định nghĩa biến thể bằng `cva`
+- Dùng token theme (biến CSS trong `styles/tokens.css`) cho màu; không hard-code hex
+- Không tạo file `.css` riêng cho component, CSS modules hay styled-components mới
 
 ### 3. Quản lý State
 - Sử dụng React Query để quản lý state của máy chủ

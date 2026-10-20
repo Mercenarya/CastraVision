@@ -1,6 +1,6 @@
 import { requireSupabase } from './supabase'
 
-const apiBase = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
+const apiBase = (import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL || '').replace(/\/$/, '')
 
 export async function backendApi(path, options = {}) {
   const client = requireSupabase()

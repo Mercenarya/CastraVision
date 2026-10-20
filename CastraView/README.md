@@ -1,16 +1,18 @@
-# React + Vite
+# CastraView
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Giao diện web của CastraVision: React 19 + Vite, Tailwind CSS v4 và shadcn/ui (JavaScript).
 
-Currently, two official plugins are available:
+## Giao diện: Tailwind + shadcn/ui
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Dự án dùng Tailwind CSS v4 và shadcn/ui (JavaScript). Chi tiết quy ước xem `AGENTS.md` và
+`docs/SPRINT1_UI.md`.
 
-## React Compiler
+```powershell
+npx shadcn@latest add button   # thêm component nền vào src/components/ui/
+npm run lint
+npm run build
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- Alias `@/` = `src/`.
+- Màu và theme khai báo trong `src/styles/tokens.css`, không hard-code hex trong JSX.
+- Dùng `cn()` từ `@/lib/utils` để gộp class.

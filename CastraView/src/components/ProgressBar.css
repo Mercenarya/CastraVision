@@ -1,0 +1,51 @@
+/* ProgressBar.css — tiền tố cv-progress */
+
+.cv-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cv-progress__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.cv-progress__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #e1e6ff);
+}
+
+.cv-progress__meta {
+  font-size: 12px;
+  color: var(--muted, #9ca8c4);
+  white-space: nowrap;
+}
+
+.cv-progress__track {
+  position: relative;
+  height: 8px;
+  background: #1b2540;
+  border-radius: 100px;
+  overflow: visible;
+}
+
+.cv-progress__fill {
+  height: 100%;
+  border-radius: 100px;
+  transition: width 0.4s ease;
+}
+
+/* Vạch mục tiêu — đường dọc màu trắng mờ */
+.cv-progress__goal-line {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  transform: translateX(-50%);
+}

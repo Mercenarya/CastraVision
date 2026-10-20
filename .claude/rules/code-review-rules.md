@@ -38,9 +38,10 @@
    - Memoize expensive computations with useMemo/useCallback
 
 2. **Styling**
-   - Use CSS modules or styled-components for scoped styling
-   - Follow BEM naming convention for CSS classes
-   - Use CSS variables for theme colors
+   - Use Tailwind CSS utility classes and shadcn/ui components (`components/ui/`)
+   - Merge classes with `cn()`; define variants with `cva`
+   - Use theme tokens (CSS variables in `styles/tokens.css`) for colors; no hard-coded hex
+   - No new per-component `.css` files, CSS modules or styled-components
 
 3. **State Management**
    - Use React Query for server state
