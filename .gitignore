@@ -16,3 +16,6 @@ htmlcov/
 CastraView/node_modules/
 CastraView/.vite/
 CastraView/dist/
+*.env.example
+*.env
+.claude/

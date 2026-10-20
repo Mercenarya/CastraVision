@@ -1,0 +1,94 @@
+/* StatCard.css — tiền tố cv-statcard để không đụng class cũ */
+
+.cv-statcard {
+  background: var(--panel, #151e32);
+  border: 1px solid var(--line, #28344d);
+  border-radius: var(--cv-radius-md, 10px);
+  padding: 20px 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cv-statcard__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.cv-statcard__label {
+  color: var(--muted, #9ca8c4);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* ── Status badge ── */
+.cv-statcard__badge {
+  flex: none;
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: var(--cv-radius-sm, 5px);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cv-statcard__badge--healthy,
+.cv-statcard__badge--optimized {
+  background: var(--cv-success-bg, #0d2e1a);
+  color: var(--cv-success, #22c55e);
+  border: 1px solid var(--cv-success-border, #1a5c35);
+}
+
+.cv-statcard__badge--above-target {
+  background: #1b3a53;
+  color: var(--cyan, #37c6ec);
+  border: 1px solid #2d6a83;
+}
+
+.cv-statcard__badge--outperforming {
+  background: #2a2a60;
+  color: var(--lavender, #c0c1ff);
+  border: 1px solid #5558a0;
+}
+
+.cv-statcard__badge--needs-opt {
+  background: var(--cv-danger-bg, #2d0f0f);
+  color: var(--cv-danger, #ef4444);
+  border: 1px solid var(--cv-danger-border, #7a1f1f);
+}
+
+.cv-statcard__badge--neutral {
+  background: #222b40;
+  color: var(--muted, #9ca8c4);
+  border: 1px solid #2d3a53;
+}
+
+/* ── Main value ── */
+.cv-statcard__value {
+  font-size: clamp(26px, 3vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text, #e1e6ff);
+  line-height: 1.1;
+}
+
+/* ── Delta ── */
+.cv-statcard__delta {
+  font-size: 13px;
+  font-weight: 700;
+}
+.cv-statcard__delta--up   { color: var(--cv-success, #22c55e); }
+.cv-statcard__delta--down { color: var(--cv-danger, #ef4444); }
+
+/* ── Benchmark line ── */
+.cv-statcard__benchmark {
+  color: var(--muted, #9ca8c4);
+  font-size: 12px;
+}

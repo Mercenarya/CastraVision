@@ -80,7 +80,7 @@ CastraVision is a full-stack application consisting of:
 - Axios or Fetch for HTTP requests
 - Formik or React Hook Form for forms
 - Yup or Zod for validation
-- Styled Components or CSS Modules for styling
+- Tailwind CSS v4 + shadcn/ui (JavaScript) for styling; lucide-react icons, class-variance-authority, clsx + tailwind-merge
 - React Query for data fetching
 - Redux Toolkit or Zustand for state management (if needed)
 - TypeScript (optional but recommended)
@@ -167,7 +167,7 @@ CastraServices/
 src/
 ├── assets/            # Images, icons, fonts
 ├── components/        # Reusable components
-│   ├── ui/            # Primitive UI components (Button, Input, etc.)
+│   ├── ui/            # shadcn/ui generated primitives (Button, Input, etc.)
 │   ├── layout/        # Layout components (Header, Footer, Sidebar)
 │   └── features/      # Feature-specific components
 ├── pages/             # Page components
@@ -175,7 +175,8 @@ src/
 ├── utils/             # Utility functions
 ├── services/          # API service functions
 ├── store/             # State management (if using Redux/Zustand)
-├── styles/            # CSS files, themes, variables
+├── lib/               # utils.js (cn), api clients
+├── styles/            # tokens.css (theme variables), Tailwind entry
 ├── routes/            # Routing configuration
 ├── App.jsx            # Main app component
 └── main.jsx           # Entry point

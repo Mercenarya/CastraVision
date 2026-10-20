@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import ManagerDashboard from '../pages/dashboards/ManagerDashboard'
 
 const money = (value) => new Intl.NumberFormat('vi-VN').format(value) + ' ₫'
 
@@ -119,9 +120,13 @@ export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
   </>
 }
 
+/**
+ * PerformanceDashboardPage — wrapper giữ nguyên export name để không phá vỡ
+ * các nơi đang import (App.jsx, test, v.v.).
+ * Dùng component ManagerDashboard đầy đủ bên trong.
+ */
 export function PerformanceDashboardPage({ setPage, imports = [] }) {
-  const channels = [['Google Search', '1,84M', '4,15%', '21.200 ₫', '4,20×', 88], ['Meta Ads', '2,10M', '3,10%', '26.400 ₫', '3,65×', 73], ['TikTok Video', '880K', '2,45%', '29.100 ₫', '2,80×', 56]]
-  return <><PageIntro code="FR05 · PERFORMANCE MONITORING" title="Dashboard hiệu suất chiến dịch" subtitle="Theo dõi các kênh marketing theo mục tiêu hiệu quả đã xác lập." action={<button className="button subtle">↻ Làm mới dữ liệu</button>} /><div className="metric-grid"><article><span>Impressions</span><strong>4,82M</strong><small className="success-text">↗ +12,4% kỳ trước</small></article><article><span>CTR</span><strong>3,42%</strong><small>Benchmark 2,80%</small></article><article><span>CPA</span><strong>24.800 ₫</strong><small>Thấp hơn mục tiêu 3.200 ₫</small></article><article><span>ROAS</span><strong>3,85×</strong><small className="success-text">Vượt mục tiêu</small></article></div><div className="dashboard-split"><Panel title="Hiệu suất theo kênh" meta={`${imports.length || 3} nguồn dữ liệu`}><div className="channel-performance">{channels.map((row, index) => <div className="performance-row" key={row[0]}><div><strong>{row[0]}</strong><small>{index === 0 ? 'High intent' : index === 1 ? 'Retargeting' : 'Cần tối ưu'}</small></div>{row.slice(1, 5).map((value) => <b key={value}>{value}</b>)}<div className="mini-progress"><span style={{ width: `${row[5]}%` }} /></div></div>)}</div></Panel><Panel title="Cảnh báo tối ưu" className="alert-panel"><Badge tone="rejected">Alert trigger</Badge><h3>TikTok CPA vượt ngưỡng</h3><p>CPA hiện tại cao hơn mục tiêu. Nên cân bằng lại ngân sách để bảo vệ biên lợi nhuận.</p><button className="button primary full" onClick={() => setPage('budget')}>Mở trình tối ưu ngân sách</button></Panel></div></>
+  return <ManagerDashboard setPage={setPage} imports={imports} />
 }
 
 export function BudgetOptimizationPage({ notify }) {

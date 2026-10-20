@@ -11,20 +11,6 @@ Sprint 1 triển khai một lát cắt chạy xuyên suốt cho FR01:
 Hợp đồng FR01 yêu cầu trường `business_size` với một trong bốn giá trị `Micro`, `Small`,
 `Medium`, `Large`. Trường này bắt buộc ở cả form và API.
 
-## Cấu hình môi trường
-
-Dùng một file `.env` tại thư mục gốc cho backend, frontend và Docker Compose:
-
-```powershell
-Copy-Item .env.example .env
-```
-
-Đặt các giá trị cần thiết trong file gốc này. Vite chỉ đọc và đưa các biến có tiền tố
-`VITE_` vào frontend; không đặt khóa backend như `OPENAI_API_KEY` hoặc
-`SUPABASE_SERVICE_ROLE_KEY` trong biến `VITE_*`. Nếu trước đây có
-`CastraView/.env`, hãy chuyển các biến `VITE_*` cần dùng sang `.env` gốc; Vite
-được cấu hình để nạp từ thư mục gốc.
-
 ## Chạy local không cần Docker
 
 ```powershell
@@ -52,6 +38,7 @@ Nếu chưa có `OPENAI_API_KEY`, API vẫn hoạt động với embedding hash 
 Docker Desktop trên Windows cần WSL 2. Sau khi Docker engine hoạt động:
 
 ```powershell
+Copy-Item .env.example .env
 docker compose up --build
 ```
 

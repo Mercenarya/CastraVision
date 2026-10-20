@@ -24,10 +24,10 @@ Use this skill when you need to create a new React component or modify an existi
 
 ### 3. Component Structure
 - [ ] Use functional components with hooks (avoid class components unless maintaining legacy code)
-- [ ] Import React at the top: `import React from 'react';`
+- [ ] No `import React` needed (React 19 automatic JSX runtime)
 - [ ] Import any hooks you'll use: `import { useState, useEffect } from 'react';`
 - [ ] Import any external libraries or components
-- [ ] Import CSS modules or styles if needed
+- [ ] Import `cn` from `@/lib/utils` and components from `@/components/ui/` if needed
 - [ ] Export the component as default or named export based on usage patterns
 
 ### 4. Props Definition
@@ -70,13 +70,13 @@ Use this skill when you need to create a new React component or modify an existi
 - [ ] Consider using custom hooks for reusable side effect logic
 
 ### 9. Styling
-- [ ] Use CSS modules for component-scoped styling (recommended)
-- [ ] Or use styled-components, emotion, or other CSS-in-JS solutions
-- [ ] Avoid inline styles for complex styling
-- [ ] Use utility-first CSS frameworks like Tailwind if adopted by the project
-- [ ] Follow BEM or similar naming conventions for CSS classes
-- [ ] Use CSS variables for theme colors and spacing
-- [ ] Ensure responsive design considerations
+- [ ] Use Tailwind classes in JSX; prefer the shadcn components in `components/ui/`
+- [ ] Add base components with `npx shadcn@latest add <name>`; do not copy code by hand
+- [ ] Use `cva` for variants and `cn()` to merge classes
+- [ ] Take colors/spacing from theme tokens (`tokens.css`); no hard-coded hex
+- [ ] No per-component `.css` files, CSS modules or styled-components in new code
+- [ ] Avoid inline styles for non-trivial UI
+- [ ] Ensure responsiveness (`sm:`, `md:`, `lg:`)
 
 ### 10. Performance Optimization
 - [ ] Use `React.memo` for components that render frequently with same props
@@ -113,29 +113,26 @@ Use this skill when you need to create a new React component or modify an existi
 
 ### Presentational Component
 ```jsx
-import React from 'react';
-import PropTypes from 'prop-types';
-import styles from './Button.module.css';
+import PropTypes from 'prop-types'
+import { cn } from '@/lib/utils'
+// Primary page action; wraps the shadcn Button to keep one API across the project.
 
-const Button = ({ variant = 'primary', size = 'medium', children, onClick }) => {
-  return (
-    <button 
-      className={`${styles.button} ${styles[variant]} ${styles[size]}`} 
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-};
+// Nút hành động chính của trang; bọc shadcn Button để thống nhất API trong dự án.
+const ActionButton = ({ variant = 'default', size = 'default', className, children, onClick }) => (
+  <UiButton variant={variant} size={size} className={cn('gap-2', className)} onClick={onClick}>
+    {children}
+  </UiButton>
+)
 
-Button.propTypes = {
-  variant: PropTypes.oneOf(['primary', 'secondary', 'outline']),
-  size: PropTypes.oneOf(['small', 'medium', 'large']),
+ActionButton.propTypes = {
+  variant: PropTypes.oneOf(['default', 'secondary', 'outline']),
+  size: PropTypes.oneOf(['sm', 'default', 'lg']),
+  className: PropTypes.string,
   children: PropTypes.node.isRequired,
   onClick: PropTypes.func,
-};
+}
 
-export default Button;
+export default ActionButton
 ```
 
 ### Container Component (Data Fetching)
@@ -266,69 +263,32 @@ export default useForm;
 
 ## Styling Approaches
 
-### CSS Modules
-```css
-/* Button.module.css */
-.button {
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
+CastraView uses **Tailwind CSS v4 + shadcn/ui** (JavaScript, no TypeScript).
 
-.button-primary {
-  background-color: #007bff;
-  color: white;
-}
+- Add base components with `npx shadcn@latest add button` (generated into `src/components/ui/`).
+- Hand-written components live in `src/components/` and compose the ones in `ui/`.
+- Use `cva` for variants and `cn()` (`src/lib/utils.js`) to merge classes.
+- Color tokens live in `src/styles/tokens.css` (shadcn theme variables + `success`/`warning`/`info`/`violet`/`coral`); never hard-code colors.
+- Do not create a per-component `.css` file for new components.
 
-.button-primary:hover {
-  background-color: #0056b3;
-}
-
-.button-outline {
-  background-color: transparent;
-  border: 1px solid #007bff;
-  color: #007bff;
-}
-
-.button-outline:hover {
-  background-color: rgba(0, 123, 255, 0.1);
-}
-```
-
-### Styled Components
+### Variant example with cva
 ```jsx
-import styled from 'styled-components';
+import { cva } from 'class-variance-authority'
+import { cn } from '@/lib/utils'
 
-const Button = styled.button`
-  padding: 8px 16px;
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+const badgeVariants = cva('inline-flex rounded-full px-2 py-0.5 text-xs font-medium', {
+  variants: {
+    tone: {
+      success: 'bg-success/15 text-success',
+      danger: 'bg-destructive/15 text-destructive',
+    },
+  },
+  defaultVariants: { tone: 'success' },
+})
 
-  ${props => props.variant === 'primary' && `
-    background-color: #007bff;
-    color: white;
-    
-    &:hover {
-      background-color: #0056b3;
-    }
-  `};
-
-  ${props => props.variant === 'outline' && `
-    background-color: transparent;
-    border: 1px solid #007bff;
-    color: #007bff;
-    
-    &:hover {
-      background-color: rgba(0, 123, 255, 0.1);
-    }
-  `};
-`;
+export default function StatusBadge({ tone, className, children }) {
+  return <span className={cn(badgeVariants({ tone }), className)}>{children}</span>
+}
 ```
 
 ## Performance Considerations
@@ -436,8 +396,8 @@ test('useForm updates values on change', () => {
 - Use `on` prefix for event handlers: `onClick`, `onChange`
 - Use `is` or `has` prefix for boolean values: `isVisible`, `hasError`
 
-### CSS Classes
-- Use kebab-case for CSS class names: `.button-primary`
-- Use BEM-like naming: `.card__title`, `.card__title--large`
-- Scope styles to components when using CSS modules
-- Avoid overly specific selectors that hinder reusability
+### CSS Classes (Tailwind)
+- Use Tailwind utility classes directly in JSX; do not introduce new BEM class names
+- Merge conditional classes with `cn()` from `@/lib/utils`
+- Take colors/spacing from theme tokens (`bg-primary`, `text-muted-foreground`), never ad-hoc hex values
+- If the same class group repeats, extract a component or a `cva` variant

@@ -80,7 +80,7 @@ CastraVision là một ứng dụng full-stack bao gồm:
 - Axios hoặc Fetch cho yêu cầu HTTP
 - Formik hoặc React Hook Form cho form
 - Yup hoặc Zod cho xác thực
-- Styled Components hoặc CSS Modules cho styling
+- Tailwind CSS v4 + shadcn/ui (JavaScript) cho styling; icon lucide-react, class-variance-authority, clsx + tailwind-merge
 - React Query để lấy dữ liệu
 - Redux Toolkit hoặc Zustand để quản lý state (nếu cần)
 - TypeScript (tùy chọn nhưng được khuyến nghị)
@@ -167,7 +167,7 @@ CastraServices/
 src/
 ├── assets/            # Hình ảnh, biểu tượng, phông chữ
 ├── components/        # Thành phần có thể tái sử dụng
-│   ├── ui/            # Thành phần UI cơ bản (Button, Input, v.v.)
+│   ├── ui/            # Thành phần nền do shadcn/ui sinh ra (Button, Input, v.v.)
 │   ├── layout/        # Thành phần bố cục (Header, Footer, Sidebar)
 │   └── features/      # Thành phần tính năng cụ thể
 ├── pages/             # Thành phần trang
@@ -175,7 +175,8 @@ src/
 ├── utils/             # Hàm tiện ích
 ├── services/          # Hàm dịch vụ API
 ├── store/             # Quản lý state (nếu sử dụng Redux/Zustand)
-├── styles/            # Tệp CSS, chủ đề, biến
+├── lib/               # utils.js (cn), client API
+├── styles/            # tokens.css (biến theme), điểm vào Tailwind
 ├── routes/            # Cấu hình định tuyến
 ├── App.jsx            # Thành phần ứng dụng chính
 └── main.jsx           # Điểm vào

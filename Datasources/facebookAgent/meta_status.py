@@ -1,13 +1,11 @@
 import os,sys
 import pandas as pd
 import requests
-from dotenv import load_dotenv
 
 # cấu hình ra gốc dự án
 CURRENT = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.path.join(CURRENT, "..", ".."))
+ROOT = os.path.join(CURRENT, "..", "..")
 sys.path.append(ROOT)
-load_dotenv(os.path.join(ROOT, ".env"))
 
 def check_facebook_api_status():
     """

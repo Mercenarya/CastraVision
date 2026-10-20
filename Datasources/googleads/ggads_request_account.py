@@ -1,21 +1,37 @@
-import json
-import os
-from google.ads.googleads.client import GoogleAdsClient
-from dotenv import load_dotenv
+from google.ads.googleads.client import GoogleAdsClient, GoogleAdsServiceClient
+import os,sys
 
-SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-load_dotenv(os.path.join(SCRIPT_DIR, "..", "..", ".env"))
+CURRENT = os.getcwd()
+ROOT = os.path.join(CURRENT,"..")
+sys.path.append(ROOT)
 
-with open(os.path.join(SCRIPT_DIR, "client_js.json")) as f:
-    oauth = json.load(f)["web"]  # nếu tạo loại Desktop app thì key là "installed"
+client = GoogleAdsClient.load_from_storage()
 
-config = {
-    "developer_token": os.environ["GOOGLE_ADS_DEVELOPER_TOKEN"],
-    "client_id": oauth["client_id"],
-    "client_secret": oauth["client_secret"],
-    "refresh_token": os.environ["GOOGLE_ADS_REFRESH_TOKEN"],
-    "login_customer_id": "1234567890",  # ID MCC, bỏ dòng này nếu không dùng MCC
-    "use_proto_plus": True,
-}
 
-client = GoogleAdsClient.load_from_dict(config)
+
+
+def get_authorization_gg_ads():
+    pass
+
+def dashboard(client: GoogleAdsClient, customer_id: str) -> None:
+    ga_service: GoogleAdsServiceClient = client.get_service("GoogleAdsService")
+
+    query: str = """
+        SELECT
+          campaign.id,
+          campaign.name
+        FROM campaign
+        ORDER BY campaign.id"""
+
+    # Issues a search request using streaming.
+    # stream: Iterator[SearchGoogleAdsStreamResponse] = ga_service.search_stream(
+    #     customer_id=customer_id, query=query
+    # )
+
+    # for batch in stream:
+    #     rows: List[GoogleAdsRow] = batch.results
+    #     for row in rows:
+    #         print(
+    #             f"Campaign with ID {row.campaign.id} and name "
+    #             f'"{row.campaign.name}" was found.'
+    #         )

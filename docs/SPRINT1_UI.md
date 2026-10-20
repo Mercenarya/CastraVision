@@ -19,6 +19,18 @@ Content Studio thể hiện bản nháp nội dung theo mẫu từ chiến lư�
 sao chép. Đây **không phải** tính năng sinh nội dung AI chuyên biệt của sprint sau.
 Giao diện ghi rõ giới hạn này để tránh nhầm lẫn.
 
+## Stack giao diện
+
+CastraView dùng React 19 + Vite, **Tailwind CSS v4** và **shadcn/ui** (JavaScript, không TypeScript).
+
+- Alias `@/` trỏ tới `CastraView/src/`.
+- Component nền (Button, Card, Table, Dialog...) nằm ở `src/components/ui/`, sinh bằng
+  `npx shadcn@latest add <tên>`. Component của dự án nằm ở `src/components/` và ghép từ `ui/`.
+- Token màu/font/radius ở `src/styles/tokens.css` (biến theme shadcn, thêm `success`, `warning`, `info`,
+  `violet`, `coral`); dùng qua class như `bg-primary`, `text-muted-foreground`.
+- Gộp class bằng `cn()` (`src/lib/utils.js`), biến thể bằng `cva`, icon `lucide-react`.
+- Code mới không viết file `.css` riêng; toàn bộ CSS cũ đã được gỡ; `index.css` và `styles/tokens.css` là hai file CSS duy nhất.
+
 ## Chạy local
 
 Tại thư mục gốc:

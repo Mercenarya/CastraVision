@@ -1,0 +1,69 @@
+/*
+ * tokens.css — design tokens của CastraView (theme shadcn/ui, giao diện tối).
+ * Màu lấy từ bản thiết kế: navy nền, lavender/violet chủ đạo, cyan nhấn.
+ * Dùng qua class Tailwind: bg-card, text-muted-foreground, bg-success/15...
+ */
+
+:root {
+  --radius: 0.625rem;
+
+  --background: #0b1225;
+  --foreground: #e1e6ff;
+  --card: #151e33;
+  --card-foreground: #e1e6ff;
+  --popover: #1b2540;
+  --popover-foreground: #e1e6ff;
+  --primary: #c0c1ff;
+  --primary-foreground: #11134d;
+  --secondary: #333e58;
+  --secondary-foreground: #e1e6ff;
+  --muted: #1b2540;
+  --muted-foreground: #9ca8c4;
+  --accent: #1b2540;
+  --accent-foreground: #e1e6ff;
+  --destructive: #ef4444;
+  --border: #28344d;
+  --input: #28344d;
+  --ring: #7777f6;
+
+  /* Màu trạng thái / nhấn của CastraVision */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --info: #37c6ec;
+  --violet: #7777f6;
+  --coral: #ffb0aa;
+}
+
+@theme inline {
+  --font-sans: Inter, system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-violet: var(--violet);
+  --color-coral: var(--coral);
+}
