@@ -11,6 +11,10 @@ __pycache__/
 *.log
 db.sqlite3
 .env
+.env.*
+!.env.example
+!**/.env.example
+.archify/
 supabase/.branches/
 supabase/.temp/
 .coverage
