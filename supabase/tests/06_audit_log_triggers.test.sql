@@ -125,16 +125,48 @@ update public.business_profiles
 set industry = 'Retail'
 where id = '35000000-0000-0000-0000-000000000003';
 
--- The privacy policy intentionally exposes only the caller's own membership
--- row. Administrative membership mutations therefore cross a privileged
--- server/RPC boundary; keep the JWT claims set so the trigger still records
--- the real initiating actor.
 reset role;
-update public.workspace_members
-set invited_email = 'updated-target@example.test'
-where workspace_id = '25000000-0000-0000-0000-000000000001'
-  and user_id = '15000000-0000-0000-0000-000000000005';
+create or replace function public.test_workspace_member_rpc(
+  target_workspace_id uuid,
+  target_user_id uuid,
+  operation text,
+  new_role public.workspace_role default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $$
+begin
+  if operation = 'update_role' then
+    update public.workspace_members
+    set role = new_role
+    where workspace_id = target_workspace_id
+      and user_id = target_user_id;
+  elsif operation = 'delete_member' then
+    delete from public.workspace_members
+    where workspace_id = target_workspace_id
+      and user_id = target_user_id;
+  else
+    raise exception 'unsupported test operation: %', operation;
+  end if;
+end;
+$$;
+revoke all on function public.test_workspace_member_rpc(uuid, uuid, text, public.workspace_role) from public;
+grant execute on function public.test_workspace_member_rpc(uuid, uuid, text, public.workspace_role) to authenticated;
+
 set local role authenticated;
+select set_config(
+  'request.jwt.claims',
+  '{"sub":"15000000-0000-0000-0000-000000000001","role":"authenticated"}',
+  true
+);
+select public.test_workspace_member_rpc(
+  '25000000-0000-0000-0000-000000000001',
+  '15000000-0000-0000-0000-000000000005',
+  'update_role',
+  'manager'
+);
 update public.approvals
 set status = 'approved',
     reviewer_id = '15000000-0000-0000-0000-000000000001',
@@ -157,9 +189,24 @@ select is(
   'business_profiles UPDATE stores before and after values'
 );
 select is(
-  (select count(*)::integer from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'update' and before_value is not null and after_value is not null),
+  (select count(*)::integer from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'update'),
   1,
-  'workspace_members UPDATE stores before and after values'
+  'workspace_members SECURITY DEFINER role update creates exactly one log for the affected user_id'
+);
+select is(
+  (select actor_id from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'update'),
+  '15000000-0000-0000-0000-000000000001'::uuid,
+  'workspace_members SECURITY DEFINER role update retains the Admin JWT actor_id'
+);
+select is(
+  (select before_value ->> 'role' from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'update'),
+  'member',
+  'workspace_members SECURITY DEFINER role update records the old role'
+);
+select is(
+  (select after_value ->> 'role' from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'update'),
+  'manager',
+  'workspace_members SECURITY DEFINER role update records the new role'
 );
 select is(
   (select count(*)::integer from public.audit_logs where entity_type = 'approvals' and entity_id = '35000000-0000-0000-0000-000000000004' and action = 'update' and before_value is not null and after_value is not null),
@@ -275,10 +322,10 @@ select ok(has_table_privilege('service_role', 'public.audit_logs', 'INSERT'), 's
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"15000000-0000-0000-0000-000000000001","role":"authenticated"}', true);
 select throws_ok(
-  $$update public.workspace_members set role = 'manager' where workspace_id = '25000000-0000-0000-0000-000000000001' and user_id = '15000000-0000-0000-0000-000000000001'$$,
+  $$select public.test_workspace_member_rpc('25000000-0000-0000-0000-000000000001', '15000000-0000-0000-0000-000000000001', 'update_role', 'manager')$$,
   '23514',
   'LAST_ADMIN_PROTECTED: workspace must retain at least one admin',
-  'last-admin protection still blocks the rejected change'
+  'last-admin protection blocks a rejected SECURITY DEFINER role change'
 );
 select is(
   (select count(*)::integer from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000001'),
@@ -291,19 +338,18 @@ delete from public.ad_contents where id = '35000000-0000-0000-0000-000000000001'
 delete from public.budget_proposals where id = '35000000-0000-0000-0000-000000000002';
 delete from public.business_profiles where id = '35000000-0000-0000-0000-000000000003';
 
--- See the corresponding UPDATE note above: exercise the server-side
--- administrative boundary while preserving request.jwt.claims.
-reset role;
-delete from public.workspace_members
-where workspace_id = '25000000-0000-0000-0000-000000000001'
-  and user_id = '15000000-0000-0000-0000-000000000005';
-set local role authenticated;
+select public.test_workspace_member_rpc(
+  '25000000-0000-0000-0000-000000000001',
+  '15000000-0000-0000-0000-000000000005',
+  'delete_member'
+);
 
 select is((select count(*)::integer from public.audit_logs where entity_type = 'approvals' and entity_id = '35000000-0000-0000-0000-000000000004' and action = 'delete' and before_value is not null and after_value is null), 1, 'approvals DELETE stores before_value');
 select is((select count(*)::integer from public.audit_logs where entity_type = 'ad_contents' and entity_id = '35000000-0000-0000-0000-000000000001' and action = 'delete' and before_value is not null and after_value is null), 1, 'ad_contents DELETE stores before_value');
 select is((select count(*)::integer from public.audit_logs where entity_type = 'budget_proposals' and entity_id = '35000000-0000-0000-0000-000000000002' and action = 'delete' and before_value is not null and after_value is null), 1, 'budget_proposals DELETE stores before_value');
 select is((select count(*)::integer from public.audit_logs where entity_type = 'business_profiles' and entity_id = '35000000-0000-0000-0000-000000000003' and action = 'delete' and before_value is not null and after_value is null), 1, 'business_profiles DELETE stores before_value');
-select is((select count(*)::integer from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'delete' and before_value is not null and after_value is null), 1, 'workspace_members DELETE stores before_value');
+select is((select count(*)::integer from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'delete' and before_value is not null and after_value is null), 1, 'workspace_members SECURITY DEFINER delete creates one log for the affected user_id');
+select is((select actor_id from public.audit_logs where entity_type = 'workspace_members' and entity_id = '15000000-0000-0000-0000-000000000005' and action = 'delete'), '15000000-0000-0000-0000-000000000001'::uuid, 'workspace_members SECURITY DEFINER delete retains the Admin JWT actor_id');
 
 reset role;
 select set_config('request.jwt.claims', '{}', true);

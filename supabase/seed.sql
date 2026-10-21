@@ -181,15 +181,15 @@ begin
   insert into public.audit_logs
     (workspace_id, actor_id, action, entity_type, entity_id, before_value, after_value, created_at)
   values
-    (demo_workspace, demo_owner, 'create', 'workspace', demo_workspace,
+    (demo_workspace, demo_owner, 'create', 'workspaces', demo_workspace,
      null, '{"name":"Cafe Ông Bụt"}'::jsonb, now() - interval '31 days'),
-    (demo_workspace, demo_owner, 'create', 'strategy', strategy_awareness,
+    (demo_workspace, demo_owner, 'create', 'strategies', strategy_awareness,
      null, '{"objective":"Tăng nhận biết quán trong bán kính 5 km"}'::jsonb,
      now() - interval '4 days'),
-    (demo_workspace, demo_owner, 'approve', 'ad_content', approved_content,
+    (demo_workspace, demo_owner, 'approve', 'ad_contents', approved_content,
      '{"status":"pending"}'::jsonb, '{"status":"approved"}'::jsonb,
      now() - interval '1 day'),
-    (demo_workspace, demo_owner, 'edit', 'budget_proposal', pending_budget,
+    (demo_workspace, demo_owner, 'edit', 'budget_proposals', pending_budget,
      '{"proposed_allocation":3600000}'::jsonb, '{"proposed_allocation":4200000}'::jsonb,
      now() - interval '3 hours');
 
