@@ -15,6 +15,7 @@ db.sqlite3
 !.env.example
 !**/.env.example
 .archify/
+Datasources/googleads/ggads_client.yaml
 supabase/.branches/
 supabase/.temp/
 .coverage
