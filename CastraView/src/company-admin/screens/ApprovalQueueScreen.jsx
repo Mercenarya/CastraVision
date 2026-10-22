@@ -2,7 +2,10 @@ import { useMemo, useState } from 'react'
 import { PageHeader, SecondaryButton, StatusBadge, NoticeBanner } from '../ui/Primitives'
 import { INITIAL_PROPOSALS } from '../mockData'
 
-export default function ApprovalQueueScreen({ notify }) {
+export default function ApprovalQueueScreen({ user, workspaceRole, notify, onNavigate }) {
+  const effectiveRole = workspaceRole || (user?.role === 'manager' ? 'manager' : (user?.role === 'admin' || user?.role === 'company_admin' ? 'admin' : user?.role || 'member'))
+  const isAuthorized = effectiveRole === 'admin' || effectiveRole === 'manager'
+
   const [proposals, setProposals] = useState(INITIAL_PROPOSALS)
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('All')
@@ -38,6 +41,15 @@ export default function ApprovalQueueScreen({ notify }) {
   }, [proposals, search, typeFilter, statusFilter])
 
   function handleApprove(id) {
+    if (!isAuthorized) {
+      notify?.('Unauthorized: Only Workspace Admins and Managers can approve proposals (FR04).')
+      return
+    }
+    const current = proposals.find((p) => p.id === id)
+    if (current && current.status !== 'pending' && current.status !== 'edited') {
+      notify?.(`Proposal ${id} has already been ${current.status}.`)
+      return
+    }
     setProposals((prev) =>
       prev.map((p) => (p.id === id ? { ...p, status: 'approved' } : p))
     )
@@ -48,6 +60,20 @@ export default function ApprovalQueueScreen({ notify }) {
   function handleRejectSubmit(e) {
     e.preventDefault()
     if (!rejectTarget) return
+    if (!isAuthorized) {
+      notify?.('Unauthorized: Only Workspace Admins and Managers can reject proposals (FR04).')
+      return
+    }
+    const trimmedReason = (rejectReason || '').trim()
+    if (!trimmedReason) {
+      notify?.('Rejection requires a non-empty explanation (FR04).')
+      return
+    }
+    const current = proposals.find((p) => p.id === rejectTarget.id)
+    if (current && current.status !== 'pending' && current.status !== 'edited') {
+      notify?.(`Proposal ${rejectTarget.id} has already been ${current.status}.`)
+      return
+    }
     const id = rejectTarget.id
     setProposals((prev) =>
       prev.map((p) => (p.id === id ? { ...p, status: 'rejected' } : p))
@@ -59,13 +85,30 @@ export default function ApprovalQueueScreen({ notify }) {
     notify?.(`Proposal ${id} rejected with reason logged.`)
   }
 
+  if (!isAuthorized) {
+    return (
+      <div className="ca-card" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+        <div style={{ fontSize: 40, marginBottom: 12 }}>🛡️</div>
+        <h2 style={{ color: '#ffffff', fontSize: 18, marginBottom: 8 }}>Access Denied (FR04 · RBAC)</h2>
+        <p style={{ color: 'var(--ca-text-secondary)', maxWidth: 520, margin: '0 auto 20px', fontSize: 14 }}>
+          The Proposal Approval Queue is strictly restricted to Workspace Admins and Workspace Managers. Members do not have authorization to view, edit, approve, or reject proposals.
+        </p>
+        {onNavigate && (
+          <SecondaryButton onClick={() => onNavigate('overview')}>
+            Return to Overview
+          </SecondaryButton>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div>
       {/* Page Header */}
       <PageHeader
         badge="FR04 / GOVERNANCE ENGINE · Stage Gate 03"
         title="Proposal Approval Queue"
-        subtitle="Admin oversight: Review, edit, approve, or reject AI-generated campaign proposals prior to deployment."
+        subtitle="Admin & Manager oversight: Review, edit, approve, or reject AI-generated campaign proposals prior to deployment."
         actions={
           <>
             <span
@@ -82,7 +125,7 @@ export default function ApprovalQueueScreen({ notify }) {
                 fontWeight: 600,
               }}
             >
-              🛡 Admin Full Authority
+              {effectiveRole === 'manager' ? '🛡 Manager Authority' : '🛡 Admin Full Authority'}
             </span>
             <SecondaryButton onClick={() => notify?.('Approval queue refreshed from database.')} icon="↻">
               Refresh

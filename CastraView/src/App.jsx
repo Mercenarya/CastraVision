@@ -10,6 +10,7 @@ import {
   FloatingInput,
   Button,
 } from './actor-ui/ActorPages'
+import { canAccessFR04ApprovalQueue } from './auth/permissions'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
 const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: '250+ employees' }
@@ -144,30 +145,42 @@ function AuthScreen({ onAuth, backendError }) {
                 >
                   Enter as System Admin 🛡 →
                 </Button>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div style={{ display: 'flex', gap: 6 }}>
                   <Button
                     type="button"
                     variant="secondary"
-                    style={{ flex: 1, fontSize: 12 }}
+                    style={{ flex: 1, fontSize: 11 }}
                     onClick={() => onAuth(
                       { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
                       { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
                       'overview'
                     )}
                   >
-                    Enter as Company Admin →
+                    Admin →
                   </Button>
                   <Button
                     type="button"
                     variant="secondary"
-                    style={{ flex: 1, fontSize: 12 }}
+                    style={{ flex: 1, fontSize: 11, borderColor: '#818cf8', color: '#c7d2fe' }}
+                    onClick={() => onAuth(
+                      { email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Manager →
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11 }}
                     onClick={() => onAuth(
                       { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
                       { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
                       'overview'
                     )}
                   >
-                    Enter as Member →
+                    Member →
                   </Button>
                 </div>
               </div>
@@ -185,12 +198,14 @@ function AuthScreen({ onAuth, backendError }) {
 
 function Shell({ user, profile, page, setPage, logout, children }) {
   const isAdmin = user?.role === 'admin'
+  const canApprove = canAccessFR04ApprovalQueue(user)
   const navList = [
     ['overview', '▦', 'Campaign Overview'],
     ['strategy', '◈', 'Strategy & Insights'],
     ['content', '✦', 'Content Studio'],
     ['import', '⇥', 'Campaign Data Import'],
     ['budget', '↗', 'Budget & ROAS'],
+    ...(canApprove ? [['approvals', '✓', 'Approval Queue']] : []),
     ...(isAdmin ? [['audit', '▤', 'Reports & Audit']] : []),
     ['profile', '⚙', 'Settings & API'],
     ...(isAdmin ? [
@@ -868,6 +883,18 @@ function App() {
           const params = new URLSearchParams(window.location.search)
           if (params.get('role') === 'system_admin' || params.get('sa') === 'true') {
             setUser({ email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' })
+          } else if (params.get('role') === 'admin') {
+            setUser({ email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' })
+            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          } else if (params.get('role') === 'manager') {
+            setUser({ email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' })
+            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          } else if (params.get('role') === 'member') {
+            setUser({ email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' })
+            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          }
+          if (params.get('page')) {
+            setPage(params.get('page'))
           }
         }
       } catch (cause) {
@@ -983,7 +1010,22 @@ function App() {
       {backendError && <Notice>{backendError}</Notice>}
 
       {/* Operations & Governance */}
-      {page === 'approvals' && <ApprovalQueuePage notify={setToast} />}
+      {page === 'approvals' && (
+        canAccessFR04ApprovalQueue(user) ? (
+          <ApprovalQueuePage notify={setToast} />
+        ) : (
+          <div className="card" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
+            <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
+            <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
+              Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+            </p>
+            <button className="button primary" onClick={() => setPage('overview')}>
+              Return to Overview
+            </button>
+          </div>
+        )
+      )}
       {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
       {page === 'reports' && <ReportsPage profile={profile || { business_name: 'Acme Studios' }} notify={setToast} />}
       {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}

@@ -1,3 +1,8 @@
+/**
+ * CompanyAdminLayout.jsx — Universal Shared Layout for Workspace Admin
+ * Integrates the standardized Sidebar, Header, and views matching approved Figma designs.
+ */
+
 import { useState } from 'react'
 import './company-admin.css'
 import CompanyAdminSidebar from './CompanyAdminSidebar'
@@ -15,6 +20,7 @@ import {
   INITIAL_PROPOSALS,
   INITIAL_AUDIT_LOGS,
 } from './mockData'
+import { canAccessFR04ApprovalQueue, resolveWorkspaceRole } from '../auth/permissions'
 
 export default function CompanyAdminLayout({
   user,
@@ -34,7 +40,7 @@ export default function CompanyAdminLayout({
   }))
 
   const [members, setMembers] = useState(INITIAL_MEMBERS)
-  const [proposals, setProposals] = useState(INITIAL_PROPOSALS)
+  const [proposals] = useState(INITIAL_PROPOSALS)
   const [auditLogs] = useState(INITIAL_AUDIT_LOGS)
   const [selectedAuditRecord, setSelectedAuditRecord] = useState(null)
   const [inviteModalOpen, setInviteModalOpen] = useState(false)
@@ -74,6 +80,30 @@ export default function CompanyAdminLayout({
     notify?.(`Invitation dispatched to ${email} as ${role}.`)
   }
 
+  function handleUpdateMemberRole(memberId, newRole) {
+    setMembers((prev) =>
+      prev.map((m) => {
+        if (m.id === memberId) {
+          return {
+            ...m,
+            role: newRole,
+            permissionsSummary:
+              newRole === 'Admin'
+                ? 'Full access, RBAC, Approvals, Billing & Audit'
+                : newRole === 'Manager'
+                ? 'FR04 Proposal Approval, Edit Proposals, Strategy'
+                : 'FR02 Strategy & FR03 Content Creation, Data Import',
+          }
+        }
+        return m
+      })
+    )
+  }
+
+  function handleRemoveMember(memberId) {
+    setMembers((prev) => prev.filter((m) => m.id !== memberId))
+  }
+
   const pageTitleMap = {
     overview: 'Admin Console',
     admin: 'Admin Console',
@@ -92,9 +122,12 @@ export default function CompanyAdminLayout({
       ? 'Audit Log Record Details'
       : pageTitleMap[page] || 'Admin Console'
 
+  const activeWorkspaceRole = resolveWorkspaceRole(user, profile)
+  const canApprove = canAccessFR04ApprovalQueue(user, profile)
+
   return (
     <div className="ca-shell">
-      {/* ── UNIFIED SIDEBAR (Shared across all 7 screens) ── */}
+      {/* ── UNIFIED SIDEBAR (Shared across all Workspace Admin screens) ── */}
       <CompanyAdminSidebar
         activeKey={selectedAuditRecord && page === 'audit' ? 'audit' : activeKey}
         onNavigate={(target) => {
@@ -106,11 +139,12 @@ export default function CompanyAdminLayout({
         }
         workspaceName={workspace.name}
         planName={workspace.tierShort}
+        canApprove={canApprove}
       />
 
       {/* ── MAIN CONTENT WRAPPER ── */}
       <div className="ca-main-wrap">
-        {/* ── UNIFIED HEADER (Shared across all 7 screens) ── */}
+        {/* ── UNIFIED HEADER (Shared across all Workspace Admin screens) ── */}
         <CompanyAdminHeader
           workspaceName={workspace.name}
           currentPageTitle={currentTitle}
@@ -141,7 +175,10 @@ export default function CompanyAdminLayout({
               members={members}
               onOpenInvite={handleOpenInvite}
               onNavigate={handleNavigate}
+              onUpdateMemberRole={handleUpdateMemberRole}
+              onRemoveMember={handleRemoveMember}
               notify={notify}
+              currentUser={user}
             />
           )}
 
@@ -150,9 +187,30 @@ export default function CompanyAdminLayout({
             <RoleManagementScreen notify={notify} />
           )}
 
-          {/* Screen 7: Proposal Approval Queue */}
+          {/* Screen 7: Proposal Approval Queue (FR04 Gated) */}
           {page === 'approvals' && (
-            <ApprovalQueueScreen notify={notify} />
+            canApprove ? (
+              <ApprovalQueueScreen
+                user={user}
+                workspaceRole={activeWorkspaceRole}
+                notify={notify}
+              />
+            ) : (
+              <div className="ca-card" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+                <div style={{ fontSize: 40, marginBottom: 12 }}>🛡️</div>
+                <h2 style={{ color: '#ffffff', fontSize: 18, marginBottom: 8 }}>Access Denied (FR04 · RBAC)</h2>
+                <p style={{ color: 'var(--ca-text-secondary)', maxWidth: 520, margin: '0 auto 20px', fontSize: 14 }}>
+                  The Proposal Approval Queue is strictly restricted to Workspace Admins and Workspace Managers. Members do not have authorization to view, edit, approve, or reject proposals.
+                </p>
+                <button
+                  type="button"
+                  className="ca-btn ca-btn-secondary"
+                  onClick={() => handleNavigate('overview')}
+                >
+                  Return to Overview
+                </button>
+              </div>
+            )
           )}
 
           {/* Screen 2 & 3: Audit Log and Details */}
@@ -179,7 +237,7 @@ export default function CompanyAdminLayout({
         </main>
       </div>
 
-      {/* ── REUSABLE INVITE MEMBER MODAL (Screen 4) ── */}
+      {/* ── REUSABLE INVITE MEMBER MODAL ── */}
       <InviteMemberModal
         isOpen={inviteModalOpen}
         onClose={() => setInviteModalOpen(false)}

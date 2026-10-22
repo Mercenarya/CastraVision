@@ -279,7 +279,22 @@ function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName,
               {page === 'emp-budget' && <BudgetOptimizationPage notify={notify} />}
               {page === 'emp-competitor' && <CompetitorInsightsPage notify={notify} />}
               {page === 'emp-reports' && <ReportsPage notify={notify} />}
-              {page === 'emp-approvals' && <ApprovalQueuePage notify={notify} />}
+              {page === 'emp-approvals' && (
+                can(role, 'approval:write') ? (
+                  <ApprovalQueuePage notify={notify} role={role} />
+                ) : (
+                  <div className="panel" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+                    <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
+                    <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
+                    <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
+                      Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+                    </p>
+                    <button className="button primary" onClick={() => setPage(defaultPage(role))}>
+                      Return to Dashboard
+                    </button>
+                  </div>
+                )
+              )}
               {page === 'emp-notifications' && <NotificationsPage notify={notify} />}
               {page === 'emp-profile' && <MyProfilePage user={user} profile={profile} notify={notify} />}
             </>
@@ -1056,21 +1071,48 @@ const proposals = [
   ['PRP-8401', 'Creative Retargeting', 'Content', 'Creative Engine', 'approved'],
 ]
 
-export function ApprovalQueuePage({ notify }) {
+export function ApprovalQueuePage({ notify, role }) {
+  const auth = useContext(AuthContext)
+  const effectiveRole = role || auth?.role || auth?.membership?.role || 'member'
+  const isAuthorized = effectiveRole === 'admin' || effectiveRole === 'manager'
+
   const [rows, setRows] = useState(proposals)
   const [filter, setFilter] = useState('all')
   const [selected, setSelected] = useState(null)
   const [rejecting, setRejecting] = useState(null)
   const [reason, setReason] = useState('')
   const visible = rows.filter(r => filter === 'all' || r[4] === filter)
+
   function setStatus(id, status) {
+    if (!isAuthorized) {
+      notify?.('Unauthorized: Only Workspace Admins and Managers can approve or reject proposals (FR04).')
+      return
+    }
+    const current = rows.find(r => r[0] === id)
+    if (current && current[4] !== 'pending' && current[4] !== 'edited') {
+      notify?.(`Proposal ${id} has already been ${current[4]}.`)
+      return
+    }
     setRows(c => c.map(r => r[0] === id ? [...r.slice(0, 4), status] : r))
     setSelected(null)
     notify?.(`${id} has been ${status === 'approved' ? 'approved' : 'rejected'}.`)
   }
+
+  if (!isAuthorized) {
+    return (
+      <div className="panel" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+        <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
+        <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
+        <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
+          Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <>
-      <PageIntro code="FR04 · GOVERNANCE ENGINE" title="Approval Queue" subtitle="Review content and budget proposals before campaign deployment." action={<Badge tone="manager">Manager access</Badge>} />
+      <PageIntro code="FR04 · GOVERNANCE ENGINE" title="Approval Queue" subtitle="Review content and budget proposals before campaign deployment." action={<Badge tone={effectiveRole === 'admin' ? 'admin' : 'manager'}>{effectiveRole === 'admin' ? 'Admin access' : 'Manager access'}</Badge>} />
       <div className="actor-policy"><b>Access control active.</b> Admin and Manager can review, edit, approve or reject. Members have no access.</div>
       <div className="actor-summary">
         <div><strong>{rows.length}</strong><span>Total Proposals</span></div>
@@ -1112,7 +1154,17 @@ export function ApprovalQueuePage({ notify }) {
       )}
       {rejecting && (
         <div className="actor-modal-backdrop">
-          <form className="actor-modal danger-modal" onSubmit={e => { e.preventDefault(); setStatus(rejecting[0], 'rejected'); setRejecting(null); setReason('') }}>
+          <form className="actor-modal danger-modal" onSubmit={e => {
+            e.preventDefault()
+            const trimmedReason = (reason || '').trim()
+            if (!trimmedReason) {
+              notify?.('Rejection requires a non-empty explanation (FR04).')
+              return
+            }
+            setStatus(rejecting[0], 'rejected')
+            setRejecting(null)
+            setReason('')
+          }}>
             <button className="modal-close" type="button" onClick={() => setRejecting(null)}>×</button>
             <span className="modal-icon danger">!</span>
             <h2>Reject Proposal</h2>
