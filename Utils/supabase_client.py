@@ -1,14 +1,17 @@
 import os
-from supabase import create_client, Client
+from supabase import Client, create_client
 
 # Initialize Supabase client
 supabase_url = os.getenv("SUPABASE_URL")
-supabase_key = os.getenv("SUPABASE_KEY")
+supabase_key = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+supabase: Client | None = (
+    create_client(supabase_url, supabase_key)
+    if supabase_url and supabase_key
+    else None
+)
 
-if not supabase_url or not supabase_key:
-    raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set in environment variables")
-
-supabase: Client = create_client(supabase_url, supabase_key)
 
 def get_supabase_client() -> Client:
+    if supabase is None:
+        raise RuntimeError("Supabase is not configured for this environment.")
     return supabase
