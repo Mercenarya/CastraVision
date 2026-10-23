@@ -1,0 +1,6 @@
+{
+  "system-flows": {
+    "meta_ads": "{\"identity_facebook\": {\"app_id\": \"Test_fb_app_id\", \"app_secret\": \"Test_fb_app_secret\", \"access_token\": \"Test_fb_access_token\", \"account_id\": \"Test_ad_account_id\"}}",
+    "google_ads": "{\"identity_google_ads\": {\"client_id\": \"148597477010-n47d3lsmrkq8sh3dhn5a150g5m9o54u0.apps.googleusercontent.com\", \"client_secret\": \"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\", \"refresh_token\": \"1//0gFcoAkD-GLaLCgYIARAAGBASNwF-L9IrJwTw2aKG8tzqUENkesHljCN9VMeGbGQArKKRztm4Oj-Xd2MJTmro8zY2jP4FPTozyOE\", \"customer_id\": \"6433384358\", \"use_proto_plus\": true}}"
+  }
+}
