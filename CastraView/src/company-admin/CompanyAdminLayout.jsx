@@ -20,7 +20,11 @@ import {
   INITIAL_PROPOSALS,
   INITIAL_AUDIT_LOGS,
 } from './mockData'
-import { canAccessFR04ApprovalQueue, resolveWorkspaceRole } from '../auth/permissions'
+import {
+  canAccessFR04ApprovalQueue,
+  canAccessFR11AuditLog,
+  resolveWorkspaceRole,
+} from '../auth/permissions'
 
 export default function CompanyAdminLayout({
   user,
@@ -40,7 +44,7 @@ export default function CompanyAdminLayout({
   }))
 
   const [members, setMembers] = useState(INITIAL_MEMBERS)
-  const [proposals] = useState(INITIAL_PROPOSALS)
+  const [proposals, setProposals] = useState(INITIAL_PROPOSALS)
   const [auditLogs] = useState(INITIAL_AUDIT_LOGS)
   const [selectedAuditRecord, setSelectedAuditRecord] = useState(null)
   const [inviteModalOpen, setInviteModalOpen] = useState(false)
@@ -59,25 +63,14 @@ export default function CompanyAdminLayout({
     setInviteModalOpen(true)
   }
 
-  function handleInviteMember({ email, role }) {
-    const newMember = {
-      id: `mem-${Date.now()}`,
-      name: email.split('@')[0].replace(/[._]/g, ' '),
-      email,
-      role,
-      status: 'pending',
-      joined: 'Just now',
-      lastActive: 'Invite Sent',
-      permissionsSummary:
-        role === 'Admin'
-          ? 'Full access, RBAC, Approvals, Billing & Audit'
-          : role === 'Manager'
-          ? 'FR04 Proposal Approval, Edit Proposals, Strategy'
-          : 'Strategy & Content Creation, Data Import',
-      avatarInitials: email.slice(0, 2).toUpperCase(),
+  async function handleInviteMember({ email: _email, role: _role } = {}) {
+    // Phase 4.1: Strictly prevent creating fake member records or claiming email delivery
+    // when no authoritative backend invitation endpoint exists.
+    notify?.('Invitations are not available yet. Email delivery has not been configured.', 'warning')
+    return {
+      success: false,
+      error: 'Invitations are not available yet. Email delivery has not been configured.',
     }
-    setMembers((prev) => [newMember, ...prev])
-    notify?.(`Invitation dispatched to ${email} as ${role}.`)
   }
 
   function handleUpdateMemberRole(memberId, newRole) {
@@ -124,6 +117,7 @@ export default function CompanyAdminLayout({
 
   const activeWorkspaceRole = resolveWorkspaceRole(user, profile)
   const canApprove = canAccessFR04ApprovalQueue(user, profile)
+  const canViewAudit = canAccessFR11AuditLog(user, profile)
 
   return (
     <div className="ca-shell">
@@ -140,6 +134,7 @@ export default function CompanyAdminLayout({
         workspaceName={workspace.name}
         planName={workspace.tierShort}
         canApprove={canApprove}
+        canViewAudit={canViewAudit}
       />
 
       {/* ── MAIN CONTENT WRAPPER ── */}
@@ -184,33 +179,24 @@ export default function CompanyAdminLayout({
 
           {/* Screen 5: Role Management & RBAC */}
           {page === 'roles' && (
-            <RoleManagementScreen notify={notify} />
+            <RoleManagementScreen
+              members={members}
+              workspace={workspace}
+              onNavigate={handleNavigate}
+              notify={notify}
+            />
           )}
 
           {/* Screen 7: Proposal Approval Queue (FR04 Gated) */}
           {page === 'approvals' && (
-            canApprove ? (
-              <ApprovalQueueScreen
-                user={user}
-                workspaceRole={activeWorkspaceRole}
-                notify={notify}
-              />
-            ) : (
-              <div className="ca-card" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
-                <div style={{ fontSize: 40, marginBottom: 12 }}>🛡️</div>
-                <h2 style={{ color: '#ffffff', fontSize: 18, marginBottom: 8 }}>Access Denied (FR04 · RBAC)</h2>
-                <p style={{ color: 'var(--ca-text-secondary)', maxWidth: 520, margin: '0 auto 20px', fontSize: 14 }}>
-                  The Proposal Approval Queue is strictly restricted to Workspace Admins and Workspace Managers. Members do not have authorization to view, edit, approve, or reject proposals.
-                </p>
-                <button
-                  type="button"
-                  className="ca-btn ca-btn-secondary"
-                  onClick={() => handleNavigate('overview')}
-                >
-                  Return to Overview
-                </button>
-              </div>
-            )
+            <ApprovalQueueScreen
+              user={user}
+              workspaceRole={activeWorkspaceRole}
+              onNavigate={handleNavigate}
+              notify={notify}
+              proposals={proposals}
+              setProposals={setProposals}
+            />
           )}
 
           {/* Screen 2 & 3: Audit Log and Details */}
@@ -219,6 +205,9 @@ export default function CompanyAdminLayout({
               auditLogs={auditLogs}
               onSelectRecord={(rec) => setSelectedAuditRecord(rec)}
               notify={notify}
+              user={user}
+              workspaceRole={activeWorkspaceRole}
+              workspace={workspace}
             />
           )}
 
@@ -227,6 +216,9 @@ export default function CompanyAdminLayout({
               record={selectedAuditRecord}
               onBack={() => setSelectedAuditRecord(null)}
               notify={notify}
+              user={user}
+              workspaceRole={activeWorkspaceRole}
+              workspace={workspace}
             />
           )}
 

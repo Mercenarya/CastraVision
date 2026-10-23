@@ -71,3 +71,19 @@ export function canAccessFR04ApprovalQueue(user, membership = null) {
   const role = resolveWorkspaceRole(user, membership)
   return role === 'admin' || role === 'manager'
 }
+
+/**
+ * FR11 Access Check:
+ * FR11 Workspace Audit Log is restricted to Workspace Administrator (Company Admin).
+ * Workspace Managers, Members, unknown roles, and unauthenticated users are strictly denied.
+ *
+ * @param {object|null} user - Current user object
+ * @param {object|null} membership - Optional active workspace membership context
+ * @returns {boolean}
+ */
+export function canAccessFR11AuditLog(user, membership = null) {
+  if (!user) return false
+  const role = resolveWorkspaceRole(user, membership)
+  return role === 'admin'
+}
+

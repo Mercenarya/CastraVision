@@ -5,7 +5,7 @@ import { PlatformOverviewScreen } from './screens/PlatformOverviewScreen'
 import { CompanyManagementScreen } from './screens/CompanyManagementScreen'
 import { CompanyOverviewScreen } from './screens/CompanyOverviewScreen'
 import { CreateCompanyScreen } from './screens/CreateCompanyScreen'
-import { INITIAL_COMPANIES, PLATFORM_METRICS } from './mockData'
+import { INITIAL_COMPANIES } from './mockData'
 import './system-admin.css'
 
 /**
@@ -27,24 +27,39 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
     const active = companies.filter((c) => c.status === 'Active').length
     const inactive = total - active
     const aggregateEmployees = companies.reduce(
-      (acc, c) => acc + (c.employeeCount || 0),
-      0
-    )
-    const allocatedSeats = companies.reduce(
-      (acc, c) => acc + (c.licensedSeats || 25),
+      (acc, c) =>
+        acc +
+        (typeof c.employeeCount === 'number' && c.employeeCount >= 0
+          ? c.employeeCount
+          : 0),
       0
     )
 
+    // Accurate licensed seats calculation: sum only valid numeric values >= 0
+    let validSeatCount = 0
+    let seatSum = 0
+    companies.forEach((c) => {
+      if (
+        typeof c.licensedSeats === 'number' &&
+        !isNaN(c.licensedSeats) &&
+        c.licensedSeats >= 0
+      ) {
+        seatSum += c.licensedSeats
+        validSeatCount++
+      }
+    })
+
+    const hasSeatData = validSeatCount > 0
+    const isPartialSeats = validSeatCount > 0 && validSeatCount < total
+
     return {
-      totalRegistered: total || PLATFORM_METRICS.totalRegistered,
-      activeTenants: active || PLATFORM_METRICS.activeTenants,
-      inactiveTenants: inactive || PLATFORM_METRICS.inactiveTenants,
-      aggregateHeadcount:
-        aggregateEmployees > 0
-          ? aggregateEmployees
-          : PLATFORM_METRICS.aggregateHeadcount,
-      allocatedSeats:
-        allocatedSeats > 0 ? allocatedSeats : PLATFORM_METRICS.allocatedSeats,
+      totalRegistered: total,
+      activeTenants: active,
+      inactiveTenants: inactive,
+      aggregateHeadcount: aggregateEmployees,
+      allocatedSeats: hasSeatData ? seatSum : null,
+      isPartialSeats,
+      seatReportingCount: validSeatCount,
     }
   }, [companies])
 
@@ -69,7 +84,7 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
   const handleCreateCompany = (newCompany) => {
     setCompanies((prev) => [newCompany, ...prev])
     setSelectedCompanyId(newCompany.id)
-    if (notify) notify(`Tenant company "${newCompany.name}" provisioned successfully.`)
+    if (notify) notify(`Company "${newCompany.name}" added to the local demo session. No backend tenant was provisioned.`)
   }
 
   // Update company handler
@@ -82,7 +97,7 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
 
   // Refresh handler
   const handleRefresh = () => {
-    if (notify) notify('Platform telemetry refreshed.')
+    if (notify) notify('Platform state refreshed (local simulation).')
   }
 
   // Global search from top header
