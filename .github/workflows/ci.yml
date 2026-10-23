@@ -5,10 +5,26 @@ on:
     branches: [main, develop, Dat]
   pull_request:
     branches: [main, develop, Dat]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   lint-test-backend:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/castravision_test
+      REDIS_URL: redis://localhost:6379/0
+      SECRET_KEY: ci-only-secret
+      DEBUG: "false"
+      ENVIRONMENT: test
+      PYTHON_DOTENV_DISABLED: "1"
     services:
       postgres:
         image: pgvector/pgvector:pg16
@@ -27,36 +43,43 @@ jobs:
         image: redis:7-alpine
         ports:
           - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: "3.13"
           cache: pip
+          cache-dependency-path: requirements.txt
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
       - name: Lint
         run: ruff check CastraVision CastraServices
-      - name: Migrate and test
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/castravision_test
-          REDIS_URL: redis://localhost:6379/0
-          SECRET_KEY: ci-only-secret
-          DEBUG: "false"
+      - name: Django system and migration checks
         run: |
+          python manage.py check
+          python manage.py makemigrations --check --dry-run
           python manage.py migrate --noinput
-          pytest --cov=CastraServices --cov-report=term-missing
+      - name: Test
+        run: pytest --cov=CastraServices --cov-report=term-missing
 
   lint-test-frontend:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     defaults:
       run:
         working-directory: CastraView
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Set up Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: "24"
           cache: npm
@@ -65,6 +88,30 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
+      - name: Test
+        run: npm test -- --run
       - name: Build
         run: npm run build
+
+  test-supabase-local:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          package-manager-cache: false
+      - name: Start isolated Supabase stack
+        run: npx --yes supabase@2.121.0 start >/dev/null 2>&1
+      - name: Test database migrations and policies
+        run: npx --yes supabase@2.121.0 test db
+      - name: Reset local database
+        run: npx --yes supabase@2.121.0 db reset --local
+      - name: Test database after reset
+        run: npx --yes supabase@2.121.0 test db
+      - name: Stop local Supabase stack
+        if: always()
+        run: npx --yes supabase@2.121.0 stop --no-backup || true
 

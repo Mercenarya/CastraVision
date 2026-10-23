@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import os
 from typing import Any
 
 from django.conf import settings
+
 from supabase import Client, create_client
 
 
