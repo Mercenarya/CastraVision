@@ -1,13 +1,25 @@
 import json
 import os
-from google.ads.googleads.client import GoogleAdsClient
+
 from dotenv import load_dotenv
+from google.ads.googleads.client import GoogleAdsClient
 
 SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
 load_dotenv(os.path.join(SCRIPT_DIR, "..", "..", ".env"))
 
-with open(os.path.join(SCRIPT_DIR, "client_secret.json")) as f:
-    oauth = json.load(f)["web"]  # nếu tạo loại Desktop app thì key là "installed"
+client_secret_file = os.environ.get("GOOGLE_ADS_CLIENT_SECRET_FILE")
+if not client_secret_file:
+    raise RuntimeError(
+        "Missing GOOGLE_ADS_CLIENT_SECRET_FILE; set it to the local OAuth client JSON path"
+    )
+
+try:
+    with open(client_secret_file, encoding="utf-8") as f:
+        oauth = json.load(f)["web"]  # nếu tạo loại Desktop app thì key là "installed"
+except (OSError, json.JSONDecodeError, KeyError) as exc:
+    raise RuntimeError(
+        "Unable to load a valid Google Ads OAuth client file from GOOGLE_ADS_CLIENT_SECRET_FILE"
+    ) from exc
 
 config = {
     # "developer_token": os.environ["GOOGLE_ADS_DEVELOPER_TOKEN"],
@@ -51,7 +63,9 @@ campaign_query = """
 for cid, cname in children:
     print(f"\n=== {cname} ({cid}) ===")
     for row in ga_service.search(customer_id=cid, query=campaign_query):
-        print(row.campaign.name,
-              row.metrics.impressions,
-              row.metrics.clicks,
-              row.metrics.cost_micros / 1_000_000)
+        print(
+            row.campaign.name,
+            row.metrics.impressions,
+            row.metrics.clicks,
+            row.metrics.cost_micros / 1_000_000,
+        )

@@ -17,6 +17,7 @@ db.sqlite3
 .archify/
 Datasources/googleads/ggads_client.yaml
 Datasources/googleads/client_secret.json
+Datasources/googleads/client_js.json
 supabase/.branches/
 supabase/.temp/
 .coverage
