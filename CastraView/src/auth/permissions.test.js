@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { can, defaultPage } from './permissions'
+import { can, canAccessFR04ApprovalQueue, defaultPage } from './permissions'
 import { navigationFor } from '../navigation'
 
 describe('actor permission map', () => {
@@ -24,14 +24,23 @@ describe('actor permission map', () => {
     expect(can('member', 'approval:write')).toBe(false)
   })
 
-  it('uses a distinct default dashboard for each actor', () => {
-    expect(new Set(['admin', 'manager', 'member'].map(defaultPage)).size).toBe(3)
+  it('uses valid workspace landing pages for each actor', () => {
+    expect(defaultPage('manager')).toBe('emp-performance')
+    expect(defaultPage('admin')).toBe('emp-dashboard')
+    expect(defaultPage('member')).toBe('emp-dashboard')
   })
 
   it('locks navigation to onboarding until the business profile exists', () => {
     expect(navigationFor('admin', true).map(([page]) => page)).toEqual(['onboarding'])
-    expect(navigationFor('admin', false).map(([page]) => page)).toContain('members')
-    expect(navigationFor('manager', false).map(([page]) => page)).toContain('approvals')
-    expect(navigationFor('member', false).map(([page]) => page)).not.toContain('approvals')
+    expect(navigationFor('admin', false).map(([page]) => page)).toContain('emp-approvals')
+    expect(navigationFor('manager', false).map(([page]) => page)).toContain('emp-approvals')
+    expect(navigationFor('member', false).map(([page]) => page)).not.toContain('emp-approvals')
+  })
+
+  it('denies approval access to platform roles and unknown roles', () => {
+    expect(canAccessFR04ApprovalQueue({ role: 'company_admin' })).toBe(false)
+    expect(canAccessFR04ApprovalQueue({ role: 'system_admin' })).toBe(false)
+    expect(canAccessFR04ApprovalQueue({ role: 'unknown' })).toBe(false)
+    expect(canAccessFR04ApprovalQueue(null)).toBe(false)
   })
 })

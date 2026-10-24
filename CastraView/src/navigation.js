@@ -10,7 +10,7 @@
  *
  * Workspace roles (inside a company's workspace):
  *   'admin'          — Workspace Admin. Full workspace governance.
- *   'manager'        — Workspace Manager. Approvals, campaigns, reports.
+ *   'manager'        — Workspace Leader. Approvals, campaigns, reports.
  *   'member'         — Workspace Member. Strategy, content, data import.
  *
  * Navigation item shape: [pageKey, icon, label, requiredCapability | null]
@@ -54,10 +54,10 @@ const COMPANY_ADMIN_NAV = [
   ['ca-workspace',  ICON.workspace,  'Workspace Management', null],
 ]
 
-// ─── Employee (workspace member) navigation ──────────────────────────────────
+// ─── Workspace navigation ─────────────────────────────────────────────────────
 // Items filtered by workspace-level RBAC capabilities.
 // Sidebar caption: WORKSPACE
-const EMPLOYEE_NAV_ALL = [
+const WORKSPACE_NAV_ALL = [
   ['emp-dashboard',     ICON.dashboard,     'Dashboard',             'overview'],
   ['emp-strategy',      ICON.strategy,      'Strategy Creation',     'strategy:read'],
   ['emp-content',       ICON.content,       'Content Generation',    'content:write'],
@@ -80,7 +80,7 @@ const ONBOARDING_NAV = [
  * Returns the navigation array for the given actor role.
  *
  * @param {'system_admin'|'company_admin'|'admin'|'manager'|'member'} role
- * @param {boolean} needsOnboarding  true when employee hasn't completed profile
+ * @param {boolean} needsOnboarding  true when the workspace user hasn't completed profile
  * @returns {Array<[string, string, string]>}  [pageKey, icon, label]
  */
 export function navigationFor(role, needsOnboarding = false) {
@@ -97,7 +97,7 @@ export function navigationFor(role, needsOnboarding = false) {
       if (needsOnboarding) {
         return ONBOARDING_NAV.map(([key, icon, label]) => [key, icon, label])
       }
-      return EMPLOYEE_NAV_ALL
+      return WORKSPACE_NAV_ALL
         .filter(([, , , cap]) => cap === null || can(role, cap))
         .map(([key, icon, label]) => [key, icon, label])
     }
@@ -146,7 +146,7 @@ export function roleLabel(role) {
     system_admin:  'System Admin',
     company_admin: 'Company Admin',
     admin:         'Workspace Admin',
-    manager:       'Manager',
+    manager:       'Leader',
     member:        'Member',
   }
   return labels[role] || 'User'

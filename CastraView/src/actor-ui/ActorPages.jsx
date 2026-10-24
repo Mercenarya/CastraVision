@@ -8,7 +8,7 @@
  * Roles handled:
  *   system_admin   → SystemAdminLayout  (PLATFORM section)
  *   company_admin  → CompanyAdminLayout (COMPANY section)
- *   admin | manager | member → EmployeeLayout (WORKSPACE section)
+ *   admin | manager | member → WorkspaceRoleLayout (WORKSPACE section)
  *
  * Legacy page exports (MembersPage, ApprovalQueuePage, etc.) are preserved
  * at the bottom so existing App.jsx imports do not break while the full
@@ -21,6 +21,8 @@ import { requireSupabase } from '../lib/supabase'
 import { navigationFor, navCaption, roleLabel, defaultPage } from '../navigation'
 import './actor-ui.css'
 import { SystemAdminLayout as OfficialSystemAdminLayout } from '../system-admin/SystemAdminLayout'
+import LeaderDashboard from '../leader/screens/LeaderDashboard'
+import MemberDashboard from '../member/screens/MemberDashboard'
 
 // ─── Design-token helpers ────────────────────────────────────────────────────
 const money = (value) => new Intl.NumberFormat('vi-VN').format(value) + ' ₫'
@@ -218,12 +220,12 @@ function CompanyAdminLayout({ user, onSignOut, companyName, notify }) {
 }
 
 /**
- * EmployeeLayout
- * Renders the correct page shell for workspace Employees (admin/manager/member).
+ * WorkspaceRoleLayout
+ * Renders the correct page shell for workspace roles (admin/manager/member).
  * Navigation items are filtered per RBAC capabilities.
  * Handles onboarding gate: if needsOnboarding=true, only shows profile completion.
  */
-function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName, notify, imports = [], profile = {} }) {
+function WorkspaceRoleLayout({ user, role, onSignOut, needsOnboarding, workspaceName, notify, imports = [], profile = {} }) {
   const [page, setPage] = useState(defaultPage(role))
   const navItems = navigationFor(role, needsOnboarding)
 
@@ -265,17 +267,37 @@ function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName,
         <main className="app-content">
           {/* ── Onboarding gate ── */}
           {needsOnboarding && (
-            <EmployeeOnboardingPage user={user} notify={notify} />
+            <WorkspaceOnboardingPage user={user} notify={notify} />
           )}
 
-          {/* ── Regular employee pages (only when onboarding is done) ── */}
+          {/* ── Regular workspace pages (only when onboarding is done) ── */}
           {!needsOnboarding && (
             <>
-              {page === 'emp-dashboard' && <PerformanceDashboardPage setPage={setPage} imports={imports} />}
+              {page === 'emp-dashboard' && (
+                role === 'manager' ? (
+                  <LeaderDashboard setPage={(target) => setPage(`emp-${target}`)} imports={imports} />
+                ) : (
+                  <MemberDashboard
+                    profile={profile}
+                    imports={imports}
+                    setPage={(target) => setPage(`emp-${target}`)}
+                  />
+                )
+              )}
               {page === 'emp-strategy' && <StrategyCreationPage notify={notify} />}
               {page === 'emp-content' && <ContentGenerationPage notify={notify} />}
               {page === 'emp-import' && <CampaignDataImportPage notify={notify} />}
-              {page === 'emp-performance' && <PerformanceDashboardPage setPage={setPage} imports={imports} />}
+              {page === 'emp-performance' && (
+                role === 'manager' ? (
+                  <LeaderDashboard setPage={(target) => setPage(`emp-${target}`)} imports={imports} />
+                ) : (
+                  <MemberDashboard
+                    profile={profile}
+                    imports={imports}
+                    setPage={(target) => setPage(`emp-${target}`)}
+                  />
+                )
+              )}
               {page === 'emp-budget' && <BudgetOptimizationPage notify={notify} />}
               {page === 'emp-competitor' && <CompetitorInsightsPage notify={notify} />}
               {page === 'emp-reports' && <ReportsPage notify={notify} />}
@@ -287,7 +309,7 @@ function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName,
                     <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
                     <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
                     <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
-                      Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+                      Only Workspace Admins and Leaders have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
                     </p>
                     <button className="button primary" onClick={() => setPage(defaultPage(role))}>
                       Return to Dashboard
@@ -311,7 +333,7 @@ function EmployeeLayout({ user, role, onSignOut, needsOnboarding, workspaceName,
  * RoleLayout — the single entry point rendered by App.jsx after auth.
  *
  * It reads the role from AuthContext and delegates to the correct layout.
- * All three actor UIs (System Admin, Company Admin, Employee) emerge from here.
+ * All three actor UIs (System Admin, Company Admin, workspace roles) emerge from here.
  */
 export function RoleLayout({ notify }) {
   const auth = useContext(AuthContext)
@@ -320,7 +342,7 @@ export function RoleLayout({ notify }) {
   // Determine actor type from role string
   const isSystemAdmin = role === 'system_admin'
   const isCompanyAdmin = role === 'company_admin'
-  const isEmployee = ['admin', 'manager', 'member'].includes(role)
+  const isWorkspaceRole = ['admin', 'manager', 'member'].includes(role)
 
   async function handleSignOut() {
     try { await auth?.signOut() } catch { /* handled by AuthProvider */ }
@@ -347,9 +369,9 @@ export function RoleLayout({ notify }) {
     )
   }
 
-  if (isEmployee) {
+  if (isWorkspaceRole) {
     return (
-      <EmployeeLayout
+      <WorkspaceRoleLayout
         user={user}
         role={role}
         onSignOut={handleSignOut}
@@ -669,7 +691,7 @@ function WorkspaceManagementPage({ notify }) {
                     style={{ fontSize: 13, borderRadius: 6 }}
                   >
                     <option value="admin">Admin</option>
-                    <option value="manager">Manager</option>
+                    <option value="manager">Leader</option>
                     <option value="member">Member</option>
                   </select>
                 </td>
@@ -684,7 +706,7 @@ function WorkspaceManagementPage({ notify }) {
 
 // ─── EMPLOYEE PAGES ───────────────────────────────────────────────────────────
 
-function EmployeeOnboardingPage({ user, notify }) {
+function WorkspaceOnboardingPage({ user, notify }) {
   const [step, setStep] = useState('welcome') // 'welcome' | 'form' | 'done'
   const [fullName, setFullName] = useState('')
   const [nameError, setNameError] = useState('')
@@ -929,7 +951,7 @@ function NotificationsPage({ notify }) {
 
 const legacyMembers = [
   ['LT', 'Lê Thành Đạt', 'lthanhdat85@gmail.com', 'Admin', 'active'],
-  ['HN', 'Hà Ngọc Minh', 'manager@demo.castravision.vn', 'Manager', 'active'],
+  ['HN', 'Hà Ngọc Minh', 'manager@demo.castravision.vn', 'Leader', 'active'],
   ['ML', 'Mai Lan', 'member@demo.castravision.vn', 'Member', 'active'],
   ['TN', 'Trần Ngọc', 'content@demo.castravision.vn', 'Member', 'pending'],
 ]
@@ -963,7 +985,7 @@ function Badge({ tone = 'neutral', children }) {
 export function MembersPage({ profile, notify }) {
   const [inviteOpen, setInviteOpen] = useState(false)
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState('Manager')
+  const [role, setRole] = useState('Leader')
   const [rows, setRows] = useState(legacyMembers)
   function invite(event) {
     event.preventDefault()
@@ -976,7 +998,7 @@ export function MembersPage({ profile, notify }) {
       <div className="actor-summary">
         <div><strong>{rows.length}</strong><span>Total Members</span></div>
         <div><strong>{rows.filter(r => r[3] === 'Admin').length}</strong><span>Admin</span></div>
-        <div><strong>{rows.filter(r => r[3] === 'Manager').length}</strong><span>Manager</span></div>
+        <div><strong>{rows.filter(r => r[3] === 'Leader').length}</strong><span>Leader</span></div>
         <div><strong>{rows.filter(r => r[3] === 'Member').length}</strong><span>Member</span></div>
       </div>
       <Panel title={profile.business_name} meta="Active member directory">
@@ -988,7 +1010,7 @@ export function MembersPage({ profile, notify }) {
                 <td><div className="actor-person"><b>{avatar}</b><span><strong>{name}</strong><small>{mail}</small></span></div></td>
                 <td><Badge tone={userRole.toLowerCase()}>{userRole}</Badge></td>
                 <td><Badge tone={status}>{status === 'active' ? 'Active' : 'Pending'}</Badge></td>
-                <td>{userRole === 'Admin' ? 'Full, RBAC, approvals, audit' : userRole === 'Manager' ? 'Campaigns, approvals, reports' : 'Strategy, content, import'}</td>
+                <td>{userRole === 'Admin' ? 'Full, RBAC, approvals, audit' : userRole === 'Leader' ? 'Campaigns, approvals, reports' : 'Strategy, content, import'}</td>
               </tr>
             ))}</tbody>
           </table>
@@ -1005,10 +1027,10 @@ export function MembersPage({ profile, notify }) {
             <label>Member Email<input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="name@company.com" required /></label>
             <fieldset>
               <legend>Assigned Role</legend>
-              {['Admin', 'Manager', 'Member'].map(item => (
+              {['Admin', 'Leader', 'Member'].map(item => (
                 <label className={`role-option ${role === item ? 'selected' : ''}`} key={item}>
                   <input type="radio" name="role" value={item} checked={role === item} onChange={() => setRole(item)} />
-                  <span><strong>{item}</strong><small>{item === 'Admin' ? 'Full admin' : item === 'Manager' ? 'Manage & approve' : 'Execute content'}</small></span>
+                  <span><strong>{item}</strong><small>{item === 'Admin' ? 'Full admin' : item === 'Leader' ? 'Manage & approve' : 'Execute content'}</small></span>
                 </label>
               ))}
             </fieldset>
@@ -1026,7 +1048,7 @@ export function MembersPage({ profile, notify }) {
 export function RoleManagementPage() {
   const roleCards = [
     ['Admin', 'Highest Access', 'Workspace administration, user lifecycle, security and financial approvals.'],
-    ['Manager', 'Governance', 'Review, edit and approve AI-generated marketing outputs.'],
+    ['Leader', 'Governance', 'Review, edit and approve AI-generated marketing outputs.'],
     ['Member', 'Execution', 'Create strategies, content and import data within assigned scope.'],
   ]
   const capabilities = [
@@ -1039,21 +1061,21 @@ export function RoleManagementPage() {
   ]
   return (
     <>
-      <PageIntro code="FR06 · ROLE-BASED ACCESS CONTROL" title="Role Management & RBAC" subtitle="Review security boundaries between Admin, Manager and Member." />
+      <PageIntro code="FR06 · ROLE-BASED ACCESS CONTROL" title="Role Management & RBAC" subtitle="Review security boundaries between Admin, Leader and Member." />
       <div className="role-card-grid">
         {roleCards.map(([r, tier, desc]) => (
           <article className="actor-panel role-card" key={r}>
             <Badge tone={r.toLowerCase()}>{r} · {tier}</Badge>
             <h2>{r} Role</h2>
             <p>{desc}</p>
-            <ul>{capabilities.filter(row => row[['Admin', 'Manager', 'Member'].indexOf(r) + 1] !== 'None').slice(0, 4).map(row => <li key={row[0]}>✓ {row[0]}</li>)}</ul>
+            <ul>{capabilities.filter(row => row[['Admin', 'Leader', 'Member'].indexOf(r) + 1] !== 'None').slice(0, 4).map(row => <li key={row[0]}>✓ {row[0]}</li>)}</ul>
           </article>
         ))}
       </div>
       <Panel title="Capability Matrix" meta="Enforced by API & UI">
         <div className="actor-table-wrap">
           <table className="actor-table matrix">
-            <thead><tr><th>Feature Scope</th><th>Admin</th><th>Manager</th><th>Member</th></tr></thead>
+            <thead><tr><th>Feature Scope</th><th>Admin</th><th>Leader</th><th>Member</th></tr></thead>
             <tbody>{capabilities.map(row => (
               <tr key={row[0]}>{row.map((cell, i) => <td key={cell}><span className={i && cell === 'None' ? 'denied' : i ? 'allowed' : ''}>{cell}</span></td>)}</tr>
             ))}</tbody>
@@ -1085,7 +1107,7 @@ export function ApprovalQueuePage({ notify, role }) {
 
   function setStatus(id, status) {
     if (!isAuthorized) {
-      notify?.('Unauthorized: Only Workspace Admins and Managers can approve or reject proposals (FR04).')
+      notify?.('Unauthorized: Only Workspace Admins and Leaders can approve or reject proposals (FR04).')
       return
     }
     const current = rows.find(r => r[0] === id)
@@ -1104,7 +1126,7 @@ export function ApprovalQueuePage({ notify, role }) {
         <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
         <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
         <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
-          Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+          Only Workspace Admins and Leaders have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
         </p>
       </div>
     )
@@ -1112,8 +1134,8 @@ export function ApprovalQueuePage({ notify, role }) {
 
   return (
     <>
-      <PageIntro code="FR04 · GOVERNANCE ENGINE" title="Approval Queue" subtitle="Review content and budget proposals before campaign deployment." action={<Badge tone={effectiveRole === 'admin' ? 'admin' : 'manager'}>{effectiveRole === 'admin' ? 'Admin access' : 'Manager access'}</Badge>} />
-      <div className="actor-policy"><b>Access control active.</b> Admin and Manager can review, edit, approve or reject. Members have no access.</div>
+      <PageIntro code="FR04 · GOVERNANCE ENGINE" title="Approval Queue" subtitle="Review content and budget proposals before campaign deployment." action={<Badge tone={effectiveRole === 'admin' ? 'admin' : 'manager'}>{effectiveRole === 'admin' ? 'Admin access' : 'Leader access'}</Badge>} />
+      <div className="actor-policy"><b>Access control active.</b> Admin and Leader can review, edit, approve or reject. Members have no access.</div>
       <div className="actor-summary">
         <div><strong>{rows.length}</strong><span>Total Proposals</span></div>
         <div><strong>{rows.filter(r => r[4] === 'pending').length}</strong><span>Pending</span></div>
@@ -1292,10 +1314,10 @@ export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
     ['PRP-8404', 'Nurture Content Series', 'CONTENT', 'AI Content Engine · Sara Williams'],
   ])
   const audit = [
-    ['FR06 RBAC', 'Role change: Sara promoted to Manager', '14 min ago', 'Alex Johnson · Admin'],
+    ['FR06 RBAC', 'Role change: Sara promoted to Leader', '14 min ago', 'Alex Johnson · Admin'],
     ['FR04 APPROVAL', 'Approved PRP-8401 Creative Retargeting', '1 hr ago', 'Alex Johnson · Admin'],
     ['FR06 INVITE', 'Invited new@acme.com', '3 hrs ago', 'Alex Johnson · Admin'],
-    ['FR08 IMPORT', `Campaign data imported (${imports.length || 3} sources)`, '5 hrs ago', 'Sara Williams · Manager'],
+    ['FR08 IMPORT', `Campaign data imported (${imports.length || 3} sources)`, '5 hrs ago', 'Sara Williams · Leader'],
   ]
   function approve(id) { setPending(c => c.filter(r => r[0] !== id)); notify?.(`${id} approved and recorded in Audit Log.`) }
   return (
@@ -1314,7 +1336,7 @@ export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
       />
       <div className="admin-kpi-grid">
         <article><span>Current Workspace</span><div className="admin-kpi-title"><strong>{profile.business_name}</strong><i>▦</i></div><p>{profile.industry || 'Business'} · {profile.business_size || 'SME'}</p><small>Status <b className="success-text">Active</b></small></article>
-        <article><span>Workspace Members</span><div className="admin-kpi-title"><strong>4 members</strong><i>♙</i></div><p>1 Admin · 1 Manager · 2 Member</p><button onClick={() => setPage('members')}>Manage members →</button></article>
+        <article><span>Workspace Members</span><div className="admin-kpi-title"><strong>4 members</strong><i>♙</i></div><p>1 Admin · 1 Leader · 2 Member</p><button onClick={() => setPage('members')}>Manage members →</button></article>
         <article><span>Pending Approvals</span><div className="admin-kpi-title"><strong>{pending.length} proposals</strong><i>✓</i></div><p>Content and Budget pending sign-off</p><button onClick={() => setPage('approvals')}>Open queue →</button></article>
         <article><span>Audit events · 24h</span><div className="admin-kpi-title"><strong>48 events</strong><i>♢</i></div><p>100% hash-recorded</p><button onClick={() => setPage('audit')}>View Audit Log →</button></article>
       </div>
@@ -1362,42 +1384,13 @@ export function AdminDashboardPage({ profile, imports = [], setPage, notify }) {
   )
 }
 
-export function PerformanceDashboardPage({ setPage, imports = [] }) {
-  const channels = [
-    ['Google Search', '1.84M', '4.15%', '$1.06', '4.20×', 88],
-    ['Meta Ads', '2.10M', '3.10%', '$1.32', '3.65×', 73],
-    ['TikTok Video', '880K', '2.45%', '$1.46', '2.80×', 56],
-  ]
-  return (
-    <>
-      <PageIntro code="FR05 · PERFORMANCE MONITORING" title="Campaign Performance Dashboard" subtitle="Track marketing channels against established performance objectives." action={<button className="button subtle">↻ Refresh Data</button>} />
-      <div className="metric-grid">
-        <article><span>Impressions</span><strong>4.82M</strong><small className="success-text">↗ +12.4% vs prev period</small></article>
-        <article><span>CTR</span><strong>3.42%</strong><small>Benchmark 2.80%</small></article>
-        <article><span>CPA</span><strong>$1.24</strong><small>-$0.16 vs target</small></article>
-        <article><span>ROAS</span><strong>3.85×</strong><small className="success-text">Above target</small></article>
-      </div>
-      <div className="dashboard-split">
-        <Panel title="Channel Performance" meta={`${imports.length || 3} data sources`}>
-          <div className="channel-performance">
-            {channels.map((row, i) => (
-              <div className="performance-row" key={row[0]}>
-                <div><strong>{row[0]}</strong><small>{i === 0 ? 'High intent' : i === 1 ? 'Retargeting' : 'Needs optimization'}</small></div>
-                {row.slice(1, 5).map(v => <b key={v}>{v}</b>)}
-                <div className="mini-progress"><span style={{ width: `${row[5]}%` }} /></div>
-              </div>
-            ))}
-          </div>
-        </Panel>
-        <Panel title="Optimization Alerts" className="alert-panel">
-          <Badge tone="rejected">Alert trigger</Badge>
-          <h3>TikTok CPA over threshold</h3>
-          <p>Current CPA is higher than target. Consider rebalancing budget to protect margin.</p>
-          <button className="button primary full" onClick={() => setPage?.('budget')}>Open Budget Optimizer</button>
-        </Panel>
-      </div>
-    </>
-  )
+export function LeaderDashboardPage({ setPage, imports = [] }) {
+  return <LeaderDashboard setPage={setPage} imports={imports} />
+}
+
+// Keep the old export for existing consumers while the role-facing name is Leader.
+export function PerformanceDashboardPage(props) {
+  return <LeaderDashboardPage {...props} />
 }
 
 // ─── FR11 Audit Log (preserved legacy export) ──────────────────────────────

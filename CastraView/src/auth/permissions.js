@@ -1,6 +1,6 @@
 export const ROLE_LABELS = {
   admin: 'Admin',
-  manager: 'Manager',
+  manager: 'Leader',
   member: 'Member',
 }
 
@@ -28,9 +28,8 @@ export function can(role, capability) {
 }
 
 export function defaultPage(role) {
-  if (role === 'admin') return 'admin-dashboard'
-  if (role === 'manager') return 'manager-dashboard'
-  return 'member-dashboard'
+  if (role === 'manager') return 'emp-performance'
+  return 'emp-dashboard'
 }
 
 /**
@@ -50,15 +49,12 @@ export function resolveWorkspaceRole(user, membership = null) {
   if (user?.role && ['admin', 'manager', 'member'].includes(user.role)) {
     return user.role
   }
-  if (user?.role === 'company_admin') {
-    return 'admin'
-  }
   return null
 }
 
 /**
  * FR04 Access Check:
- * Proposal v1.3 specifies that only Workspace Admin and Workspace Manager
+ * Proposal v1.3 specifies that only Workspace Admin and Workspace Leader
  * can access the approval queue and review, edit, approve, or reject proposals.
  * Workspace Members, unknown roles, and unauthenticated users are strictly denied.
  *

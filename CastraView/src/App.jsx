@@ -11,6 +11,8 @@ import {
   Button,
 } from './actor-ui/ActorPages'
 import { canAccessFR04ApprovalQueue } from './auth/permissions'
+import MemberDashboard from './member/screens/MemberDashboard'
+import LeaderDashboard from './leader/screens/LeaderDashboard'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
 const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: '250+ employees' }
@@ -168,7 +170,7 @@ function AuthScreen({ onAuth, backendError }) {
                       'overview'
                     )}
                   >
-                    Manager →
+                    Leader →
                   </Button>
                   <Button
                     type="button"
@@ -217,7 +219,11 @@ function Shell({ user, profile, page, setPage, logout, children }) {
   const workspaceInitials = workspaceName.slice(0, 2).toUpperCase()
   const userName = user?.email ? user.email.split('@')[0] : 'Admin User'
   const userInitials = userName.slice(0, 2).toUpperCase()
-  const userRoleTitle = isAdmin ? 'Admin • Security & Governance Lead' : 'ML • Growth Lead'
+  const userRoleTitle = isAdmin
+    ? 'Admin • Security & Governance Lead'
+    : user?.role === 'manager'
+      ? 'Leader • Growth Lead'
+      : 'Member • Growth Contributor'
 
   return (
     <div className="shell">
@@ -1018,7 +1024,7 @@ function App() {
             <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
             <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
             <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
-              Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+              Only Workspace Admins and Leaders have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
             </p>
             <button className="button primary" onClick={() => setPage('overview')}>
               Return to Overview
@@ -1035,7 +1041,13 @@ function App() {
         <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
       )}
       {profile && page === 'overview' && (
-        <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        user?.role === 'manager' ? (
+          <LeaderDashboard imports={imports} setPage={setPage} />
+        ) : user?.role === 'member' ? (
+          <MemberDashboard profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        ) : (
+          <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        )
       )}
       {profile && page === 'import' && (
         <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
