@@ -71,5 +71,3 @@ The frontend uses global project styles and `--cv-*` design tokens in addition t
 The checked-in `.claude/rules/` files are authoritative. Their important project-specific requirements are focused functional React components, clear and testable code, CSS variables, accessible UI, input validation at API boundaries, and preservation of authentication/authorization contracts. Comments should explain constraints or reasons rather than restating code. Use the existing Conventional Commits format only when a commit is explicitly requested.
 
 For Figma-based UI work, inspect the relevant design frame and existing project components/tokens first. If the design source is unavailable, implement only from confirmed repository behavior and state that visual fidelity is unverified.
-
-echo "defined md"
