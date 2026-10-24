@@ -1,6 +1,6 @@
 export const ROLE_LABELS = {
   admin: 'Admin',
-  manager: 'Leader',
+  manager: 'Manager',
   member: 'Member',
 }
 
@@ -28,42 +28,7 @@ export function can(role, capability) {
 }
 
 export function defaultPage(role) {
-  if (role === 'manager') return 'emp-performance'
-  return 'emp-dashboard'
-}
-
-/**
- * Resolves the verified role in the active workspace.
- *
- * @param {object|null} user - Current user object
- * @param {object|null} membership - Optional active workspace membership context
- * @returns {'admin'|'manager'|'member'|null}
- */
-export function resolveWorkspaceRole(user, membership = null) {
-  if (membership?.role && ['admin', 'manager', 'member'].includes(membership.role)) {
-    return membership.role
-  }
-  if (user?.workspaceRole && ['admin', 'manager', 'member'].includes(user.workspaceRole)) {
-    return user.workspaceRole
-  }
-  if (user?.role && ['admin', 'manager', 'member'].includes(user.role)) {
-    return user.role
-  }
-  return null
-}
-
-/**
- * FR04 Access Check:
- * Proposal v1.3 specifies that only Workspace Admin and Workspace Leader
- * can access the approval queue and review, edit, approve, or reject proposals.
- * Workspace Members, unknown roles, and unauthenticated users are strictly denied.
- *
- * @param {object|null} user - Current user object
- * @param {object|null} membership - Optional active workspace membership context
- * @returns {boolean}
- */
-export function canAccessFR04ApprovalQueue(user, membership = null) {
-  if (!user) return false
-  const role = resolveWorkspaceRole(user, membership)
-  return role === 'admin' || role === 'manager'
+  if (role === 'admin') return 'admin-dashboard'
+  if (role === 'manager') return 'manager-dashboard'
+  return 'member-dashboard'
 }

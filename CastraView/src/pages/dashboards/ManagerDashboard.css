@@ -1,0 +1,343 @@
+/* ManagerDashboard.css — tiền tố cv-db */
+
+/* ── Wrapper ── */
+.cv-db {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Heading ── */
+.cv-db__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 20px;
+  margin-bottom: 4px;
+}
+
+.cv-db__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  color: var(--cyan, #37c6ec);
+  text-transform: uppercase;
+}
+
+.cv-db__dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cyan, #37c6ec);
+  flex: none;
+}
+
+.cv-db__workspace {
+  color: var(--muted, #9ca8c4);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.cv-db__title {
+  margin: 0 0 6px;
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: var(--text, #e1e6ff);
+  line-height: 1.1;
+}
+
+.cv-db__subtitle {
+  margin: 0;
+  font-size: 15px;
+  color: var(--muted, #9ca8c4);
+  line-height: 1.5;
+}
+
+.cv-db__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.cv-db__date-range select {
+  background: var(--panel, #151e32);
+  border: 1px solid var(--line, #28344d);
+  border-radius: var(--cv-radius-md, 10px);
+  color: var(--text, #e1e6ff);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.cv-db__refresh {
+  white-space: nowrap;
+}
+
+/* ── KPI row ── */
+.cv-db__kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* ── Split layout ── */
+.cv-db__split {
+  display: grid;
+  grid-template-columns: minmax(0, 2.2fr) minmax(280px, 1fr);
+  gap: 18px;
+  align-items: start;
+}
+
+/* ── Panel card ── */
+.cv-db__panel {
+  background: var(--panel, #151e32);
+  border: 1px solid var(--line, #28344d);
+  border-radius: var(--cv-radius-lg, 15px);
+  overflow: hidden;
+}
+
+.cv-db__panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line, #28344d);
+  gap: 14px;
+}
+
+.cv-db__panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cv-db__panel-icon {
+  color: var(--cyan, #37c6ec);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.cv-db__panel-title h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.cv-db__panel-meta {
+  color: var(--muted, #9ca8c4);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ── Channel table ── */
+.cv-db__table-wrap {
+  overflow-x: auto;
+}
+
+.cv-db__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+.cv-db__table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--muted, #9ca8c4);
+  background: #101729;
+  border-bottom: 1px solid var(--line, #28344d);
+  white-space: nowrap;
+}
+
+.cv-db__th-right {
+  text-align: right !important;
+}
+
+.cv-db__table td {
+  padding: 16px 16px;
+  font-size: 13px;
+  color: var(--text, #e1e6ff);
+  border-bottom: 1px solid #1e2a3d;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.cv-db__table tr:last-child td {
+  border-bottom: none;
+}
+
+.cv-db__table tr:hover td {
+  background: #172030;
+}
+
+/* Channel cell */
+.cv-db__channel-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cv-db__channel-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #1e2a3d;
+  font-size: 16px;
+  flex: none;
+}
+
+.cv-db__channel-cell strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cv-db__channel-cell small {
+  display: block;
+  color: var(--muted, #9ca8c4);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Coloured cells */
+.cv-db__td--up     { color: var(--cv-success, #22c55e); font-weight: 700; }
+.cv-db__td--warn   { color: var(--muted, #9ca8c4); }
+.cv-db__td--danger { color: var(--cv-danger, #ef4444); font-weight: 700; }
+
+/* Status badges */
+.cv-db-status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: var(--cv-radius-sm, 5px);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cv-db-status--high {
+  background: #0d2e1a;
+  color: var(--cv-success, #22c55e);
+  border: 1px solid #1a5c35;
+}
+
+.cv-db-status--retarget {
+  background: #1b3a53;
+  color: var(--cyan, #37c6ec);
+  border: 1px solid #2d6a83;
+}
+
+.cv-db-status--danger {
+  background: var(--cv-danger-bg, #2d0f0f);
+  color: var(--cv-danger, #ef4444);
+  border: 1px solid var(--cv-danger-border, #7a1f1f);
+}
+
+.cv-db-status--neutral {
+  background: #222b40;
+  color: var(--muted, #9ca8c4);
+  border: 1px solid #2d3a53;
+}
+
+/* Quick action button */
+.cv-db__action-btn {
+  min-height: 34px !important;
+  padding: 0 12px !important;
+  font-size: 12px !important;
+}
+
+/* Table footer */
+.cv-db__table-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--line, #28344d);
+  font-size: 12px;
+  color: var(--muted, #9ca8c4);
+}
+
+.cv-db__latency {
+  margin-left: auto;
+  color: var(--muted, #9ca8c4);
+}
+
+/* ── Right column ── */
+.cv-db__right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ROAS panel */
+.cv-db__roas-panel .cv-db__panel-header {
+  border-bottom: 1px solid var(--line, #28344d);
+}
+
+.cv-db__roas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 22px;
+}
+
+.cv-db__roas-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  padding: 0 22px 18px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted, #9ca8c4);
+}
+
+.cv-db__info-icon {
+  flex: none;
+  color: var(--muted, #9ca8c4);
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .cv-db__kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .cv-db__split {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 650px) {
+  .cv-db__heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cv-db__kpi-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cv-db__actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 400px) {
+  .cv-db__kpi-row {
+    grid-template-columns: 1fr;
+  }
+}
