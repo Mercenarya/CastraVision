@@ -88,6 +88,8 @@ jobs:
         run: npm ci
       - name: Lint
         run: npm run lint
+      - name: install vibetest
+        run: npm install -D vitest
       - name: Test
         run: npm test -- --run
       - name: Build
