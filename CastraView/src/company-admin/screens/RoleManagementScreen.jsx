@@ -291,7 +291,7 @@ export default function RoleManagementScreen({
               lineHeight: 1.5,
             }}
           >
-            Review official role definitions and RBAC permissions across Admin, Manager, and Member.
+            Review official role definitions and RBAC permissions across Marketing Manager, Leader, and Employee.
           </p>
         </div>
 
@@ -325,8 +325,8 @@ export default function RoleManagementScreen({
             <IconShield size={16} />
           </div>
           <div>
-            <span className="ca-guardrail-title">Final Admin Guardrail:</span>
-            <span>The last Workspace Admin cannot be removed or demoted.</span>
+            <span className="ca-guardrail-title">Final Marketing Manager Guardrail:</span>
+            <span>The last Marketing Manager cannot be removed or demoted.</span>
           </div>
         </div>
         <span className="ca-guardrail-tag">
@@ -345,13 +345,13 @@ export default function RoleManagementScreen({
                 type="button"
                 className="ca-role-member-count-btn"
                 onClick={() => onNavigate?.('members')}
-                title="View Admin members in directory"
+                title="View Marketing Manager members in directory"
               >
                 <IconUsers size={14} />
                 <span>{adminCount} Members</span>
               </button>
             </div>
-            <h2 className="ca-role-col-title">Admin</h2>
+            <h2 className="ca-role-col-title">Marketing Manager</h2>
             <p className="ca-role-col-desc">
               Full authority over workspace lifecycle, membership management, and financial or proposal approvals.
             </p>
@@ -379,7 +379,7 @@ export default function RoleManagementScreen({
                 <span style={{ color: '#38bdf8', flexShrink: 0, marginTop: 1 }}>
                   <IconCheckCircle size={15} />
                 </span>
-                <span>Remove members (except last Admin)</span>
+                <span>Remove members (except last Marketing Manager)</span>
               </li>
               <li className="ca-role-cap-item allowed">
                 <span style={{ color: '#38bdf8', flexShrink: 0, marginTop: 1 }}>
@@ -391,7 +391,7 @@ export default function RoleManagementScreen({
           </div>
           <div className="ca-role-col-footer amber">
             <IconAlertTriangle size={15} />
-            <span>Protected role • Cannot remove the last Admin</span>
+            <span>Protected role • Cannot remove the last Marketing Manager</span>
           </div>
         </div>
 
@@ -404,13 +404,13 @@ export default function RoleManagementScreen({
                 type="button"
                 className="ca-role-member-count-btn"
                 onClick={() => onNavigate?.('members')}
-                title="View Manager members in directory"
+                title="View Leader members in directory"
               >
                 <IconUsers size={14} />
                 <span>{managerCount} Members</span>
               </button>
             </div>
-            <h2 className="ca-role-col-title">Manager</h2>
+            <h2 className="ca-role-col-title">Leader</h2>
             <p className="ca-role-col-desc">
               Supervises campaign proposals with human-in-the-loop review, edit, and signoff authority.
             </p>
@@ -463,13 +463,13 @@ export default function RoleManagementScreen({
                 type="button"
                 className="ca-role-member-count-btn"
                 onClick={() => onNavigate?.('members')}
-                title="View standard Members in directory"
+                title="View standard Employee members in directory"
               >
                 <IconUsers size={14} />
                 <span>{memberCount} Members</span>
               </button>
             </div>
-            <h2 className="ca-role-col-title">Member</h2>
+            <h2 className="ca-role-col-title">Employee</h2>
             <p className="ca-role-col-desc">
               Campaign specialist executing creative workflows, generating variants, and drafting proposals.
             </p>
@@ -577,13 +577,13 @@ export default function RoleManagementScreen({
                   CATEGORY / SCOPE
                 </th>
                 <th style={{ width: '12%', textAlign: 'center', padding: '12px 10px', fontSize: 10.5, letterSpacing: '0.06em' }}>
-                  ADMIN
+                  MARKETING MANAGER
                 </th>
                 <th style={{ width: '12%', textAlign: 'center', padding: '12px 10px', fontSize: 10.5, letterSpacing: '0.06em' }}>
-                  MANAGER
+                  LEADER
                 </th>
                 <th style={{ width: '12%', textAlign: 'center', padding: '12px 10px', fontSize: 10.5, letterSpacing: '0.06em' }}>
-                  MEMBER
+                  EMPLOYEE
                 </th>
               </tr>
             </thead>
@@ -621,7 +621,7 @@ export default function RoleManagementScreen({
           <div>
             <div className="ca-policy-title">Role-Based Access Control Enforcement</div>
             <p className="ca-policy-desc">
-              Permissions are enforced strictly by the CastraVision platform router. Modifications to role assignments require Admin credentials and are logged to the Workspace Audit Log.
+              Permissions are enforced strictly by the CastraVision platform router. Modifications to role assignments require Marketing Manager credentials and are logged to the Workspace Audit Log.
             </p>
           </div>
         </div>

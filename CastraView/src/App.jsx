@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import CompanyAdminLayout from './company-admin/CompanyAdminLayout'
+import MarketingManagerLayout from './company-admin/MarketingManagerLayout'
 import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
 import {
   ApprovalQueuePage,
@@ -156,7 +156,7 @@ function AuthScreen({ onAuth, backendError }) {
                       'overview'
                     )}
                   >
-                    Admin →
+                    Marketing Manager →
                   </Button>
                   <Button
                     type="button"
@@ -168,7 +168,7 @@ function AuthScreen({ onAuth, backendError }) {
                       'overview'
                     )}
                   >
-                    Manager →
+                    Leader →
                   </Button>
                   <Button
                     type="button"
@@ -180,7 +180,7 @@ function AuthScreen({ onAuth, backendError }) {
                       'overview'
                     )}
                   >
-                    Member →
+                    Employee →
                   </Button>
                 </div>
               </div>
@@ -973,7 +973,7 @@ function App() {
 
   if (isAdmin || user?.role === 'company_admin') {
     return (
-      <CompanyAdminLayout
+      <MarketingManagerLayout
         user={user}
         profile={profile}
         page={page}
@@ -983,7 +983,7 @@ function App() {
       >
         {backendError && <Notice>{backendError}</Notice>}
 
-        {/* Core Workflow Pages & Tools wrapped inside Company Admin Layout */}
+        {/* Core Workflow Pages & Tools wrapped inside Marketing Manager Layout */}
         {(!profile || page === 'onboarding' || page === 'profile') && (
           <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
         )}
@@ -1001,7 +1001,7 @@ function App() {
         {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
 
         <Toast message={toast} clear={() => setToast('')} />
-      </CompanyAdminLayout>
+      </MarketingManagerLayout>
     )
   }
 
@@ -1018,7 +1018,7 @@ function App() {
             <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
             <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
             <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
-              Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+              Only Marketing Managers and Leaders have authorization to access the Approval Queue. Employees cannot view or process approvals.
             </p>
             <button className="button primary" onClick={() => setPage('overview')}>
               Return to Overview

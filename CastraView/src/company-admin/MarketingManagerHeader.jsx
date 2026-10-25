@@ -1,5 +1,5 @@
 /**
- * CompanyAdminHeader.jsx — Shared top header across all Workspace Admin screens
+ * MarketingManagerHeader.jsx — Shared top header across all Marketing Manager screens
  * Matches the approved Figma layout, typography, breadcrumbs, search, and system indicators.
  */
 
@@ -12,9 +12,9 @@ import {
   IconUser,
 } from './ui/Icons'
 
-export default function CompanyAdminHeader({
+export default function MarketingManagerHeader({
   workspaceName = 'Acme Corp',
-  currentPageTitle = 'Admin Console',
+  currentPageTitle = 'Marketing Manager Console',
   searchValue = '',
   onSearchChange,
   user,
@@ -39,12 +39,12 @@ export default function CompanyAdminHeader({
 
   const displayRole =
     user?.role === 'admin'
-      ? 'Admin'
+      ? 'Marketing Manager'
       : user?.role === 'manager'
-      ? 'Manager'
+      ? 'Leader'
       : user?.role === 'member'
-      ? 'Member'
-      : 'Admin'
+      ? 'Employee'
+      : 'Marketing Manager'
 
   // Close profile dropdown when clicking outside
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function CompanyAdminHeader({
   }, [menuOpen])
 
   return (
-    <header className="ca-header" aria-label="Workspace Admin Header">
+    <header className="ca-header" aria-label="Marketing Manager Header">
       {/* Breadcrumb Navigation */}
       <nav aria-label="Breadcrumb" className="ca-breadcrumbs">
         <span className="ca-breadcrumb-item">CastraVision</span>

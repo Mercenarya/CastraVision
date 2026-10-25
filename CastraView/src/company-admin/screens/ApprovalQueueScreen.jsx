@@ -125,7 +125,7 @@ const DEFAULT_PROPOSALS = [
     cta: 'Explore Tier 1',
     conversionTarget: 'Campaign Collection',
     keywords: ['creative set', 'retargeting', 'tier 1', 'meta ads'],
-    approvedBy: 'Sarah Jenkins (Admin)',
+    approvedBy: 'Sarah Jenkins (Marketing Manager)',
     approvedAt: 'Oct 23, 2026 17:15 UTC',
   },
   {
@@ -150,7 +150,7 @@ const DEFAULT_PROPOSALS = [
     cta: 'Authorize Impression Uplift',
     conversionTarget: 'Google Search Console',
     keywords: ['branded search', 'impression share', 'q4 campaign'],
-    approvedBy: 'Sarah Jenkins (Admin)',
+    approvedBy: 'Sarah Jenkins (Marketing Manager)',
     approvedAt: 'Oct 23, 2026 10:00 UTC',
   },
   {
@@ -179,7 +179,7 @@ const DEFAULT_PROPOSALS = [
     cta: 'Initiate Creator Outreach',
     conversionTarget: 'TikTok Marketplace',
     keywords: ['tiktok', 'micro-influencer', 'viral growth', 'creator spike'],
-    rejectedBy: 'Sarah Jenkins (Admin)',
+    rejectedBy: 'Sarah Jenkins (Marketing Manager)',
     rejectedAt: 'Oct 22, 2026 16:45 UTC',
   },
 ]
@@ -350,7 +350,7 @@ export default function ApprovalQueueScreen({
   // Execute Approval
   function handleConfirmApprove(targetItem) {
     if (!isAuthorized) {
-      notify?.('Unauthorized: Only Workspace Admins and Managers can approve proposals (FR04).')
+      notify?.('Unauthorized: Only Marketing Managers and Leaders can approve proposals (FR04).')
       return
     }
 
@@ -369,7 +369,7 @@ export default function ApprovalQueueScreen({
           ? {
               ...p,
               status: 'approved',
-              approvedBy: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Admin' : 'Manager'})`,
+              approvedBy: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Marketing Manager' : 'Leader'})`,
               approvedAt: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
               justApproved: true,
             }
@@ -381,7 +381,7 @@ export default function ApprovalQueueScreen({
     setApprovedSuccessData({
       id: item.id,
       title: item.title,
-      approver: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Admin' : 'Manager'})`,
+      approver: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Marketing Manager' : 'Leader'})`,
       timestamp: '14:35 UTC',
     })
     setRejectedSuccessData(null)
@@ -398,7 +398,7 @@ export default function ApprovalQueueScreen({
     if (e) e.preventDefault()
 
     if (!isAuthorized) {
-      notify?.('Unauthorized: Only Workspace Admins and Managers can reject proposals (FR04).')
+      notify?.('Unauthorized: Only Marketing Managers and Leaders can reject proposals (FR04).')
       return
     }
 
@@ -421,7 +421,7 @@ export default function ApprovalQueueScreen({
               rejectionReasonLogged: true,
               rejectionCategory: rejectCategory,
               rejectionReason: trimmedReason,
-              rejectedBy: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Admin' : 'Manager'})`,
+              rejectedBy: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Marketing Manager' : 'Leader'})`,
               rejectedAt: new Date().toISOString().replace('T', ' ').slice(0, 19) + ' UTC',
               justRejected: true,
             }
@@ -435,7 +435,7 @@ export default function ApprovalQueueScreen({
       title: item.title,
       category: rejectCategory,
       reason: trimmedReason,
-      rejector: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Admin' : 'Manager'})`,
+      rejector: `${user?.name || 'Sarah Jenkins'} (${effectiveRole === 'admin' ? 'Marketing Manager' : 'Leader'})`,
     })
     setApprovedSuccessData(null)
 
@@ -548,10 +548,10 @@ export default function ApprovalQueueScreen({
             <span className="ca-unauthorized-tag">FR04 HUMAN-IN-THE-LOOP GOVERNANCE • RBAC</span>
             <h1 className="ca-unauthorized-title">Access Restricted: Proposal Approval Queue</h1>
             <p className="ca-unauthorized-desc">
-              You are currently signed in with the <strong>Member</strong> role in Acme Corp. Under
+              You are currently signed in with the <strong>Employee</strong> role in Acme Corp. Under
               CastraVision Governance Policy FR04, access to the Proposal Approval Queue and proposal
               decision authority (Approve, Edit, Reject) is strictly restricted to{' '}
-              <strong>Workspace Admins</strong> and <strong>Workspace Managers</strong>.
+              <strong>Marketing Managers</strong> and <strong>Leaders</strong>.
             </p>
           </div>
 
@@ -565,7 +565,7 @@ export default function ApprovalQueueScreen({
               <div className="ca-unauthorized-matrix-card privilege">
                 <div className="ca-unauthorized-matrix-card-title privilege">
                   <IconCheckCircle size={14} />
-                  MEMBER PRIVILEGES
+                  EMPLOYEE PRIVILEGES
                 </div>
                 <div className="ca-unauthorized-matrix-card-body">
                   Can create original proposals and view published workspace assets.
@@ -592,7 +592,7 @@ export default function ApprovalQueueScreen({
               <strong>Need Decision Authority?</strong>
               <div>
                 If you require approval authority for this campaign cycle, contact your Workspace
-                Administrator <a href="mailto:sarah.jenkins@acmecorp.com" style={{ color: '#818cf8', textDecoration: 'none' }}>sarah.jenkins@acmecorp.com ↗</a> to request role elevation to Manager.
+                Administrator <a href="mailto:sarah.jenkins@acmecorp.com" style={{ color: '#818cf8', textDecoration: 'none' }}>sarah.jenkins@acmecorp.com ↗</a> to request role elevation to Leader.
               </div>
             </div>
           </div>
@@ -733,7 +733,7 @@ export default function ApprovalQueueScreen({
                 setApprovedSuccessData({
                   id: 'PRP-8402',
                   title: 'Q3 Activewear Omnichannel Copy',
-                  approver: 'Sarah Jenkins (Admin)',
+                  approver: 'Sarah Jenkins (Marketing Manager)',
                   timestamp: '14:35 UTC',
                 })
                 setRejectedSuccessData(null)
@@ -756,7 +756,7 @@ export default function ApprovalQueueScreen({
                   category: 'Content Tone / Brand Inconsistency',
                   reason:
                     'The primary headline tone is too aggressive for our autumn lifestyle demographic. Please revise copy to emphasize everyday comfort and breathability rather than extreme athletic training.',
-                  rejector: 'Sarah Jenkins (Admin)',
+                  rejector: 'Sarah Jenkins (Marketing Manager)',
                 })
                 setApprovedSuccessData(null)
                 setReviewingProposal(null)
@@ -772,7 +772,7 @@ export default function ApprovalQueueScreen({
               style={{ fontSize: 11, padding: '3px 9px', color: '#ef4444' }}
               onClick={() => setPreviewState('unauthorized')}
             >
-              Unauthorized (Member)
+              Unauthorized (Employee)
             </button>
           </div>
         </div>
@@ -907,7 +907,7 @@ export default function ApprovalQueueScreen({
           <div>
             <span className="ca-access-policy-label">Access Policy:</span>
             <span className="ca-access-policy-text">
-              Workspace Admin and Workspace Manager hold review and signoff authority (FR04). Workspace Members are restricted.
+              Marketing Manager and Leader hold review and signoff authority (FR04). Employees are restricted.
             </span>
           </div>
         </div>
@@ -1973,7 +1973,7 @@ export default function ApprovalQueueScreen({
                       AUTHORIZATION CONFIRMED
                     </div>
                     <div style={{ fontSize: 12.5, color: 'var(--ca-text-secondary)' }}>
-                      Approved by <strong>{viewingDetailsProposal.approvedBy || 'Sarah Jenkins (Admin)'}</strong> at{' '}
+                      Approved by <strong>{viewingDetailsProposal.approvedBy || 'Sarah Jenkins (Marketing Manager)'}</strong> at{' '}
                       <strong>{viewingDetailsProposal.approvedAt || 'Oct 23, 2026 17:15 UTC'}</strong>.
                     </div>
                   </div>
@@ -1992,7 +1992,7 @@ export default function ApprovalQueueScreen({
                     </div>
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--ca-text-muted)' }}>
-                    Rejected by <strong>{viewingDetailsProposal.rejectedBy || 'Sarah Jenkins (Admin)'}</strong> at{' '}
+                    Rejected by <strong>{viewingDetailsProposal.rejectedBy || 'Sarah Jenkins (Marketing Manager)'}</strong> at{' '}
                     <strong>{viewingDetailsProposal.rejectedAt || 'Oct 22, 2026 16:45 UTC'}</strong>.
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 /**
- * AdminDashboardScreen.jsx — Workspace Admin / Company Admin Dashboard
+ * MarketingManagerDashboardScreen.jsx — Marketing Manager Dashboard
  * Matches the approved Figma reference screenshot: company_admin_dashboard.jpg
  */
 
@@ -17,7 +17,7 @@ import {
 } from '../ui/Icons'
 import { INITIAL_WORKSPACE, INITIAL_PROPOSALS, INITIAL_AUDIT_LOGS } from '../mockData'
 
-export default function AdminDashboardScreen({
+export default function MarketingManagerDashboardScreen({
   workspace = INITIAL_WORKSPACE,
   proposals = INITIAL_PROPOSALS,
   auditLogs = INITIAL_AUDIT_LOGS,
@@ -59,10 +59,10 @@ export default function AdminDashboardScreen({
           {/* Top Pill Indicator */}
           <div className="ca-dashboard-pill">
             <span className="ca-pill-dot" />
-            <span>WORKSPACE GOVERNANCE • ADMIN CONSOLE</span>
+            <span>WORKSPACE GOVERNANCE • MARKETING MANAGER CONSOLE</span>
           </div>
 
-          <h1 className="ca-dashboard-title">Admin Dashboard</h1>
+          <h1 className="ca-dashboard-title">Marketing Manager Dashboard</h1>
           <p className="ca-dashboard-subtitle">
             Governing {workspace.name} enterprise workspace, member privileges,
             proposal approvals, and compliance audit trail.
@@ -135,7 +135,7 @@ export default function AdminDashboardScreen({
           </div>
           <div className="ca-kpi-bottom-row">
             <span className="ca-kpi-text-muted">
-              {workspace.adminCount || 3} Admins · {workspace.managerCount || 4} Mgrs · {workspace.memberCount || 7} M...
+              {workspace.adminCount || 3} Marketing Managers · {workspace.managerCount || 4} Leaders · {workspace.memberCount || 7} Employees
             </span>
             <button
               type="button"
@@ -249,7 +249,7 @@ export default function AdminDashboardScreen({
           <div className="ca-health-tile">
             <div className="ca-tile-label">AUTHENTICATED ACTOR</div>
             <div className="ca-tile-value">Sarah Jenkins</div>
-            <div className="ca-tile-subtext ca-text-actor">Admin (Primary Admin)</div>
+            <div className="ca-tile-subtext ca-text-actor">Marketing Manager (Primary)</div>
           </div>
 
           {/* Tile 4: Seat Utilization */}
@@ -270,7 +270,7 @@ export default function AdminDashboardScreen({
           <div className="ca-policy-content">
             <IconLock size={15} className="ca-policy-lock" />
             <span>
-              <strong>Policy Rule:</strong> Last Workspace Admin cannot be removed, demoted, or deactivated.
+              <strong>Policy Rule:</strong> Last Marketing Manager cannot be removed, demoted, or deactivated.
             </span>
           </div>
 
@@ -439,7 +439,7 @@ export default function AdminDashboardScreen({
                 action: 'Proposal Approved',
                 time: '14:35 UTC',
                 desc: 'Authorized Q3 Activewear Omnichannel Copy v1.0 promotion into production pipeline.',
-                actor: 'By: Sarah Jenkins (Admin)',
+                actor: 'By: Sarah Jenkins (Marketing Manager)',
                 ref: 'PRP-8402',
               },
               {
@@ -448,7 +448,7 @@ export default function AdminDashboardScreen({
                 action: 'Proposal Rejected',
                 time: '14:10 UTC',
                 desc: 'Reason: Content Tone / Brand Inconsistency feedback recorded.',
-                actor: 'By: Sarah Jenkins (Admin)',
+                actor: 'By: Sarah Jenkins (Marketing Manager)',
                 ref: 'PRP-8395',
               },
               {
@@ -457,7 +457,7 @@ export default function AdminDashboardScreen({
                 action: 'Proposal Edited',
                 time: '13:58 UTC',
                 desc: 'Revised Holiday Email headline and CTA parameters into version v1.1.',
-                actor: 'By: David Kross (Manager)',
+                actor: 'By: David Kross (Leader)',
                 ref: 'PRP-8404',
               },
               {
@@ -465,8 +465,8 @@ export default function AdminDashboardScreen({
                 type: 'purple',
                 action: 'Member Invited',
                 time: '11:05 UTC',
-                desc: 'Dispatched Manager role invitation with 7-day auth token.',
-                actor: 'By: Sarah Jenkins (Admin)',
+                desc: 'Dispatched Leader role invitation with 7-day auth token.',
+                actor: 'By: Sarah Jenkins (Marketing Manager)',
                 ref: 'marcus.cole@acmecorp.com',
               },
             ].map((event) => (

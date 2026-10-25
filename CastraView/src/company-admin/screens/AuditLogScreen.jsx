@@ -300,7 +300,7 @@ export default function AuditLogScreen({
           <h2 className="ca-audit-error-title">403 Forbidden — Audit Log Access Restricted</h2>
           <p className="ca-audit-error-desc">
             In accordance with FR11 Workspace Governance and CastraVision RBAC policy, the
-            Workspace Audit Log is strictly restricted to authenticated <strong>Company Administrators (Workspace Admins)</strong>.
+            Workspace Audit Log is strictly restricted to authenticated <strong>Marketing Managers</strong>.
             Your current assigned role (<strong>{devRoleEmulation.toUpperCase()}</strong>) is not authorized to view the chronological workspace audit stream.
           </p>
           <div className="ca-audit-suggestions-box" style={{ maxWidth: 500, margin: '0 auto 24px auto' }}>
@@ -309,7 +309,7 @@ export default function AuditLogScreen({
               <div className="ca-audit-suggestions-title">Governance Boundary Policy</div>
               <p className="ca-audit-suggestions-text">
                 Audit event payloads are never dispatched to unauthorized clients. If you require access to
-                system logs or compliance verification receipts, contact your primary Workspace Administrator.
+                system logs or compliance verification receipts, contact your primary Marketing Manager.
               </p>
             </div>
           </div>
@@ -733,7 +733,7 @@ export default function AuditLogScreen({
           >
             <option value="All">All Modules</option>
             <option value="FR04 Approvals">FR04 Approvals</option>
-            <option value="Workspace Admin">Workspace Admin</option>
+            <option value="Workspace Admin">Marketing Manager</option>
             <option value="RBAC Control">RBAC Control</option>
             <option value="Data Import">Data Import</option>
           </select>

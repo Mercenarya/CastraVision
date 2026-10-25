@@ -144,10 +144,10 @@ export function navCaption(role) {
 export function roleLabel(role) {
   const labels = {
     system_admin:  'System Admin',
-    company_admin: 'Company Admin',
-    admin:         'Workspace Admin',
-    manager:       'Manager',
-    member:        'Member',
+    company_admin: 'Marketing Manager',
+    admin:         'Marketing Manager',
+    manager:       'Leader',
+    member:        'Employee',
   }
   return labels[role] || 'User'
 }
