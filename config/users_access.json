@@ -1,6 +1,6 @@
 {
   "system-flows": {
-    "meta_ads": "{\"identity_facebook\": {\"app_id\": \"Test_fb_app_id\", \"app_secret\": \"Test_fb_app_secret\", \"access_token\": \"Test_fb_access_token\", \"account_id\": \"Test_ad_account_id\"}}",
-    "google_ads": "{\"identity_google_ads\": {\"client_id\": \"148597477010-n47d3lsmrkq8sh3dhn5a150g5m9o54u0.apps.googleusercontent.com\", \"client_secret\": \"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\", \"refresh_token\": \"1//0gFcoAkD-GLaLCgYIARAAGBASNwF-L9IrJwTw2aKG8tzqUENkesHljCN9VMeGbGQArKKRztm4Oj-Xd2MJTmro8zY2jP4FPTozyOE\", \"customer_id\": \"6433384358\", \"use_proto_plus\": true}}"
+    "meta_ads": "gAAAAABq3IOpieZuxQWNl7s13d15tvjNggA6G7b1xAxdtqWsPKzwRPowJ2YIi2WMWKpwwonMYeVcMjPtHPuN1Sg9s1lyMv93Iz_ZNfvx2BFezU_bBDIAAdqNdh9g9mZHMcVsM4ApBWD-0gOu7WCUDHEKBXnkao3h1x-eVfNqItel1mcQXKqaaIb5N-AF4RXRqzm-oqt7FfDoAjfbSeIrKrHsi1ZN62AjoLzj-xWSFCakG1BvTIKda7pdHbr6XTJhegfS2mVck_mNkcgIx39wKpvxQKWfdEbBQ_2v5rOWN5NrbHItwJslx0o=",
+    "google_ads": "gAAAAABq3IOpIes7JLYrAn96g-vh0kFrnpIEcU2tpy20TmtRXKrccDwvmbQvTY-pRHj3GBVORDkO6fdezrCU6aJ0WfYQEyNM7mB0i1ohT6yLVy4b9xrT1gFnq7vOAgaB7iyIiQRIOEFGF_3g7HowC1wcFiDJTLLMIc1uNiGKZ6CLrTqVU-z1-PABXR6to8XrX9OimYG6hYzHg4yZpaD0v3QpbXXvzyqEs5JbcaCs5P3wnS23PQ9azzllJKad76IZIod45pcEUkoyktaunNUyL56MbfNFlpJLnrMCjsUjA7KFVRS9cPXaN4AXIBMANPviI78lV0CJvAVCZ6bLxFG2k-hlZMS4WBrbdmPvWp-p4ZbK7ZAQxvQOP3N0lXbCoERIKZFDieT1BGNmUJJuGAnnjEPSDr8a96C_I0E3pTlns3JtFT9j1aCI66mrmBzNS6lWCGzUZ_uG3aPBMwIKxy2Mp27ys_mMF-GiMZdp7g9TOTbdoHtbKPkHXq90CpDVX7pJUflaQCUvZRKtEV9NWIfiuyRXcOtEYTkQqw=="
   }
 }

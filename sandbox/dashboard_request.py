@@ -22,14 +22,15 @@ print("Có biến:", "GOOGLE_ADS_REFRESH_TOKEN" in os.environ)
 
 encoder = Fernet(key)
 
+
 load_dotenv(os.path.join(ROOT, ".env"))
 
 
 from Datasources.googleads.ggads_request_account import children
 from Datasources.facebookAgent.meta_request import run
 # xuất các module chính
-# from Datasources.facebookAgent import meta_request
-# from Datasources.googleads import customer_checker, refresh_token, ggads_request_account
+from Datasources.facebookAgent import meta_request
+from Datasources.googleads import customer_checker, refresh_token, ggads_request_account
 
 
 # from Utils.data_pipline import auto_generate_tasks, set_functions_pipeline
@@ -75,6 +76,7 @@ class Ggadsreports:
         }
         
         return encoder.encrypt(json.dumps(self.data_graphs).encode("utf-8")).decode("utf-8")
+
 # lưu cấu hình để chạy các dữ liệu chính của hệ thống
 def save_config(filename:str,access_system_data):
     '''Lưu cấu hình vào config / users-access, khi hệ thống cần đến, 
@@ -84,11 +86,6 @@ def save_config(filename:str,access_system_data):
             return {
                 "message":f"{filename} is not exits yet."
             }
-            
-        # if not isinstance(access_system_data,dict):
-        #     return {
-        #         "message":f"access data configuration must be dictionary."
-        #     }
             
         with open(filename,"w",encoding='utf-8') as file:
             
@@ -117,7 +114,7 @@ if __name__ == "__main__":
         "client_id": oauth["client_id"],
         "client_secret": oauth["client_secret"],
         "refresh_token": os.environ["GOOGLE_ADS_REFRESH_TOKEN"],
-        "login_customer_id": "6433384358",  # ID MCC, bỏ dòng này nếu không dùng MCC
+        "login_customer_id": os.environ["LOGIN_CUSTOMER_ID"],  # ID MCC, bỏ dòng này nếu không dùng MCC
         "use_proto_plus": True,
     }
     
@@ -140,6 +137,7 @@ if __name__ == "__main__":
         gg_ads_config['use_proto_plus']
     )
     
+    
     result_meta_ads = encoder.decrypt(meta_ads.encode_frames().encode("utf-8")).decode('utf-8')
     result_gg_ads = encoder.decrypt(gg_ads.encode_frames().encode("utf-8")).decode('utf-8')
     
@@ -150,10 +148,9 @@ if __name__ == "__main__":
     print(result_gg_ads)    
         
     frame_result = {
-        # "data-flows":{
-            "meta_ads": result_meta_ads,
-            "google_ads": result_gg_ads,
-        # }
+        "meta_ads": meta_ads.encode_frames(),
+        "google_ads": gg_ads.encode_frames(),
+        
     }
     
     saved_config = save_config(CONFIG,frame_result)
