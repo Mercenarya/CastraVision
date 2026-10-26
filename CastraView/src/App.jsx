@@ -1,13 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
+import CompanyAdminLayout from './company-admin/CompanyAdminLayout'
+import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
+import {
+  ApprovalQueuePage,
+  BudgetOptimizationPage,
+  ReportsPage,
+  CompetitorInsightsPage,
+  FloatingInput,
+  Button,
+} from './actor-ui/ActorPages'
+import { canAccessFR04ApprovalQueue } from './auth/permissions'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
-const SIZES = { Micro: '1–10 nhân sự', Small: '11–50 nhân sự', Medium: '51–250 nhân sự', Large: 'Trên 250 nhân sự' }
-const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'VND' }
+const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: '250+ employees' }
+const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'USD' }
 const NAV = [
-  ['overview', '▦', 'Tổng quan'], ['strategy', '◈', 'Chiến lược & phân tích'],
-  ['content', '✦', 'Content Studio'], ['import', '⇥', 'Nhập dữ liệu chiến dịch'],
-  ['profile', '☷', 'Hồ sơ doanh nghiệp'],
+  ['overview', '▦', 'Campaign Overview'],
+  ['strategy', '◈', 'Strategy & Insights'],
+  ['content', '✦', 'Content Studio'],
+  ['import', '⇥', 'Campaign Data Import'],
+  ['budget', '↗', 'Budget & ROAS'],
+  ['audit', '▤', 'Reports & Audit'],
+  ['profile', '⚙', 'Settings & API'],
 ]
 
 function csrfToken() { return decodeURIComponent(document.cookie.split('; ').find((part) => part.startsWith('csrftoken='))?.split('=')[1] || '') }
@@ -17,44 +32,267 @@ async function api(path, options = {}) {
   if (options.method && options.method !== 'GET') headers['X-CSRFToken'] = csrfToken()
   let response
   try { response = await fetch(`/api/${path}`, { credentials: 'same-origin', ...options, headers }) }
-  catch { throw new Error('Không kết nối được máy chủ. Hãy kiểm tra backend ở cổng 8000.') }
+  catch { throw new Error('Cannot connect to API server. Please check backend status.') }
   const data = await response.json().catch(() => ({}))
-  if (!response.ok) throw new Error(data.error?.message || `Yêu cầu thất bại (${response.status}).`)
+  if (!response.ok) throw new Error(data.error?.message || `Request failed (${response.status}).`)
   return data
 }
 
 function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
 function Heading({ eyebrow, title, subtitle, children }) { return <div className="page-heading"><div><div className="eyebrow"><i /> {eyebrow}</div><h1>{title}</h1><p>{subtitle}</p></div>{children}</div> }
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
-function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Đóng thông báo">×</button></div> }
+function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Close notification">×</button></div> }
 
-function AuthScreen({ mode, setMode, onAuth, backendError }) {
-  const signup = mode === 'signup'
+function AuthScreen({ onAuth, backendError }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+
   async function submit(event) {
-    event.preventDefault(); setError('')
-    if (signup && password !== confirm) return setError('Mật khẩu xác nhận không khớp.')
+    event.preventDefault()
+    setError('')
     setBusy(true)
-    try { const data = await api(`auth/${signup ? 'register' : 'login'}/`, { method: 'POST', body: JSON.stringify({ email, password }) }); onAuth(data.user) }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+    try {
+      const data = await api('auth/login/', { method: 'POST', body: JSON.stringify({ email, password }) })
+      onAuth(data.user)
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
-  return <div className="auth-page"><header className="auth-top"><Brand /></header><main className="auth-main"><div className="auth-card">
-    <div className="auth-heading"><Brand /><span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span><h1>{signup ? 'Tạo tài khoản' : 'Chào mừng trở lại'}</h1><p>{signup ? 'Bắt đầu xây dựng chiến lược marketing trong vài phút.' : 'Đăng nhập để quản lý chiến lược marketing của bạn.'}</p></div>
-    <form className="auth-form" onSubmit={submit}><label>Email công việc<input type="email" autoComplete="email" placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required /></label><label>Mật khẩu<div className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} placeholder="Nhập mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showPassword ? 'Ẩn' : 'Hiện'}</button></div></label>{signup && <label>Xác nhận mật khẩu<input type={showPassword ? 'text' : 'password'} autoComplete="new-password" minLength={8} placeholder="Nhập lại mật khẩu" value={confirm} onChange={(e) => setConfirm(e.target.value)} required /></label>}{(error || backendError) && <Notice>{error || backendError}</Notice>}<button className="button primary full" disabled={busy}>{busy ? 'Đang xử lý…' : signup ? 'Tạo tài khoản →' : 'Đăng nhập →'}</button></form>
-    {signup && <p className="auth-terms">Tài khoản được bảo vệ bằng mật khẩu mã hóa và phiên đăng nhập an toàn.</p>}<div className="auth-switch">{signup ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'} <button type="button" onClick={() => { setError(''); setMode(signup ? 'login' : 'signup') }}>{signup ? 'Đăng nhập' : 'Đăng ký'}</button></div>
-  </div></main><footer className="auth-footer"><span>© 2026 CastraVision · Sprint 1</span><span>AI marketing workspace for SMBs</span></footer></div>
+
+  const displayError = error || backendError
+
+  return (
+    <div className="auth-page">
+      <header className="auth-top"><Brand /></header>
+      <main className="auth-main">
+        <div className="auth-card">
+          <div className="auth-heading">
+            <Brand />
+            <span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span>
+            <h1>Welcome back</h1>
+            <p>Sign in to manage your marketing strategy and workspace.</p>
+          </div>
+
+          <form className="auth-form" onSubmit={submit} noValidate>
+            <FloatingInput
+              label="Work Email"
+              name="auth-email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              autoComplete="email"
+              required
+            />
+
+            <div className="auth-password-wrap">
+              <FloatingInput
+                label="Password"
+                name="auth-password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                className="auth-show-pw"
+                onClick={() => setShowPassword(v => !v)}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
+
+            {displayError && (
+              <div className="auth-error" role="alert">
+                <span className="auth-error-icon">⚠</span>
+                <span>{displayError}</span>
+              </div>
+            )}
+
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={busy}
+              loading={busy}
+              className="auth-submit-btn"
+            >
+              {busy ? 'Signing in…' : 'Sign In →'}
+            </Button>
+
+            <div className="auth-footer-note">
+              Access is by invitation only. Contact your administrator if you need access.
+            </div>
+
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--cv-border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ fontSize: 11, color: 'var(--cv-muted)', textAlign: 'center', fontWeight: 600, letterSpacing: '.05em' }}>DEVELOPER PREVIEW &amp; TEST ACCESS</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  style={{ width: '100%', fontSize: 12, borderColor: '#10b981', color: '#10b981', fontWeight: 600 }}
+                  onClick={() => onAuth(
+                    { email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' },
+                    null,
+                    'sa-dashboard'
+                  )}
+                >
+                  Enter as System Admin 🛡 →
+                </Button>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11 }}
+                    onClick={() => onAuth(
+                      { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Admin →
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11, borderColor: '#818cf8', color: '#c7d2fe' }}
+                    onClick={() => onAuth(
+                      { email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Manager →
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11 }}
+                    onClick={() => onAuth(
+                      { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Member →
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </main>
+      <footer className="auth-footer">
+        <span>© 2026 CastraVision · Enterprise Platform</span>
+        <span>AI marketing workspace for SMBs</span>
+      </footer>
+    </div>
+  )
 }
 
 function Shell({ user, profile, page, setPage, logout, children }) {
-  const current = NAV.find(([key]) => key === page)?.[2] || 'Tổng quan'
-  return <div className="shell"><aside className="sidebar"><div className="sidebar-brand"><Brand /><span className="sme-tag">SME AI</span></div><div className="workspace-switch"><span className="workspace-avatar">{(profile?.business_name || user.email).slice(0, 2).toUpperCase()}</span><span><strong>{profile?.business_name || 'Không gian mới'}</strong><small>CastraVision Workspace</small></span><span>⌄</span></div><div className="nav-caption">ENGINE NAVIGATION</div><nav aria-label="Điều hướng chính">{NAV.map(([key, icon, label]) => <button key={key} className={`nav-item ${page === key ? 'active' : ''}`} onClick={() => setPage(key)} aria-current={page === key ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</button>)}</nav><div className="sidebar-bottom"><div><i /> Sprint 1 workspace <strong>Online</strong></div><div className="quota-line"><span /></div><small>FR12 · FR08 · FR01</small></div></aside><div className="main-wrap"><header className="app-topbar"><span className="mobile-brand"><Brand /></span><div className="topbar-context"><i /> {current.toUpperCase()}</div><div className="topbar-actions"><span className="sprint-label">SPRINT 1</span><span className="user-avatar">{user.email[0].toUpperCase()}</span><span className="user-email">{user.email}</span><button onClick={logout} className="text-button" type="button">Đăng xuất</button></div></header><main className="app-content">{children}</main></div></div>
+  const isAdmin = user?.role === 'admin'
+  const canApprove = canAccessFR04ApprovalQueue(user)
+  const navList = [
+    ['overview', '▦', 'Campaign Overview'],
+    ['strategy', '◈', 'Strategy & Insights'],
+    ['content', '✦', 'Content Studio'],
+    ['import', '⇥', 'Campaign Data Import'],
+    ['budget', '↗', 'Budget & ROAS'],
+    ...(canApprove ? [['approvals', '✓', 'Approval Queue']] : []),
+    ...(isAdmin ? [['audit', '▤', 'Reports & Audit']] : []),
+    ['profile', '⚙', 'Settings & API'],
+    ...(isAdmin ? [
+      ['admin', '⚡', 'Admin Console'],
+    ] : []),
+  ]
+
+  const workspaceName = profile?.business_name || 'Acme Studios'
+  const workspaceInitials = workspaceName.slice(0, 2).toUpperCase()
+  const userName = user?.email ? user.email.split('@')[0] : 'Admin User'
+  const userInitials = userName.slice(0, 2).toUpperCase()
+  const userRoleTitle = isAdmin ? 'Admin • Security & Governance Lead' : 'ML • Growth Lead'
+
+  return (
+    <div className="shell">
+      <aside className="sidebar">
+        <div className="sidebar-brand">
+          <Brand />
+          <span className="sme-tag">SME AI</span>
+        </div>
+        <div className="workspace-switch" title="Active Workspace">
+          <span className="workspace-avatar">{workspaceInitials}</span>
+          <span>
+            <strong>{workspaceName}</strong>
+            <small>Enterprise Pro</small>
+          </span>
+          <span className="workspace-caret">⌄</span>
+        </div>
+        <div className="nav-caption">ENGINE NAVIGATION</div>
+        <nav aria-label="Main Navigation">
+          {navList.map(([key, icon, label]) => (
+            <button
+              key={key}
+              className={`nav-item ${page === key ? 'active' : ''}`}
+              onClick={() => setPage(key)}
+              aria-current={page === key ? 'page' : undefined}
+            >
+              <span aria-hidden="true">{icon}</span>
+              {label}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-bottom">
+          <div className="quota-header">
+            <span>Copilot Quota</span>
+            <span>78.4% Online</span>
+          </div>
+          <div className="quota-track">
+            <span style={{ width: '78.4%' }} />
+          </div>
+          <div className="quota-footer">
+            <small>Adaptive SME Model</small>
+            <small>Latency 24ms</small>
+          </div>
+        </div>
+      </aside>
+      <div className="main-wrap">
+        <header className="app-topbar">
+          <span className="mobile-brand"><Brand /></span>
+          <div className="topbar-campaign">
+            <span className="live-dot" />
+            <span>ACTIVE CAMPAIGN:</span>
+            <strong>Summer 2025 Campaign - SneakerX</strong>
+            <div className="topbar-tags">
+              <span className="topbar-tag">Meta</span>
+              <span className="topbar-tag">Google</span>
+              <span className="topbar-tag">TikTok</span>
+            </div>
+          </div>
+          <div className="topbar-actions">
+            <button className="topbar-bell" type="button" aria-label="Notifications" title="Notifications">🔔</button>
+            <div className="topbar-user">
+              <span className="user-avatar">{userInitials}</span>
+              <div className="user-meta">
+                <span className="user-name">{userName}</span>
+                <span className="user-role">{userRoleTitle}</span>
+              </div>
+            </div>
+            <button onClick={logout} className="text-button" type="button">Sign Out</button>
+          </div>
+        </header>
+        <main className="app-content">{children}</main>
+      </div>
+    </div>
+  )
 }
+
 
 function ChannelPicker({ channels, toggle }) { return <div className="channel-grid">{CHANNELS.map((channel) => <button type="button" key={channel} className={`channel-card ${channels.includes(channel) ? 'selected' : ''}`} onClick={() => toggle(channel)}><span className="channel-glyph">{channel === 'Meta' ? '∞' : channel === 'TikTok' ? '♪' : 'G'}</span><strong>{channel}</strong><span className="check-box">{channels.includes(channel) ? '✓' : ''}</span></button>)}</div> }
 
@@ -68,12 +306,126 @@ function ProfileScreen({ profile, onboarding, saveProfile, busy, error, cancel }
       ? current.preferred_channels.filter((item) => item !== channel)
       : [...current.preferred_channels, channel],
   }))
-  return <><Heading eyebrow={onboarding ? 'NEW ACCOUNT SETUP' : 'BUSINESS SETTINGS'} title={onboarding ? 'Thiết lập doanh nghiệp' : 'Hồ sơ doanh nghiệp'} subtitle="Cho CastraVision biết về doanh nghiệp để cá nhân hóa đề xuất." /><div className="stepper"><div className={step === 1 ? 'current' : 'done'}><b>1</b> Thông tin doanh nghiệp</div><div className={step === 2 ? 'current' : ''}><b>2</b> Mục tiêu & kênh</div><div className="step-track"><span style={{ width: step === 1 ? '50%' : '100%' }} /></div></div><form className="card profile-card" onSubmit={(event) => { event.preventDefault(); if (step === 1) setStep(2); else saveProfile(draft) }}>
-    {step === 1 ? <div className="form-grid"><label className="wide">Tên doanh nghiệp *<input value={draft.business_name} onChange={(e) => set('business_name', e.target.value)} minLength={2} maxLength={120} required placeholder="Ví dụ: SneakerX Việt Nam" /></label><label>Ngành hàng *<input value={draft.industry} onChange={(e) => set('industry', e.target.value)} minLength={2} maxLength={120} required placeholder="Ví dụ: Thời trang & phụ kiện" /></label><label>Quy mô doanh nghiệp *<select value={draft.business_size} onChange={(e) => set('business_size', e.target.value)} required><option value="">Chọn quy mô</option>{Object.entries(SIZES).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label><label className="wide">Khách hàng mục tiêu *<textarea value={draft.target_customers} onChange={(e) => set('target_customers', e.target.value)} minLength={3} maxLength={500} required placeholder="Nhóm tuổi, khu vực, sở thích và nhu cầu..." /></label></div> : <div className="form-grid"><label className="wide">Sản phẩm / dịch vụ chính<input value={draft.product_service} onChange={(e) => set('product_service', e.target.value)} maxLength={500} placeholder="Sản phẩm hoặc dịch vụ sẽ quảng bá" /></label><label className="wide">Mục tiêu chính<input value={draft.primary_goal} onChange={(e) => set('primary_goal', e.target.value)} maxLength={300} placeholder="Ví dụ: Tăng doanh số trực tuyến" /></label><label>Ngân sách mỗi tháng<input type="number" min="0" max="1000000000" value={draft.monthly_budget} onChange={(e) => set('monthly_budget', e.target.value)} placeholder="30000000" /></label><label>Đơn vị tiền<select value={draft.currency} onChange={(e) => set('currency', e.target.value)}><option>VND</option><option>USD</option></select></label><div className="wide"><div className="field-title">Kênh ưu tiên</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} /></div></div>}
-    {error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={step === 2 ? () => setStep(1) : cancel}>{step === 2 ? '← Quay lại' : 'Hủy'}</button><button className="button primary" disabled={busy}>{busy ? 'Đang lưu…' : step === 1 ? 'Tiếp tục →' : 'Lưu hồ sơ ✓'}</button></div></form><div className="under-card"><span>◈ Hồ sơ có thể cập nhật sau trong phần cài đặt.</span><span>Dữ liệu gắn với tài khoản của bạn</span></div></>
+  return <>
+    <Heading
+      eyebrow={onboarding ? 'NEW ACCOUNT SETUP' : 'BUSINESS SETTINGS'}
+      title={onboarding ? 'Business Profile Setup' : 'Business Profile'}
+      subtitle="Tell CastraVision about your business to personalize AI marketing recommendations and budget allocation."
+    />
+    <div className="stepper">
+      <div className={step === 1 ? 'current' : 'done'}><b>1</b> Business Information</div>
+      <div className={step === 2 ? 'current' : ''}><b>2</b> Goals &amp; Channels</div>
+      <div className="step-track"><span style={{ width: step === 1 ? '50%' : '100%' }} /></div>
+    </div>
+    <form className="card profile-card" onSubmit={(event) => { event.preventDefault(); if (step === 1) setStep(2); else saveProfile(draft) }}>
+      {step === 1 ? (
+        <div className="form-grid">
+          <label className="wide">Business Name *
+            <input value={draft.business_name} onChange={(e) => set('business_name', e.target.value)} minLength={2} maxLength={120} required placeholder="e.g. Acme Studios / SneakerX" />
+          </label>
+          <label>Industry *
+            <input value={draft.industry} onChange={(e) => set('industry', e.target.value)} minLength={2} maxLength={120} required placeholder="e.g. Footwear & Apparel" />
+          </label>
+          <label>Company Size *
+            <select value={draft.business_size} onChange={(e) => set('business_size', e.target.value)} required>
+              <option value="">Select company size</option>
+              {Object.entries(SIZES).map(([value, label]) => <option value={value} key={value}>{label}</option>)}
+            </select>
+          </label>
+          <label className="wide">Target Audience / Customers *
+            <textarea value={draft.target_customers} onChange={(e) => set('target_customers', e.target.value)} minLength={3} maxLength={500} required placeholder="Demographics, key regions, lifestyle preferences, and primary customer needs..." />
+          </label>
+        </div>
+      ) : (
+        <div className="form-grid">
+          <label className="wide">Core Product or Service
+            <input value={draft.product_service} onChange={(e) => set('product_service', e.target.value)} maxLength={500} placeholder="Primary product line or offering promoted in campaigns" />
+          </label>
+          <label className="wide">Primary Campaign Goal
+            <input value={draft.primary_goal} onChange={(e) => set('primary_goal', e.target.value)} maxLength={300} placeholder="e.g. Accelerate DTC sales & customer acquisition" />
+          </label>
+          <label>Monthly Marketing Budget
+            <input type="number" min="0" max="1000000000" value={draft.monthly_budget} onChange={(e) => set('monthly_budget', e.target.value)} placeholder="30000" />
+          </label>
+          <label>Currency
+            <select value={draft.currency} onChange={(e) => set('currency', e.target.value)}>
+              <option>USD</option>
+              <option>EUR</option>
+              <option>GBP</option>
+              <option>VND</option>
+            </select>
+          </label>
+          <div className="wide">
+            <div className="field-title">Preferred Ad Channels</div>
+            <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
+          </div>
+        </div>
+      )}
+      {error && <Notice>{error}</Notice>}
+      <div className="form-actions">
+        <button type="button" className="button coral" onClick={step === 2 ? () => setStep(1) : cancel}>
+          {step === 2 ? '← Back' : 'Cancel'}
+        </button>
+        <button className="button primary" disabled={busy}>
+          {busy ? 'Saving Profile…' : step === 1 ? 'Continue →' : 'Save Profile ✓'}
+        </button>
+      </div>
+    </form>
+    <div className="under-card">
+      <span>◈ Profile configuration can be modified anytime in workspace settings.</span>
+      <span>Encrypted &amp; securely bound to your workspace</span>
+    </div>
+  </>
 }
 
-function Overview({ profile, imports, strategy, setPage }) { return <><Heading eyebrow="CAMPAIGN WORKSPACE" title={`Xin chào, ${profile.business_name}`} subtitle="Từ dữ liệu doanh nghiệp đến chiến lược marketing có thể hành động." /><div className="overview-hero card"><div><span className="mini-label">SPRINT 1 · MARKETING INTELLIGENCE</span><h2>Một quy trình rõ ràng cho chiến lược tốt hơn.</h2><p>Ba khối tính năng cốt lõi đã được nối thành một luồng làm việc.</p></div><span className="hero-orbit" aria-hidden="true">✣</span></div><div className="overview-grid"><button className="overview-card card" onClick={() => setPage('profile')}><span className="overview-number">01 / FR12</span><span className="overview-icon violet">▣</span><strong>Hồ sơ doanh nghiệp</strong><p>{profile.industry} · {SIZES[profile.business_size] || profile.business_size}</p><span className="card-link">Xem hồ sơ →</span></button><button className="overview-card card" onClick={() => setPage('import')}><span className="overview-number">02 / FR08</span><span className="overview-icon cyan">⇥</span><strong>Nhập dữ liệu chiến dịch</strong><p>{imports.length ? `${imports[0].row_count} dòng dữ liệu đã nhập` : 'CSV / XLSX · kiểm tra & chuẩn hóa'}</p><span className="card-link">{imports.length ? 'Xem dữ liệu' : 'Bắt đầu nhập'} →</span></button><button className="overview-card card" onClick={() => setPage('strategy')}><span className="overview-number">03 / FR01</span><span className="overview-icon violet">◈</span><strong>Tạo chiến lược AI</strong><p>{strategy ? `Kênh đề xuất: ${strategy.strategy.recommended_channel}` : 'Kết hợp hồ sơ và lịch sử chiến dịch'}</p><span className="card-link">{strategy ? 'Xem đề xuất' : 'Tạo chiến lược'} →</span></button></div><div className="overview-note card"><span>ⓘ</span><div><strong>Về Content Studio</strong><p>Màn hình Figma được đưa vào dưới dạng bản nháp nội dung từ chiến lược. Sinh nội dung AI chuyên biệt nằm ngoài phạm vi Sprint 1.</p></div><button className="button subtle" onClick={() => setPage('content')}>Xem màn hình →</button></div></> }
+function Overview({ profile, imports, strategy, setPage }) {
+  return <>
+    <Heading
+      eyebrow="CAMPAIGN WORKSPACE"
+      title={`Welcome back, ${profile.business_name}`}
+      subtitle="From enterprise data ingestion to actionable, multi-channel marketing campaigns."
+    />
+    <div className="overview-hero card">
+      <div>
+        <span className="mini-label">SPRINT 1 · MARKETING INTELLIGENCE</span>
+        <h2>A clear, unified workflow for superior marketing outcomes.</h2>
+        <p>Three core operational pillars integrated into one cohesive intelligence loop.</p>
+      </div>
+      <span className="hero-orbit" aria-hidden="true">✣</span>
+    </div>
+    <div className="overview-grid">
+      <button className="overview-card card" onClick={() => setPage('profile')}>
+        <span className="overview-number">01 / FR12</span>
+        <span className="overview-icon violet">▣</span>
+        <strong>Business Profile</strong>
+        <p>{profile.industry} · {SIZES[profile.business_size] || profile.business_size}</p>
+        <span className="card-link">View Profile →</span>
+      </button>
+      <button className="overview-card card" onClick={() => setPage('import')}>
+        <span className="overview-number">02 / FR08</span>
+        <span className="overview-icon cyan">⇥</span>
+        <strong>Campaign Data Import</strong>
+        <p>{imports.length ? `${imports[0].row_count} records imported` : 'CSV / XLSX validation & normalization'}</p>
+        <span className="card-link">{imports.length ? 'View Data' : 'Start Import'} →</span>
+      </button>
+      <button className="overview-card card" onClick={() => setPage('strategy')}>
+        <span className="overview-number">03 / FR01</span>
+        <span className="overview-icon violet">◈</span>
+        <strong>Generate AI Strategy</strong>
+        <p>{strategy ? `Recommended Channel: ${strategy.strategy.recommended_channel}` : 'Synthesizing business profile & historical campaign records'}</p>
+        <span className="card-link">{strategy ? 'View Strategy' : 'Generate Strategy'} →</span>
+      </button>
+    </div>
+    <div className="overview-note card">
+      <span>ⓘ</span>
+      <div>
+        <strong>About Content Studio</strong>
+        <p>Figma prototype included as content draft scaffolding. Dedicated specialized AI generation is scheduled for subsequent sprints.</p>
+      </div>
+      <button className="button subtle" onClick={() => setPage('content')}>Open Content Studio →</button>
+    </div>
+  </>
+}
 
 function ImportScreen({ imports, onImported, notify }) {
   const [file, setFile] = useState(null)
@@ -90,48 +442,408 @@ function ImportScreen({ imports, onImported, notify }) {
   }
   async function commit() {
     setBusy(true); setError('')
-    try { const body = new FormData(); body.append('file', file); body.append('mode', 'commit'); const data = await api('campaign-imports/upload/', { method: 'POST', body }); await onImported(); notify(`${data.row_count} dòng dữ liệu đã được nhập.`); setFile(null); setPreview(null); if (input.current) input.current.value = '' }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+    try {
+      const body = new FormData(); body.append('file', file); body.append('mode', 'commit')
+      const data = await api('campaign-imports/upload/', { method: 'POST', body })
+      await onImported()
+      notify(`${data.row_count} data records imported successfully.`)
+      setFile(null); setPreview(null)
+      if (input.current) input.current.value = ''
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
-  function downloadSample() { const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500000,320,18000,25,3900000\nGoogle Ads,2026-09,1000000,240,12000,18,2800000\n'; const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' })); link.download = 'castravision_sample.csv'; link.click(); URL.revokeObjectURL(link.href) }
-  return <><Heading eyebrow="DATA INGESTION HUB" title="Nhập dữ liệu chiến dịch" subtitle="Tải lên dữ liệu hiệu suất để làm giàu chiến lược marketing." /><div className={`upload-zone card ${file ? 'has-file' : ''}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); stage(e.dataTransfer.files[0]) }}><div className="upload-icon">⇧</div><h2>Kéo thả tệp vào đây</h2><p>hoặc chọn tệp từ thiết bị</p><span className="upload-separator">OR</span><button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>⇧ Chọn tệp CSV / Excel</button><input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} /><small>Tối đa 5 MB · CSV UTF-8 hoặc XLSX</small><button type="button" className="inline-link" onClick={downloadSample}>↓ Tải CSV mẫu</button></div>
-    {file && <div className="file-card card"><div className="file-success">✓</div><div className="file-info"><span className="mini-label">TỆP ĐÃ CHỌN · {(file.size / 1024 / 1024).toFixed(2)} MB</span><strong>{file.name}</strong><small>{busy ? 'Đang kiểm tra…' : preview ? `${preview.row_count} dòng hợp lệ · ${preview.error_count} dòng lỗi` : 'Chưa xác thực'}</small></div><div className="file-actions"><button className="button coral" type="button" onClick={() => { setFile(null); setPreview(null); setError('') }}>Gỡ bỏ</button><button className="button primary" type="button" disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0} onClick={commit}>Nhập dữ liệu →</button></div></div>}
-    {error && <Notice>{error}</Notice>}{preview?.errors?.length > 0 && <div className="card validation-card"><h3>Cần sửa {preview.error_count} dòng trước khi nhập</h3>{preview.errors.map((item) => <p key={item.row}>Dòng {item.row}: {item.message}</p>)}</div>}{preview?.preview?.length > 0 && <div className="card preview-card"><h3>Xem trước dữ liệu chuẩn hóa</h3><div className="table-wrap"><table><thead><tr>{['Kênh', 'Kỳ', 'Chi phí', 'Clicks', 'Hiển thị', 'Chuyển đổi', 'Doanh thu'].map((value) => <th key={value}>{value}</th>)}</tr></thead><tbody>{preview.preview.map((row, index) => <tr key={index}><td>{row.channel}</td><td>{row.period}</td><td>{row.spend.toLocaleString('vi-VN')}</td><td>{row.clicks}</td><td>{row.impressions}</td><td>{row.conversions}</td><td>{row.revenue.toLocaleString('vi-VN')}</td></tr>)}</tbody></table></div></div>}
-    <div className="benefit-grid"><div className="card"><b>▣</b><strong>Định dạng chuẩn</strong><p>Tự ánh xạ cột chi phí, lượt nhấp, hiển thị và chuyển đổi.</p></div><div className="card"><b>♢</b><strong>Kiểm tra tự động</strong><p>Phát hiện cột thiếu, số âm và dòng không hợp lệ trước khi lưu.</p></div><div className="card"><b>ϟ</b><strong>Dùng cho phân tích</strong><p>Chỉ số từ tệp đã nhập được đưa vào yêu cầu tạo chiến lược.</p></div></div>{imports.length > 0 && <div className="card import-history"><h3>Lần nhập gần đây</h3>{imports.map((item) => <div key={item.id}><span>{item.filename}</span><small>{item.row_count} dòng · {new Date(item.created_at).toLocaleDateString('vi-VN')}</small></div>)}</div>}</>
+  function downloadSample() {
+    const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500,320,18000,25,3900\nGoogle Ads,2026-09,1000,240,12000,18,2800\n'
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' }))
+    link.download = 'castravision_sample.csv'
+    link.click()
+    URL.revokeObjectURL(link.href)
+  }
+  return <>
+    <Heading
+      eyebrow="DATA INGESTION HUB"
+      title="Campaign Data Import"
+      subtitle="Upload historical campaign performance data to enrich AI strategy and budget models."
+    />
+    <div
+      className={`upload-zone card ${file ? 'has-file' : ''}`}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => { e.preventDefault(); stage(e.dataTransfer.files[0]) }}
+    >
+      <div className="upload-icon">⇧</div>
+      <h2>Drag and drop files here</h2>
+      <p>or browse files from your computer</p>
+      <span className="upload-separator">OR</span>
+      <button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>
+        ⇧ Select CSV / Excel File
+      </button>
+      <input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} />
+      <small>Maximum 5 MB · UTF-8 CSV or XLSX</small>
+      <button type="button" className="inline-link" onClick={downloadSample}>↓ Download Sample CSV Template</button>
+    </div>
+    {file && (
+      <div className="file-card card">
+        <div className="file-success">✓</div>
+        <div className="file-info">
+          <span className="mini-label">SELECTED FILE · {(file.size / 1024 / 1024).toFixed(2)} MB</span>
+          <strong>{file.name}</strong>
+          <small>{busy ? 'Validating file…' : preview ? `${preview.row_count} valid records · ${preview.error_count} errors` : 'Pending validation'}</small>
+        </div>
+        <div className="file-actions">
+          <button className="button coral" type="button" onClick={() => { setFile(null); setPreview(null); setError('') }}>Remove</button>
+          <button className="button primary" type="button" disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0} onClick={commit}>
+            Import Data →
+          </button>
+        </div>
+      </div>
+    )}
+    {error && <Notice>{error}</Notice>}
+    {preview?.errors?.length > 0 && (
+      <div className="card validation-card">
+        <h3>Please fix {preview.error_count} row(s) before importing</h3>
+        {preview.errors.map((item) => <p key={item.row}>Row {item.row}: {item.message}</p>)}
+      </div>
+    )}
+    {preview?.preview?.length > 0 && (
+      <div className="card preview-card">
+        <h3>Normalized Data Preview</h3>
+        <div className="table-wrap">
+          <table>
+            <thead>
+              <tr>{['Channel', 'Period', 'Spend', 'Clicks', 'Impressions', 'Conversions', 'Revenue'].map((value) => <th key={value}>{value}</th>)}</tr>
+            </thead>
+            <tbody>
+              {preview.preview.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.channel}</td>
+                  <td>{row.period}</td>
+                  <td>{typeof row.spend === 'number' ? row.spend.toLocaleString('en-US') : row.spend}</td>
+                  <td>{row.clicks}</td>
+                  <td>{row.impressions}</td>
+                  <td>{row.conversions}</td>
+                  <td>{typeof row.revenue === 'number' ? row.revenue.toLocaleString('en-US') : row.revenue}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    )}
+    <div className="benefit-grid">
+      <div className="card">
+        <b>▣</b>
+        <strong>Standard Schema</strong>
+        <p>Automatically maps spend, clicks, impressions, conversions, and revenue columns.</p>
+      </div>
+      <div className="card">
+        <b>♢</b>
+        <strong>Automated Validation</strong>
+        <p>Detects missing headers, negative numbers, and invalid date formats before commit.</p>
+      </div>
+      <div className="card">
+        <b>ϟ</b>
+        <strong>Direct Strategy Ingestion</strong>
+        <p>Ingested metrics feed directly into the AI strategy allocation and optimization engine.</p>
+      </div>
+    </div>
+    {imports.length > 0 && (
+      <div className="card import-history">
+        <h3>Recent Imports</h3>
+        {imports.map((item) => (
+          <div key={item.id}>
+            <span>{item.filename}</span>
+            <small>{item.row_count} records · {new Date(item.created_at).toLocaleDateString('en-US')}</small>
+          </div>
+        ))}
+      </div>
+    )}
+  </>
 }
 
 function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
-  const initial = () => ({ campaign_goal: profile.primary_goal || '', target_audience: profile.target_customers || '', budget: profile.monthly_budget || '', preferred_channels: profile.preferred_channels.length ? profile.preferred_channels : CHANNELS })
+  const initial = () => ({
+    campaign_goal: profile.primary_goal || '',
+    target_audience: profile.target_customers || '',
+    budget: profile.monthly_budget || '',
+    preferred_channels: profile.preferred_channels?.length ? profile.preferred_channels : CHANNELS,
+  })
   const [draft, setDraft] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const toggle = (channel) => setDraft((current) => ({ ...current, preferred_channels: current.preferred_channels.includes(channel) ? current.preferred_channels.filter((item) => item !== channel) : [...current.preferred_channels, channel] }))
+  const toggle = (channel) => setDraft((current) => ({
+    ...current,
+    preferred_channels: current.preferred_channels.includes(channel)
+      ? current.preferred_channels.filter((item) => item !== channel)
+      : [...current.preferred_channels, channel],
+  }))
   async function generate(event) {
     event?.preventDefault(); setBusy(true); setError('')
-    try { const historical_data = latestRows.slice(0, 30).map((row) => ({ channel: CHANNELS.includes(row.channel) ? row.channel : 'Other', period: row.period, ctr: row.impressions ? +(row.clicks / row.impressions * 100).toFixed(2) : 0, cpa: row.conversions ? +(row.spend / row.conversions).toFixed(2) : 0, roas: row.spend ? +(row.revenue / row.spend).toFixed(2) : 0 })); const payload = { business_name: profile.business_name, industry: profile.industry, business_size: profile.business_size, product_service: profile.product_service || profile.business_name, target_audience: draft.target_audience, campaign_goal: draft.campaign_goal, budget: Number(draft.budget), currency: profile.currency, preferred_channels: draft.preferred_channels, historical_data }; const data = await api('strategies/generate/', { method: 'POST', body: JSON.stringify(payload) }); setResult(data); notify('Chiến lược đã được tạo. Hãy xem lại trước khi sử dụng.') }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+    try {
+      const historical_data = latestRows.slice(0, 30).map((row) => ({
+        channel: CHANNELS.includes(row.channel) ? row.channel : 'Other',
+        period: row.period,
+        ctr: row.impressions ? +(row.clicks / row.impressions * 100).toFixed(2) : 0,
+        cpa: row.conversions ? +(row.spend / row.conversions).toFixed(2) : 0,
+        roas: row.spend ? +(row.revenue / row.spend).toFixed(2) : 0,
+      }))
+      const payload = {
+        business_name: profile.business_name,
+        industry: profile.industry,
+        business_size: profile.business_size,
+        product_service: profile.product_service || profile.business_name,
+        target_audience: draft.target_audience,
+        campaign_goal: draft.campaign_goal,
+        budget: Number(draft.budget),
+        currency: profile.currency,
+        preferred_channels: draft.preferred_channels,
+        historical_data,
+      }
+      const data = await api('strategies/generate/', { method: 'POST', body: JSON.stringify(payload) })
+      setResult(data)
+      notify('AI Strategy recommendation generated successfully.')
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
-  const money = (percentage) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: profile.currency, maximumFractionDigits: 0 }).format(Number(draft.budget) * percentage / 100)
-  return <><Heading eyebrow="STRATEGY ENGINE" title="Tạo chiến lược" subtitle="Đặt mục tiêu và đối tượng để xây dựng đề xuất marketing dựa trên dữ liệu.">{latestRows.length > 0 && <span className="data-chip">✓ {latestRows.length} dòng lịch sử được sử dụng</span>}</Heading><div className="strategy-grid"><form className="card strategy-form" onSubmit={generate}><div className="section-head"><h2><i /> Thiết lập chiến dịch</h2><span className="step-badge">FR01 · Sprint 1</span></div><label>Mục tiêu chiến dịch<input value={draft.campaign_goal} onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })} minLength={3} required placeholder="Ví dụ: Tăng doanh số mùa hè" /></label><label>Khách hàng mục tiêu<input value={draft.target_audience} onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })} minLength={3} required placeholder="Ví dụ: Người trẻ 18–28 tuổi" /></label><label>Ngân sách tháng ({profile.currency})<input type="number" min="1" value={draft.budget} onChange={(e) => setDraft({ ...draft, budget: e.target.value })} required placeholder="30000000" /></label><div className="field-title">Kênh dự kiến</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} />{error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={() => setDraft(initial())}>↻ Đặt lại</button><button className="button primary" disabled={busy || !draft.preferred_channels.length}>{busy ? 'Đang phân tích…' : 'ϟ Tạo chiến lược'}</button></div></form><div className="card result-card"><div className="section-head"><div><h2>Đề xuất chiến lược AI</h2><p>Dựa trên hồ sơ và dữ liệu lịch sử của bạn</p></div>{result && <span className="active-badge">{result.strategy.confidence}% tin cậy</span>}</div>{!result ? <div className="result-empty"><span>◈</span><h3>Chưa có đề xuất</h3><p>Hoàn thành biểu mẫu và nhấn “Tạo chiến lược” để xem kênh, thông điệp và phân bổ ngân sách.</p></div> : <><div className="insight-box"><span className="mini-label">TRỌNG TÂM CHIẾN LƯỢC</span><p>{result.strategy.rationale}</p></div><div className="insight-box"><div className="allocation-head"><span className="mini-label">PHÂN BỔ ĐỀ XUẤT</span><span>{money(100)} tổng</span></div><div className="stacked-bar">{result.strategy.budget_allocation.map((item, index) => <span key={index} style={{ width: `${item.percentage}%` }} />)}</div><div className="allocation-grid">{result.strategy.budget_allocation.map((item, index) => <div key={index}><i className={`legend-dot d${index}`} /><strong>{item.channel}</strong><small>{item.percentage}% · {money(item.percentage)}</small></div>)}</div></div><div className="insight-box"><span className="mini-label">THÔNG ĐIỆP & PHÂN KHÚC</span><p>“{result.strategy.message}”</p><small>{result.strategy.segment}</small></div><div className="insight-box"><span className="mini-label">HÀNH ĐỘNG TIẾP THEO</span><ol>{result.strategy.actions.map((action, index) => <li key={index}>{action}</li>)}</ol></div><div className="result-footer"><span>{result.provider === 'openai' ? 'OpenAI' : 'Bản dự phòng có quy tắc'} · {result.context_sources.length} nguồn tham chiếu</span><button className="button subtle" type="button" onClick={generate} disabled={busy}>↻ Phân tích lại</button></div>{result.warning && <Notice kind="warning">{result.warning}</Notice>}</>}</div></div></>
+  const money = (percentage) => new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: profile.currency || 'USD',
+    maximumFractionDigits: 0,
+  }).format((Number(draft.budget) || 0) * percentage / 100)
+
+  return <>
+    <Heading
+      eyebrow="STRATEGY ENGINE"
+      title="Strategy &amp; Insights"
+      subtitle="Define campaign objectives and audience segments to generate data-driven marketing strategies."
+    >
+      {latestRows.length > 0 && <span className="data-chip">✓ {latestRows.length} historical records utilized</span>}
+    </Heading>
+    <div className="strategy-grid">
+      <form className="card strategy-form" onSubmit={generate}>
+        <div className="section-head">
+          <h2><i /> Campaign Configuration</h2>
+          <span className="step-badge">FR01 · Sprint 1</span>
+        </div>
+        <label>Campaign Goal
+          <input value={draft.campaign_goal} onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })} minLength={3} required placeholder="e.g. Accelerate Q4 direct-to-consumer sales" />
+        </label>
+        <label>Target Audience
+          <input value={draft.target_audience} onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })} minLength={3} required placeholder="e.g. Gen Z urban sneakerheads aged 18–28" />
+        </label>
+        <label>Monthly Budget ({profile.currency || 'USD'})
+          <input type="number" min="1" value={draft.budget} onChange={(e) => setDraft({ ...draft, budget: e.target.value })} required placeholder="30000" />
+        </label>
+        <div className="field-title">Planned Channels</div>
+        <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
+        {error && <Notice>{error}</Notice>}
+        <div className="form-actions">
+          <button type="button" className="button coral" onClick={() => setDraft(initial())}>↻ Reset</button>
+          <button className="button primary" disabled={busy || !draft.preferred_channels.length}>
+            {busy ? 'Analyzing Campaign Data…' : 'ϟ Generate Strategy'}
+          </button>
+        </div>
+      </form>
+      <div className="card result-card">
+        <div className="section-head">
+          <div>
+            <h2>AI Strategy Recommendation</h2>
+            <p>Synthesized from business profile &amp; verified historical metrics</p>
+          </div>
+          {result && <span className="active-badge">{result.strategy.confidence}% Confidence</span>}
+        </div>
+        {!result ? (
+          <div className="result-empty">
+            <span>◈</span>
+            <h3>No Strategy Generated Yet</h3>
+            <p>Complete the campaign configuration form and click “Generate Strategy” to view recommended channel allocations, messaging, and action steps.</p>
+          </div>
+        ) : (
+          <>
+            <div className="insight-box">
+              <span className="mini-label">STRATEGY FOCUS</span>
+              <p>{result.strategy.rationale}</p>
+            </div>
+            <div className="insight-box">
+              <div className="allocation-head">
+                <span className="mini-label">RECOMMENDED ALLOCATION</span>
+                <span>{money(100)} Total</span>
+              </div>
+              <div className="stacked-bar">
+                {result.strategy.budget_allocation.map((item, index) => <span key={index} style={{ width: `${item.percentage}%` }} />)}
+              </div>
+              <div className="allocation-grid">
+                {result.strategy.budget_allocation.map((item, index) => (
+                  <div key={index}>
+                    <i className={`legend-dot d${index}`} />
+                    <strong>{item.channel}</strong>
+                    <small>{item.percentage}% · {money(item.percentage)}</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="insight-box">
+              <span className="mini-label">MESSAGING &amp; AUDIENCE SEGMENT</span>
+              <p>“{result.strategy.message}”</p>
+              <small>{result.strategy.segment}</small>
+            </div>
+            <div className="insight-box">
+              <span className="mini-label">NEXT ACTION STEPS</span>
+              <ol>{result.strategy.actions.map((action, index) => <li key={index}>{action}</li>)}</ol>
+            </div>
+            <div className="result-footer">
+              <span>{result.provider === 'openai' ? 'OpenAI GPT-4' : 'Rule-Based Fallback Engine'} · {result.context_sources.length} Context Sources</span>
+              <button className="button subtle" type="button" onClick={generate} disabled={busy}>↻ Re-analyze</button>
+            </div>
+            {result.warning && <Notice kind="warning">{result.warning}</Notice>}
+          </>
+        )}
+      </div>
+    </div>
+  </>
 }
 
 function ContentScreen({ result, profile, setPage, notify }) {
   const [channels, setChannels] = useState(CHANNELS)
-  const [tone, setTone] = useState('Năng động & táo bạo')
+  const [tone, setTone] = useState('Active & Bold')
   const [version, setVersion] = useState(0)
   const [edits, setEdits] = useState({})
   const [editing, setEditing] = useState(null)
   const message = result?.strategy.message || ''
   const drafts = {
-    Meta: { title: `${profile.business_name} — Khám phá điều khác biệt`, body: version % 2 ? `Một lựa chọn mới cho bạn. ${message}` : `${message} Khám phá ngay và tìm cảm hứng cho hành trình tiếp theo.`, cta: 'Tìm hiểu thêm' },
-    'Google Ads': { title: `${profile.business_name} | ${profile.industry} phù hợp với bạn`, body: `${profile.product_service || profile.business_name}. Xem giải pháp cho ${profile.target_customers}.`, cta: 'Truy cập website' },
-    TikTok: { title: `Hook 0–3s · ${profile.business_name}`, body: version % 2 ? `Mở đầu bằng câu hỏi của ${profile.target_customers}. Chuyển cảnh nhanh sang giải pháp: ${profile.product_service || profile.business_name}.` : `Bắt đầu bằng tình huống gần gũi với ${profile.target_customers}. Giới thiệu lợi ích chính và kết bằng lời mời tìm hiểu thêm.`, cta: 'Xem ngay' },
+    Meta: {
+      title: `${profile.business_name} — Experience the Difference`,
+      body: version % 2
+        ? `A fresh standard in daily performance. ${message}`
+        : `${message} Step forward with confidence and discover the collection designed for your daily journey.`,
+      cta: 'Explore Collection',
+    },
+    'Google Ads': {
+      title: `${profile.business_name} | Built for Everyday Performance`,
+      body: `${profile.product_service || profile.business_name}. Discover purpose-built designs tailored for ${profile.target_customers}.`,
+      cta: 'Visit Official Store',
+    },
+    TikTok: {
+      title: `Hook 0–3s · ${profile.business_name}`,
+      body: version % 2
+        ? `Open with common pain point among ${profile.target_customers}. Fast cut to product solution: ${profile.product_service || profile.business_name}.`
+        : `Start with high-energy POV relatable to ${profile.target_customers}. Highlight signature durability and wrap with prompt to explore the drop.`,
+      cta: 'Watch Now',
+    },
   }
   const toggle = (channel) => setChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel])
-  async function copy(value) { try { await navigator.clipboard.writeText(value); notify('Đã sao chép nội dung.') } catch { notify('Không thể sao chép trên trình duyệt này.') } }
-  return <><Heading eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO" title="Tạo nội dung" subtitle="Phác thảo nội dung đa kênh từ chiến lược vừa tạo." /><div className="content-notice"><span>ⓘ</span><p>Đây là bản nháp nội dung theo mẫu, chưa phải hệ thống sinh nội dung AI chuyên biệt. Hãy biên tập và kiểm tra trước khi đăng.</p></div>{!result ? <div className="card content-empty"><span>✦</span><h2>Hãy tạo chiến lược trước</h2><p>Content Studio sử dụng phân khúc và thông điệp từ đề xuất chiến lược của bạn.</p><button className="button primary" onClick={() => setPage('strategy')}>Đến màn hình chiến lược →</button></div> : <><div className="content-steps">{['Chiến lược', 'Kênh', 'Đối tượng', 'Tạo nháp', 'Rà soát'].map((step, index) => <div key={step}><b>{index + 1}</b>{step}</div>)}</div><div className="card content-controls"><div><span className="mini-label">CHIẾN LƯỢC</span><strong>{profile.business_name}</strong></div><div className="control-channels"><span className="mini-label">KÊNH MỤC TIÊU</span><div>{CHANNELS.map((channel) => <button type="button" key={channel} onClick={() => toggle(channel)} className={channels.includes(channel) ? 'selected' : ''}>{channel} {channels.includes(channel) && '✓'}</button>)}</div></div><div><span className="mini-label">KHÁCH HÀNG</span><strong>{result.strategy.segment}</strong></div><label>GIỌNG ĐIỆU<select value={tone} onChange={(e) => setTone(e.target.value)}><option>Năng động & táo bạo</option><option>Thân thiện & gần gũi</option><option>Chuyên nghiệp & rõ ràng</option></select></label><div className="content-control-actions"><button className="button coral" onClick={() => { setChannels(CHANNELS); setTone('Năng động & táo bạo'); setEdits({}) }}>↻ Đặt lại</button><button className="button primary" onClick={() => { setVersion(version + 1); setEdits({}); notify('Đã làm mới bản nháp nội dung.') }}>✦ Tạo bản nháp</button></div></div><div className="content-results-heading"><h2>Bản nháp theo kênh <span>{channels.length} kênh</span></h2><small>Giọng điệu: {tone}</small></div><div className="content-grid">{channels.map((channel) => { const item = drafts[channel]; const value = edits[channel] ?? item.body; return <div className="card content-card" key={channel}><div className="content-card-top"><span>{channel === 'Meta' ? 'Facebook Feed' : channel === 'Google Ads' ? 'Google Search Ads' : 'TikTok / Reels'}</span><small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small></div><span className="mini-label">TIÊU ĐỀ / HOOK</span><h3>{item.title}</h3><span className="mini-label">NỘI DUNG CHÍNH</span>{editing === channel ? <textarea value={value} onChange={(e) => setEdits({ ...edits, [channel]: e.target.value })} rows={7} /> : <p>{value}</p>}<div className="content-preview"><span>{channel === 'TikTok' ? '0s Hook · 8s Lợi ích · 15s CTA' : item.cta}</span><strong>{channel === 'Google Ads' ? '✓ Thông điệp nhất quán' : '✦ Bản nháp sẵn để rà soát'}</strong></div><div className="content-card-actions"><button className="button subtle" onClick={() => setEditing(editing === channel ? null : channel)}>{editing === channel ? '✓ Xong' : '✎ Sửa'}</button><button className="button subtle" onClick={() => copy(`${item.title}\n\n${value}\n\n${item.cta}`)}>⧉ Sao chép</button></div></div> })}</div><div className="content-bottom card"><strong>{channels.length} / 3 kênh được chọn</strong><span>Rà soát nội dung và tuân thủ chính sách quảng cáo trước khi xuất bản.</span></div></>}</>
+  async function copy(value) {
+    try {
+      await navigator.clipboard.writeText(value)
+      notify('Content copied to clipboard.')
+    } catch {
+      notify('Unable to access clipboard in this browser.')
+    }
+  }
+  return <>
+    <Heading
+      eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO"
+      title="Content Studio"
+      subtitle="Draft and refine multi-channel advertising copy aligned with your active strategy."
+    />
+    <div className="content-notice">
+      <span>ⓘ</span>
+      <p>Draft content templates generated from strategy parameters. Review and refine copy before publishing to ad networks.</p>
+    </div>
+    {!result ? (
+      <div className="card content-empty">
+        <span>✦</span>
+        <h2>Generate Strategy First</h2>
+        <p>Content Studio utilizes audience segments and core messaging generated by your strategy engine.</p>
+        <button className="button primary" onClick={() => setPage('strategy')}>Open Strategy Engine →</button>
+      </div>
+    ) : (
+      <>
+        <div className="content-steps">
+          {['Strategy', 'Channels', 'Audience', 'Drafting', 'Review'].map((step, index) => <div key={step}><b>{index + 1}</b>{step}</div>)}
+        </div>
+        <div className="card content-controls">
+          <div>
+            <span className="mini-label">ACTIVE STRATEGY</span>
+            <strong>{profile.business_name}</strong>
+          </div>
+          <div className="control-channels">
+            <span className="mini-label">TARGET CHANNELS</span>
+            <div>
+              {CHANNELS.map((channel) => (
+                <button type="button" key={channel} onClick={() => toggle(channel)} className={channels.includes(channel) ? 'selected' : ''}>
+                  {channel} {channels.includes(channel) && '✓'}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <span className="mini-label">AUDIENCE SEGMENT</span>
+            <strong>{result.strategy.segment}</strong>
+          </div>
+          <label>TONE OF VOICE
+            <select value={tone} onChange={(e) => setTone(e.target.value)}>
+              <option>Active &amp; Bold</option>
+              <option>Friendly &amp; Approachable</option>
+              <option>Professional &amp; Clear</option>
+            </select>
+          </label>
+          <div className="content-control-actions">
+            <button className="button coral" onClick={() => { setChannels(CHANNELS); setTone('Active & Bold'); setEdits({}) }}>↻ Reset</button>
+            <button className="button primary" onClick={() => { setVersion(version + 1); setEdits({}); notify('Content drafts refreshed.') }}>✦ Generate Drafts</button>
+          </div>
+        </div>
+        <div className="content-results-heading">
+          <h2>Channel Drafts <span>{channels.length} channels selected</span></h2>
+          <small>Tone: {tone}</small>
+        </div>
+        <div className="content-grid">
+          {channels.map((channel) => {
+            const item = drafts[channel]
+            const value = edits[channel] ?? item.body
+            return (
+              <div className="card content-card" key={channel}>
+                <div className="content-card-top">
+                  <span>{channel === 'Meta' ? 'Facebook / Instagram Feed' : channel === 'Google Ads' ? 'Google Search RSA' : 'TikTok / Reels'}</span>
+                  <small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small>
+                </div>
+                <span className="mini-label">HEADLINE / HOOK</span>
+                <h3>{item.title}</h3>
+                <span className="mini-label">BODY COPY</span>
+                {editing === channel ? (
+                  <textarea value={value} onChange={(e) => setEdits({ ...edits, [channel]: e.target.value })} rows={7} />
+                ) : (
+                  <p>{value}</p>
+                )}
+                <div className="content-preview">
+                  <span>{channel === 'TikTok' ? '0s Hook · 8s Benefits · 15s CTA' : item.cta}</span>
+                  <strong>{channel === 'Google Ads' ? '✓ Message Match Verified' : '✦ Ready for Review'}</strong>
+                </div>
+                <div className="content-card-actions">
+                  <button className="button subtle" onClick={() => setEditing(editing === channel ? null : channel)}>
+                    {editing === channel ? '✓ Done' : '✎ Edit'}
+                  </button>
+                  <button className="button subtle" onClick={() => copy(`${item.title}\n\n${value}\n\n${item.cta}`)}>
+                    ⧉ Copy
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+        <div className="content-bottom card">
+          <strong>{channels.length} / 3 channels configured</strong>
+          <span>Review copy and verify advertising network policy compliance prior to export.</span>
+        </div>
+      </>
+    )}
+  </>
 }
 
 function App() {
@@ -147,15 +859,197 @@ function App() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
-  async function refreshData() { const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')]); setProfile(business.profile); setImports(history.imports); setLatestRows(history.latest_rows); setPage(business.profile ? 'overview' : 'onboarding') }
-  useEffect(() => { async function boot() { try { await api('auth/csrf/'); const session = await api('auth/session/'); if (session.user) { setUser(session.user); await refreshData() } } catch (cause) { setBackendError(cause.message) } finally { setReady(true) } } boot() }, [])
-  async function handleAuth(account) { setUser(account); setBackendError(''); try { await refreshData() } catch (cause) { setBackendError(cause.message) } }
-  async function saveProfile(draft) { setBusy(true); setError(''); try { const data = await api('business-profile/', { method: 'PUT', body: JSON.stringify(draft) }); setProfile(data.profile); setPage('overview'); setToast('Hồ sơ doanh nghiệp đã được lưu.') } catch (cause) { setError(cause.message) } finally { setBusy(false) } }
-  async function logout() { try { await api('auth/logout/', { method: 'POST' }) } finally { setUser(null); setProfile(null); setStrategy(null); setPage('overview') } }
-  async function onImported() { const data = await api('campaign-imports/'); setImports(data.imports); setLatestRows(data.latest_rows) }
-  if (!ready) return <div className="loading-screen"><Brand /><span>Đang kết nối không gian làm việc…</span></div>
-  if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} onAuth={handleAuth} backendError={backendError} />
-  return <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>{backendError && <Notice>{backendError}</Notice>}{(!profile || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />}{profile && page === 'overview' && <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && page === 'import' && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && page === 'strategy' && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}<Toast message={toast} clear={() => setToast('')} /></Shell>
+
+  async function refreshData() {
+    const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')])
+    setProfile(business.profile)
+    setImports(history.imports)
+    setLatestRows(history.latest_rows)
+    setPage(business.profile ? 'overview' : 'onboarding')
+  }
+
+  useEffect(() => {
+    async function boot() {
+      try {
+        await api('auth/csrf/')
+        const session = await api('auth/session/')
+        if (session.user) {
+          setUser(session.user)
+          if (session.user.role !== 'system_admin' && session.user.role !== 'sys_admin') {
+            await refreshData()
+          }
+        } else {
+          // Optional dev shortcut via query params
+          const params = new URLSearchParams(window.location.search)
+          if (params.get('role') === 'system_admin' || params.get('sa') === 'true') {
+            setUser({ email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' })
+          } else if (params.get('role') === 'admin') {
+            setUser({ email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' })
+            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          } else if (params.get('role') === 'manager') {
+            setUser({ email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' })
+            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          } else if (params.get('role') === 'member') {
+            setUser({ email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' })
+            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          }
+          if (params.get('page')) {
+            setPage(params.get('page'))
+          }
+        }
+      } catch (cause) {
+        setBackendError(cause.message)
+      } finally {
+        setReady(true)
+      }
+    }
+    boot()
+  }, [])
+
+  async function handleAuth(account, demoProfile = null, initialPage = 'overview') {
+    setUser(account)
+    setBackendError('')
+    if (account?.role === 'system_admin' || account?.role === 'sys_admin') {
+      return
+    }
+    if (demoProfile) {
+      setProfile(demoProfile)
+      setPage(initialPage)
+      return
+    }
+    try {
+      await refreshData()
+    } catch (cause) {
+      setBackendError(cause.message)
+    }
+  }
+
+  async function saveProfile(draft) {
+    setBusy(true); setError('')
+    try {
+      const data = await api('business-profile/', { method: 'PUT', body: JSON.stringify(draft) })
+      setProfile(data.profile)
+      setPage('overview')
+      setToast('Business profile saved successfully.')
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function logout() {
+    try {
+      await api('auth/logout/', { method: 'POST' })
+    } finally {
+      setUser(null); setProfile(null); setStrategy(null); setPage('overview')
+    }
+  }
+
+  async function onImported() {
+    const data = await api('campaign-imports/')
+    setImports(data.imports)
+    setLatestRows(data.latest_rows)
+  }
+
+  const isAdmin = user?.role === 'admin'
+
+  if (!ready) {
+    return (
+      <div className="loading-screen">
+        <Brand />
+        <span>Connecting to workspace…</span>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return <AuthScreen onAuth={handleAuth} backendError={backendError} />
+  }
+
+  if (user?.role === 'system_admin' || user?.role === 'sys_admin') {
+    return <SystemAdminLayout user={user} onLogout={logout} notify={setToast} />
+  }
+
+  if (isAdmin || user?.role === 'company_admin') {
+    return (
+      <CompanyAdminLayout
+        user={user}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        onSignOut={logout}
+        notify={setToast}
+      >
+        {backendError && <Notice>{backendError}</Notice>}
+
+        {/* Core Workflow Pages & Tools wrapped inside Company Admin Layout */}
+        {(!profile || page === 'onboarding' || page === 'profile') && (
+          <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
+        )}
+        {profile && page === 'import' && (
+          <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+        )}
+        {profile && page === 'strategy' && (
+          <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />
+        )}
+        {profile && page === 'content' && (
+          <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />
+        )}
+        {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
+        {page === 'reports' && <ReportsPage profile={profile || { business_name: 'Acme Studios' }} notify={setToast} />}
+        {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
+
+        <Toast message={toast} clear={() => setToast('')} />
+      </CompanyAdminLayout>
+    )
+  }
+
+  return (
+    <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>
+      {backendError && <Notice>{backendError}</Notice>}
+
+      {/* Operations & Governance */}
+      {page === 'approvals' && (
+        canAccessFR04ApprovalQueue(user) ? (
+          <ApprovalQueuePage notify={setToast} />
+        ) : (
+          <div className="card" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+            <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
+            <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted (FR04)</h2>
+            <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
+              Only Workspace Admins and Managers have authorization to access the Approval Queue. Workspace Members cannot view or process approvals.
+            </p>
+            <button className="button primary" onClick={() => setPage('overview')}>
+              Return to Overview
+            </button>
+          </div>
+        )
+      )}
+      {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
+      {page === 'reports' && <ReportsPage profile={profile || { business_name: 'Acme Studios' }} notify={setToast} />}
+      {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
+
+      {/* Core Workflow Pages */}
+      {(!profile || page === 'onboarding' || page === 'profile') && (
+        <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
+      )}
+      {profile && page === 'overview' && (
+        <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+      )}
+      {profile && page === 'import' && (
+        <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+      )}
+      {profile && page === 'strategy' && (
+        <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />
+      )}
+      {profile && page === 'content' && (
+        <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />
+      )}
+
+      <Toast message={toast} clear={() => setToast('')} />
+    </Shell>
+  )
 }
 
 export default App
