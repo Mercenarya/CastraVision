@@ -41,6 +41,7 @@ export const INITIAL_COMPANIES = [
     notes: 'Primary enterprise marketing tenant.',
     history: [
       {
+<<<<<<< HEAD
         title: 'Status Verified',
         actor: 'Automated Health Probe',
         date: 'Oct 24, 2026 09:15 UTC',
@@ -59,6 +60,26 @@ export const INITIAL_COMPANIES = [
         actor: 'System Admin',
         date: 'Oct 12, 2026 14:00 UTC',
         detail: 'Initial tenant container initialized on Enclave Node #04 with sovereign database schema.',
+=======
+        title: 'Status Synchronized',
+        actor: 'System Admin',
+        date: 'Oct 24, 2026 09:15 UTC',
+        detail: 'Demo operational status refreshed from local telemetry (Simulated).',
+        icon: '🛡',
+      },
+      {
+        title: 'Domain Staged',
+        actor: 'System Admin',
+        date: 'Oct 16, 2026 11:42 UTC',
+        detail: 'Domain record staged in demo metadata (Simulated — no live DNS probe performed).',
+        icon: '📄',
+      },
+      {
+        title: 'Company Staged (Demo Session)',
+        actor: 'System Admin',
+        date: 'Oct 12, 2026 14:00 UTC',
+        detail: 'Company added to the local demo session. No backend tenant or database schema was provisioned.',
+>>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
         icon: '⚙',
       },
     ],

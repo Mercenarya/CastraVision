@@ -15,6 +15,7 @@ import {
   IconSettings,
   IconBuilding,
   IconChevronsUpDown,
+<<<<<<< HEAD
 } from './ui/Icons'
 
 const NAV_ITEMS = [
@@ -22,6 +23,16 @@ const NAV_ITEMS = [
   { key: 'members', label: 'Workspace Members', Icon: IconMembers },
   { key: 'roles', label: 'Role Management', Icon: IconRoles },
   { key: 'audit', label: 'Audit Log (FR11)', Icon: IconAudit },
+=======
+  IconLock,
+} from './ui/Icons'
+
+const NAV_ITEMS = [
+  { key: 'overview', label: 'Overview / Dashboard', Icon: IconOverview },
+  { key: 'members', label: 'Workspace Members', Icon: IconMembers },
+  { key: 'roles', label: 'Role Management', Icon: IconRoles },
+  { key: 'audit', label: 'Audit Log', Icon: IconAudit },
+>>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
   { key: 'approvals', label: 'Approvals', Icon: IconApprovals, hasBadge: true },
   { key: 'import', label: 'Campaign Import', Icon: IconImport },
   { key: 'content', label: 'Content Generation', Icon: IconContent },
@@ -35,12 +46,17 @@ export default function CompanyAdminSidebar({
   workspaceName = 'Acme Corp',
   planName = 'Enterprise Workspace',
   canApprove = true,
+<<<<<<< HEAD
 }) {
   const visibleNavItems = NAV_ITEMS.filter((item) => {
     if (item.key === 'approvals' && !canApprove) return false
     return true
   })
 
+=======
+  canViewAudit = true,
+}) {
+>>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
   return (
     <aside className="ca-sidebar" aria-label="Workspace Admin Navigation">
       {/* Top Logo & Admin Badge */}
@@ -58,8 +74,16 @@ export default function CompanyAdminSidebar({
       <div className="ca-sidebar-nav-wrap">
         <div className="ca-nav-section-label">NAVIGATION</div>
         <ul className="ca-nav-list">
+<<<<<<< HEAD
           {visibleNavItems.map((item) => {
             const { Icon } = item
+=======
+          {NAV_ITEMS.map((item) => {
+            const isApprovals = item.key === 'approvals'
+            const isAudit = item.key === 'audit'
+            const isLocked = (isApprovals && !canApprove) || (isAudit && !canViewAudit)
+            const Icon = isLocked ? IconLock : item.Icon
+>>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             const isActive =
               activeKey === item.key ||
               (item.key === 'overview' && activeKey === 'admin') ||
@@ -76,7 +100,21 @@ export default function CompanyAdminSidebar({
                     <Icon size={18} />
                   </span>
                   <span className="ca-nav-label">{item.label}</span>
+<<<<<<< HEAD
                   {item.hasBadge && pendingApprovalsCount > 0 && (
+=======
+                  {isApprovals && isLocked && (
+                    <span className="ca-nav-badge-locked" title="Restricted by FR04 Governance">
+                      Locked
+                    </span>
+                  )}
+                  {isAudit && isLocked && (
+                    <span className="ca-nav-badge-locked" title="Admin only by FR11 Governance">
+                      Locked
+                    </span>
+                  )}
+                  {isApprovals && !isLocked && pendingApprovalsCount > 0 && (
+>>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
                     <span
                       className="ca-nav-badge"
                       title={`${pendingApprovalsCount} pending approvals`}
