@@ -3,7 +3,8 @@ import { fileURLToPath } from 'node:url'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
 
-const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+const frontendRoot = dirname(fileURLToPath(import.meta.url))
+const projectRoot = resolve(frontendRoot, '..')
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
@@ -12,6 +13,11 @@ export default defineConfig(({ mode }) => {
   return {
     envDir: projectRoot,
     plugins: [react()],
+    resolve: {
+      alias: {
+        '@': resolve(frontendRoot, 'src'),
+      },
+    },
     server: {
       host: '0.0.0.0',
       proxy: {
