@@ -6,18 +6,18 @@
 
 import { useEffect, useState } from 'react'
 import './preview.css'
+import CrossChannelCampaignOverview from './CrossChannelCampaignOverview'
 import MarketingManagerLayout from '../company-admin/MarketingManagerLayout'
-import {
-  Shell,
-  LeaderDashboard,
-  EmployeeDashboard,
-} from '../dashboards/RoleDashboards'
+import MainLeaderDashboard from '../leader/screens/LeaderDashboard'
+import MainEmployeeDashboard from '../member/screens/MemberDashboard'
+import { Shell } from '../dashboards/RoleDashboards'
 import {
   ApprovalQueuePage,
   BudgetOptimizationPage,
   ReportsPage,
   CompetitorInsightsPage,
 } from '../actor-ui/ActorPages'
+
 
 // ─── Development Preview Mock Datasets ──────────────────────────────────────
 const MOCK_PREVIEW_PROFILE = {
@@ -66,14 +66,14 @@ const MOCK_PREVIEW_STRATEGY = {
   },
 }
 
-const PREVIEW_ROLES = [
+export const PREVIEW_ROLES = [
   { key: 'marketing_manager', label: 'Marketing Manager', internalRole: 'company_admin / admin', icon: '🏢' },
   { key: 'leader', label: 'Leader', internalRole: 'manager', icon: '✓' },
   { key: 'employee', label: 'Employee', internalRole: 'member', icon: '✦' },
 ]
 
-export default function DashboardPreviewPage({ onExit }) {
-  const [activeRole, setActiveRole] = useState('marketing_manager')
+export default function DashboardPreviewPage({ onExit, role = 'marketing_manager' }) {
+  const [activeRole] = useState(role)
   const [previewPage, setPreviewPage] = useState('overview')
   const [toastMessage, setToastMessage] = useState('')
 
@@ -97,12 +97,6 @@ export default function DashboardPreviewPage({ onExit }) {
     })
   }, [activeRole, previewPage])
 
-  function handleRoleSwitch(roleKey) {
-    setActiveRole(roleKey)
-    setPreviewPage('overview')
-    setToastMessage(`Switched to ${PREVIEW_ROLES.find((r) => r.key === roleKey)?.label}`)
-  }
-
   function handleNotify(msg) {
     setToastMessage(msg)
   }
@@ -116,52 +110,9 @@ export default function DashboardPreviewPage({ onExit }) {
   }
 
   const currentUser = MOCK_PREVIEW_USERS[activeRole]
-  const currentRoleMeta = PREVIEW_ROLES.find((r) => r.key === activeRole)
 
   return (
     <div className="dev-preview-root">
-      {/* ── TOP PREVIEW TOOLBAR ── */}
-      <header className="dev-preview-bar" aria-label="Development Preview Controls">
-        <div className="dev-preview-left">
-          <span className="dev-preview-badge">DEVELOPMENT PREVIEW</span>
-          <span className="dev-preview-title">Dashboard Preview Inspector</span>
-        </div>
-
-        {/* ── CENTRALIZED ROLE TABS ── */}
-        <div className="dev-preview-tabs" role="tablist" aria-label="Role Dashboards">
-          {PREVIEW_ROLES.map((role) => {
-            const isActive = activeRole === role.key
-            return (
-              <button
-                key={role.key}
-                role="tab"
-                type="button"
-                className={`dev-preview-tab ${isActive ? 'active' : ''}`}
-                aria-selected={isActive}
-                onClick={() => handleRoleSwitch(role.key)}
-              >
-                <span aria-hidden="true">{role.icon}</span>
-                <span>{role.label}</span>
-                <span className="dev-preview-tab-role">{role.internalRole}</span>
-              </button>
-            )
-          })}
-        </div>
-
-        <div className="dev-preview-right">
-          <span className="dev-preview-mode" title="Loaded in Vite dev mode">
-            Active: <strong>{currentRoleMeta?.label}</strong>
-          </span>
-          <button
-            type="button"
-            className="dev-preview-exit-btn"
-            onClick={handleExit}
-            title="Return to standard authentication"
-          >
-            Exit Preview ✕
-          </button>
-        </div>
-      </header>
 
       {/* ── COMPACT TOP-RIGHT NOTIFICATION TOAST ── */}
       {toastMessage && (
@@ -192,12 +143,51 @@ export default function DashboardPreviewPage({ onExit }) {
             profile={MOCK_PREVIEW_PROFILE}
             page={previewPage}
             setPage={setPreviewPage}
-            onSignOut={() => handleNotify('Sign Out is disabled in development preview mode.')}
+            onSignOut={handleExit}
             notify={handleNotify}
           >
+            {previewPage === 'overview' && (
+              <CrossChannelCampaignOverview
+                onNavigate={setPreviewPage}
+                notify={handleNotify}
+              />
+            )}
             {previewPage === 'budget' && <BudgetOptimizationPage notify={handleNotify} />}
             {previewPage === 'reports' && <ReportsPage profile={MOCK_PREVIEW_PROFILE} notify={handleNotify} />}
             {previewPage === 'insights' && <CompetitorInsightsPage notify={handleNotify} />}
+            {previewPage === 'import' && (
+              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
+                <h2>Campaign Data Import Preview</h2>
+                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
+                  Normalized records from Meta, Google Ads, and TikTok ({MOCK_PREVIEW_IMPORTS[0].row_count} rows ingested).
+                </p>
+                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
+                  ← Back to Overview
+                </button>
+              </div>
+            )}
+            {previewPage === 'content' && (
+              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
+                <h2>Content Studio Preview</h2>
+                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
+                  Channel-specific copy variations, headlines, and creative assets.
+                </p>
+                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
+                  ← Back to Overview
+                </button>
+              </div>
+            )}
+            {previewPage === 'profile' && (
+              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
+                <h2>Company Profile &amp; Settings Preview</h2>
+                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
+                  {MOCK_PREVIEW_PROFILE.business_name} · {MOCK_PREVIEW_PROFILE.industry} · {MOCK_PREVIEW_PROFILE.business_size}
+                </p>
+                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
+                  ← Back to Overview
+                </button>
+              </div>
+            )}
           </MarketingManagerLayout>
         )}
 
@@ -208,14 +198,11 @@ export default function DashboardPreviewPage({ onExit }) {
             profile={MOCK_PREVIEW_PROFILE}
             page={previewPage}
             setPage={setPreviewPage}
-            logout={() => handleNotify('Sign Out is disabled in development preview mode.')}
+            logout={handleExit}
           >
             {previewPage === 'overview' && (
-              <LeaderDashboard
-                user={currentUser}
-                profile={MOCK_PREVIEW_PROFILE}
+              <MainLeaderDashboard
                 imports={MOCK_PREVIEW_IMPORTS}
-                strategy={MOCK_PREVIEW_STRATEGY}
                 setPage={setPreviewPage}
               />
             )}
@@ -279,11 +266,10 @@ export default function DashboardPreviewPage({ onExit }) {
             profile={MOCK_PREVIEW_PROFILE}
             page={previewPage}
             setPage={setPreviewPage}
-            logout={() => handleNotify('Sign Out is disabled in development preview mode.')}
+            logout={handleExit}
           >
             {previewPage === 'overview' && (
-              <EmployeeDashboard
-                user={currentUser}
+              <MainEmployeeDashboard
                 profile={MOCK_PREVIEW_PROFILE}
                 imports={MOCK_PREVIEW_IMPORTS}
                 strategy={MOCK_PREVIEW_STRATEGY}

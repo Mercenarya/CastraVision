@@ -16,16 +16,22 @@ import {
   IconBuilding,
   IconChevronsUpDown,
   IconLock,
+  IconTrendingUp,
+  IconBarChart,
+  IconSparkles,
 } from './ui/Icons'
 
 const NAV_ITEMS = [
   { key: 'overview', label: 'Overview / Dashboard', Icon: IconOverview },
   { key: 'members', label: 'Workspace Members', Icon: IconMembers },
   { key: 'roles', label: 'Role Management', Icon: IconRoles },
-  { key: 'audit', label: 'Audit Log', Icon: IconAudit },
   { key: 'approvals', label: 'Approvals', Icon: IconApprovals, hasBadge: true },
+  { key: 'audit', label: 'Audit Log', Icon: IconAudit },
+  { key: 'budget', label: 'Budget & ROAS', Icon: IconTrendingUp, hasAiBadge: true },
+  { key: 'reports', label: 'Reports', Icon: IconBarChart, hasAiBadge: true },
+  { key: 'insights', label: 'Competitor Insights', Icon: IconSparkles, hasAiBadge: true },
   { key: 'import', label: 'Campaign Import', Icon: IconImport },
-  { key: 'content', label: 'Content Generation', Icon: IconContent },
+  { key: 'content', label: 'Content Studio', Icon: IconContent },
   { key: 'profile', label: 'Settings', Icon: IconSettings },
 ]
 
@@ -84,6 +90,11 @@ export default function MarketingManagerSidebar({
                   {isAudit && isLocked && (
                     <span className="ca-nav-badge-locked" title="Marketing Manager only by FR11 Governance">
                       Locked
+                    </span>
+                  )}
+                  {item.hasAiBadge && (
+                    <span className="ca-nav-badge-ai" title="AI Powered Module">
+                      AI
                     </span>
                   )}
                   {isApprovals && !isLocked && pendingApprovalsCount > 0 && (

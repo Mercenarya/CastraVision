@@ -1,0 +1,107 @@
+Hướng dẫn chạy CastraVision
+
+Điều kiện préalable
+
+- Python 3.8+
+- Node.js 18+ (hoặc phiên bản LTS mới nhất)
+- Git
+- Redis (cho Celery, tùy chọn cho phát triển cơ bản)
+
+Các bước cài đặt
+
+1. Clone repository (nếu chưa làm)
+
+git clone https://github.com/Mercenarya/CastraVision.git
+cd CastraVision
+
+2. Thiết lập môi trường backend
+
+# Tạo môi trường ảo
+python -m venv venv
+
+# Kích hoạt môi trường ảo
+# Trên Windows:
+venv\Scripts\activate
+# Trên Linux/Mac:
+# source venv/bin/activate
+
+# Cài đặt dependencies Python
+pip install -r requirements.txt
+
+# Cài đặt Supabase client (nếu chưa có trong requirements)
+pip install supabase
+
+3. Thiết lập môi trường frontend
+
+cd CastraView
+npm install
+cd ..
+
+4. Cấu hình biến môi trường
+
+# Sao chép file example
+cp .env.example .env
+
+# Chỉnh sửa .env với thông tin thực tế của bạn:
+# - SECRET_KEY: khóa bí mật Django (tạo bằng: python -c "from djport get_random_secret_key; print(get_random_secret_key())")
+# - SUPABASE_URL: URL dự án Supabase của bạn
+# - SUPABASE_ANON_KEY: khóa anon Supabase của bạn
+# - SUPABASE_SERVICE_ROLE_KEY: khóa service role Supabase của bạ
+# - OPENAI_API_KEY: khóa API OpenAI của bạn (nếu sử dụng tính năng AI)
+
+5. Chạy migrations và tạo superuser
+
+# Áp dụng migrations
+python manage.py migrate
+
+# Tạo superuser (tùy chọn)
+python manage.py createsuperuser
+
+6. Chạy development servers
+
+Terminal 1 - Backend (Django)
+
+# Đảm bảo ở trong thư mục gốc dự án
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # Linux/Mac
+python manage.py runserver
+Backend sẽ chạy tại: http://localhost:8000
+
+Terminal 2 - Frontend (React/Vite)
+
+# Mở terminal mới, ở trong thư mục gốc dự án
+cd CastraView
+npm run dev
+Frontend sẽ chạy tại: http://localhost:5173
+
+Kiểm tra khả năng hoạt động
+
+
+Kiểm tra khả năng hoạt động
+
+1. Backend health check:
+curl http://localhost:8000/api/health/
+1. Kết quả mong đợi: {"status": "ok", "database": "sqlite", "supabase": "connected"}
+2. Test đăng ký:
+curl -X POST http://localhost:8000/api/auth/register/ \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com", "password": "securepassword123"}'
+3. Test đăng nhập:
+curl -X POST http://localhost:8000/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"email": "test@example.com", "password": "securepassword1
+
+Lưu ý quan trọng
+
+- Windows: Sử dụng venv\Scripts\activate để kích hoạt môi trường ảo
+- Environment variables: Đảm bảo file .env có tất cả biến cần thiết, đặc biệt là SUPABASE_URL và SUPABASE_ANON_KEY
+- Supabase: Bạn cần có một dự án Supabase để kết nối. Nếu chỉ muốn test cơ bản, có thể sử dụng các giá trị demo trong .env.example nhưng chức năng auth sẽ không hoạt động thực sự
+- CSRF: Các endpoint auth đã được cấu hình để làm việc với CSRF protection của Django. Khi test bằng curl/postman, bạn có thể cần bỏ qua CSRF check hoặc lấy token CSRF trước từ /api/auth/csrf/
+
+Dừng servers
+
+Nhấn Ctrl+C trong mỗi terminal để dừng các development servers.
+
+✻ Cogitated for 15s
+
+※ recap: Login/register with Supabase is already implemented in CastraServices. Next, start the backend and frontend servers using the provided run guide to test the endpoints. (disable recaps in /config)

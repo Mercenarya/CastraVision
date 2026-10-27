@@ -98,13 +98,16 @@ export default function MarketingManagerLayout({
   }
 
   const pageTitleMap = {
-    overview: 'Marketing Manager Console',
+    overview: 'Cross-Channel Campaign Overview',
     admin: 'Marketing Manager Console',
     members: 'Workspace Members & Access Control',
     roles: 'Role Management & RBAC Permissions',
     audit: 'System Audit Log',
     'audit-details': 'Audit Log Record Details',
     approvals: 'Proposal Approval Queue',
+    budget: 'Budget Optimization & ROAS',
+    reports: 'Omnichannel Performance Reports',
+    insights: 'Competitor Intelligence & Insights',
     import: 'Campaign Data Import',
     content: 'Content Studio',
     profile: 'Business Profile & Settings',
@@ -151,16 +154,18 @@ export default function MarketingManagerLayout({
 
         {/* ── PAGE CONTENT ── */}
         <main className="ca-content">
-          {/* Screen 1: Marketing Manager Console Dashboard */}
+          {/* Screen 1: Marketing Manager Console Dashboard / Overview */}
           {(page === 'overview' || page === 'admin') && (
-            <MarketingManagerDashboardScreen
-              workspace={workspace}
-              proposals={proposals}
-              auditLogs={auditLogs}
-              onNavigate={handleNavigate}
-              onOpenInvite={handleOpenInvite}
-              notify={notify}
-            />
+            children || (
+              <MarketingManagerDashboardScreen
+                workspace={workspace}
+                proposals={proposals}
+                auditLogs={auditLogs}
+                onNavigate={handleNavigate}
+                onOpenInvite={handleOpenInvite}
+                notify={notify}
+              />
+            )
           )}
 
           {/* Screen 6: Workspace Members & Access Control */}
