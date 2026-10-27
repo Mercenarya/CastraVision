@@ -1082,8 +1082,8 @@ export default function ApprovalQueueScreen({
               <th style={{ width: '16%' }}>CREATED DATE</th>
               <th style={{ width: '14%' }}>APPROVAL STATUS</th>
               <th style={{ width: '10%', textAlign: 'right' }}>ACTIONS</th>
-            </tr>
-          </thead>
+            </tr >
+          </thead >
           <tbody>
             {filteredProposals.length === 0 ? (
               <tr>
@@ -1209,10 +1209,10 @@ export default function ApprovalQueueScreen({
               })
             )}
           </tbody>
-        </table>
+        </table >
 
         {/* Table Footer */}
-        <div className="ca-table-footer">
+        < div className="ca-table-footer" >
           <span>Showing records 1 through {filteredProposals.length} of {proposals.length}</span>
           <div className="ca-pagination-btns">
             <button type="button" className="ca-page-btn" disabled>
@@ -1225,8 +1225,8 @@ export default function ApprovalQueueScreen({
               Next
             </button>
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
 
       {/* ── BOTTOM CARDS (2 COLUMNS) ── */}
       <div className="ca-approvals-bottom-grid">
@@ -1922,10 +1922,11 @@ export default function ApprovalQueueScreen({
                   Status will change to &quot;Rejected&quot;. Proposal will be archived with this feedback note.
                 </span>
               </div>
-            </form>
-          </div>
-        </div>
-      )}
+            </form >
+          </div >
+        </div >
+      )
+      }
 
       {/* ═════════════════════════════════════════════════════════════════════════ */}
       {/* ── MODAL 4: VIEW DETAILS / VIEW REASON MODAL ── */}
@@ -2023,6 +2024,6 @@ export default function ApprovalQueueScreen({
           </div>
         </div>
       )}
-    </div>
+    </div >
   )
 }

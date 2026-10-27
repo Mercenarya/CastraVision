@@ -491,10 +491,10 @@ export default function InviteMemberModal({
               <div className="ca-invite-email-container">
                 <div
                   className={`ca-invite-email-box ${viewState === 'invalid-email'
-                      ? 'has-error'
-                      : viewState === 'already-invited'
-                        ? 'has-warning'
-                        : ''
+                    ? 'has-error'
+                    : viewState === 'already-invited'
+                      ? 'has-warning'
+                      : ''
                     } ${isLocked ? 'is-locked' : ''}`}
                 >
                   <div className="ca-invite-email-fields">

@@ -512,10 +512,10 @@ export default function AuditLogScreen({
               {isEmptyState
                 ? 'TOTAL LOGGED EVENTS'
                 : isErrorMode
-                ? 'TOTAL LOGGED EVENTS'
-                : isFilteredState
-                ? 'MATCHING EVENTS'
-                : 'TOTAL LOGGED EVENTS'}
+                  ? 'TOTAL LOGGED EVENTS'
+                  : isFilteredState
+                    ? 'MATCHING EVENTS'
+                    : 'TOTAL LOGGED EVENTS'}
             </span>
             <div className="ca-audit-kpi-icon-wrap">
               {isFilteredState ? '🔍' : '☁️'}
@@ -539,10 +539,10 @@ export default function AuditLogScreen({
             {isErrorMode
               ? 'Telemetry sync paused'
               : isFilteredState
-              ? `${((filteredLogs.length / totalRecords) * 100).toFixed(1)}% of total ${totalRecords} events`
-              : isEmptyState
-              ? 'In workspace ledger'
-              : `Across ${workspace.name} lifecycle`}
+                ? `${((filteredLogs.length / totalRecords) * 100).toFixed(1)}% of total ${totalRecords} events`
+                : isEmptyState
+                  ? 'In workspace ledger'
+                  : `Across ${workspace.name} lifecycle`}
           </div>
         </div>
 
@@ -553,10 +553,10 @@ export default function AuditLogScreen({
               {isEmptyState
                 ? 'MATCHING EVENTS'
                 : isErrorMode
-                ? 'EVENTS (LAST 30 DAYS)'
-                : isFilteredState
-                ? 'FILTERED TIMEFRAME'
-                : 'EVENTS (LAST 30 DAYS)'}
+                  ? 'EVENTS (LAST 30 DAYS)'
+                  : isFilteredState
+                    ? 'FILTERED TIMEFRAME'
+                    : 'EVENTS (LAST 30 DAYS)'}
             </span>
             <div className="ca-audit-kpi-icon-wrap">
               {isFilteredState ? '📅' : isEmptyState ? '🎯' : '📈'}
@@ -582,10 +582,10 @@ export default function AuditLogScreen({
             {isErrorMode
               ? 'Unable to fetch metrics'
               : isEmptyState
-              ? 'No records found'
-              : isFilteredState
-              ? 'Oct 18, 2026 – Oct 24, 2026'
-              : 'vs previous 30-day period'}
+                ? 'No records found'
+                : isFilteredState
+                  ? 'Oct 18, 2026 – Oct 24, 2026'
+                  : 'vs previous 30-day period'}
           </div>
         </div>
 
@@ -596,10 +596,10 @@ export default function AuditLogScreen({
               {isEmptyState
                 ? 'ACTIVE SEARCH'
                 : isErrorMode
-                ? 'LATEST EVENT'
-                : isFilteredState
-                ? 'TARGET MODULE'
-                : 'LATEST EVENT'}
+                  ? 'LATEST EVENT'
+                  : isFilteredState
+                    ? 'TARGET MODULE'
+                    : 'LATEST EVENT'}
             </span>
             <div className="ca-audit-kpi-icon-wrap">
               <IconClock size={15} />
@@ -622,10 +622,10 @@ export default function AuditLogScreen({
             {isErrorMode
               ? 'Cached from local session'
               : isEmptyState
-              ? 'Unmatched query string'
-              : isFilteredState
-              ? 'Human-in-the-loop governance'
-              : 'Proposal Approved (PRP-8402)'}
+                ? 'Unmatched query string'
+                : isFilteredState
+                  ? 'Human-in-the-loop governance'
+                  : 'Proposal Approved (PRP-8402)'}
           </div>
         </div>
 
@@ -636,10 +636,10 @@ export default function AuditLogScreen({
               {isEmptyState
                 ? 'ACTIVE FILTERS'
                 : isErrorMode
-                ? 'SERVICE STATUS'
-                : isFilteredState
-                ? 'FILTERED OPERATORS'
-                : 'ACTIVE OPERATORS'}
+                  ? 'SERVICE STATUS'
+                  : isFilteredState
+                    ? 'FILTERED OPERATORS'
+                    : 'ACTIVE OPERATORS'}
             </span>
             <div className="ca-audit-kpi-icon-wrap">
               <IconShield size={15} />
@@ -660,10 +660,10 @@ export default function AuditLogScreen({
             {isErrorMode
               ? 'Audit query node timeout'
               : isEmptyState
-              ? `Action: ${actionFilter}`
-              : isFilteredState
-              ? 'S. Jenkins, D. Kross, E. Rostova'
-              : 'Authorized audit actors'}
+                ? `Action: ${actionFilter}`
+                : isFilteredState
+                  ? 'S. Jenkins, D. Kross, E. Rostova'
+                  : 'Authorized audit actors'}
           </div>
         </div>
       </div>
@@ -1115,8 +1115,8 @@ export default function AuditLogScreen({
                             log.actorRole === 'Admin'
                               ? '#4f46e5'
                               : log.actorRole === 'Manager'
-                              ? '#0284c7'
-                              : '#475569',
+                                ? '#0284c7'
+                                : '#475569',
                         }}
                       >
                         {log.actorInitials}
@@ -1297,6 +1297,6 @@ export default function AuditLogScreen({
           </div>
         </div>
       )}
-    </div>
+    </div >
   )
 }
