@@ -15,6 +15,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  validate-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Reject unresolved merge conflicts
+        shell: bash
+        run: |
+          if git grep -nE '(^<<<<<<< |^=======$|^>>>>>>> )'; then
+            echo "Unresolved merge conflict markers were committed."
+            exit 1
+          fi
+
   lint-test-backend:
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -61,14 +74,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
       - name: Lint
-        run: ruff check CastraVision CastraServices
+        run: python -m ruff check CastraVision CastraServices
       - name: Django system and migration checks
         run: |
           python manage.py check
           python manage.py makemigrations --check --dry-run
           python manage.py migrate --noinput
       - name: Test
-        run: pytest --cov=CastraServices --cov-report=term-missing
+        run: python -m pytest --cov=CastraServices --cov-report=term-missing
 
   lint-test-frontend:
     runs-on: ubuntu-latest
@@ -89,7 +102,7 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Test
-        run: npm test -- --run
+        run: npm test
       - name: Build
         run: npm run build
 
