@@ -11,19 +11,18 @@ import {
   Button,
 } from './actor-ui/ActorPages'
 import { canAccessFR04ApprovalQueue } from './auth/permissions'
+import DashboardPreviewPage from './preview/DashboardPreviewPage'
+import {
+  Brand,
+  Heading,
+  Shell,
+  LeaderDashboard,
+  EmployeeDashboard,
+} from './dashboards/RoleDashboards'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
 const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: '250+ employees' }
 const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'USD' }
-const NAV = [
-  ['overview', '▦', 'Campaign Overview'],
-  ['strategy', '◈', 'Strategy & Insights'],
-  ['content', '✦', 'Content Studio'],
-  ['import', '⇥', 'Campaign Data Import'],
-  ['budget', '↗', 'Budget & ROAS'],
-  ['audit', '▤', 'Reports & Audit'],
-  ['profile', '⚙', 'Settings & API'],
-]
 
 function csrfToken() { return decodeURIComponent(document.cookie.split('; ').find((part) => part.startsWith('csrftoken='))?.split('=')[1] || '') }
 async function api(path, options = {}) {
@@ -38,8 +37,6 @@ async function api(path, options = {}) {
   return data
 }
 
-function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
-function Heading({ eyebrow, title, subtitle, children }) { return <div className="page-heading"><div><div className="eyebrow"><i /> {eyebrow}</div><h1>{title}</h1><p>{subtitle}</p></div>{children}</div> }
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Close notification">×</button></div> }
 
@@ -129,62 +126,6 @@ function AuthScreen({ onAuth, backendError }) {
             <div className="auth-footer-note">
               Access is by invitation only. Contact your administrator if you need access.
             </div>
-
-            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--cv-border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ fontSize: 11, color: 'var(--cv-muted)', textAlign: 'center', fontWeight: 600, letterSpacing: '.05em' }}>DEVELOPER PREVIEW &amp; TEST ACCESS</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <Button
-                  type="button"
-                  variant="secondary"
-                  style={{ width: '100%', fontSize: 12, borderColor: '#10b981', color: '#10b981', fontWeight: 600 }}
-                  onClick={() => onAuth(
-                    { email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' },
-                    null,
-                    'sa-dashboard'
-                  )}
-                >
-                  Enter as System Admin 🛡 →
-                </Button>
-                <div style={{ display: 'flex', gap: 6 }}>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    style={{ flex: 1, fontSize: 11 }}
-                    onClick={() => onAuth(
-                      { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
-                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
-                      'overview'
-                    )}
-                  >
-                    Marketing Manager →
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    style={{ flex: 1, fontSize: 11, borderColor: '#818cf8', color: '#c7d2fe' }}
-                    onClick={() => onAuth(
-                      { email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' },
-                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
-                      'overview'
-                    )}
-                  >
-                    Leader →
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    style={{ flex: 1, fontSize: 11 }}
-                    onClick={() => onAuth(
-                      { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
-                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
-                      'overview'
-                    )}
-                  >
-                    Employee →
-                  </Button>
-                </div>
-              </div>
-            </div>
           </form>
         </div>
       </main>
@@ -192,103 +133,6 @@ function AuthScreen({ onAuth, backendError }) {
         <span>© 2026 CastraVision · Enterprise Platform</span>
         <span>AI marketing workspace for SMBs</span>
       </footer>
-    </div>
-  )
-}
-
-function Shell({ user, profile, page, setPage, logout, children }) {
-  const isAdmin = user?.role === 'admin'
-  const canApprove = canAccessFR04ApprovalQueue(user)
-  const navList = [
-    ['overview', '▦', 'Campaign Overview'],
-    ['strategy', '◈', 'Strategy & Insights'],
-    ['content', '✦', 'Content Studio'],
-    ['import', '⇥', 'Campaign Data Import'],
-    ['budget', '↗', 'Budget & ROAS'],
-    ...(canApprove ? [['approvals', '✓', 'Approval Queue']] : []),
-    ...(isAdmin ? [['audit', '▤', 'Reports & Audit']] : []),
-    ['profile', '⚙', 'Settings & API'],
-    ...(isAdmin ? [
-      ['admin', '⚡', 'Admin Console'],
-    ] : []),
-  ]
-
-  const workspaceName = profile?.business_name || 'Acme Studios'
-  const workspaceInitials = workspaceName.slice(0, 2).toUpperCase()
-  const userName = user?.email ? user.email.split('@')[0] : 'Admin User'
-  const userInitials = userName.slice(0, 2).toUpperCase()
-  const userRoleTitle = isAdmin ? 'Admin • Security & Governance Lead' : 'ML • Growth Lead'
-
-  return (
-    <div className="shell">
-      <aside className="sidebar">
-        <div className="sidebar-brand">
-          <Brand />
-          <span className="sme-tag">SME AI</span>
-        </div>
-        <div className="workspace-switch" title="Active Workspace">
-          <span className="workspace-avatar">{workspaceInitials}</span>
-          <span>
-            <strong>{workspaceName}</strong>
-            <small>Enterprise Pro</small>
-          </span>
-          <span className="workspace-caret">⌄</span>
-        </div>
-        <div className="nav-caption">ENGINE NAVIGATION</div>
-        <nav aria-label="Main Navigation">
-          {navList.map(([key, icon, label]) => (
-            <button
-              key={key}
-              className={`nav-item ${page === key ? 'active' : ''}`}
-              onClick={() => setPage(key)}
-              aria-current={page === key ? 'page' : undefined}
-            >
-              <span aria-hidden="true">{icon}</span>
-              {label}
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-bottom">
-          <div className="quota-header">
-            <span>Copilot Quota</span>
-            <span>78.4% Online</span>
-          </div>
-          <div className="quota-track">
-            <span style={{ width: '78.4%' }} />
-          </div>
-          <div className="quota-footer">
-            <small>Adaptive SME Model</small>
-            <small>Latency 24ms</small>
-          </div>
-        </div>
-      </aside>
-      <div className="main-wrap">
-        <header className="app-topbar">
-          <span className="mobile-brand"><Brand /></span>
-          <div className="topbar-campaign">
-            <span className="live-dot" />
-            <span>ACTIVE CAMPAIGN:</span>
-            <strong>Summer 2025 Campaign - SneakerX</strong>
-            <div className="topbar-tags">
-              <span className="topbar-tag">Meta</span>
-              <span className="topbar-tag">Google</span>
-              <span className="topbar-tag">TikTok</span>
-            </div>
-          </div>
-          <div className="topbar-actions">
-            <button className="topbar-bell" type="button" aria-label="Notifications" title="Notifications">🔔</button>
-            <div className="topbar-user">
-              <span className="user-avatar">{userInitials}</span>
-              <div className="user-meta">
-                <span className="user-name">{userName}</span>
-                <span className="user-role">{userRoleTitle}</span>
-              </div>
-            </div>
-            <button onClick={logout} className="text-button" type="button">Sign Out</button>
-          </div>
-        </header>
-        <main className="app-content">{children}</main>
-      </div>
     </div>
   )
 }
@@ -846,10 +690,9 @@ function ContentScreen({ result, profile, setPage, notify }) {
   </>
 }
 
-function App() {
+function WorkspaceApp() {
   const [ready, setReady] = useState(false)
   const [backendError, setBackendError] = useState('')
-  const [authMode, setAuthMode] = useState('login')
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [page, setPage] = useState('overview')
@@ -870,6 +713,36 @@ function App() {
 
   useEffect(() => {
     async function boot() {
+      // Optional dev shortcut via query params (strictly development mode only)
+      if (import.meta.env.DEV) {
+        const params = new URLSearchParams(window.location.search)
+        const roleParam = params.get('role')
+        if (roleParam === 'system_admin' || params.get('sa') === 'true') {
+          setUser({ email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' })
+          if (params.get('page')) setPage(params.get('page'))
+          setReady(true)
+          return
+        } else if (roleParam === 'admin') {
+          setUser({ email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' })
+          setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          if (params.get('page')) setPage(params.get('page'))
+          setReady(true)
+          return
+        } else if (roleParam === 'manager') {
+          setUser({ email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' })
+          setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          if (params.get('page')) setPage(params.get('page'))
+          setReady(true)
+          return
+        } else if (roleParam === 'member') {
+          setUser({ email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' })
+          setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
+          if (params.get('page')) setPage(params.get('page'))
+          setReady(true)
+          return
+        }
+      }
+
       try {
         await api('auth/csrf/')
         const session = await api('auth/session/')
@@ -877,24 +750,6 @@ function App() {
           setUser(session.user)
           if (session.user.role !== 'system_admin' && session.user.role !== 'sys_admin') {
             await refreshData()
-          }
-        } else {
-          // Optional dev shortcut via query params
-          const params = new URLSearchParams(window.location.search)
-          if (params.get('role') === 'system_admin' || params.get('sa') === 'true') {
-            setUser({ email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' })
-          } else if (params.get('role') === 'admin') {
-            setUser({ email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' })
-            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
-          } else if (params.get('role') === 'manager') {
-            setUser({ email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' })
-            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
-          } else if (params.get('role') === 'member') {
-            setUser({ email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' })
-            setProfile({ business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' })
-          }
-          if (params.get('page')) {
-            setPage(params.get('page'))
           }
         }
       } catch (cause) {
@@ -1026,6 +881,18 @@ function App() {
           </div>
         )
       )}
+      {['audit', 'members', 'roles', 'admin'].includes(page) && !isAdmin && (
+        <div className="card" style={{ padding: '48px 32px', textAlign: 'center', margin: '24px 0' }}>
+          <div style={{ fontSize: 36, marginBottom: 12 }}>🛡️</div>
+          <h2 style={{ fontSize: 18, marginBottom: 8, color: '#f1f5f9' }}>Access Restricted</h2>
+          <p style={{ color: '#94a3b8', maxWidth: 480, margin: '0 auto 20px', fontSize: 14 }}>
+            Only Marketing Managers have authorization to access this administrative area.
+          </p>
+          <button className="button primary" onClick={() => setPage('overview')}>
+            Return to Dashboard
+          </button>
+        </div>
+      )}
       {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
       {page === 'reports' && <ReportsPage profile={profile || { business_name: 'Acme Studios' }} notify={setToast} />}
       {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
@@ -1035,7 +902,13 @@ function App() {
         <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
       )}
       {profile && page === 'overview' && (
-        <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        user?.role === 'manager' ? (
+          <LeaderDashboard user={user} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        ) : user?.role === 'member' ? (
+          <EmployeeDashboard user={user} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        ) : (
+          <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />
+        )
       )}
       {profile && page === 'import' && (
         <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
@@ -1050,6 +923,38 @@ function App() {
       <Toast message={toast} clear={() => setToast('')} />
     </Shell>
   )
+}
+
+function App() {
+  // ─── Development Preview Route (/dashboard-preview) ───────────────────────
+  const isPreviewPath =
+    typeof window !== 'undefined' &&
+    (window.location.pathname === '/dashboard-preview' ||
+      window.location.pathname.startsWith('/dashboard-preview/') ||
+      window.location.hash === '#/dashboard-preview')
+
+  if (isPreviewPath) {
+    if (import.meta.env.DEV) {
+      return <DashboardPreviewPage onExit={() => { window.location.href = '/' }} />
+    }
+    // In production builds, development preview is strictly inaccessible
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#070b14', color: '#f1f5f9', fontFamily: 'sans-serif', padding: 24, textAlign: 'center' }}>
+        <div style={{ maxWidth: 440, padding: 32, background: '#0e1726', border: '1px solid #1e293b', borderRadius: 12 }}>
+          <div style={{ fontSize: 40, marginBottom: 16 }}>🔒</div>
+          <h1 style={{ fontSize: 20, marginBottom: 8, fontWeight: 700 }}>404 — Not Found</h1>
+          <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 20 }}>
+            The requested development preview page is not accessible in production.
+          </p>
+          <a href="/" style={{ display: 'inline-block', padding: '10px 18px', background: '#4f46e5', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
+            Return to Login
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  return <WorkspaceApp />
 }
 
 export default App
