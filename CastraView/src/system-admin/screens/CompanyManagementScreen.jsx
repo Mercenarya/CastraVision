@@ -29,15 +29,12 @@ export function CompanyManagementScreen({
   const activeCount = companies.filter((c) => c.status === 'Active').length
   const inactiveCount = companies.filter((c) => c.status !== 'Active').length
 
-<<<<<<< HEAD
-=======
   // Calculate operational rate
   const operationalRate = useMemo(() => {
     if (!metrics.totalRegistered) return '0.0'
     return ((metrics.activeTenants / metrics.totalRegistered) * 100).toFixed(1)
   }, [metrics.totalRegistered, metrics.activeTenants])
 
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
   // Filter & Sort
   const processedCompanies = useMemo(() => {
     let result = [...companies]
@@ -55,17 +52,11 @@ export function CompanyManagementScreen({
       result = result.filter(
         (c) =>
           c.name.toLowerCase().includes(term) ||
-<<<<<<< HEAD
-          c.accountEmail.toLowerCase().includes(term) ||
-          (c.id && c.id.toLowerCase().includes(term)) ||
-          (c.domain && c.domain.toLowerCase().includes(term))
-=======
           (c.accountEmail && c.accountEmail.toLowerCase().includes(term)) ||
           (c.adminEmail && c.adminEmail.toLowerCase().includes(term)) ||
           (c.id && c.id.toLowerCase().includes(term)) ||
           (c.domain && c.domain.toLowerCase().includes(term)) ||
           (c.internalDomain && c.internalDomain.toLowerCase().includes(term))
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
       )
     }
 
@@ -92,12 +83,9 @@ export function CompanyManagementScreen({
     return processedCompanies.slice(start, start + pageSize)
   }, [processedCompanies, currentPage, pageSize])
 
-<<<<<<< HEAD
-=======
   const startIndex = totalFiltered === 0 ? 0 : (currentPage - 1) * pageSize + 1
   const endIndex = Math.min(currentPage * pageSize, totalFiltered)
 
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
   const handleRefreshClick = () => {
     setIsRefreshing(true)
     if (onRefresh) onRefresh()
@@ -106,15 +94,6 @@ export function CompanyManagementScreen({
 
   return (
     <div className="sa-page-container">
-<<<<<<< HEAD
-      {/* Page Header */}
-      <div className="sa-page-header">
-        <div className="sa-page-header-text">
-          <div className="sa-telemetry-tag">TENANT DIRECTORY CONTROLS</div>
-          <h1 className="sa-page-title">Company Management</h1>
-          <p className="sa-page-desc">
-            Search, inspect, and manage registered company accounts across the CastraVision platform.
-=======
       {/* Page Header with Blue Accent Bar */}
       <div className="sa-page-header">
         <div className="sa-page-header-text">
@@ -124,7 +103,6 @@ export function CompanyManagementScreen({
           </div>
           <p className="sa-page-desc">
             Search, inspect, and provision registered tenant organizations across CastraVision platform.
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </p>
         </div>
         <div className="sa-page-actions">
@@ -166,11 +144,7 @@ export function CompanyManagementScreen({
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-<<<<<<< HEAD
-            Create Company
-=======
             + Create Company
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </button>
         </div>
       </div>
@@ -178,15 +152,6 @@ export function CompanyManagementScreen({
       {/* KPI Cards Grid */}
       <div className="sa-kpi-grid">
         <MetricCard
-<<<<<<< HEAD
-          label="Total Registered Tenants"
-          value={metrics.totalRegistered}
-          subtext="Total platform enterprises"
-          badge="Global"
-          icon={
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
-              <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" />
-=======
           label="TOTAL REGISTERED TENANTS"
           value={metrics.totalRegistered}
           unit="organizations"
@@ -198,21 +163,10 @@ export function CompanyManagementScreen({
               <rect x="14" y="3" width="7" height="7" />
               <rect x="14" y="14" width="7" height="7" />
               <rect x="3" y="14" width="7" height="7" />
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             </svg>
           }
         />
         <MetricCard
-<<<<<<< HEAD
-          label="Active Companies"
-          value={metrics.activeTenants}
-          subtext="In good standing & verified"
-          badge="Operational"
-          icon={
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 14 14" />
-=======
           label="ACTIVE ROUTING STATES"
           value={metrics.activeTenants}
           badge={`${operationalRate}% operational`}
@@ -225,22 +179,10 @@ export function CompanyManagementScreen({
               <circle cx="18" cy="6" r="3" />
               <circle cx="6" cy="18" r="3" />
               <path d="M18 9a9 9 0 0 1-9 9" />
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             </svg>
           }
         />
         <MetricCard
-<<<<<<< HEAD
-          label="Inactive / Suspended Companies"
-          value={metrics.inactiveTenants}
-          subtext="Pending verification or inactive"
-          badge="Action Required"
-          icon={
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-=======
           label="INACTIVE / SUSPENDED"
           value={metrics.inactiveTenants}
           unit="non-emitting nodes"
@@ -251,22 +193,10 @@ export function CompanyManagementScreen({
               <circle cx="12" cy="12" r="10" />
               <line x1="10" y1="15" x2="10" y2="9" />
               <line x1="14" y1="15" x2="14" y2="9" />
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             </svg>
           }
         />
         <MetricCard
-<<<<<<< HEAD
-          label="Aggregated Employee Count"
-          value={metrics.aggregateHeadcount.toLocaleString()}
-          subtext="Aggregated platform roster (Zero PII)"
-          badge="Aggregated"
-          highlight={true}
-          icon={
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-=======
           label="ALLOCATED TOTAL SEATS"
           value={
             metrics.allocatedSeats !== null && metrics.allocatedSeats !== undefined
@@ -290,7 +220,6 @@ export function CompanyManagementScreen({
               <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
               <rect x="16" y="8" width="6" height="4" rx="1" />
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             </svg>
           }
         />
@@ -316,11 +245,7 @@ export function CompanyManagementScreen({
             <input
               type="text"
               className="sa-input-search"
-<<<<<<< HEAD
-              placeholder="Filter by company name, email, or domain..."
-=======
               placeholder="Search companies by name or account email..."
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value)
@@ -329,57 +254,6 @@ export function CompanyManagementScreen({
             />
           </div>
 
-<<<<<<< HEAD
-          {/* Status Segmented Buttons */}
-          <div className="sa-filter-pills">
-            <button
-              type="button"
-              className={`sa-filter-pill ${statusFilter === 'ALL' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('ALL')
-                setCurrentPage(1)
-              }}
-            >
-              All Companies <span className="sa-pill-count">{totalCount}</span>
-            </button>
-            <button
-              type="button"
-              className={`sa-filter-pill ${statusFilter === 'ACTIVE' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('ACTIVE')
-                setCurrentPage(1)
-              }}
-            >
-              Active <span className="sa-pill-count">{activeCount}</span>
-            </button>
-            <button
-              type="button"
-              className={`sa-filter-pill ${statusFilter === 'INACTIVE' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('INACTIVE')
-                setCurrentPage(1)
-              }}
-            >
-              Inactive <span className="sa-pill-count">{inactiveCount}</span>
-            </button>
-          </div>
-
-          {/* Sort Dropdown */}
-          <div className="sa-sort-wrapper">
-            <label htmlFor="sa-sort-select" className="sa-sort-label">Sort:</label>
-            <select
-              id="sa-sort-select"
-              className="sa-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="newest">Creation Date (Newest)</option>
-              <option value="oldest">Creation Date (Oldest)</option>
-              <option value="name-asc">Company Name (A–Z)</option>
-              <option value="name-desc">Company Name (Z–A)</option>
-              <option value="emp-desc">Employee Count (High to Low)</option>
-            </select>
-=======
           {/* Right Controls: Segmented Group + Sort */}
           <div className="sa-filter-controls-right">
             {/* Status Segmented Buttons */}
@@ -460,7 +334,6 @@ export function CompanyManagementScreen({
                 </svg>
               </div>
             </div>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </div>
         </div>
       </div>
@@ -473,15 +346,9 @@ export function CompanyManagementScreen({
               <tr>
                 <th>COMPANY NAME</th>
                 <th>ACCOUNT EMAIL</th>
-<<<<<<< HEAD
-                <th>STATUS</th>
-                <th>EMPLOYEE COUNT</th>
-                <th>PROVISIONED / CREATED ON</th>
-=======
                 <th>ROUTING STATUS</th>
                 <th>EMPLOYEE COUNT</th>
                 <th>PROVISIONED ON</th>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
                 <th style={{ textAlign: 'right' }}>ACTIONS</th>
               </tr>
             </thead>
@@ -504,15 +371,6 @@ export function CompanyManagementScreen({
                     <td>
                       <div className="sa-company-cell">
                         <CompanyAvatar
-<<<<<<< HEAD
-                          initials={company.avatarInitials}
-                          bg={company.avatarBg}
-                          size={36}
-                        />
-                        <div className="sa-company-cell-info">
-                          <span className="sa-company-name">{company.name}</span>
-                          <span className="sa-company-subid">{company.id}</span>
-=======
                           initials={company.name.charAt(0).toUpperCase()}
                           bg={company.avatarBg}
                           size={36}
@@ -521,16 +379,11 @@ export function CompanyManagementScreen({
                         <div className="sa-company-cell-info">
                           <span className="sa-company-name">{company.name}</span>
                           <span className="sa-company-subid">ID: {company.id}</span>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
                         </div>
                       </div>
                     </td>
                     <td>
-<<<<<<< HEAD
-                      <span className="sa-text-mono">{company.accountEmail}</span>
-=======
                       <span className="sa-text-mono">{company.accountEmail || company.email}</span>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
                     </td>
                     <td>
                       <StatusBadge status={company.status} />
@@ -538,15 +391,9 @@ export function CompanyManagementScreen({
                     <td>
                       <div className="sa-headcount-cell">
                         <span className="sa-headcount-val">
-<<<<<<< HEAD
-                          {company.employeeCount}
-                        </span>
-                        <span className="sa-headcount-sub">employees</span>
-=======
                           {company.employeeCount ?? 0}
                         </span>
                         <span className="sa-headcount-sub">roster members</span>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
                       </div>
                     </td>
                     <td>
@@ -574,19 +421,7 @@ export function CompanyManagementScreen({
         {/* Pagination Footer */}
         <div className="sa-pagination-bar">
           <div className="sa-pagination-info">
-<<<<<<< HEAD
-            Showing{' '}
-            <span className="sa-text-white">
-              {totalFiltered === 0 ? 0 : (currentPage - 1) * pageSize + 1}
-            </span>{' '}
-            to{' '}
-            <span className="sa-text-white">
-              {Math.min(currentPage * pageSize, totalFiltered)}
-            </span>{' '}
-            of <span className="sa-text-white">{totalFiltered}</span> companies
-=======
             Showing {startIndex} - {endIndex} of {totalFiltered} registered companies
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </div>
           <div className="sa-pagination-actions">
             <button
@@ -594,14 +429,6 @@ export function CompanyManagementScreen({
               className="sa-btn sa-btn-pagination"
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-<<<<<<< HEAD
-            >
-              Previous
-            </button>
-            <span className="sa-page-num-pill">
-              Page {currentPage} of {totalPages}
-            </span>
-=======
               aria-label="Previous Page"
             >
               ‹
@@ -616,32 +443,21 @@ export function CompanyManagementScreen({
                 {pageNum}
               </button>
             ))}
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             <button
               type="button"
               className="sa-btn sa-btn-pagination"
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-<<<<<<< HEAD
-            >
-              Next
-=======
               aria-label="Next Page"
             >
               ›
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             </button>
           </div>
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Bottom Privacy Notice (Compact) */}
-      <TenantPrivacyNotice compact={true} />
-=======
       {/* Bottom Privacy Notice (Management Variant) */}
       <TenantPrivacyNotice variant="management" />
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
     </div>
   )
 }

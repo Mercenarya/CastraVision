@@ -1,11 +1,6 @@
 import React, { useState } from 'react'
 import {
   StatusBadge,
-<<<<<<< HEAD
-  CompanyAvatar,
-  TenantPrivacyNotice,
-=======
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
   AlertBanner,
 } from '../ui/Primitives'
 
@@ -24,16 +19,6 @@ export function CompanyOverviewScreen({
 }) {
   const [isEditing, setIsEditing] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
-<<<<<<< HEAD
-  const [feedback, setFeedback] = useState(null) // { type: 'success'|'error', message: string }
-
-  // Editable form state
-  const [formData, setFormData] = useState({
-    name: company?.name || '',
-    legalEntity: company?.legalEntity || company?.name || '',
-    accountEmail: company?.accountEmail || '',
-    adminEmail: company?.adminEmail || '',
-=======
   const [feedback, setFeedback] = useState(null) // { type: 'success'|'error', title: string, message: string }
 
   // Editable form state initialized with company data
@@ -41,16 +26,11 @@ export function CompanyOverviewScreen({
     name: company?.name || '',
     legalEntity: company?.legalEntity || company?.name || '',
     accountEmail: company?.accountEmail || company?.adminEmail || '',
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
     domain: company?.domain || '',
     status: company?.status || 'Active',
     notes: company?.notes || '',
   })
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
   if (!company) {
     return (
       <div className="sa-page-container">
@@ -65,11 +45,7 @@ export function CompanyOverviewScreen({
             className="sa-btn sa-btn-primary"
             onClick={() => onNavigate('sa-company-mgmt')}
           >
-<<<<<<< HEAD
-            ← Go to Company Management
-=======
             ← Back to Company Management
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </button>
         </div>
       </div>
@@ -86,16 +62,6 @@ export function CompanyOverviewScreen({
       setIsRefreshing(false)
       setFeedback({
         type: 'success',
-<<<<<<< HEAD
-        title: 'Status Synchronized',
-        message: `Tenant status refreshed for ${company.name}. Node health check confirmed nominal.`,
-      })
-    }, 500)
-  }
-
-  const handleSaveChanges = (e) => {
-    e.preventDefault()
-=======
         title: 'Status Synchronized (Local Simulation)',
         message: `Demo status refreshed from local data for ${company.name}.`,
       })
@@ -132,18 +98,13 @@ export function CompanyOverviewScreen({
       })
       return
     }
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
 
     // Basic validation
     if (!formData.name.trim()) {
       setFeedback({
         type: 'error',
         title: 'Validation Error',
-<<<<<<< HEAD
-        message: 'Company Name cannot be empty.',
-=======
         message: 'Company legal entity / name cannot be blank.',
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
       })
       return
     }
@@ -152,11 +113,7 @@ export function CompanyOverviewScreen({
       setFeedback({
         type: 'error',
         title: 'Validation Error',
-<<<<<<< HEAD
-        message: 'Please provide a valid account email address.',
-=======
         message: 'Please provide a valid account administrator email address.',
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
       })
       return
     }
@@ -165,10 +122,7 @@ export function CompanyOverviewScreen({
       ...company,
       ...formData,
       legalEntity: formData.legalEntity || formData.name,
-<<<<<<< HEAD
-=======
       adminEmail: formData.accountEmail,
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
     }
 
     if (onUpdateCompany) {
@@ -178,31 +132,6 @@ export function CompanyOverviewScreen({
     setIsEditing(false)
     setFeedback({
       type: 'success',
-<<<<<<< HEAD
-      title: 'Changes Persisted',
-      message: `Organization details for ${formData.name} were successfully updated.`,
-    })
-  }
-
-  const handleCancelEdit = () => {
-    setFormData({
-      name: company.name || '',
-      legalEntity: company.legalEntity || company.name || '',
-      accountEmail: company.accountEmail || '',
-      adminEmail: company.adminEmail || '',
-      domain: company.domain || '',
-      status: company.status || 'Active',
-      notes: company.notes || '',
-    })
-    setIsEditing(false)
-    setFeedback(null)
-  }
-
-  return (
-    <div className="sa-page-container">
-      {/* Back button and breadcrumb action */}
-      <div className="sa-overview-top-nav">
-=======
       title: 'Changes Persisted (Local Session State)',
       message: `Organization details for "${formData.name}" have been updated in local React state. Note: Server persistence is simulated in this client-only environment.`,
     })
@@ -211,7 +140,7 @@ export function CompanyOverviewScreen({
   // Domain verification check: only show green checkmark if verification data actually exists
   const isDomainVerified = Boolean(
     company.domainVerified ||
-      company.history?.some((h) => h.title === 'Domain Verified')
+    company.history?.some((h) => h.title === 'Domain Verified')
   )
 
   // Safe storage percentage calculation
@@ -225,8 +154,8 @@ export function CompanyOverviewScreen({
   const storageLimitNum = parseStorage(company.storageLimit)
   const storagePercent =
     storageUsedNum !== null &&
-    storageLimitNum !== null &&
-    storageLimitNum > 0
+      storageLimitNum !== null &&
+      storageLimitNum > 0
       ? Math.min(100, Math.max(0, Math.round((storageUsedNum / storageLimitNum) * 100)))
       : null
 
@@ -266,16 +195,11 @@ export function CompanyOverviewScreen({
           <span className="sa-breadcrumb-active">Overview</span>
         </div>
 
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
         <button
           type="button"
           className="sa-btn-back"
           onClick={() => onNavigate('sa-company-mgmt')}
         >
-<<<<<<< HEAD
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="15 18 9 12 15 6" />
-=======
           <svg
             width="14"
             height="14"
@@ -286,17 +210,12 @@ export function CompanyOverviewScreen({
           >
             <line x1="19" y1="12" x2="5" y2="12" />
             <polyline points="12 19 5 12 12 5" />
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </svg>
           Back to Company Management
         </button>
       </div>
 
-<<<<<<< HEAD
-      {/* Feedback banner if present */}
-=======
       {/* Dismissible Feedback Banner */}
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
       {feedback && (
         <AlertBanner
           type={feedback.type}
@@ -306,17 +225,6 @@ export function CompanyOverviewScreen({
         />
       )}
 
-<<<<<<< HEAD
-      {/* Company Identity Header Card */}
-      <div className="sa-card sa-overview-header-card">
-        <div className="sa-overview-header-row">
-          <div className="sa-overview-identity">
-            <CompanyAvatar
-              initials={company.avatarInitials}
-              bg={company.avatarBg}
-              size={56}
-            />
-=======
       {/* 1. Company Identity Header Card */}
       <div className="sa-card sa-overview-header-card">
         <div className="sa-overview-header-row">
@@ -330,28 +238,19 @@ export function CompanyOverviewScreen({
               {company.avatarInitials ||
                 (formData.name
                   ? formData.name
-                      .split(' ')
-                      .map((w) => w[0])
-                      .join('')
-                      .toUpperCase()
-                      .slice(0, 2)
+                    .split(' ')
+                    .map((w) => w[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2)
                   : 'CO')}
             </div>
 
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             <div className="sa-overview-identity-text">
               <div className="sa-overview-title-row">
                 <h1 className="sa-overview-company-name">{formData.name}</h1>
                 <StatusBadge status={formData.status} />
               </div>
-<<<<<<< HEAD
-              <div className="sa-overview-meta-tags">
-                <span className="sa-meta-tag mono">ID: {company.id}</span>
-                <span className="sa-meta-divider">•</span>
-                <span className="sa-meta-tag mono">Tenant: {company.tenantId}</span>
-                <span className="sa-meta-divider">•</span>
-                <span className="sa-meta-tag">Provisioned {company.provisionedOn}</span>
-=======
 
               <div className="sa-overview-node-row">
                 <span className="sa-node-badge">
@@ -367,88 +266,12 @@ export function CompanyOverviewScreen({
                 </span>
                 <span className="sa-meta-divider">·</span>
                 <span className="sa-meta-tag">Isolated Enclave Node (Simulated)</span>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
               </div>
             </div>
           </div>
 
           <div className="sa-overview-header-actions">
             {!isEditing ? (
-<<<<<<< HEAD
-              <>
-                <button
-                  type="button"
-                  className="sa-btn sa-btn-secondary"
-                  onClick={handleRefreshStatus}
-                  disabled={isRefreshing}
-                >
-                  <svg
-                    className={`sa-btn-icon ${isRefreshing ? 'sa-spin' : ''}`}
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <polyline points="23 4 23 10 17 10" />
-                    <polyline points="1 20 1 14 7 14" />
-                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                  </svg>
-                  Refresh Status
-                </button>
-                <button
-                  type="button"
-                  className="sa-btn sa-btn-primary"
-                  onClick={() => setIsEditing(true)}
-                >
-                  <svg
-                    className="sa-btn-icon"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M12 20h9" />
-                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-                  </svg>
-                  Edit Organization Details
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className="sa-btn sa-btn-secondary"
-                  onClick={handleCancelEdit}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="sa-btn sa-btn-primary"
-                  onClick={handleSaveChanges}
-                >
-                  <svg
-                    className="sa-btn-icon"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                  >
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                    <polyline points="17 21 17 13 7 13 7 21" />
-                    <polyline points="7 3 7 8 15 8" />
-                  </svg>
-                  Save Changes
-                </button>
-              </>
-            )}
-=======
               <button
                 type="button"
                 className="sa-btn-ghost-edit"
@@ -518,122 +341,10 @@ export function CompanyOverviewScreen({
               </svg>
               Save Changes
             </button>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </div>
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Main Grid: Organization Account Info (Left) + Platform Utilization (Right) */}
-      <div className="sa-overview-grid">
-        {/* Left Column: Organization Details */}
-        <div className="sa-card sa-overview-section">
-          <div className="sa-section-header">
-            <h2 className="sa-section-title">Company Account Information</h2>
-            <span className="sa-section-subtitle">
-              {isEditing ? 'Editing permitted tenant fields' : 'Platform registry record'}
-            </span>
-          </div>
-
-          <form onSubmit={handleSaveChanges} className="sa-form-grid">
-            {/* Legal Entity / Display Name */}
-            <div className="sa-form-group">
-              <label className="sa-form-label">Company Legal Entity / Name</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  className="sa-input"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  required
-                />
-              ) : (
-                <div className="sa-detail-value">{company.name}</div>
-              )}
-            </div>
-
-            {/* Tenant Identifier (Immutable) */}
-            <div className="sa-form-group">
-              <label className="sa-form-label">
-                Tenant Identifier <span className="sa-label-badge">Immutable</span>
-              </label>
-              <div className="sa-detail-value mono text-muted">
-                {company.tenantId}
-              </div>
-            </div>
-
-            {/* Account Contact Email */}
-            <div className="sa-form-group">
-              <label className="sa-form-label">Company Account Administrator Email</label>
-              {isEditing ? (
-                <input
-                  type="email"
-                  className="sa-input"
-                  value={formData.accountEmail}
-                  onChange={(e) =>
-                    handleInputChange('accountEmail', e.target.value)
-                  }
-                  required
-                />
-              ) : (
-                <div className="sa-detail-value mono">{company.accountEmail}</div>
-              )}
-            </div>
-
-            {/* Registered Domain */}
-            <div className="sa-form-group">
-              <label className="sa-form-label">Registered Business Domain</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  className="sa-input"
-                  value={formData.domain}
-                  onChange={(e) => handleInputChange('domain', e.target.value)}
-                  placeholder="e.g. acmecorp.com"
-                />
-              ) : (
-                <div className="sa-detail-value">{company.domain}</div>
-              )}
-            </div>
-
-            {/* Operational Activity Status */}
-            <div className="sa-form-group">
-              <label className="sa-form-label">Activity Status</label>
-              {isEditing ? (
-                <select
-                  className="sa-select"
-                  value={formData.status}
-                  onChange={(e) => handleInputChange('status', e.target.value)}
-                >
-                  <option value="Active">Active</option>
-                  <option value="Inactive">Inactive</option>
-                  <option value="Pending Setup">Pending Setup</option>
-                </select>
-              ) : (
-                <div className="sa-detail-value">
-                  <StatusBadge status={company.status} />
-                </div>
-              )}
-            </div>
-
-            {/* Creation Date (Immutable) */}
-            <div className="sa-form-group">
-              <label className="sa-form-label">
-                Creation Date <span className="sa-label-badge">Immutable</span>
-              </label>
-              <div className="sa-detail-value text-muted">
-                {company.provisionedOn}
-              </div>
-            </div>
-
-            {/* Account Notes */}
-            <div className="sa-form-group full-width">
-              <label className="sa-form-label">Account Notes</label>
-              {isEditing ? (
-                <textarea
-                  className="sa-textarea"
-                  rows={3}
-=======
       {/* Main 2-Column Layout */}
       <div className="sa-overview-grid">
         {/* Left Column: Account Information + Platform Provisioning Tier */}
@@ -771,20 +482,19 @@ export function CompanyOverviewScreen({
                 ) : (
                   <div className="sa-field-card-value sa-status-val-row">
                     <span
-                      className={`sa-status-dot ${
-                        formData.status === 'Active'
+                      className={`sa-status-dot ${formData.status === 'Active'
                           ? 'green'
                           : formData.status === 'Inactive'
-                          ? 'slate'
-                          : 'amber'
-                      }`}
+                            ? 'slate'
+                            : 'amber'
+                        }`}
                     />
                     <span>
                       {formData.status === 'Active'
                         ? 'Active (Operational)'
                         : formData.status === 'Inactive'
-                        ? 'Inactive (Suspended)'
-                        : 'Pending Setup'}
+                          ? 'Inactive (Suspended)'
+                          : 'Pending Setup'}
                     </span>
                   </div>
                 )}
@@ -798,91 +508,10 @@ export function CompanyOverviewScreen({
                 <textarea
                   className="sa-textarea"
                   rows={2}
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
                   value={formData.notes}
                   onChange={(e) => handleInputChange('notes', e.target.value)}
                   placeholder="Optional administrative notes regarding this tenant..."
                 />
-<<<<<<< HEAD
-              ) : (
-                <div className="sa-detail-value text-muted">
-                  {company.notes || 'No administrative notes recorded for this tenant account.'}
-                </div>
-              )}
-            </div>
-          </form>
-        </div>
-
-        {/* Right Column: Platform Utilization Metrics & Enclave Tier */}
-        <div className="sa-overview-right-col">
-          {/* Utilization Metrics Card */}
-          <div className="sa-card sa-overview-section">
-            <div className="sa-section-header">
-              <h2 className="sa-section-title">Platform Utilization Metrics</h2>
-              <span className="sa-section-badge">Zero PII Access</span>
-            </div>
-
-            <div className="sa-utilization-metrics">
-              <div className="sa-util-item">
-                <div className="sa-util-label">Aggregated Employee Count</div>
-                <div className="sa-util-val-row">
-                  <span className="sa-util-number">{company.employeeCount}</span>
-                  <span className="sa-util-unit">Employees</span>
-                </div>
-                <div className="sa-util-desc">
-                  Aggregate roster count only. Platform admin cannot inspect employee names, profiles, or directories.
-                </div>
-              </div>
-
-              <div className="sa-util-item">
-                <div className="sa-util-label">Licensed Seat Allocation</div>
-                <div className="sa-util-val-row">
-                  <span className="sa-util-number">{company.licensedSeats || 25}</span>
-                  <span className="sa-util-unit">Allocated Seats</span>
-                </div>
-                <div className="sa-util-desc">
-                  Authorized enterprise tier seat quota defined during account onboarding.
-                </div>
-              </div>
-
-              <div className="sa-util-item">
-                <div className="sa-util-label">Assigned Cluster Node</div>
-                <div className="sa-util-val-row">
-                  <span className="sa-util-node-title">{company.node || 'Enclave Node #04'}</span>
-                  <span className="sa-node-status-chip">Nominal</span>
-                </div>
-                <div className="sa-util-desc">
-                  Isolated sandbox container routed through sovereign boundary egress. Uptime: {company.uptime || '99.98%'}.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Platform Provisioning Tier */}
-          <div className="sa-card sa-overview-section">
-            <div className="sa-section-header">
-              <h2 className="sa-section-title">Platform Provisioning Tier</h2>
-              <span className="sa-section-badge green">Isolated Sandbox</span>
-            </div>
-
-            <div className="sa-provisioning-specs">
-              <div className="sa-spec-row">
-                <span className="sa-spec-label">Internal Routing:</span>
-                <span className="sa-spec-value mono">
-                  {company.internalDomain || `${company.name.toLowerCase().replace(/\s+/g, '')}.tenant.castra.internal`}
-                </span>
-              </div>
-              <div className="sa-spec-row">
-                <span className="sa-spec-label">Storage Allocated:</span>
-                <span className="sa-spec-value">
-                  {company.storageUsed || '1.2 GB'} / {company.storageLimit || '10 GB'}
-                </span>
-              </div>
-              <div className="sa-spec-row">
-                <span className="sa-spec-label">Boundary Policy:</span>
-                <span className="sa-spec-value green-text">Strict Zero-Knowledge Roster Isolation</span>
-              </div>
-=======
               </div>
             ) : (
               formData.notes && (
@@ -1133,20 +762,11 @@ export function CompanyOverviewScreen({
               <span className={`sa-uptime-badge ${!company.uptime ? 'muted' : ''}`}>
                 {company.uptime ? 'STABLE' : 'UNAVAILABLE'}
               </span>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
             </div>
           </div>
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Platform Governance History */}
-      <div className="sa-card sa-overview-section" style={{ marginTop: '24px' }}>
-        <div className="sa-section-header">
-          <h2 className="sa-section-title">Platform Governance History</h2>
-          <span className="sa-section-subtitle">
-            Tenant-account level administrative logs (No company-internal activity exposed)
-=======
       {/* Full-Width Platform Governance History */}
       <div className="sa-card sa-governance-history-card">
         <div className="sa-section-header">
@@ -1168,47 +788,12 @@ export function CompanyOverviewScreen({
           </div>
           <span className="sa-badge-fixture" title="Simulated governance entries">
             🔒 Demo Governance History (Fixture)
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
           </span>
         </div>
 
         <div className="sa-timeline">
           {(company.history || [
             {
-<<<<<<< HEAD
-              title: 'Status Verified',
-              actor: 'Automated Health Probe',
-              date: 'Oct 24, 2026 09:15 UTC',
-              detail: 'Automated security health check passed across all boundary ingress nodes.',
-              icon: '🛡',
-            },
-            {
-              title: 'Domain Verified',
-              actor: 'System Admin',
-              date: 'Oct 16, 2026 11:42 UTC',
-              detail: 'Domain DNS records confirmed with zero trust TLS pin registration.',
-              icon: '📄',
-            },
-            {
-              title: 'Tenant Account Provisioned',
-              actor: 'System Admin',
-              date: `${company.provisionedOn} 14:00 UTC`,
-              detail: `Initial tenant container initialized on ${company.node || 'Enclave Node #04'} with sovereign database schema.`,
-              icon: '⚙',
-            },
-          ]).map((evt, idx) => (
-            <div key={idx} className="sa-timeline-item">
-              <div className="sa-timeline-marker">
-                <span className="sa-timeline-icon">{evt.icon}</span>
-              </div>
-              <div className="sa-timeline-content">
-                <div className="sa-timeline-header">
-                  <span className="sa-timeline-title">{evt.title}</span>
-                  <span className="sa-timeline-date">{evt.date}</span>
-                </div>
-                <div className="sa-timeline-actor">Actor: {evt.actor}</div>
-                <p className="sa-timeline-detail">{evt.detail}</p>
-=======
               title: 'Status Synchronized',
               actor: 'System Admin',
               date: 'Oct 24, 2026 09:15 UTC',
@@ -1287,17 +872,12 @@ export function CompanyOverviewScreen({
                   <span className="sa-timeline-date mono">{evt.date}</span>
                 </div>
                 <p className="sa-timeline-desc">{evt.detail}</p>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
               </div>
             </div>
           ))}
         </div>
       </div>
 
-<<<<<<< HEAD
-      {/* Bottom Privacy Sentinel */}
-      <TenantPrivacyNotice />
-=======
       {/* Full-Width Bottom Card: DATA ISOLATION COMPLIANCE GUARANTEE */}
       <div className="sa-card sa-compliance-card">
         <div className="sa-compliance-icon-wrap">
@@ -1330,7 +910,6 @@ export function CompanyOverviewScreen({
           </div>
         </div>
       </div>
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
     </div>
   )
 }

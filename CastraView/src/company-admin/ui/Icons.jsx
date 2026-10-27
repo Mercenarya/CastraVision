@@ -668,8 +668,6 @@ export function IconX({ size = 16, className = '' }) {
   )
 }
 
-<<<<<<< HEAD
-=======
 export function IconMail({ size = 16, className = '' }) {
   return (
     <svg
@@ -1082,5 +1080,4 @@ export function IconArrowLeft({ size = 16, className = '' }) {
     </svg>
   )
 }
->>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
 

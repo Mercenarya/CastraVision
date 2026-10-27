@@ -21,54 +21,54 @@ import { can } from './auth/permissions'
 
 // ─── Icon constants (simple unicode glyphs) ─────────────────────────────────
 const ICON = {
-  dashboard:      '▦',
-  company:        '🏢',
-  employees:      '👤',
-  workgroups:     '◉',
-  workspace:      '⚙',
-  strategy:       '◈',
-  content:        '✦',
-  import:         '⇥',
-  profile:        '☷',
-  approvals:      '✓',
-  reports:        '▤',
-  performance:    '↗',
-  competitor:     '◎',
-  budget:         '↗',
-  notifications:  '🔔',
+  dashboard: '▦',
+  company: '🏢',
+  employees: '👤',
+  workgroups: '◉',
+  workspace: '⚙',
+  strategy: '◈',
+  content: '✦',
+  import: '⇥',
+  profile: '☷',
+  approvals: '✓',
+  reports: '▤',
+  performance: '↗',
+  competitor: '◎',
+  budget: '↗',
+  notifications: '🔔',
 }
 
 // ─── System Admin navigation ─────────────────────────────────────────────────
 // Sidebar caption: PLATFORM
 const SYSTEM_ADMIN_NAV = [
-  ['sa-dashboard',    ICON.dashboard, 'Dashboard',          null],
-  ['sa-company-mgmt', ICON.company,   'Company Management', null],
+  ['sa-dashboard', ICON.dashboard, 'Dashboard', null],
+  ['sa-company-mgmt', ICON.company, 'Company Management', null],
 ]
 
 // ─── Company Admin navigation ────────────────────────────────────────────────
 // Sidebar caption: COMPANY
 const COMPANY_ADMIN_NAV = [
-  ['ca-overview',   ICON.dashboard,  'Company Overview',     null],
-  ['ca-employees',  ICON.employees,  'Employee Management',  null],
+  ['ca-overview', ICON.dashboard, 'Company Overview', null],
+  ['ca-employees', ICON.employees, 'Employee Management', null],
   ['ca-workgroups', ICON.workgroups, 'Workgroup Management', null],
-  ['ca-workspace',  ICON.workspace,  'Workspace Management', null],
+  ['ca-workspace', ICON.workspace, 'Workspace Management', null],
 ]
 
 // ─── Employee (workspace member) navigation ──────────────────────────────────
 // Items filtered by workspace-level RBAC capabilities.
 // Sidebar caption: WORKSPACE
 const EMPLOYEE_NAV_ALL = [
-  ['emp-dashboard',     ICON.dashboard,     'Dashboard',             'overview'],
-  ['emp-strategy',      ICON.strategy,      'Strategy Creation',     'strategy:read'],
-  ['emp-content',       ICON.content,       'Content Generation',    'content:write'],
-  ['emp-import',        ICON.import,        'Campaign Data Import',  'campaign:import'],
-  ['emp-performance',   ICON.performance,   'Performance Monitoring','campaign:read'],
-  ['emp-budget',        ICON.budget,        'Budget Optimization',   'budget:write'],
-  ['emp-competitor',    ICON.competitor,    'Competitor Analysis',   'competitor:read'],
-  ['emp-reports',       ICON.reports,       'Reports',               'reports:write'],
-  ['emp-approvals',     ICON.approvals,     'Approval Queue',        'approval:write'],
-  ['emp-notifications', ICON.notifications, 'Notifications',         'notifications:read'],
-  ['emp-profile',       ICON.profile,       'My Profile',            null],
+  ['emp-dashboard', ICON.dashboard, 'Dashboard', 'overview'],
+  ['emp-strategy', ICON.strategy, 'Strategy Creation', 'strategy:read'],
+  ['emp-content', ICON.content, 'Content Generation', 'content:write'],
+  ['emp-import', ICON.import, 'Campaign Data Import', 'campaign:import'],
+  ['emp-performance', ICON.performance, 'Performance Monitoring', 'campaign:read'],
+  ['emp-budget', ICON.budget, 'Budget Optimization', 'budget:write'],
+  ['emp-competitor', ICON.competitor, 'Competitor Analysis', 'competitor:read'],
+  ['emp-reports', ICON.reports, 'Reports', 'reports:write'],
+  ['emp-approvals', ICON.approvals, 'Approval Queue', 'approval:write'],
+  ['emp-notifications', ICON.notifications, 'Notifications', 'notifications:read'],
+  ['emp-profile', ICON.profile, 'My Profile', null],
 ]
 
 // ─── Onboarding-only nav ─────────────────────────────────────────────────────
@@ -115,9 +115,9 @@ export function navigationFor(role, needsOnboarding = false) {
  */
 export function defaultPage(role) {
   switch (role) {
-    case 'system_admin':  return 'sa-dashboard'
+    case 'system_admin': return 'sa-dashboard'
     case 'company_admin': return 'ca-overview'
-    default:              return 'emp-dashboard'
+    default: return 'emp-dashboard'
   }
 }
 
@@ -129,9 +129,9 @@ export function defaultPage(role) {
  */
 export function navCaption(role) {
   switch (role) {
-    case 'system_admin':  return 'PLATFORM'
+    case 'system_admin': return 'PLATFORM'
     case 'company_admin': return 'COMPANY'
-    default:              return 'WORKSPACE'
+    default: return 'WORKSPACE'
   }
 }
 
@@ -143,11 +143,11 @@ export function navCaption(role) {
  */
 export function roleLabel(role) {
   const labels = {
-    system_admin:  'System Admin',
+    system_admin: 'System Admin',
     company_admin: 'Company Admin',
-    admin:         'Workspace Admin',
-    manager:       'Manager',
-    member:        'Member',
+    admin: 'Workspace Admin',
+    manager: 'Manager',
+    member: 'Member',
   }
   return labels[role] || 'User'
 }
