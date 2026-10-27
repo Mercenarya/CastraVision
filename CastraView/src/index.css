@@ -12,48 +12,83 @@
   background: #0b1225;
 
   /* ── Primary Brand Colors ── */
-  --cv-green:        #2dce76;   /* Primary action: buttons, active states, success */
-  --cv-green-dark:   #1faa5c;   /* Primary hover / pressed */
-  --cv-green-subtle: #0d3822;   /* Primary ghost background */
+  --cv-green: #2dce76;
+  /* Primary action: buttons, active states, success */
+  --cv-green-dark: #1faa5c;
+  /* Primary hover / pressed */
+  --cv-green-subtle: #0d3822;
+  /* Primary ghost background */
 
   /* ── Destructive ── */
-  --cv-red:          #c9253e;   /* Destructive button, error badge */
-  --cv-red-dark:     #a31b30;   /* Destructive hover */
-  --cv-red-subtle:   #3d0f18;   /* Destructive ghost background */
+  --cv-red: #c9253e;
+  /* Destructive button, error badge */
+  --cv-red-dark: #a31b30;
+  /* Destructive hover */
+  --cv-red-subtle: #3d0f18;
+  /* Destructive ghost background */
 
   /* ── Neutral / Secondary ── */
-  --cv-white:        #ffffff;
-  --cv-white-outline: rgba(255,255,255,0.12); /* Secondary outlined button border */
+  --cv-white: #ffffff;
+  --cv-white-outline: rgba(255, 255, 255, 0.12);
+  /* Secondary outlined button border */
 
   /* ── Dark Sidebar ── */
-  --cv-sidebar-bg:   #0e1626;   /* Dark sidebar background */
-  --cv-sidebar-border: #1e2b40; /* Sidebar divider */
+  --cv-sidebar-bg: #0e1626;
+  /* Dark sidebar background */
+  --cv-sidebar-border: #1e2b40;
+  /* Sidebar divider */
 
   /* ── Surface / Card ── */
-  --cv-surface:      #151e31;   /* Card / panel background */
-  --cv-surface-alt:  #1b2437;   /* Slightly lighter card variant */
-  --cv-border:       #27334c;   /* General card border */
-  --cv-border-focus: #4e62ff;   /* Input focus ring */
+  --cv-surface: #151e31;
+  /* Card / panel background */
+  --cv-surface-alt: #1b2437;
+  /* Slightly lighter card variant */
+  --cv-border: #27334c;
+  /* General card border */
+  --cv-border-focus: #4e62ff;
+  /* Input focus ring */
 
   /* ── Text ── */
-  --cv-text:         #e1e6ff;   /* Primary text */
-  --cv-muted:        #8f99b3;   /* Secondary / placeholder text */
-  --cv-cyan:         #55d9fb;   /* Accent / code highlight */
+  --cv-text: #e1e6ff;
+  /* Primary text */
+  --cv-muted: #8f99b3;
+  /* Secondary / placeholder text */
+  --cv-cyan: #55d9fb;
+  /* Accent / code highlight */
 
   /* ── Input / Form ── */
-  --cv-input-bg:     #111a2e;
+  --cv-input-bg: #111a2e;
   --cv-input-border: #2e3c57;
   --cv-input-height: 52px;
 
   /* ── Button dimensions ── */
-  --cv-btn-h:        40px;
-  --cv-btn-radius:   8px;
-  --cv-btn-font:     14px;
+  --cv-btn-h: 40px;
+  --cv-btn-radius: 8px;
+  --cv-btn-font: 14px;
 }
 
 /* ─── Reset ───────────────────────────────────────────────────────────────── */
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; min-height: 100vh; }
-button, input, textarea, select { font: inherit; }
-button { cursor: pointer; }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}

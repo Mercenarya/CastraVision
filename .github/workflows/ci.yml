@@ -85,6 +85,9 @@ jobs:
           cache: npm
           
           cache-dependency-path: CastraView/package-lock.json
+          
+      - name: change directory to Castraview
+        run: cd CastraView
       - name: Install dependencies
         run: npm ci
       - name: Lint
