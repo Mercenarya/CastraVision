@@ -48,7 +48,7 @@ def _supabase_ready() -> bool:
         return False
     try:
         response = httpx.get(
-            f"{settings.SUPABASE_URL}/rest/v1/",
+            f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/settings",
             headers={"apikey": api_key},
             timeout=min(settings.SUPABASE_HTTP_TIMEOUT_SECONDS, 3),
         )
