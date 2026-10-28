@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+
+import { resolveWorkspaceRole } from './auth/permissions'
+import RoleDashboardPage from './pages/RoleDashboardPage'
 import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
@@ -147,6 +150,7 @@ function App() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
+  const role = resolveWorkspaceRole(user)
   async function refreshData() { const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')]); setProfile(business.profile); setImports(history.imports); setLatestRows(history.latest_rows); setPage(business.profile ? 'overview' : 'onboarding') }
   useEffect(() => { async function boot() { try { await api('auth/csrf/'); const session = await api('auth/session/'); if (session.user) { setUser(session.user); await refreshData() } } catch (cause) { setBackendError(cause.message) } finally { setReady(true) } } boot() }, [])
   async function handleAuth(account) { setUser(account); setBackendError(''); try { await refreshData() } catch (cause) { setBackendError(cause.message) } }
@@ -155,7 +159,7 @@ function App() {
   async function onImported() { const data = await api('campaign-imports/'); setImports(data.imports); setLatestRows(data.latest_rows) }
   if (!ready) return <div className="loading-screen"><Brand /><span>Đang kết nối không gian làm việc…</span></div>
   if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} onAuth={handleAuth} backendError={backendError} />
-  return <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>{backendError && <Notice>{backendError}</Notice>}{(!profile || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />}{profile && page === 'overview' && <Overview profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && page === 'import' && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && page === 'strategy' && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}<Toast message={toast} clear={() => setToast('')} /></Shell>
+  return <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>{backendError && <Notice>{backendError}</Notice>}{(!profile || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />}{profile && page === 'overview' && <RoleDashboardPage role={role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />}{profile && page === 'import' && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}{profile && page === 'strategy' && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}{profile && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}<Toast message={toast} clear={() => setToast('')} /></Shell>
 }
 
 export default App

@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
-import { can, defaultPage } from './permissions'
+import { can, defaultPage, resolveWorkspaceRole } from './permissions'
 import { navigationFor } from '../navigation'
 
 describe('actor permission map', () => {
+  it('resolves only explicit workspace roles and defaults safely', () => {
+    expect(resolveWorkspaceRole({ role: 'manager' })).toBe('manager')
+    expect(resolveWorkspaceRole({ workspaceRole: 'admin' })).toBe('admin')
+    expect(resolveWorkspaceRole({ email: 'manager@example.com' })).toBe('member')
+    expect(resolveWorkspaceRole(null)).toBe('member')
+  })
+
   it('gives Admin governance permissions', () => {
     expect(can('admin', 'members:manage')).toBe(true)
     expect(can('admin', 'approval:write')).toBe(true)

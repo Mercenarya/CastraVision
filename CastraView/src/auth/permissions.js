@@ -4,6 +4,17 @@ export const ROLE_LABELS = {
   member: 'Member',
 }
 
+const WORKSPACE_ROLES = new Set(Object.keys(ROLE_LABELS))
+
+export function resolveWorkspaceRole(user) {
+  const candidates = [user?.role, user?.workspaceRole, user?.membership?.role]
+  return candidates.find((role) => WORKSPACE_ROLES.has(role)) || 'member'
+}
+
+export function canAccessFR04ApprovalQueue(user) {
+  return ['admin', 'manager'].includes(resolveWorkspaceRole(user))
+}
+
 export const CAPABILITIES = {
   admin: new Set([
     'overview', 'business:read', 'business:write', 'campaign:read',
