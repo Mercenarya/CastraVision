@@ -1,14 +1,14 @@
 /**
- * CompanyAdminLayout.jsx — Universal Shared Layout for Workspace Admin
+ * MarketingManagerLayout.jsx — Universal Shared Layout for Marketing Manager
  * Integrates the standardized Sidebar, Header, and views matching approved Figma designs.
  */
 
 import { useState } from 'react'
 import './company-admin.css'
-import CompanyAdminSidebar from './CompanyAdminSidebar'
-import CompanyAdminHeader from './CompanyAdminHeader'
+import MarketingManagerSidebar from './MarketingManagerSidebar'
+import MarketingManagerHeader from './MarketingManagerHeader'
 import InviteMemberModal from './screens/InviteMemberModal'
-import AdminDashboardScreen from './screens/AdminDashboardScreen'
+import MarketingManagerDashboardScreen from './screens/MarketingManagerDashboardScreen'
 import WorkspaceMembersScreen from './screens/WorkspaceMembersScreen'
 import RoleManagementScreen from './screens/RoleManagementScreen'
 import ApprovalQueueScreen from './screens/ApprovalQueueScreen'
@@ -26,7 +26,7 @@ import {
   resolveWorkspaceRole,
 } from '../auth/permissions'
 
-export default function CompanyAdminLayout({
+export default function MarketingManagerLayout({
   user,
   profile,
   page = 'overview',
@@ -98,13 +98,16 @@ export default function CompanyAdminLayout({
   }
 
   const pageTitleMap = {
-    overview: 'Admin Console',
-    admin: 'Admin Console',
+    overview: 'Cross-Channel Campaign Overview',
+    admin: 'Marketing Manager Console',
     members: 'Workspace Members & Access Control',
     roles: 'Role Management & RBAC Permissions',
     audit: 'System Audit Log',
     'audit-details': 'Audit Log Record Details',
     approvals: 'Proposal Approval Queue',
+    budget: 'Budget Optimization & ROAS',
+    reports: 'Omnichannel Performance Reports',
+    insights: 'Competitor Intelligence & Insights',
     import: 'Campaign Data Import',
     content: 'Content Studio',
     profile: 'Business Profile & Settings',
@@ -113,7 +116,7 @@ export default function CompanyAdminLayout({
   const currentTitle =
     page === 'audit' && selectedAuditRecord
       ? 'Audit Log Record Details'
-      : pageTitleMap[page] || 'Admin Console'
+      : pageTitleMap[page] || 'Marketing Manager Console'
 
   const activeWorkspaceRole = resolveWorkspaceRole(user, profile)
   const canApprove = canAccessFR04ApprovalQueue(user, profile)
@@ -121,8 +124,8 @@ export default function CompanyAdminLayout({
 
   return (
     <div className="ca-shell">
-      {/* ── UNIFIED SIDEBAR (Shared across all Workspace Admin screens) ── */}
-      <CompanyAdminSidebar
+      {/* ── UNIFIED SIDEBAR (Shared across all Marketing Manager screens) ── */}
+      <MarketingManagerSidebar
         activeKey={selectedAuditRecord && page === 'audit' ? 'audit' : activeKey}
         onNavigate={(target) => {
           setSelectedAuditRecord(null)
@@ -139,8 +142,8 @@ export default function CompanyAdminLayout({
 
       {/* ── MAIN CONTENT WRAPPER ── */}
       <div className="ca-main-wrap">
-        {/* ── UNIFIED HEADER (Shared across all Workspace Admin screens) ── */}
-        <CompanyAdminHeader
+        {/* ── UNIFIED HEADER (Shared across all Marketing Manager screens) ── */}
+        <MarketingManagerHeader
           workspaceName={workspace.name}
           currentPageTitle={currentTitle}
           searchValue={headerSearch}
@@ -151,16 +154,20 @@ export default function CompanyAdminLayout({
 
         {/* ── PAGE CONTENT ── */}
         <main className="ca-content">
-          {/* Screen 1: Admin Console Dashboard */}
+          {/* Screen 1: Marketing Manager Console Dashboard / Overview */}
           {(page === 'overview' || page === 'admin') && (
-            <AdminDashboardScreen
-              workspace={workspace}
-              proposals={proposals}
-              auditLogs={auditLogs}
-              onNavigate={handleNavigate}
-              onOpenInvite={handleOpenInvite}
-              notify={notify}
-            />
+            (children && (!Array.isArray(children) || children.some(Boolean)))
+              ? children
+              : (
+                <MarketingManagerDashboardScreen
+                  workspace={workspace}
+                  proposals={proposals}
+                  auditLogs={auditLogs}
+                  onNavigate={handleNavigate}
+                  onOpenInvite={handleOpenInvite}
+                  notify={notify}
+                />
+              )
           )}
 
           {/* Screen 6: Workspace Members & Access Control */}

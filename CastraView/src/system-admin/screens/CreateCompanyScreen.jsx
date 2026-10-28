@@ -418,7 +418,7 @@ export function CreateCompanyScreen({
               <div className="sa-form-group">
                 <label htmlFor={nameInputId} className="sa-form-label">
                   COMPANY NAME
-                </label >
+                </label>
                 <input
                   id={nameInputId}
                   type="text"
@@ -428,7 +428,7 @@ export function CreateCompanyScreen({
                   onChange={(e) => handleInputChange('name', e.target.value)}
                   required
                 />
-              </div >
+              </div>
 
               {/* 2-Column Row: Account Email & Authorized Domain */}
               <div className="sa-form-row-2col">
@@ -460,10 +460,10 @@ export function CreateCompanyScreen({
                     onChange={(e) => handleInputChange('domain', e.target.value)}
                   />
                 </div>
-              </div >
+              </div>
 
               {/* Organization Identifier / Slug */}
-              < div className="sa-form-group" >
+              <div className="sa-form-group">
                 <label htmlFor={slugInputId} className="sa-form-label">
                   ORGANIZATION IDENTIFIER (SLUG)
                 </label>
@@ -508,8 +508,8 @@ export function CreateCompanyScreen({
                       <p className="sa-option-desc">
                         Status staged as Active. (Demo session: no live cluster partitions or backend ingress allocated).
                       </p>
-                    </div >
-                  </button >
+                    </div>
+                  </button>
 
                   <button
                     type="button"
@@ -527,10 +527,10 @@ export function CreateCompanyScreen({
                       <p className="sa-option-desc">
                         Metadata staged. Workspaces and pipelines suspended until manual system admin activation.
                       </p>
-                    </div >
-                  </button >
-                </div >
-              </div >
+                    </div>
+                  </button>
+                </div>
+              </div>
 
               {/* Account Notes (Optional) */}
               <div className="sa-form-group">
@@ -562,9 +562,9 @@ export function CreateCompanyScreen({
                   </p>
                 </div>
               </div>
-            </div >
-          </form >
-        </div >
+            </div>
+          </form>
+        </div>
 
         {/* Right Column: Cluster Placement & Tenancy Verification */}
         <div className="sa-create-right-col">
@@ -733,7 +733,7 @@ export function CreateCompanyScreen({
             </div>
           </div>
         </div>
-      </div >
+      </div>
 
       {/* Bottom Action Bar */}
       <div className="sa-card sa-create-bottom-bar">
@@ -789,9 +789,9 @@ export function CreateCompanyScreen({
                 Create Account
               </>
             )}
-          </button >
-        </div >
-      </div >
-    </div >
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }

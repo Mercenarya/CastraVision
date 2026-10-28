@@ -21,7 +21,7 @@ config = {
 client = GoogleAdsClient.load_from_dict(config)
 print(client)
 
-CUSTOMER_ID = "1234567890" 
+CUSTOMER_ID = "1234567890"
 
 
 customer_service = client.get_service("CustomerService")

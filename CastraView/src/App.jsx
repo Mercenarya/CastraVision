@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
-import CompanyAdminLayout from './company-admin/CompanyAdminLayout'
+import MarketingManagerLayout from './company-admin/MarketingManagerLayout'
 import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
 import {
   ApprovalQueuePage,
@@ -38,8 +38,6 @@ async function api(path, options = {}) {
   return data
 }
 
-function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
-function Heading({ eyebrow, title, subtitle, children }) { return <div className="page-heading"><div><div className="eyebrow"><i /> {eyebrow}</div><h1>{title}</h1><p>{subtitle}</p></div>{children}</div> }
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Close notification">×</button></div> }
 
@@ -47,6 +45,7 @@ function AuthScreen({ onAuth, backendError }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
@@ -846,10 +845,9 @@ function ContentScreen({ result, profile, setPage, notify }) {
   </>
 }
 
-function App() {
+function WorkspaceApp() {
   const [ready, setReady] = useState(false)
   const [backendError, setBackendError] = useState('')
-  const [authMode, setAuthMode] = useState('login')
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [page, setPage] = useState('overview')
@@ -973,7 +971,7 @@ function App() {
 
   if (isAdmin || user?.role === 'company_admin') {
     return (
-      <CompanyAdminLayout
+      <MarketingManagerLayout
         user={user}
         profile={profile}
         page={page}
@@ -1001,7 +999,7 @@ function App() {
         {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
 
         <Toast message={toast} clear={() => setToast('')} />
-      </CompanyAdminLayout>
+      </MarketingManagerLayout>
     )
   }
 
@@ -1050,6 +1048,38 @@ function App() {
       <Toast message={toast} clear={() => setToast('')} />
     </Shell>
   )
+}
+
+function App() {
+  // ─── Development Preview Route (/dashboard-preview) ───────────────────────
+  const isPreviewPath =
+    typeof window !== 'undefined' &&
+    (window.location.pathname === '/dashboard-preview' ||
+      window.location.pathname.startsWith('/dashboard-preview/') ||
+      window.location.hash === '#/dashboard-preview')
+
+  if (isPreviewPath) {
+    if (import.meta.env.DEV) {
+      return <DashboardPreviewPage onExit={() => { window.location.href = '/' }} />
+    }
+    // In production builds, development preview is strictly inaccessible
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#070b14', color: '#f1f5f9', fontFamily: 'sans-serif', padding: 24, textAlign: 'center' }}>
+        <div style={{ maxWidth: 440, padding: 32, background: '#0e1726', border: '1px solid #1e293b', borderRadius: 12 }}>
+          <div style={{ fontSize: 40, marginBottom: 16 }}>🔒</div>
+          <h1 style={{ fontSize: 20, marginBottom: 8, fontWeight: 700 }}>404 — Not Found</h1>
+          <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 20 }}>
+            The requested development preview page is not accessible in production.
+          </p>
+          <a href="/" style={{ display: 'inline-block', padding: '10px 18px', background: '#4f46e5', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
+            Return to Login
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  return <WorkspaceApp />
 }
 
 export default App

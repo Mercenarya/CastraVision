@@ -16,3 +16,5 @@ htmlcov/
 CastraView/node_modules/
 CastraView/.vite/
 CastraView/dist/
+# Google Ads OAuth credentials
+/Datasources/googleads/client_secret.json

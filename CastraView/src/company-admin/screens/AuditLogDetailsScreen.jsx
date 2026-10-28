@@ -671,7 +671,7 @@ export default function AuditLogDetailsScreen({
                   Executive Narrative <span style={{ color: 'var(--ca-text-muted)', fontWeight: 400 }}>• State Verified</span>
                 </div>
                 <p style={{ fontSize: 12.5, color: 'var(--ca-text-secondary)', margin: 0, lineHeight: 1.45 }}>
-                  Workspace Administrator <strong>Sarah Jenkins</strong> updated <strong>Elena Rostova</strong> from Member to <strong>Manager</strong> tier, granting stage-gate proposal review, edit, approval, and rejection authority under FR04 human-in-the-loop governance.
+                  Marketing Manager <strong>Sarah Jenkins</strong> updated <strong>Elena Rostova</strong> from Employee to <strong>Leader</strong> tier, granting stage-gate proposal review, edit, approval, and rejection authority under FR04 human-in-the-loop governance.
                 </p>
               </div>
             </div>
@@ -727,8 +727,8 @@ export default function AuditLogDetailsScreen({
                   { perm: 'Review Proposals (FR04)', desc: 'Stage-gate content & generation audits', before: 'Denied', after: 'Allowed', changed: true },
                   { perm: 'Edit Proposals (FR04)', desc: 'Direct parameter overrides prior to deployment', before: 'Denied', after: 'Allowed', changed: true },
                   { perm: 'Approve & Reject Proposals (FR04)', desc: 'Terminal stage-gate signoff for active automation', before: 'Denied', after: 'Allowed', changed: true },
-                  { perm: 'Manage Workspace Membership', desc: 'Invite, configure invitations, manage users', unchangedLabel: 'Unchanged (Denied - Admin Only)' },
-                  { perm: 'Remove Members', desc: 'Revoke tenant membership and authorization', unchangedLabel: 'Unchanged (Denied - Admin Only)' },
+                  { perm: 'Manage Workspace Membership', desc: 'Invite, configure invitations, manage users', unchangedLabel: 'Unchanged (Denied - Marketing Manager Only)' },
+                  { perm: 'Remove Members', desc: 'Revoke tenant membership and authorization', unchangedLabel: 'Unchanged (Denied - Marketing Manager Only)' },
                 ].map((row, idx) => (
                   <div
                     key={idx}
@@ -1105,7 +1105,7 @@ export default function AuditLogDetailsScreen({
                   Event Narrative & Transition Scope
                 </div>
                 <p style={{ fontSize: 12.5, color: 'var(--ca-text-secondary)', margin: 0, lineHeight: 1.45 }}>
-                  Workspace Administrator <strong>Sarah Jenkins</strong> granted final affirmative human authorization for proposal{' '}
+                  Marketing Manager <strong>Sarah Jenkins</strong> granted final affirmative human authorization for proposal{' '}
                   <strong style={{ color: '#38bdf8' }}>PRP-8402</strong> (Q3 Activewear Omnichannel Copy v1.4). Proposal successfully transitioned from <strong>Pending Review</strong> to <strong>Approved</strong>.
                 </p>
               </div>
@@ -1178,7 +1178,7 @@ export default function AuditLogDetailsScreen({
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
                   {[
-                    { label: 'Human Authorization Confirmed', desc: 'Verified by Sarah Jenkins (Workspace Admin credential validation).' },
+                    { label: 'Human Authorization Confirmed', desc: 'Verified by Sarah Jenkins (Marketing Manager credential validation).' },
                     { label: 'Mandatory Review Passed', desc: 'Creative tone, claim validations, and brand safety guidelines verified against Q4 baseline.' },
                     { label: 'Budget Pacing Check', desc: 'Within workspace monthly pacing threshold ($45,000 / mo allocation approved).' },
                     { label: 'Downstream Notification Dispatched', desc: 'Authors and workspace reviewers notified via system webhook and email digest.' },
@@ -1299,7 +1299,7 @@ export default function AuditLogDetailsScreen({
                         <span className="ca-audit-timeline-time">Oct 24, 14:32:00 UTC</span>
                       </div>
                       <p className="ca-audit-timeline-desc">
-                        Session initiated by Sarah Jenkins via Workspace Admin console dashboard.
+                        Session initiated by Sarah Jenkins via Marketing Manager console dashboard.
                       </p>
                     </div>
                   </div>
