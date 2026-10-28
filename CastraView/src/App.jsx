@@ -40,19 +40,28 @@ async function api(path, options = {}) {
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Close notification">×</button></div> }
 
-function AuthScreen({ onAuth, backendError }) {
+function AuthScreen({ mode: initialMode = 'login', onAuth, backendError }) {
+  const [mode, setMode] = useState(initialMode)
+  const signup = mode === 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
   async function submit(event) {
     event.preventDefault()
     setError('')
+    if (signup && password !== confirmPassword) {
+      setError('Mật khẩu xác nhận không khớp.')
+      return
+    }
     setBusy(true)
     try {
-      const data = await api('auth/login/', { method: 'POST', body: JSON.stringify({ email, password }) })
+      const endpoint = signup ? 'auth/register/' : 'auth/login/'
+      const data = await api(endpoint, { method: 'POST', body: JSON.stringify({ email, password }) })
       onAuth(data.user)
     } catch (cause) {
       setError(cause.message)
@@ -71,8 +80,12 @@ function AuthScreen({ onAuth, backendError }) {
           <div className="auth-heading">
             <Brand />
             <span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span>
-            <h1>Welcome back</h1>
-            <p>Sign in to manage your marketing strategy and workspace.</p>
+            <h1>{signup ? 'Create Account' : 'Welcome back'}</h1>
+            <p>
+              {signup
+                ? 'Sign up to build your AI marketing workspace.'
+                : 'Sign in to manage your marketing strategy and workspace.'}
+            </p>
           </div>
 
           <form className="auth-form" onSubmit={submit} noValidate>
@@ -93,7 +106,7 @@ function AuthScreen({ onAuth, backendError }) {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                autoComplete="current-password"
+                autoComplete={signup ? 'new-password' : 'current-password'}
                 required
               />
               <button
@@ -105,6 +118,28 @@ function AuthScreen({ onAuth, backendError }) {
                 {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
+
+            {signup && (
+              <div className="auth-password-wrap">
+                <FloatingInput
+                  label="Confirm Password"
+                  name="auth-confirm-password"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  autoComplete="new-password"
+                  required
+                />
+                <button
+                  type="button"
+                  className="auth-show-pw"
+                  onClick={() => setShowConfirmPassword(v => !v)}
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showConfirmPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
+            )}
 
             {displayError && (
               <div className="auth-error" role="alert">
@@ -120,11 +155,81 @@ function AuthScreen({ onAuth, backendError }) {
               loading={busy}
               className="auth-submit-btn"
             >
-              {busy ? 'Signing in…' : 'Sign In →'}
+              {busy ? (signup ? 'Creating account…' : 'Signing in…') : (signup ? 'Create Account →' : 'Sign In →')}
             </Button>
+
+            <div style={{ textAlign: 'center', marginTop: 10, fontSize: 13, color: 'var(--cv-muted)' }}>
+              {signup ? 'Already have an account? ' : "Don't have an account? "}
+              <button
+                type="button"
+                style={{ background: 'none', border: 'none', color: '#818cf8', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline', padding: 0 }}
+                onClick={() => {
+                  setError('')
+                  setMode(signup ? 'login' : 'signup')
+                }}
+              >
+                {signup ? 'Sign In' : 'Sign Up'}
+              </button>
+            </div>
 
             <div className="auth-footer-note">
               Access is by invitation only. Contact your administrator if you need access.
+            </div>
+
+            <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--cv-border)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ fontSize: 11, color: 'var(--cv-muted)', textAlign: 'center', fontWeight: 600, letterSpacing: '.05em' }}>DEVELOPER PREVIEW &amp; TEST ACCESS</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <Button
+                  type="button"
+                  variant="secondary"
+                  style={{ width: '100%', fontSize: 12, borderColor: '#10b981', color: '#10b981', fontWeight: 600 }}
+                  onClick={() => onAuth(
+                    { email: 'admin@castravision.internal', full_name: 'Platform Administrator', role: 'system_admin' },
+                    null,
+                    'sa-dashboard'
+                  )}
+                >
+                  Enter as System Admin 🛡 →
+                </Button>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11 }}
+                    onClick={() => onAuth(
+                      { email: 'sarah.jenkins@acmecorp.com', full_name: 'Sarah Jenkins', role: 'admin' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Admin →
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11, borderColor: '#818cf8', color: '#c7d2fe' }}
+                    onClick={() => onAuth(
+                      { email: 'marcus.vance@acmecorp.com', full_name: 'Marcus Vance', role: 'manager' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Manager →
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    style={{ flex: 1, fontSize: 11 }}
+                    onClick={() => onAuth(
+                      { email: 'member@acmecorp.com', full_name: 'Alex Mercer', role: 'member' },
+                      { business_name: 'Acme Corp', industry: 'Enterprise SaaS', business_size: 'Enterprise' },
+                      'overview'
+                    )}
+                  >
+                    Member →
+                  </Button>
+                </div>
+              </div>
             </div>
           </form>
         </div>
