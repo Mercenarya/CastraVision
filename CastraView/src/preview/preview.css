@@ -221,6 +221,7 @@
     opacity: 0;
     transform: translateY(-6px) scale(0.97);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -233,9 +234,11 @@
     align-items: stretch;
     gap: 10px;
   }
+
   .dev-preview-tabs {
     overflow-x: auto;
   }
+
   .dev-preview-right {
     justify-content: space-between;
   }

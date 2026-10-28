@@ -71,11 +71,11 @@ const BAR_DATA = [
 
 // Sparkline data for KPI cards (7 pts normalised 0–1)
 const SPARKLINES = {
-  spend:  [.55, .60, .65, .70, .62, .80, .90],
-  roas:   [.70, .72, .69, .74, .78, .82, .85],
-  cpa:    [.80, .75, .72, .78, .65, .62, .58],
-  reach:  [.40, .50, .55, .60, .65, .62, .70],
-  conv:   [.58, .62, .68, .65, .72, .78, .80],
+  spend: [.55, .60, .65, .70, .62, .80, .90],
+  roas: [.70, .72, .69, .74, .78, .82, .85],
+  cpa: [.80, .75, .72, .78, .65, .62, .58],
+  reach: [.40, .50, .55, .60, .65, .62, .70],
+  conv: [.58, .62, .68, .65, .72, .78, .80],
 }
 
 const STATUS_CLASS = {
@@ -303,277 +303,277 @@ export default function CrossChannelCampaignOverview({ onNavigate, notify }) {
           </button>
         </div>
 
-          {/* ── KPI CARDS ── */}
-          <div className="cco-kpi-row">
-            {/* Total Spend */}
-            <div className="cco-kpi-card">
-              <div className="cco-kpi-label">
-                Total Spend
-                <span className="cco-kpi-badge cco-kpi-badge-green">↑ 8.4%</span>
-              </div>
-              <div className="cco-kpi-value">$50K</div>
-              <div className="cco-kpi-sub">
-                <strong>$49,000</strong> of $50,000 budget · 3 channels active
-              </div>
-              <Sparkline data={SPARKLINES.spend} color="#22d3ee" />
-              <div className="cco-kpi-segbar">
-                <div className="cco-kpi-seg cco-kpi-seg-fb" style={{ flex: 37 }} />
-                <div className="cco-kpi-seg cco-kpi-seg-gg" style={{ flex: 45 }} />
-                <div className="cco-kpi-seg cco-kpi-seg-tt" style={{ flex: 18 }} />
-              </div>
+        {/* ── KPI CARDS ── */}
+        <div className="cco-kpi-row">
+          {/* Total Spend */}
+          <div className="cco-kpi-card">
+            <div className="cco-kpi-label">
+              Total Spend
+              <span className="cco-kpi-badge cco-kpi-badge-green">↑ 8.4%</span>
             </div>
-
-            {/* Blended ROAS */}
-            <div className="cco-kpi-card">
-              <div className="cco-kpi-label">
-                Blended ROAS
-                <span className="cco-kpi-badge cco-kpi-badge-purple">↑ 12%</span>
-              </div>
-              <div className="cco-kpi-value">4.8×</div>
-              <div className="cco-kpi-sub">
-                vs <strong>4.3×</strong> prev. period · +0.5× AI optimised
-              </div>
-              <Sparkline data={SPARKLINES.roas} color="#a78bfa" />
+            <div className="cco-kpi-value">$50K</div>
+            <div className="cco-kpi-sub">
+              <strong>$49,000</strong> of $50,000 budget · 3 channels active
             </div>
-
-            {/* Blended CPA */}
-            <div className="cco-kpi-card">
-              <div className="cco-kpi-label">
-                Blended CPA
-                <span className="cco-kpi-badge cco-kpi-badge-green">↓ 7.3%</span>
-              </div>
-              <div className="cco-kpi-value">$16.10</div>
-              <div className="cco-kpi-sub">
-                Target <strong>$18.50</strong> · FB $14.20 · GG $11.80
-              </div>
-              <Sparkline data={SPARKLINES.cpa} color="#34d399" />
-            </div>
-
-            {/* Total Reach */}
-            <div className="cco-kpi-card">
-              <div className="cco-kpi-label">
-                Total Reach
-                <span className="cco-kpi-badge cco-kpi-badge-blue">↑ 22%</span>
-              </div>
-              <div className="cco-kpi-value">2.4M</div>
-              <div className="cco-kpi-sub">
-                <strong>Meta</strong> 1.1M · <strong>Google</strong> 890K · <strong>TikTok</strong> 410K
-              </div>
-              <Sparkline data={SPARKLINES.reach} color="#60a5fa" />
-            </div>
-
-            {/* Conversions */}
-            <div className="cco-kpi-card">
-              <div className="cco-kpi-label">
-                Conversions
-                <span className="cco-kpi-badge cco-kpi-badge-orange">3,046</span>
-              </div>
-              <div className="cco-kpi-value">3.0K</div>
-              <div className="cco-kpi-sub">
-                Budget pace <strong>98%</strong> · 2 days remaining
-              </div>
-              <Sparkline data={SPARKLINES.conv} color="#f59e0b" />
-              <div className="cco-kpi-progress">
-                <div className="cco-kpi-progress-fill" style={{ width: '98%' }} />
-              </div>
+            <Sparkline data={SPARKLINES.spend} color="#22d3ee" />
+            <div className="cco-kpi-segbar">
+              <div className="cco-kpi-seg cco-kpi-seg-fb" style={{ flex: 37 }} />
+              <div className="cco-kpi-seg cco-kpi-seg-gg" style={{ flex: 45 }} />
+              <div className="cco-kpi-seg cco-kpi-seg-tt" style={{ flex: 18 }} />
             </div>
           </div>
 
-          {/* ── MID: CHART + AI PANEL ── */}
-          <div className="cco-mid-section">
-            {/* Bar Chart */}
-            <div className="cco-chart-card">
-              <div className="cco-chart-header">
-                <div>
-                  <div className="cco-chart-title">
-                    Weekly Channel Performance
-                    <span className="cco-live-chip">LIVE</span>
-                  </div>
-                  <div className="cco-chart-subtitle">
-                    Daily spend (× $1,000) by channel · {activePeriod} view
-                  </div>
-                </div>
-                <div className="cco-chart-controls">
-                  <div className="cco-period-tabs">
-                    {['7D', '14D', '30D', '90D'].map((p) => (
-                      <button
-                        key={p}
-                        type="button"
-                        className={`cco-period-tab${activePeriod === p ? ' active' : ''}`}
-                        onClick={() => setActivePeriod(p)}
-                      >
-                        {p}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="cco-chart-legend">
-                <div className="cco-legend-item">
-                  <div className="cco-legend-dot cco-legend-fb" />
-                  Facebook Ads · $18.4K
-                </div>
-                <div className="cco-legend-item">
-                  <div className="cco-legend-dot cco-legend-gg" />
-                  Google Ads · $22.1K
-                </div>
-                <div className="cco-legend-item">
-                  <div className="cco-legend-dot cco-legend-tt" />
-                  TikTok Ads · $9.5K
-                </div>
-              </div>
-
-              <GroupedBarChart />
+          {/* Blended ROAS */}
+          <div className="cco-kpi-card">
+            <div className="cco-kpi-label">
+              Blended ROAS
+              <span className="cco-kpi-badge cco-kpi-badge-purple">↑ 12%</span>
             </div>
-
-            {/* AI Budget Allocation Panel */}
-            <div className="cco-ai-panel">
-              <div className="cco-ai-panel-title">
-                <span className="cco-ai-icon">🤖</span>
-                AI Budget Allocation
-              </div>
-
-              <div className="cco-spike-box">
-                <div className="cco-spike-header">⚡ ROAS Spike Detected</div>
-                <div className="cco-spike-body">
-                  Google Ads ROAS surged to <em>6.2×</em> (Sat–Sun). AI recommends reallocating{' '}
-                  <strong>+$3,200</strong> from TikTok to Google PMax to capitalise on conversion momentum.
-                </div>
-              </div>
-
-              <div className="cco-realloc-flow">
-                <div className="cco-realloc-from">
-                  <span className="cco-realloc-channel">TikTok Ads</span>
-                  <span className="cco-realloc-amount-red">− $3,200</span>
-                </div>
-                <span className="cco-realloc-arrow">→</span>
-                <div className="cco-realloc-to">
-                  <span className="cco-realloc-channel">Google PMax</span>
-                  <span className="cco-realloc-amount-green">+ $3,200</span>
-                </div>
-              </div>
-
-              <div className="cco-governance-note">
-                <span className="cco-gov-icon">🔒</span>
-                FR04 governance approval required. Budget shift exceeds automated threshold of $2,000.
-              </div>
-
-              {!aiApproved ? (
-                <button
-                  type="button"
-                  className="cco-btn-approve"
-                  onClick={() => setAiApproved(true)}
-                >
-                  ✓ Approve Reallocation
-                </button>
-              ) : (
-                <div style={{ padding: '9px', textAlign: 'center', borderRadius: '8px', background: 'rgba(16,185,129,.1)', border: '1px solid rgba(16,185,129,.25)', fontSize: '11px', fontWeight: 700, color: '#34d399' }}>
-                  ✓ Approved — Syncing to Google Ads
-                </div>
-              )}
-
-              <div className="cco-ai-secondary-btns">
-                <button type="button" className="cco-btn-customize">⚙ Customize</button>
-                <button
-                  type="button"
-                  className="cco-btn-reject"
-                  onClick={() => setAiApproved(false)}
-                >
-                  ✕ Reject
-                </button>
-              </div>
+            <div className="cco-kpi-value">4.8×</div>
+            <div className="cco-kpi-sub">
+              vs <strong>4.3×</strong> prev. period · +0.5× AI optimised
             </div>
+            <Sparkline data={SPARKLINES.roas} color="#a78bfa" />
           </div>
 
-          {/* ── CAMPAIGN STATUS TABLE ── */}
-          <div className="cco-table-card">
-            <div className="cco-table-header">
-              <div>
-                <div className="cco-table-title">Active Channel Performance</div>
-                <div className="cco-table-subtitle">
-                  AI-optimised campaigns · CPA, ROAS, and budget efficiency
-                </div>
-              </div>
-              <div className="cco-table-search">
-                <span style={{ opacity: 0.7 }}>🔍</span>
-                <input
-                  type="text"
-                  placeholder="Search channels or campaigns…"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="cco-search-input"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery('')}
-                    className="cco-search-clear"
-                    aria-label="Clear search"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
+          {/* Blended CPA */}
+          <div className="cco-kpi-card">
+            <div className="cco-kpi-label">
+              Blended CPA
+              <span className="cco-kpi-badge cco-kpi-badge-green">↓ 7.3%</span>
             </div>
+            <div className="cco-kpi-value">$16.10</div>
+            <div className="cco-kpi-sub">
+              Target <strong>$18.50</strong> · FB $14.20 · GG $11.80
+            </div>
+            <Sparkline data={SPARKLINES.cpa} color="#34d399" />
+          </div>
 
-            <table className="cco-table">
-              <thead>
-                <tr>
-                  <th>Channel</th>
-                  <th>Campaign</th>
-                  <th>AI Status</th>
-                  <th>Spend / Clicks</th>
-                  <th>CPA</th>
-                  <th>ROAS</th>
-                </tr>
-              </thead>
-              <tbody>
-                {CHANNELS.filter((ch) => {
-                  if (!searchQuery.trim()) return true
-                  const q = searchQuery.toLowerCase()
-                  return (
-                    ch.name.toLowerCase().includes(q) ||
-                    ch.campaign.toLowerCase().includes(q) ||
-                    ch.objective.toLowerCase().includes(q) ||
-                    ch.model.toLowerCase().includes(q)
-                  )
-                }).map((ch) => (
-                  <tr key={ch.id}>
-                    <td>
-                      <div className="cco-channel-cell">
-                        <div className={`cco-channel-avatar ${ch.cls}`}>{ch.icon}</div>
-                        <div>
-                          <div className="cco-channel-name">{ch.name}</div>
-                          <div className="cco-channel-model">{ch.model}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="cco-campaign-name">{ch.campaign}</div>
-                      <div className="cco-campaign-objective">{ch.objective}</div>
-                    </td>
-                    <td>
-                      <span className={`cco-status-chip ${STATUS_CLASS[ch.statusKey]}`}>
-                        {ch.statusLabel}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="cco-spend">{ch.spend}</div>
-                      <div className="cco-clicks">{ch.clicks}</div>
-                    </td>
-                    <td>
-                      <span className="cco-cpa">{ch.cpa}</span>
-                    </td>
-                    <td>
-                      <span className="cco-roas">{ch.roas}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Total Reach */}
+          <div className="cco-kpi-card">
+            <div className="cco-kpi-label">
+              Total Reach
+              <span className="cco-kpi-badge cco-kpi-badge-blue">↑ 22%</span>
+            </div>
+            <div className="cco-kpi-value">2.4M</div>
+            <div className="cco-kpi-sub">
+              <strong>Meta</strong> 1.1M · <strong>Google</strong> 890K · <strong>TikTok</strong> 410K
+            </div>
+            <Sparkline data={SPARKLINES.reach} color="#60a5fa" />
+          </div>
+
+          {/* Conversions */}
+          <div className="cco-kpi-card">
+            <div className="cco-kpi-label">
+              Conversions
+              <span className="cco-kpi-badge cco-kpi-badge-orange">3,046</span>
+            </div>
+            <div className="cco-kpi-value">3.0K</div>
+            <div className="cco-kpi-sub">
+              Budget pace <strong>98%</strong> · 2 days remaining
+            </div>
+            <Sparkline data={SPARKLINES.conv} color="#f59e0b" />
+            <div className="cco-kpi-progress">
+              <div className="cco-kpi-progress-fill" style={{ width: '98%' }} />
+            </div>
           </div>
         </div>
+
+        {/* ── MID: CHART + AI PANEL ── */}
+        <div className="cco-mid-section">
+          {/* Bar Chart */}
+          <div className="cco-chart-card">
+            <div className="cco-chart-header">
+              <div>
+                <div className="cco-chart-title">
+                  Weekly Channel Performance
+                  <span className="cco-live-chip">LIVE</span>
+                </div>
+                <div className="cco-chart-subtitle">
+                  Daily spend (× $1,000) by channel · {activePeriod} view
+                </div>
+              </div>
+              <div className="cco-chart-controls">
+                <div className="cco-period-tabs">
+                  {['7D', '14D', '30D', '90D'].map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      className={`cco-period-tab${activePeriod === p ? ' active' : ''}`}
+                      onClick={() => setActivePeriod(p)}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="cco-chart-legend">
+              <div className="cco-legend-item">
+                <div className="cco-legend-dot cco-legend-fb" />
+                Facebook Ads · $18.4K
+              </div>
+              <div className="cco-legend-item">
+                <div className="cco-legend-dot cco-legend-gg" />
+                Google Ads · $22.1K
+              </div>
+              <div className="cco-legend-item">
+                <div className="cco-legend-dot cco-legend-tt" />
+                TikTok Ads · $9.5K
+              </div>
+            </div>
+
+            <GroupedBarChart />
+          </div>
+
+          {/* AI Budget Allocation Panel */}
+          <div className="cco-ai-panel">
+            <div className="cco-ai-panel-title">
+              <span className="cco-ai-icon">🤖</span>
+              AI Budget Allocation
+            </div>
+
+            <div className="cco-spike-box">
+              <div className="cco-spike-header">⚡ ROAS Spike Detected</div>
+              <div className="cco-spike-body">
+                Google Ads ROAS surged to <em>6.2×</em> (Sat–Sun). AI recommends reallocating{' '}
+                <strong>+$3,200</strong> from TikTok to Google PMax to capitalise on conversion momentum.
+              </div>
+            </div>
+
+            <div className="cco-realloc-flow">
+              <div className="cco-realloc-from">
+                <span className="cco-realloc-channel">TikTok Ads</span>
+                <span className="cco-realloc-amount-red">− $3,200</span>
+              </div>
+              <span className="cco-realloc-arrow">→</span>
+              <div className="cco-realloc-to">
+                <span className="cco-realloc-channel">Google PMax</span>
+                <span className="cco-realloc-amount-green">+ $3,200</span>
+              </div>
+            </div>
+
+            <div className="cco-governance-note">
+              <span className="cco-gov-icon">🔒</span>
+              FR04 governance approval required. Budget shift exceeds automated threshold of $2,000.
+            </div>
+
+            {!aiApproved ? (
+              <button
+                type="button"
+                className="cco-btn-approve"
+                onClick={() => setAiApproved(true)}
+              >
+                ✓ Approve Reallocation
+              </button>
+            ) : (
+              <div style={{ padding: '9px', textAlign: 'center', borderRadius: '8px', background: 'rgba(16,185,129,.1)', border: '1px solid rgba(16,185,129,.25)', fontSize: '11px', fontWeight: 700, color: '#34d399' }}>
+                ✓ Approved — Syncing to Google Ads
+              </div>
+            )}
+
+            <div className="cco-ai-secondary-btns">
+              <button type="button" className="cco-btn-customize">⚙ Customize</button>
+              <button
+                type="button"
+                className="cco-btn-reject"
+                onClick={() => setAiApproved(false)}
+              >
+                ✕ Reject
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* ── CAMPAIGN STATUS TABLE ── */}
+        <div className="cco-table-card">
+          <div className="cco-table-header">
+            <div>
+              <div className="cco-table-title">Active Channel Performance</div>
+              <div className="cco-table-subtitle">
+                AI-optimised campaigns · CPA, ROAS, and budget efficiency
+              </div>
+            </div>
+            <div className="cco-table-search">
+              <span style={{ opacity: 0.7 }}>🔍</span>
+              <input
+                type="text"
+                placeholder="Search channels or campaigns…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="cco-search-input"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="cco-search-clear"
+                  aria-label="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          </div>
+
+          <table className="cco-table">
+            <thead>
+              <tr>
+                <th>Channel</th>
+                <th>Campaign</th>
+                <th>AI Status</th>
+                <th>Spend / Clicks</th>
+                <th>CPA</th>
+                <th>ROAS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {CHANNELS.filter((ch) => {
+                if (!searchQuery.trim()) return true
+                const q = searchQuery.toLowerCase()
+                return (
+                  ch.name.toLowerCase().includes(q) ||
+                  ch.campaign.toLowerCase().includes(q) ||
+                  ch.objective.toLowerCase().includes(q) ||
+                  ch.model.toLowerCase().includes(q)
+                )
+              }).map((ch) => (
+                <tr key={ch.id}>
+                  <td>
+                    <div className="cco-channel-cell">
+                      <div className={`cco-channel-avatar ${ch.cls}`}>{ch.icon}</div>
+                      <div>
+                        <div className="cco-channel-name">{ch.name}</div>
+                        <div className="cco-channel-model">{ch.model}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="cco-campaign-name">{ch.campaign}</div>
+                    <div className="cco-campaign-objective">{ch.objective}</div>
+                  </td>
+                  <td>
+                    <span className={`cco-status-chip ${STATUS_CLASS[ch.statusKey]}`}>
+                      {ch.statusLabel}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="cco-spend">{ch.spend}</div>
+                    <div className="cco-clicks">{ch.clicks}</div>
+                  </td>
+                  <td>
+                    <span className="cco-cpa">{ch.cpa}</span>
+                  </td>
+                  <td>
+                    <span className="cco-roas">{ch.roas}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
