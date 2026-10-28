@@ -111,9 +111,9 @@ export function PlatformOverviewScreen({
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
             + Register Company
-          </button >
-        </div >
-      </div >
+          </button>
+        </div>
+      </div>
 
       {/* KPI Cards Grid */}
       < div className="sa-kpi-grid" >
@@ -224,7 +224,7 @@ export function PlatformOverviewScreen({
               Go to Company Management →
             </button>
           </div>
-        </div >
+        </div>
 
         <div className="sa-table-responsive">
           <table className="sa-table">
@@ -266,13 +266,13 @@ export function PlatformOverviewScreen({
                     </td>
                     <td>
                       <span className="sa-text-mono">{c.adminEmail || c.accountEmail}</span>
-                    </td >
+                    </td>
                     <td>
                       <StatusBadge status={c.status} />
                     </td>
                     <td>
                       <span className="sa-employee-count">{c.employeeCount ?? 0}</span>
-                    </td >
+                    </td>
                     <td>
                       <span className="sa-text-muted">{c.provisionedOn}</span>
                     </td>
@@ -286,9 +286,9 @@ export function PlatformOverviewScreen({
                         }}
                       >
                         View Overview
-                      </button >
-                    </td >
-                  </tr >
+                      </button>
+                    </td>
+                  </tr>
                 ))
               )
               }
@@ -300,7 +300,7 @@ export function PlatformOverviewScreen({
         < div className="sa-pagination-bar" >
           <div className="sa-pagination-info">
             Displaying {paginatedCompanies.length} of {totalRecords} registered tenants • Sort: Most recently registered
-          </div >
+          </div>
           <div className="sa-pagination-actions">
             <button
               type="button"

@@ -1,0 +1,253 @@
+/* preview.css — Styles for CastraVision Role Dashboard Preview */
+
+.dev-preview-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--cv-bg, #070b14);
+  overflow-x: hidden;
+}
+
+.dev-preview-bar {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 20px;
+  background: rgba(13, 20, 36, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.dev-preview-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dev-preview-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 999px;
+  color: #34d399;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dev-preview-badge::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+}
+
+.dev-preview-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.dev-preview-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+}
+
+.dev-preview-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dev-preview-tab:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.dev-preview-tab.active {
+  background: #4f46e5;
+  color: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.35);
+}
+
+.dev-preview-tab-role {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dev-preview-tab.active .dev-preview-tab-role {
+  background: rgba(0, 0, 0, 0.25);
+  color: #e0e7ff;
+}
+
+.dev-preview-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dev-preview-mode {
+  font-size: 12px;
+  color: #64748b;
+}
+
+.dev-preview-exit-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid #334155;
+  border-radius: 8px;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dev-preview-exit-btn:hover {
+  background: #334155;
+  color: #f8fafc;
+  border-color: #475569;
+}
+
+.dev-preview-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  /* Ensure children that use height:100% (e.g. cco-root) fill correctly */
+  min-height: 0;
+}
+
+/* ─── Compact Top-Right Toast Notification ─── */
+.dev-preview-toast {
+  position: fixed;
+  top: 58px;
+  right: 20px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 12px 7px 10px;
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 500;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  max-width: 320px;
+  animation: devToastSlideIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+.dev-preview-toast-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.25);
+  color: #818cf8;
+  font-size: 10px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.dev-preview-toast-text {
+  flex: 1;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dev-preview-toast-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 14px;
+  line-height: 1;
+  padding: 1px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 2px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.dev-preview-toast-close:hover {
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@keyframes devToastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .dev-preview-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .dev-preview-tabs {
+    overflow-x: auto;
+  }
+  .dev-preview-right {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 640px) {
+  .dev-preview-toast {
+    top: 92px;
+    right: 12px;
+    left: auto;
+    max-width: calc(100vw - 24px);
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}

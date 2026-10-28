@@ -1,5 +1,5 @@
 /**
- * CompanyAdminSidebar.jsx — Unified shared sidebar for CastraVision Workspace Admin
+ * MarketingManagerSidebar.jsx — Unified shared sidebar for CastraVision Marketing Manager
  * Matches the approved Figma design system across all screens.
  */
 
@@ -16,20 +16,26 @@ import {
   IconBuilding,
   IconChevronsUpDown,
   IconLock,
+  IconTrendingUp,
+  IconBarChart,
+  IconSparkles,
 } from './ui/Icons'
 
 const NAV_ITEMS = [
   { key: 'overview', label: 'Overview / Dashboard', Icon: IconOverview },
   { key: 'members', label: 'Workspace Members', Icon: IconMembers },
   { key: 'roles', label: 'Role Management', Icon: IconRoles },
-  { key: 'audit', label: 'Audit Log', Icon: IconAudit },
   { key: 'approvals', label: 'Approvals', Icon: IconApprovals, hasBadge: true },
+  { key: 'audit', label: 'Audit Log', Icon: IconAudit },
+  { key: 'budget', label: 'Budget & ROAS', Icon: IconTrendingUp, hasAiBadge: true },
+  { key: 'reports', label: 'Reports', Icon: IconBarChart, hasAiBadge: true },
+  { key: 'insights', label: 'Competitor Insights', Icon: IconSparkles, hasAiBadge: true },
   { key: 'import', label: 'Campaign Import', Icon: IconImport },
-  { key: 'content', label: 'Content Generation', Icon: IconContent },
+  { key: 'content', label: 'Content Studio', Icon: IconContent },
   { key: 'profile', label: 'Settings', Icon: IconSettings },
 ]
 
-export default function CompanyAdminSidebar({
+export default function MarketingManagerSidebar({
   activeKey = 'overview',
   onNavigate,
   pendingApprovalsCount = 3,
@@ -39,7 +45,7 @@ export default function CompanyAdminSidebar({
   canViewAudit = true,
 }) {
   return (
-    <aside className="ca-sidebar" aria-label="Workspace Admin Navigation">
+    <aside className="ca-sidebar" aria-label="Marketing Manager Navigation">
       {/* Top Logo & Admin Badge */}
       <div className="ca-sidebar-top">
         <div className="ca-brand" role="button" tabIndex={0} onClick={() => onNavigate('overview')} onKeyDown={(e) => e.key === 'Enter' && onNavigate('overview')}>
@@ -48,7 +54,7 @@ export default function CompanyAdminSidebar({
           </span>
           <span className="ca-brand-text">CastraVision</span>
         </div>
-        <span className="ca-admin-badge" title="Workspace Administrator Context">ADMIN</span>
+        <span className="ca-admin-badge" title="Marketing Manager Context">MARKETING MANAGER</span>
       </div>
 
       {/* Navigation List */}
@@ -82,8 +88,13 @@ export default function CompanyAdminSidebar({
                     </span>
                   )}
                   {isAudit && isLocked && (
-                    <span className="ca-nav-badge-locked" title="Admin only by FR11 Governance">
+                    <span className="ca-nav-badge-locked" title="Marketing Manager only by FR11 Governance">
                       Locked
+                    </span>
+                  )}
+                  {item.hasAiBadge && (
+                    <span className="ca-nav-badge-ai" title="AI Powered Module">
+                      AI
                     </span>
                   )}
                   {isApprovals && !isLocked && pendingApprovalsCount > 0 && (

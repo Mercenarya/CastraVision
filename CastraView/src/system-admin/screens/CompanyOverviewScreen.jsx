@@ -7,10 +7,14 @@ import {
 /**
  * Screen 3: Company Overview
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Reference: companyoverview—systemadmin.png
 =======
  * Matches Figma Reference: docs/admin_system/companyoverview—systemadmin.png
 >>>>>>> 758d59f8d6cef023d3ca537aaf5d908b4756d232
+=======
+ * Matches Figma Reference: docs/admin_system/companyoverview—systemadmin.png
+>>>>>>> 00fe749c2080eb6dc0ca533276fe2b81d558cef1
  */
 export function CompanyOverviewScreen({
   company,
@@ -483,10 +487,10 @@ export function CompanyOverviewScreen({
                   <div className="sa-field-card-value sa-status-val-row">
                     <span
                       className={`sa-status-dot ${formData.status === 'Active'
-                          ? 'green'
-                          : formData.status === 'Inactive'
-                            ? 'slate'
-                            : 'amber'
+                        ? 'green'
+                        : formData.status === 'Inactive'
+                          ? 'slate'
+                          : 'amber'
                         }`}
                     />
                     <span>

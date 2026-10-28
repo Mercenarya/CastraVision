@@ -247,6 +247,18 @@
   text-align: center;
 }
 
+.ca-nav-badge-ai {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(99, 102, 241, 0.22);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.38);
+  letter-spacing: 0.04em;
+  margin-left: auto;
+}
+
 .ca-sidebar-bottom {
   padding: 12px;
   border-top: 1px solid var(--ca-sidebar-border);
