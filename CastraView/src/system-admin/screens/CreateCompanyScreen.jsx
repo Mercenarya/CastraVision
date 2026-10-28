@@ -418,7 +418,7 @@ export function CreateCompanyScreen({
               <div className="sa-form-group">
                 <label htmlFor={nameInputId} className="sa-form-label">
                   COMPANY NAME
-                </label >
+                </label>
                 <input
                   id={nameInputId}
                   type="text"
@@ -460,7 +460,7 @@ export function CreateCompanyScreen({
                     onChange={(e) => handleInputChange('domain', e.target.value)}
                   />
                 </div>
-              </div >
+              </div>
 
               {/* Organization Identifier / Slug */}
               < div className="sa-form-group" >
@@ -562,9 +562,9 @@ export function CreateCompanyScreen({
                   </p>
                 </div>
               </div>
-            </div >
-          </form >
-        </div >
+            </div>
+          </form>
+        </div>
 
         {/* Right Column: Cluster Placement & Tenancy Verification */}
         <div className="sa-create-right-col">
@@ -789,9 +789,9 @@ export function CreateCompanyScreen({
                 Create Account
               </>
             )}
-          </button >
-        </div >
-      </div >
-    </div >
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }

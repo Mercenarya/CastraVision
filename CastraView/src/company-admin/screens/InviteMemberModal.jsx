@@ -67,21 +67,21 @@ export default function InviteMemberModal({
   const roleOptions = [
     {
       key: 'Admin',
-      name: 'Admin',
+      name: 'Marketing Manager',
       badge: 'FULL ACCESS',
       tier: 'TIER 0',
       description: 'Full access to workspace configuration, member management, FR04 approvals, and FR11 audit logs.',
     },
     {
       key: 'Manager',
-      name: 'Manager',
+      name: 'Leader',
       badge: 'RECOMMENDED',
       tier: 'SIGN-OFF LEAD',
       description: 'Can approve, reject, and edit proposals (FR04), create campaigns and strategies.',
     },
     {
       key: 'Member',
-      name: 'Member',
+      name: 'Employee',
       badge: 'STANDARD',
       tier: 'STANDARD USER',
       description: 'Can generate content, create strategies, import data. Strictly NO access to the Approval Queue.',
@@ -413,7 +413,7 @@ export default function InviteMemberModal({
                   <div className="ca-invite-metadata-row">
                     <span className="ca-invite-metadata-label">Assigned Role</span>
                     <span className="ca-invite-metadata-val cyan">
-                      {lastDelivered?.role || 'Manager'} (Sign-Off Lead)
+                      {(lastDelivered?.role === 'Admin' ? 'Marketing Manager' : lastDelivered?.role === 'Manager' ? 'Leader' : lastDelivered?.role === 'Member' ? 'Employee' : lastDelivered?.role) || 'Leader'} (Sign-Off Lead)
                     </span>
                   </div>
                   <div className="ca-invite-metadata-row">

@@ -8,4 +8,3 @@ DATABASES = {  # noqa: F405
         "NAME": ":memory:",
     }
 }
-

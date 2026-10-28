@@ -1,7 +1,7 @@
 export const ROLE_LABELS = {
-  admin: 'Admin',
-  manager: 'Manager',
-  member: 'Member',
+  admin: 'Marketing Manager',
+  manager: 'Leader',
+  member: 'Employee',
 }
 
 export const CAPABILITIES = {

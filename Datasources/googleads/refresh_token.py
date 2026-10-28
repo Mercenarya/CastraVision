@@ -17,4 +17,3 @@ def refresh_token_flow():
 
     creds = flow.run_local_server(port=8080, prompt="consent", access_type="offline")
     print("Refresh token:", creds.refresh_token)
-
