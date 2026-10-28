@@ -11,8 +11,12 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
+    "class-variance-authority": "^0.7.1",
+    "prop-types": "^15.8.1",
+    "radix-ui": "^1.8.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "tailwind-merge": "^3.7.0",
     "test": "^3.3.0"
   },
   "devDependencies": {

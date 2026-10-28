@@ -1,13 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-/* ─── Brand Design Tokens ──────────────────────────────────────────────────── */
 :root {
-  /* Typography */
   font-family: Inter, system-ui, sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-
-  /* Base surface */
   color: #e1e6ff;
   background: #0b1225;
 

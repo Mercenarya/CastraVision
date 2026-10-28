@@ -23,9 +23,9 @@ use_proto_plus: true
 # OAuth2 flow. For more information on authenticating with OAuth2 see:                   #
 # https://developers.google.com/google-ads/api/docs/oauth/overview                       #
 ##########################################################################################
-client_id: 148597477010148597477010-n47d3lsmrkq8sh3dhn5a150g5m9o54u0.apps.googleusercontent.com
-client_secret: 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
-refresh_token: 1//0gFcoAkD-GLaLCgYIARAAGBASNwF-L9IrJwTw2aKG8tzqUENkesHljCN9VMeGbGQArKKRztm4Oj-Xd2MJTmro8zY2jP4FPTozyOE
+client_id: INSERT_OAUTH2_CLIENT_ID_HERE
+client_secret: INSERT_OAUTH2_CLIENT_SECRET_HERE
+refresh_token: INSERT_REFRESH_TOKEN_HERE
 
 # Service Account configuration
 ##########################################################################################
@@ -50,7 +50,7 @@ refresh_token: 1//0gFcoAkD-GLaLCgYIARAAGBASNwF-L9IrJwTw2aKG8tzqUENkesHljCN9VMeGb
 # OAuth pairs.                                                                           #
 ##########################################################################################
 login_customer_id: 1234567890
-json_key_file_path: client_secret.json
+json_key_file_path: JSON_KEY_FILE_PATH
 # Logging configuration
 ##########################################################################################
 # Below you may specify the logging configuration. This will be provided as an input to  #
