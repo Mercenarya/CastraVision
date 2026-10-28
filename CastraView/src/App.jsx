@@ -12,6 +12,7 @@ import {
 } from './actor-ui/ActorPages'
 import { canAccessFR04ApprovalQueue } from './auth/permissions'
 import DashboardPreviewPage from './preview/DashboardPreviewPage'
+import CrossChannelCampaignOverview from './preview/CrossChannelCampaignOverview'
 import {
   Brand,
   Heading,
@@ -946,6 +947,9 @@ function WorkspaceApp() {
         {/* Core Workflow Pages & Tools wrapped inside Marketing Manager Layout */}
         {(!profile || page === 'onboarding' || page === 'profile') && (
           <ProfileScreen profile={profile} onboarding={!profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => setPage('overview') : logout} />
+        )}
+        {profile && page === 'overview' && (
+          <CrossChannelCampaignOverview onNavigate={setPage} notify={setToast} />
         )}
         {profile && page === 'import' && (
           <ImportScreen imports={imports} onImported={onImported} notify={setToast} />

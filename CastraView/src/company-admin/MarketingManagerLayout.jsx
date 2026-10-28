@@ -156,16 +156,18 @@ export default function MarketingManagerLayout({
         <main className="ca-content">
           {/* Screen 1: Marketing Manager Console Dashboard / Overview */}
           {(page === 'overview' || page === 'admin') && (
-            children || (
-              <MarketingManagerDashboardScreen
-                workspace={workspace}
-                proposals={proposals}
-                auditLogs={auditLogs}
-                onNavigate={handleNavigate}
-                onOpenInvite={handleOpenInvite}
-                notify={notify}
-              />
-            )
+            (children && (!Array.isArray(children) || children.some(Boolean)))
+              ? children
+              : (
+                <MarketingManagerDashboardScreen
+                  workspace={workspace}
+                  proposals={proposals}
+                  auditLogs={auditLogs}
+                  onNavigate={handleNavigate}
+                  onOpenInvite={handleOpenInvite}
+                  notify={notify}
+                />
+              )
           )}
 
           {/* Screen 6: Workspace Members & Access Control */}
