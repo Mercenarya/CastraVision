@@ -9,9 +9,13 @@ ROOT = os.path.join(CURRENT,"..")
 sys.path.append(ROOT)
 print(ROOT)
 
-CONFIG = os.path.join(ROOT,"config","users_access.json")
+
+CONFIG = os.path.join(ROOT,"config","dashboard_access.json")
 ENV = os.path.join(ROOT,".env")
-key = Fernet.generate_key()
+CRT_KEY = os.environ['CRYPTOGRAPHY_KEY']
+
+
+key = Fernet.generate_key(CRT_KEY)
 
 
 print("Đường dẫn:",ENV )
@@ -104,54 +108,69 @@ def save_config(filename:str,access_system_data):
         }
 
 
-if __name__ == "__main__":
-    with open(os.path.join(ROOT,"Datasources","googleads", "client_secret.json")) as f:
-        oauth = json.load(f)["web"]  # nếu tạo loại Desktop app thì key là "installed"
+def release_data(sheet:str,source=CONFIG):
+    '''
+    xuất các dict-string thuộc sheet chỉ định từ config thông qua json
+    '''
+    with open(source,encoding='utf-8') as file:
+        data = json.load(file)
+        result = data['system-flows'][sheet]
+    
+    return {
+        "result":result
+    }
 
-    # Mẫu cấu hình dữ liệu gg ads 
-    gg_ads_config = {
-        # "developer_token": os.environ["GOOGLE_ADS_DEVELOPER_TOKEN"],
-        "client_id": oauth["client_id"],
-        "client_secret": oauth["client_secret"],
-        "refresh_token": os.environ["GOOGLE_ADS_REFRESH_TOKEN"],
-        "login_customer_id": os.environ["LOGIN_CUSTOMER_ID"],  # ID MCC, bỏ dòng này nếu không dùng MCC
-        "use_proto_plus": True,
-    }
+if __name__ == "__main__":
+    # with open(os.path.join(ROOT,"Datasources","googleads", "client_secret.json")) as f:
+    #     oauth = json.load(f)["web"]  # nếu tạo loại Desktop app thì key là "installed"
+
+    # # Mẫu cấu hình dữ liệu gg ads 
+    # gg_ads_config = {
+    #     # "developer_token": os.environ["GOOGLE_ADS_DEVELOPER_TOKEN"],
+    #     "client_id": oauth["client_id"],
+    #     "client_secret": oauth["client_secret"],
+    #     "refresh_token": os.environ["GOOGLE_ADS_REFRESH_TOKEN"],
+    #     "login_customer_id": os.environ["LOGIN_CUSTOMER_ID"],  # ID MCC, bỏ dòng này nếu không dùng MCC
+    #     "use_proto_plus": True,
+    # }
     
-    # Mẫu cấu hình dữ liệu meta ads 
-    APP_ID = os.getenv("FB_APP_ID")
-    APP_SECRET = os.getenv("FB_APP_SECRET")
-    ACCESS_TOKEN = os.getenv("FB_ACCESS_TOKEN")
-    AD_ACCOUNT_ID = os.getenv("FB_AD_ACCOUNT_ID")
+    # # Mẫu cấu hình dữ liệu meta ads 
+    # APP_ID = os.getenv("FB_APP_ID")
+    # APP_SECRET = os.getenv("FB_APP_SECRET")
+    # ACCESS_TOKEN = os.getenv("FB_ACCESS_TOKEN")
+    # AD_ACCOUNT_ID = os.getenv("FB_AD_ACCOUNT_ID")
     
-    # khởi tạo đối tượng
-    meta_ads = Metareports(
-        APP_ID,APP_SECRET,ACCESS_TOKEN,AD_ACCOUNT_ID
-    )
+    # # khởi tạo đối tượng
+    # meta_ads = Metareports(
+    #     APP_ID,APP_SECRET,ACCESS_TOKEN,AD_ACCOUNT_ID
+    # )
     
-    gg_ads = Ggadsreports(
-        gg_ads_config['client_id'],
-        gg_ads_config['client_secret'],
-        gg_ads_config['refresh_token'],
-        gg_ads_config['login_customer_id'],
-        gg_ads_config['use_proto_plus']
-    )
+    # gg_ads = Ggadsreports(
+    #     gg_ads_config['client_id'],
+    #     gg_ads_config['client_secret'],
+    #     gg_ads_config['refresh_token'],
+    #     gg_ads_config['login_customer_id'],
+    #     gg_ads_config['use_proto_plus']
+    # )
     
     
-    result_meta_ads = encoder.decrypt(meta_ads.encode_frames().encode("utf-8")).decode('utf-8')
-    result_gg_ads = encoder.decrypt(gg_ads.encode_frames().encode("utf-8")).decode('utf-8')
+    # result_meta_ads = encoder.decrypt(meta_ads.encode_frames().encode("utf-8")).decode('utf-8')
+    # result_gg_ads = encoder.decrypt(gg_ads.encode_frames().encode("utf-8")).decode('utf-8')
     
-    print("META ADS FRAME: ")
-    print(result_meta_ads)
+    # print("META ADS FRAME: ")
+    # print(result_meta_ads)
     
-    print("GG ADS FRAME: ")
-    print(result_gg_ads)    
+    # print("GG ADS FRAME: ")
+    # print(result_gg_ads)    
         
-    frame_result = {
-        "meta_ads": meta_ads.encode_frames(),
-        "google_ads": gg_ads.encode_frames(),
+    # frame_result = {
+    #     "meta_ads": result_meta_ads,
+    #     "google_ads": result_gg_ads,
         
-    }
+    # }
     
-    saved_config = save_config(CONFIG,frame_result)
-    print(saved_config['message'])
+    # saved_config = save_config(CONFIG,frame_result)
+    # print(saved_config['message'])
+    
+    result = release_data('meta_ads')
+    print(result)

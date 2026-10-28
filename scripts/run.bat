@@ -5,6 +5,11 @@ echo Begin kick-off stage ...
 
 echo check directories
 dir
+cd ..
+
+echo install Python Dependencies
+start cmd /k "pip install -r requirements.txt"
+
 echo runserver back-bone
 start cmd /k "python manage.py runserver"
 
