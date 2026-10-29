@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { resolveWorkspaceRole } from './auth/permissions'
+import { Brand, Heading } from './dashboards/RoleDashboards'
 import RoleDashboardPage from './pages/RoleDashboardPage'
+import DashboardPreviewPage from './preview/DashboardPreviewPage'
 import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
@@ -48,8 +50,13 @@ function AuthScreen({ mode, setMode, onAuth, backendError }) {
   }
   return <div className="auth-page"><header className="auth-top"><Brand /></header><main className="auth-main"><div className="auth-card">
     <div className="auth-heading"><Brand /><span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span><h1>{signup ? 'Tạo tài khoản' : 'Chào mừng trở lại'}</h1><p>{signup ? 'Bắt đầu xây dựng chiến lược marketing trong vài phút.' : 'Đăng nhập để quản lý chiến lược marketing của bạn.'}</p></div>
-    <form className="auth-form" onSubmit={submit}><label>Email công việc<input type="email" autoComplete="email" placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required /></label><label>Mật khẩu<div className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} placeholder="Nhập mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showPassword ? 'Ẩn' : 'Hiện'}</button></div></label>{signup && <label>Xác nhận mật khẩu<input type={showPassword ? 'text' : 'password'} autoComplete="new-password" minLength={8} placeholder="Nhập lại mật khẩu" value={confirm} onChange={(e) => setConfirm(e.target.value)} required /></label>}{(error || backendError) && <Notice>{error || backendError}</Notice>}<button className="button primary full" disabled={busy}>{busy ? 'Đang xử lý…' : signup ? 'Tạo tài khoản →' : 'Đăng nhập →'}</button></form>
+    <form className="auth-form" onSubmit={submit}><label>Email công việc<input type="email" autoComplete="email" placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required /></label><label>Mật khẩu<div className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} placeholder="Nhập mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showPassword ? 'Ẩn' : 'Hiện'}</button></div></label>{signup && <label>Xác nhận mật khẩu<div className="password-field"><input type={showConfirmPassword ? 'text' : 'password'} autoComplete="new-password" minLength={8} placeholder="Nhập lại mật khẩu" value={confirm} onChange={(e) => setConfirm(e.target.value)} required /><button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} aria-label={showConfirmPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showConfirmPassword ? 'Ẩn' : 'Hiện'}</button></div></label>}{(error || backendError) && <Notice>{error || backendError}</Notice>}<button className="button primary full" disabled={busy}>{busy ? 'Đang xử lý…' : signup ? 'Tạo tài khoản →' : 'Đăng nhập →'}</button></form>
     {signup && <p className="auth-terms">Tài khoản được bảo vệ bằng mật khẩu mã hóa và phiên đăng nhập an toàn.</p>}<div className="auth-switch">{signup ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'} <button type="button" onClick={() => { setError(''); setMode(signup ? 'login' : 'signup') }}>{signup ? 'Đăng nhập' : 'Đăng ký'}</button></div>
+    <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
+      <a href="/dashboard-preview" style={{ color: '#818cf8', fontSize: 13, textDecoration: 'none' }}>
+        🔍 Xem trước Dashboard (Preview Mode) →
+      </a>
+    </div>
   </div></main><footer className="auth-footer"><span>© 2026 CastraVision · Sprint 1</span><span>AI marketing workspace for SMBs</span></footer></div>
 }
 
@@ -140,6 +147,7 @@ function WorkspaceApp() {
   const [ready, setReady] = useState(false)
   const [backendError, setBackendError] = useState('')
   const [user, setUser] = useState(null)
+  const [authMode, setAuthMode] = useState('login')
   const [profile, setProfile] = useState(null)
   const [page, setPage] = useState('overview')
   const [imports, setImports] = useState([])

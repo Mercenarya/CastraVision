@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working in this
 
 ## Repository architecture
 
-CastraVision is a full-stack marketing assistant:
+CastraVision is a full-stack marketing assistant:![alt text](image.png)
 
 - `CastraServices/` contains the Django REST API, models, authentication, permissions, campaign/business endpoints, background tasks, and migrations.
 - `CastraVision/` contains Django project configuration and URL/WSGI/ASGI entry points.
