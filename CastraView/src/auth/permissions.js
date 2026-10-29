@@ -1,17 +1,19 @@
 export const ROLE_LABELS = {
+  system_admin: 'System Admin',
+  manager: 'Marketing Manager',
   admin: 'Marketing Manager',
-  manager: 'Leader',
+  leader: 'Leader',
   member: 'Employee',
 }
 
-const WORKSPACE_ROLES = new Set(Object.keys(ROLE_LABELS))
+const WORKSPACE_ROLES = new Set(['admin', 'manager', 'member'])
 
 /**
  * Resolves the verified role in the active workspace.
  *
  * @param {object|null} user - Current user object
  * @param {object|null} membership - Optional active workspace membership context
- * @returns {'admin'|'manager'|'member'|null}
+ * @returns {'admin'|'manager'|'member'}
  */
 export function resolveWorkspaceRole(user, membership = null) {
   const membershipRole = membership?.role
@@ -33,7 +35,68 @@ export function resolveWorkspaceRole(user, membership = null) {
     return 'admin'
   }
 
-  return null
+  return 'member'
+}
+
+/**
+ * Resolves the four canonical actor interface roles:
+ * - 'system_admin' -> System Admin Layout
+ * - 'manager'      -> Company Admin Layout (Marketing Manager)
+ * - 'leader'       -> Leader Layout
+ * - 'member'       -> Member Layout
+ *
+ * @param {object|null} user - Current user object from Supabase / API
+ * @param {object|null} membership - Optional active workspace membership context
+ * @returns {'system_admin'|'manager'|'leader'|'member'}
+ */
+export function resolveActorRole(user, membership = null) {
+  if (!user) return 'member'
+
+  const explicit =
+    user?.app_metadata?.role ||
+    user?.user_metadata?.role ||
+    user?.role ||
+    user?.workspaceRole ||
+    membership?.role
+
+  if (typeof explicit === 'string') {
+    const r = explicit.trim().toLowerCase()
+    if (r === 'system_admin' || r === 'sys_admin' || r === 'system admin' || r === 'systemadmin') {
+      return 'system_admin'
+    }
+    if (r === 'manager' || r === 'company_admin' || r === 'admin' || r === 'marketing_manager') {
+      return 'manager'
+    }
+    if (r === 'leader' || r === 'group_leader') {
+      return 'leader'
+    }
+    if (r === 'member' || r === 'employee') {
+      return 'member'
+    }
+  }
+
+  if (membership?.role) {
+    const mr = String(membership.role).trim().toLowerCase()
+    if (mr === 'admin') return 'manager'
+    if (mr === 'manager') return 'leader'
+    if (mr === 'member') return 'member'
+  }
+
+  const email = (user?.email || '').trim().toLowerCase()
+  if (email.startsWith('system') || email.includes('system_admin') || email.includes('sysadmin')) {
+    return 'system_admin'
+  }
+  if (email.includes('company_admin') || email.includes('marketing_manager')) {
+    return 'manager'
+  }
+  if (email.includes('leader')) {
+    return 'leader'
+  }
+  if (email.includes('manager')) {
+    return 'manager'
+  }
+
+  return 'member'
 }
 
 /**
