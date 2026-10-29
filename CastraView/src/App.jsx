@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { resolveWorkspaceRole } from './auth/permissions'
 import RoleDashboardPage from './pages/RoleDashboardPage'
+import DashboardPreviewPage from './preview/DashboardPreviewPage'
 import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
@@ -26,6 +27,8 @@ async function api(path, options = {}) {
   return data
 }
 
+function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
+function Heading({ eyebrow, title, subtitle, children }) { return <div className="page-heading"><div><div className="eyebrow"><i /> {eyebrow}</div><h1>{title}</h1><p>{subtitle}</p></div>{children}</div> }
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Đóng thông báo">×</button></div> }
 
@@ -35,7 +38,6 @@ function AuthScreen({ mode, setMode, onAuth, backendError }) {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   async function submit(event) {
@@ -139,6 +141,7 @@ function ContentScreen({ result, profile, setPage, notify }) {
 function WorkspaceApp() {
   const [ready, setReady] = useState(false)
   const [backendError, setBackendError] = useState('')
+  const [authMode, setAuthMode] = useState('login')
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
   const [page, setPage] = useState('overview')
