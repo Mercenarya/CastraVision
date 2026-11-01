@@ -9,7 +9,7 @@ export default function LeaderDashboard({ imports = [], setPage }) {
     <LeaderDashboardView
       key={refreshCount}
       importCount={imports.length}
-      onOpenBudget={() => setPage?.('budget')}
+      onOpenApprovals={() => setPage?.('approvals')}
       onRefresh={() => setRefreshCount((count) => count + 1)}
     />
   )

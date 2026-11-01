@@ -98,6 +98,7 @@ export function navigationFor(role, needsOnboarding = false) {
         return ONBOARDING_NAV.map(([key, icon, label]) => [key, icon, label])
       }
       return EMPLOYEE_NAV_ALL
+        .filter(([, , , cap]) => !(role === 'manager' && cap === 'budget:write'))
         .filter(([, , , cap]) => cap === null || can(role, cap))
         .map(([key, icon, label]) => [key, icon, label])
     }

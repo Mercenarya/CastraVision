@@ -9,10 +9,11 @@ import './preview.css'
 import CrossChannelCampaignOverview from './CrossChannelCampaignOverview'
 import MarketingManagerLayout from '../company-admin/MarketingManagerLayout'
 import MainLeaderDashboard from '../leader/screens/LeaderDashboard'
+import LeaderApproval from '../leader/screens/LeaderApproval'
+import LeaderWorkspaceShell from '../leader/ui/LeaderWorkspaceShell'
 import MainEmployeeDashboard from '../member/screens/MemberDashboard'
 import { Shell } from '../dashboards/RoleDashboards'
 import {
-  ApprovalQueuePage,
   BudgetOptimizationPage,
   ReportsPage,
   CompetitorInsightsPage,
@@ -72,10 +73,19 @@ export const PREVIEW_ROLES = [
   { key: 'employee', label: 'Employee', internalRole: 'member', icon: '✦' },
 ]
 
-export default function DashboardPreviewPage({ onExit, role = 'marketing_manager' }) {
+export default function DashboardPreviewPage({ onExit, role = 'marketing_manager', initialPage = 'overview' }) {
   const [activeRole] = useState(role)
-  const [previewPage, setPreviewPage] = useState('overview')
+  const [previewPage, setPreviewPage] = useState(initialPage)
   const [toastMessage, setToastMessage] = useState('')
+
+  function setLeaderPage(nextPage) {
+    const safePage = nextPage === 'budget' ? 'overview' : nextPage
+    setPreviewPage(safePage)
+    if (activeRole === 'leader' && typeof window !== 'undefined') {
+      const path = safePage === 'approvals' ? '/dashboard-preview/leader/approval' : '/dashboard-preview/leader'
+      window.history.replaceState({}, '', path)
+    }
+  }
 
   // Automatically dismiss toast notification after 2.5 seconds
   useEffect(() => {
@@ -88,6 +98,10 @@ export default function DashboardPreviewPage({ onExit, role = 'marketing_manager
 
   // Reset scroll position to top whenever switching roles or subpages
   useEffect(() => {
+    if (activeRole === 'leader' && typeof window !== 'undefined' && window.location.pathname.includes('/budget')) {
+      window.history.replaceState({}, '', '/dashboard-preview/leader')
+      setPreviewPage('overview')
+    }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
     const containers = document.querySelectorAll(
       '.dev-preview-body, .ca-shell, .ca-main-wrap, .ca-content, .shell, .main-wrap, .app-content'
@@ -193,70 +207,21 @@ export default function DashboardPreviewPage({ onExit, role = 'marketing_manager
 
         {/* 2. LEADER DASHBOARD */}
         {activeRole === 'leader' && (
-          <Shell
+          <LeaderWorkspaceShell
             user={currentUser}
             profile={MOCK_PREVIEW_PROFILE}
             page={previewPage}
-            setPage={setPreviewPage}
+            setPage={setLeaderPage}
             logout={handleExit}
           >
-            {previewPage === 'overview' && (
-              <MainLeaderDashboard
-                imports={MOCK_PREVIEW_IMPORTS}
-                setPage={setPreviewPage}
-              />
-            )}
-            {previewPage === 'approvals' && (
-              <ApprovalQueuePage notify={handleNotify} role="manager" />
-            )}
-            {previewPage === 'budget' && <BudgetOptimizationPage notify={handleNotify} />}
-            {previewPage === 'reports' && <ReportsPage profile={MOCK_PREVIEW_PROFILE} notify={handleNotify} />}
-            {previewPage === 'insights' && <CompetitorInsightsPage notify={handleNotify} />}
-            {previewPage === 'strategy' && (
-              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
-                <h2>Strategy &amp; Insights Preview</h2>
-                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
-                  Active strategy target: <strong>{MOCK_PREVIEW_STRATEGY.strategy.recommended_channel}</strong> with target CPA {MOCK_PREVIEW_STRATEGY.strategy.target_cpa}.
-                </p>
-                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
-                  ← Back to Leader Dashboard
-                </button>
-              </div>
-            )}
-            {previewPage === 'content' && (
-              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
-                <h2>Content Studio Preview</h2>
-                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
-                  Multi-channel drafting workspace aligned with active campaign strategy.
-                </p>
-                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
-                  ← Back to Leader Dashboard
-                </button>
-              </div>
-            )}
-            {previewPage === 'import' && (
-              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
-                <h2>Campaign Data Import Preview</h2>
-                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
-                  Normalized records from Meta, Google Ads, and TikTok ({MOCK_PREVIEW_IMPORTS[0].row_count} rows ingested).
-                </p>
-                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
-                  ← Back to Leader Dashboard
-                </button>
-              </div>
-            )}
-            {previewPage === 'profile' && (
-              <div className="card" style={{ padding: 32, margin: '20px 0' }}>
-                <h2>Company Profile Preview</h2>
-                <p style={{ color: 'var(--cv-muted, #94a3b8)', marginTop: 8 }}>
-                  {MOCK_PREVIEW_PROFILE.business_name} · {MOCK_PREVIEW_PROFILE.industry} · {MOCK_PREVIEW_PROFILE.business_size}
-                </p>
-                <button className="button primary" style={{ marginTop: 16 }} onClick={() => setPreviewPage('overview')}>
-                  ← Back to Leader Dashboard
-                </button>
-              </div>
-            )}
-          </Shell>
+            {previewPage === 'overview' && <MainLeaderDashboard imports={MOCK_PREVIEW_IMPORTS} setPage={setLeaderPage} />}
+            {previewPage === 'approvals' && <LeaderApproval notify={handleNotify} />}
+            {previewPage === 'import' && <div className="leader-card"><h2>Campaign Import</h2><p>Use the shared campaign import workflow to validate and normalize your data.</p></div>}
+            {previewPage === 'content' && <div className="leader-card"><h2>Content Generation</h2><p>Content Studio drafts are available from the shared workspace workflow.</p></div>}
+            {previewPage === 'strategy' && <div className="leader-card"><h2>Strategy Studio</h2><p>Active strategy target: <strong>{MOCK_PREVIEW_STRATEGY.strategy.recommended_channel}</strong> with target CPA {MOCK_PREVIEW_STRATEGY.strategy.target_cpa}.</p></div>}
+            {previewPage === 'performance' && <div className="leader-card"><h2>Performance</h2><p>Performance metrics are summarized on the Leader Dashboard.</p></div>}
+            {previewPage === 'profile' && <div className="leader-card"><h2>Settings</h2><p>{MOCK_PREVIEW_PROFILE.business_name} · {MOCK_PREVIEW_PROFILE.industry} · {MOCK_PREVIEW_PROFILE.business_size}</p></div>}
+          </LeaderWorkspaceShell>
         )}
 
         {/* 3. EMPLOYEE DASHBOARD */}

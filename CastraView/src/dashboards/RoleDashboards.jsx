@@ -51,7 +51,7 @@ export function Shell({ user, profile, page, setPage, logout, children }) {
     ['strategy', '◈', 'Strategy & Insights'],
     ['content', '✦', 'Content Studio'],
     ['import', '⇥', 'Campaign Data Import'],
-    ['budget', '↗', 'Budget & ROAS'],
+    ...(!isLeader ? [['budget', '↗', 'Budget & ROAS']] : []),
     ...(canApprove ? [['approvals', '✓', 'Approval Queue']] : []),
     ...(isAdmin ? [['audit', '▤', 'Reports & Audit']] : []),
     ['profile', '⚙', 'Settings & API'],
@@ -188,12 +188,12 @@ export function LeaderDashboard({ user, profile, imports = [], strategy, setPage
           <span className="card-link">{strategy ? 'View Strategy' : 'Inspect Strategy'} →</span>
         </button>
 
-        <button className="overview-card card" onClick={() => setPage('budget')}>
-          <span className="overview-number">03 / FR05</span>
-          <span className="overview-icon cyan">↗</span>
-          <strong>Budget &amp; ROAS Optimization</strong>
-          <p>Monitor multi-channel ad spend allocation, conversion forecasts, and ROAS projections.</p>
-          <span className="card-link">Analyze Budget →</span>
+        <button className="overview-card card" onClick={() => setPage('approvals')}>
+          <span className="overview-number">03 / FR04</span>
+          <span className="overview-icon cyan">✓</span>
+          <strong>Approval Queue</strong>
+          <p>Review campaign proposals, content drafts, and governed AI recommendations.</p>
+          <span className="card-link">Review Proposals →</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('import')}>

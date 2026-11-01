@@ -1052,15 +1052,25 @@ function WorkspaceApp() {
 
 function App() {
   // ─── Development Preview Route (/dashboard-preview) ───────────────────────
+  const previewPath = typeof window !== 'undefined' ? window.location.pathname : ''
+  const isLeaderPreview =
+    previewPath === '/dashboard-preview/leader' ||
+    previewPath.startsWith('/dashboard-preview/leader/')
   const isPreviewPath =
     typeof window !== 'undefined' &&
-    (window.location.pathname === '/dashboard-preview' ||
-      window.location.pathname.startsWith('/dashboard-preview/') ||
+    (previewPath === '/dashboard-preview' ||
+      previewPath.startsWith('/dashboard-preview/') ||
       window.location.hash === '#/dashboard-preview')
 
   if (isPreviewPath) {
     if (import.meta.env.DEV) {
-      return <DashboardPreviewPage onExit={() => { window.location.href = '/' }} />
+      return (
+        <DashboardPreviewPage
+          role={isLeaderPreview ? 'leader' : undefined}
+          initialPage={previewPath === '/dashboard-preview/leader/approval' ? 'approvals' : 'overview'}
+          onExit={() => { window.location.href = '/' }}
+        />
+      )
     }
     // In production builds, development preview is strictly inaccessible
     return (
