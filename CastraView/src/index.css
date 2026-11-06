@@ -86,3 +86,450 @@ select {
 button {
   cursor: pointer;
 }
+
+/* ─── Standardized Dashboard Shell (Stitch Design Frame) ───────────────── */
+.std-shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+  background-color: #070b14;
+  color: #e2e8f0;
+}
+
+/* Sidebar */
+.std-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #0b1120;
+  border-right: 1px solid #1e293b;
+  z-index: 20;
+}
+
+.std-sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 20px 16px;
+  border-bottom: 1px solid rgba(30, 41, 59, 0.6);
+}
+
+.std-brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.std-brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.std-brand-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #f8fafc;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.std-brand-subtitle {
+  font-size: 10px;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+
+.std-nav-section-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  padding: 24px 20px 8px;
+  text-transform: uppercase;
+}
+
+.std-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+  flex: 1;
+}
+
+.std-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.std-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: #f1f5f9;
+}
+
+.std-nav-btn.active {
+  background: #5258e4;
+  color: #ffffff;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(82, 88, 228, 0.35);
+}
+
+.std-nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  color: inherit;
+}
+
+.std-nav-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.std-nav-badge {
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.std-nav-badge.badge-cyan {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.std-nav-badge.badge-gray {
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+}
+
+/* Sidebar Quota */
+.std-sidebar-bottom {
+  padding: 16px;
+  margin-top: auto;
+}
+
+.std-quota-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.std-quota-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.std-quota-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.std-quota-pct {
+  font-size: 12px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.std-quota-track {
+  height: 6px;
+  background: #1e293b;
+  border-radius: 6px;
+  overflow: hidden;
+  margin: 9px 0;
+}
+
+.std-quota-fill {
+  height: 100%;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+}
+
+.std-quota-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.std-quota-icon {
+  color: #38bdf8;
+  font-size: 12px;
+}
+
+/* Main Area & Topbar */
+.std-main-wrap {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.std-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 28px;
+  background: rgba(11, 17, 32, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid #1e293b;
+}
+
+.std-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.std-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.std-pill-btn:hover {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.std-pill-chevron {
+  color: #64748b;
+  font-size: 12px;
+  margin-left: 2px;
+}
+
+.std-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.std-engine-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 14px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+}
+
+.std-engine-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.std-engine-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+}
+
+.std-engine-val {
+  font-size: 12px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.std-bell-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.std-bell-btn:hover {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+.std-bell-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 17px;
+  height: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  border: 2px solid #0b1120;
+}
+
+.std-user-container {
+  position: relative;
+}
+
+.std-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 12px 5px 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.std-user-pill:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: #1e293b;
+}
+
+.std-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #5258e4;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.std-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.std-user-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.std-user-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+}
+
+.std-role-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1.5px 6px;
+  border-radius: 4px;
+  background: #5258e4;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+}
+
+.std-user-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 1px;
+}
+
+.std-user-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 220px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  padding: 8px;
+  z-index: 50;
+}
+
+.std-user-menu-header {
+  padding: 8px 12px 10px;
+  border-bottom: 1px solid #1e293b;
+  margin-bottom: 6px;
+}
+
+.std-user-menu-header strong {
+  display: block;
+  font-size: 13px;
+  color: #f1f5f9;
+}
+
+.std-user-menu-header small {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+}
+
+.std-user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #cbd5e1;
+  font-size: 12.5px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.std-user-menu-item:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+/* Content Body */
+.std-content-body {
+  flex: 1;
+  padding: 24px 32px 64px;
+  max-width: 1600px;
+  width: 100%;
+}

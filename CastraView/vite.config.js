@@ -7,10 +7,22 @@ const configDir = dirname(fileURLToPath(import.meta.url))
 const projectRoot = resolve(configDir, '..')
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, projectRoot, 'VITE_')
+  const env = loadEnv(mode, projectRoot, ['VITE_', 'SUPABASE_'])
+  const supabaseUrl = env.VITE_SUPABASE_URL || env.SUPABASE_URL || ''
+  const supabaseKey =
+    env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    env.SUPABASE_PUBLISHABLE_KEY ||
+    env.SUPABASE_KEY ||
+    ''
 
   return {
     envDir: projectRoot,
+    envPrefix: ['VITE_', 'SUPABASE_'],
+
+    define: {
+      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
+      'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(supabaseKey),
+    },
 
     plugins: [react()],
 
