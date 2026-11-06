@@ -1,7 +1,12 @@
 export const ROLE_LABELS = {
   admin: 'Marketing Manager',
+<<<<<<< Updated upstream
   manager: 'Leader',
   member: 'Employee',
+=======
+  leader: 'Leader',
+  member: 'Member',
+>>>>>>> Stashed changes
 }
 
 const WORKSPACE_ROLES = new Set(Object.keys(ROLE_LABELS))

@@ -1,7 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import MarketingManagerLayout from './company-admin/MarketingManagerLayout'
+<<<<<<< Updated upstream
 import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
+=======
+import LeaderDashboard from './leader/screens/LeaderDashboard'
+import MemberDashboard from './member/screens/MemberDashboard'
+import MemberShell from './member/ui/MemberShell'
+import MemberStrategyStudio from './member/ui/MemberStrategyStudio'
+import MemberContentStudio from './member/ui/MemberContentStudio'
+import MemberImportView from './member/ui/MemberImportView'
+import {
+  MemberAccountPage,
+  MemberCampaignsPage,
+  MemberNotificationsPage,
+  MemberProposalsPage,
+} from './member/ui/MemberWorkspacePages'
+import {
+  getMemberPageFromHash,
+  getMemberPageHash,
+  normalizeMemberPage,
+} from './member/memberContract'
+>>>>>>> Stashed changes
 import {
   ApprovalQueuePage,
   BudgetOptimizationPage,
@@ -19,10 +39,19 @@ const NAV = [
   ['overview', '▦', 'Campaign Overview'],
   ['strategy', '◈', 'Strategy & Insights'],
   ['content', '✦', 'Content Studio'],
+<<<<<<< Updated upstream
   ['import', '⇥', 'Campaign Data Import'],
   ['budget', '↗', 'Budget & ROAS'],
   ['audit', '▤', 'Reports & Audit'],
   ['profile', '⚙', 'Settings & API'],
+=======
+  ['import', '⇥', 'Nhập dữ liệu chiến dịch'],
+  ['budget', '↗', 'Tối ưu ngân sách'],
+  ['approvals', '✓', 'Hàng chờ phê duyệt'],
+  ['reports', '▤', 'Báo cáo chiến dịch'],
+  ['insights', '◎', 'Phân tích đối thủ'],
+  ['profile', '☷', 'Hồ sơ doanh nghiệp'],
+>>>>>>> Stashed changes
 ]
 
 function csrfToken() { return decodeURIComponent(document.cookie.split('; ').find((part) => part.startsWith('csrftoken='))?.split('=')[1] || '') }
@@ -76,6 +105,7 @@ function AuthScreen({ onAuth, backendError }) {
             <h1>Welcome back</h1>
             <p>Sign in to manage your marketing strategy and workspace.</p>
           </div>
+<<<<<<< Updated upstream
 
           <form className="auth-form" onSubmit={submit} noValidate>
             <FloatingInput
@@ -113,6 +143,60 @@ function AuthScreen({ onAuth, backendError }) {
                 <span className="auth-error-icon">⚠</span>
                 <span>{displayError}</span>
               </div>
+=======
+          <form className="auth-form" onSubmit={submit}>
+            <label>
+              Email tài khoản
+              <input
+                id="auth-email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="name@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              Mật khẩu
+              <div className="password-field">
+                <input
+                  id="auth-password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete={signup ? 'new-password' : 'current-password'}
+                  minLength={6}
+                  placeholder="Nhập mật khẩu"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
+                >
+                  {showPassword ? 'Ẩn' : 'Hiện'}
+                </button>
+              </div>
+            </label>
+            {signup && (
+              <label>
+                Xác nhận mật khẩu
+                <input
+                  id="auth-password-confirm"
+                  name="passwordConfirm"
+                  type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  minLength={6}
+                  placeholder="Nhập lại mật khẩu"
+                  value={confirm}
+                  onChange={(e) => setConfirm(e.target.value)}
+                  required
+                />
+              </label>
+>>>>>>> Stashed changes
             )}
 
             <Button
@@ -195,6 +279,7 @@ function AuthScreen({ onAuth, backendError }) {
   )
 }
 
+<<<<<<< Updated upstream
 function Shell({ user, profile, page, setPage, logout, children }) {
   const isAdmin = user?.role === 'admin'
   const canApprove = canAccessFR04ApprovalQueue(user)
@@ -217,6 +302,12 @@ function Shell({ user, profile, page, setPage, logout, children }) {
   const userName = user?.email ? user.email.split('@')[0] : 'Admin User'
   const userInitials = userName.slice(0, 2).toUpperCase()
   const userRoleTitle = isAdmin ? 'Admin • Security & Governance Lead' : 'ML • Growth Lead'
+=======
+function Shell({ user, role, profile, page, setPage, logout, children }) {
+  const navList = LEADER_NAV
+  const current = navList.find(([key]) => key === page)?.[2] || 'Tổng quan'
+  const roleName = role === 'leader' ? 'Leader' : 'Member'
+>>>>>>> Stashed changes
 
   return (
     <div className="shell">
@@ -426,7 +517,7 @@ function Overview({ profile, imports, strategy, setPage }) {
   </>
 }
 
-function ImportScreen({ imports, onImported, notify }) {
+function ImportScreen({ imports, onImported, notify, memberPresentation = false }) {
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -454,6 +545,7 @@ function ImportScreen({ imports, onImported, notify }) {
       setBusy(false)
     }
   }
+<<<<<<< Updated upstream
   function downloadSample() {
     const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500,320,18000,25,3900\nGoogle Ads,2026-09,1000,240,12000,18,2800\n'
     const link = document.createElement('a')
@@ -570,6 +662,18 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
     budget: profile.monthly_budget || '',
     preferred_channels: profile.preferred_channels?.length ? profile.preferred_channels : CHANNELS,
   })
+=======
+  function downloadSample() { const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500000,320,18000,25,3900000\nGoogle Ads,2026-09,1000000,240,12000,18,2800000\n'; const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' })); link.download = 'castravision_sample.csv'; link.click(); URL.revokeObjectURL(link.href) }
+  if (memberPresentation) return <MemberImportView imports={imports} file={file} preview={preview} busy={busy} error={error} input={input} onSelect={stage} onDrop={(event) => { event.preventDefault(); stage(event.dataTransfer.files[0]) }} onRemove={() => { setFile(null); setPreview(null); setError(''); if (input.current) input.current.value = '' }} onCommit={commit} onDownload={downloadSample} />
+  return <div className="member-page member-import-page"><Heading eyebrow="CAMPAIGN IMPORT · DATA INGESTION" title="Campaign Data Import" subtitle="Import external campaign telemetry and historical datasets to support your strategy workflow." /><div className="member-callout"><span className="member-callout__icon" aria-hidden="true">ⓘ</span><div><strong>Supported files: CSV and XLSX</strong><p>Use the standard campaign columns for automatic mapping and validation.</p></div><button type="button" className="member-text-button" onClick={downloadSample}>Download schema template ↗</button></div><div className={`upload-zone card ${file ? 'has-file' : ''}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); stage(e.dataTransfer.files[0]) }}><div className="upload-icon">⇧</div><h2>Kéo thả tệp vào đây</h2><p>hoặc chọn tệp từ thiết bị</p><span className="upload-separator">OR</span><button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>⇧ Chọn tệp CSV / Excel</button><input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} /><small>Tối đa 5 MB · CSV UTF-8 hoặc XLSX</small><button type="button" className="inline-link" onClick={downloadSample}>↓ Tải CSV mẫu</button></div><div className="member-callout"><span className="member-callout__icon" aria-hidden="true">ϟ</span><div><strong>Data stays in the workspace</strong><p>Imported rows are validated before they are used by the strategy engine.</p></div></div>
+    {file && <div className="file-card card"><div className="file-success">✓</div><div className="file-info"><span className="mini-label">TỆP ĐÃ CHỌN · {(file.size / 1024 / 1024).toFixed(2)} MB</span><strong>{file.name}</strong><small>{busy ? 'Đang kiểm tra…' : preview ? `${preview.row_count} dòng hợp lệ · ${preview.error_count} dòng lỗi` : 'Chưa xác thực'}</small></div><div className="file-actions"><button className="button coral" type="button" onClick={() => { setFile(null); setPreview(null); setError('') }}>Gỡ bỏ</button><button className="button primary" type="button" disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0} onClick={commit}>Nhập dữ liệu →</button></div></div>}
+    {error && <Notice>{error}</Notice>}{preview?.errors?.length > 0 && <div className="card validation-card"><h3>Cần sửa {preview.error_count} dòng trước khi nhập</h3>{preview.errors.map((item) => <p key={item.row}>Dòng {item.row}: {item.message}</p>)}</div>}{preview?.preview?.length > 0 && <div className="card preview-card"><h3>Xem trước dữ liệu chuẩn hóa</h3><div className="table-wrap"><table><thead><tr>{['Kênh', 'Kỳ', 'Chi phí', 'Clicks', 'Hiển thị', 'Chuyển đổi', 'Doanh thu'].map((value) => <th key={value}>{value}</th>)}</tr></thead><tbody>{preview.preview.map((row, index) => <tr key={index}><td>{row.channel}</td><td>{row.period}</td><td>{row.spend.toLocaleString('vi-VN')}</td><td>{row.clicks}</td><td>{row.impressions}</td><td>{row.conversions}</td><td>{row.revenue.toLocaleString('vi-VN')}</td></tr>)}</tbody></table></div></div>}
+    <div className="benefit-grid"><div className="card"><b>▣</b><strong>Định dạng chuẩn</strong><p>Tự ánh xạ cột chi phí, lượt nhấp, hiển thị và chuyển đổi.</p></div><div className="card"><b>♢</b><strong>Kiểm tra tự động</strong><p>Phát hiện cột thiếu, số âm và dòng không hợp lệ trước khi lưu.</p></div><div className="card"><b>ϟ</b><strong>Dùng cho phân tích</strong><p>Chỉ số từ tệp đã nhập được đưa vào yêu cầu tạo chiến lược.</p></div></div><div className="card import-history"><div className="member-panel__header"><div><span className="member-eyebrow">Imported datasets</span><h2>Lần nhập gần đây</h2></div><span className="member-panel__meta">{imports.length} batches</span></div>{imports.length > 0 ? imports.map((item) => <div key={item.id}><span>{item.filename}</span><small>{item.row_count} dòng · {new Date(item.created_at).toLocaleDateString('vi-VN')}</small></div>) : <div className="member-empty-state"><span className="member-empty-state__icon" aria-hidden="true">⇧</span><h2>Chưa có dữ liệu nhập</h2><p>Validated files appear here after an import completes successfully.</p></div>}</div></div>
+}
+
+function StrategyScreen({ profile, latestRows, result, setResult, notify, memberPresentation = false, setPage }) {
+  const initial = () => ({ campaign_goal: profile?.primary_goal || '', target_audience: profile?.target_customers || '', budget: profile?.monthly_budget || '', preferred_channels: profile?.preferred_channels?.length ? profile.preferred_channels : CHANNELS })
+>>>>>>> Stashed changes
   const [draft, setDraft] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
@@ -610,6 +714,7 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
       setBusy(false)
     }
   }
+<<<<<<< Updated upstream
   const money = (percentage) => new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: profile.currency || 'USD',
@@ -706,6 +811,11 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
       </div>
     </div>
   </>
+=======
+  const money = (percentage) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: profile?.currency || 'VND', maximumFractionDigits: 0 }).format(Number(draft.budget || 0) * percentage / 100)
+  if (memberPresentation) return <MemberStrategyStudio profile={profile} latestRows={latestRows} result={result} onOpenContent={() => setPage('content')} controls={<form className="member-panel member-strategy-controls" onSubmit={generate}><div className="member-panel__header"><div><span className="member-eyebrow">Strategy controls</span><h2>Campaign parameters</h2></div><span className="member-status">FR01 · Planning</span></div><label>Campaign objective<input value={draft.campaign_goal} onChange={(event) => setDraft({ ...draft, campaign_goal: event.target.value })} minLength={3} required /></label><label>Target audience<input value={draft.target_audience} onChange={(event) => setDraft({ ...draft, target_audience: event.target.value })} minLength={3} required /></label><label>Monthly budget ({profile?.currency || 'VND'})<input type="number" min="1" value={draft.budget} onChange={(event) => setDraft({ ...draft, budget: event.target.value })} required /></label><div className="field-title">Preferred channels</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} />{error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={() => setDraft(initial())}>Reset</button><button className="button primary" disabled={busy || !draft.preferred_channels.length}>{busy ? 'Analyzing…' : 'Generate strategy'}</button></div>{result && <button type="button" className="button subtle" onClick={generate} disabled={busy}>Regenerate recommendation</button>}</form>} />
+  return <div className="member-page member-strategy-page"><Heading eyebrow="STRATEGY STUDIO · DATA-DRIVEN PLANNING" title="AI Strategy Studio" subtitle="Build and review marketing recommendations using your business profile and imported campaign history.">{latestRows.length > 0 && <span className="data-chip">{latestRows.length.toLocaleString()} workspace rows available</span>}</Heading><div className="strategy-grid"><form className="card strategy-form" onSubmit={generate}><div className="section-head"><h2><i /> Thiết lập chiến dịch</h2><span className="step-badge">FR01 · Sprint 1</span></div><label>Mục tiêu chiến dịch<input value={draft.campaign_goal} onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })} minLength={3} required placeholder="Ví dụ: Tăng doanh số mùa hè" /></label><label>Khách hàng mục tiêu<input value={draft.target_audience} onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })} minLength={3} required placeholder="Ví dụ: Người trẻ 18–28 tuổi" /></label><label>Ngân sách tháng ({profile?.currency || 'VND'})<input type="number" min="1" value={draft.budget} onChange={(e) => setDraft({ ...draft, budget: e.target.value })} required placeholder="30000000" /></label><div className="field-title">Kênh dự kiến</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} />{error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={() => setDraft(initial())}>↻ Đặt lại</button><button className="button primary" disabled={busy || !draft.preferred_channels.length}>{busy ? 'Đang phân tích…' : 'ϟ Tạo chiến lược'}</button></div></form><div className="card result-card"><div className="section-head"><div><h2>Đề xuất chiến lược AI</h2><p>Dựa trên hồ sơ và dữ liệu lịch sử của bạn</p></div>{result && <span className="active-badge">{result.strategy.confidence}% tin cậy</span>}</div>{!result ? <div className="result-empty"><span>◈</span><h3>Chưa có đề xuất</h3><p>Hoàn thành biểu mẫu và nhấn “Tạo chiến lược” để xem kênh, thông điệp và phân bổ ngân sách.</p></div> : <><div className="insight-box"><span className="mini-label">TRỌNG TÂM CHIẾN LƯỢC</span><p>{result.strategy.rationale}</p></div><div className="insight-box"><div className="allocation-head"><span className="mini-label">PHÂN BỔ ĐỀ XUẤT</span><span>{money(100)} tổng</span></div><div className="stacked-bar">{result.strategy.budget_allocation.map((item, index) => <span key={index} style={{ width: `${item.percentage}%` }} />)}</div><div className="allocation-grid">{result.strategy.budget_allocation.map((item, index) => <div key={index}><i className={`legend-dot d${index}`} /><strong>{item.channel}</strong><small>{item.percentage}% · {money(item.percentage)}</small></div>)}</div></div><div className="insight-box"><span className="mini-label">THÔNG ĐIỆP & PHÂN KHÚC</span><p>“{result.strategy.message}”</p><small>{result.strategy.segment}</small></div><div className="insight-box"><span className="mini-label">HÀNH ĐỘNG TIẾP THEO</span><ol>{result.strategy.actions.map((action, index) => <li key={index}>{action}</li>)}</ol></div><div className="result-footer"><span>{result.provider === 'openai' ? 'OpenAI' : 'Bản dự phòng có quy tắc'} · {result.context_sources.length} nguồn tham chiếu</span><button className="button subtle" type="button" onClick={generate} disabled={busy}>↻ Phân tích lại</button></div>{result.warning && <Notice kind="warning">{result.warning}</Notice>}</>}</div></div></div>
+>>>>>>> Stashed changes
 }
 
 function ContentScreen({ result, profile, setPage, notify }) {
@@ -737,6 +847,7 @@ function ContentScreen({ result, profile, setPage, notify }) {
     },
   }
   const toggle = (channel) => setChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel])
+<<<<<<< Updated upstream
   async function copy(value) {
     try {
       await navigator.clipboard.writeText(value)
@@ -843,6 +954,10 @@ function ContentScreen({ result, profile, setPage, notify }) {
       </>
     )}
   </>
+=======
+  async function copy(value) { try { await navigator.clipboard.writeText(value); notify('Đã sao chép nội dung.') } catch { notify('Không thể sao chép trên trình duyệt này.') } }
+  return <div className="member-page member-content-page"><Heading eyebrow="CONTENT STUDIO · CAMPAIGN WORKFLOW" title="AI Content Studio" subtitle="Draft and refine channel-ready marketing copy using the strategy and business context available to your workspace." /><div className="content-notice"><span>ⓘ</span><p>Đây là bản nháp nội dung theo mẫu, chưa phải hệ thống sinh nội dung AI chuyên biệt. Hãy biên tập và kiểm tra trước khi đăng.</p></div>{!result ? <div className="card content-empty"><span>✦</span><h2>Hãy tạo chiến lược trước</h2><p>Content Studio sử dụng phân khúc và thông điệp từ đề xuất chiến lược của bạn.</p><button className="button primary" onClick={() => setPage('strategy')}>Đến màn hình chiến lược →</button></div> : <><div className="content-steps">{['Chiến lược', 'Kênh', 'Đối tượng', 'Tạo nháp', 'Rà soát'].map((step, index) => <div key={step}><b>{index + 1}</b>{step}</div>)}</div><div className="card content-controls"><div><span className="mini-label">CHIẾN LƯỢC</span><strong>{businessName}</strong></div><div className="control-channels"><span className="mini-label">KÊNH MỤC TIÊU</span><div>{CHANNELS.map((channel) => <button type="button" key={channel} onClick={() => toggle(channel)} className={channels.includes(channel) ? 'selected' : ''}>{channel} {channels.includes(channel) && '✓'}</button>)}</div></div><div><span className="mini-label">KHÁCH HÀNG</span><strong>{result.strategy.segment}</strong></div><label>GIỌNG ĐIỆU<select value={tone} onChange={(e) => setTone(e.target.value)}><option>Năng động & táo bạo</option><option>Thân thiện & gần gũi</option><option>Chuyên nghiệp & rõ ràng</option></select></label><div className="content-control-actions"><button className="button coral" onClick={() => { setChannels(CHANNELS); setTone('Năng động & táo bạo'); setEdits({}) }}>↻ Đặt lại</button><button className="button primary" onClick={() => { setVersion(version + 1); setEdits({}); notify('Đã làm mới bản nháp nội dung.') }}>✦ Tạo bản nháp</button></div></div><div className="content-results-heading"><h2>Bản nháp theo kênh <span>{channels.length} kênh</span></h2><small>Giọng điệu: {tone}</small></div><div className="content-grid">{channels.map((channel) => { const item = drafts[channel]; const value = edits[channel] ?? item.body; return <div className="card content-card" key={channel}><div className="content-card-top"><span>{channel === 'Meta' ? 'Facebook Feed' : channel === 'Google Ads' ? 'Google Search Ads' : 'TikTok / Reels'}</span><small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small></div><span className="mini-label">TIÊU ĐỀ / HOOK</span><h3>{item.title}</h3><span className="mini-label">NỘI DUNG CHÍNH</span>{editing === channel ? <textarea value={value} onChange={(e) => setEdits({ ...edits, [channel]: e.target.value })} rows={7} /> : <p>{value}</p>}<div className="content-preview"><span>{channel === 'TikTok' ? '0s Hook · 8s Lợi ích · 15s CTA' : item.cta}</span><strong>{channel === 'Google Ads' ? '✓ Thông điệp nhất quán' : '✦ Bản nháp sẵn để rà soát'}</strong></div><div className="content-card-actions"><button className="button subtle" onClick={() => setEditing(editing === channel ? null : channel)}>{editing === channel ? '✓ Xong' : '✎ Sửa'}</button><button className="button subtle" onClick={() => copy(`${item.title}\n\n${value}\n\n${item.cta}`)}>⧉ Sao chép</button></div></div> })}</div><div className="content-bottom card"><strong>{channels.length} / 3 channels selected</strong><span>Review copy and advertising policy compliance before publishing. Content remains a draft until handled through supported workflows.</span></div></>}</div>
+>>>>>>> Stashed changes
 }
 
 function WorkspaceApp() {
@@ -850,14 +965,16 @@ function WorkspaceApp() {
   const [backendError, setBackendError] = useState('')
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
-  const [page, setPage] = useState('overview')
+  const [page, setPage] = useState(() => getMemberPageFromHash(window.location.hash))
   const [imports, setImports] = useState([])
   const [latestRows, setLatestRows] = useState([])
   const [strategy, setStrategy] = useState(null)
   const [busy, setBusy] = useState(false)
+  const [memberDataLoading, setMemberDataLoading] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
 
+<<<<<<< Updated upstream
   async function refreshData() {
     const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')])
     setProfile(business.profile)
@@ -865,6 +982,94 @@ function WorkspaceApp() {
     setLatestRows(history.latest_rows)
     setPage(business.profile ? 'overview' : 'onboarding')
   }
+=======
+  const actorRole = resolveActorRole(user, membership)
+
+  const navigateMemberPage = useCallback((nextPage) => {
+    const hash = getMemberPageHash(nextPage)
+    if (window.location.hash !== hash) {
+      window.history.pushState({ memberPage: nextPage }, '', hash)
+    }
+    setPage(nextPage)
+  }, [])
+
+  useEffect(() => {
+    function restoreMemberPage() {
+      setPage(getMemberPageFromHash(window.location.hash))
+    }
+    window.addEventListener('popstate', restoreMemberPage)
+    window.addEventListener('hashchange', restoreMemberPage)
+    return () => {
+      window.removeEventListener('popstate', restoreMemberPage)
+      window.removeEventListener('hashchange', restoreMemberPage)
+    }
+  }, [])
+
+  const loadUserRoleAndData = useCallback(async (activeUser) => {
+    if (!activeUser) return
+    setMemberDataLoading(true)
+    try {
+      if (supabase) {
+        // Query workspace membership from Supabase
+        const { data: memberRows } = await supabase
+          .from('workspace_members')
+          .select('workspace_id, role, workspaces(id, name)')
+          .eq('user_id', activeUser.id)
+          .limit(2)
+
+        if (memberRows && memberRows.length > 0) {
+          const item = memberRows[0]
+          setMembership({
+            workspaceId: item.workspace_id,
+            workspaceName: item.workspaces?.name || 'CastraVision Workspace',
+            role: item.role,
+          })
+          setProfile((current) => current || {
+            business_name: item.workspaces?.name || 'CastraVision Workspace',
+            industry: 'Marketing & Bán lẻ',
+            business_size: 'Medium',
+            currency: 'VND',
+          })
+        }
+      }
+
+      // Load business profile and campaign data if available from backend API
+      try {
+        const [business, history] = await Promise.all([
+          api('business-profile/'),
+          api('campaign-imports/'),
+        ])
+        if (business?.profile) setProfile(business.profile)
+        if (history?.imports) setImports(history.imports)
+        if (history?.latest_rows) setLatestRows(history.latest_rows)
+      } catch {
+        // Local fallback when backend API not running
+      }
+    } catch (cause) {
+      console.warn('Membership resolution warning:', cause)
+    } finally {
+      setMemberDataLoading(false)
+    }
+  }, [])
+
+  const refreshData = useCallback(async () => {
+    setMemberDataLoading(true)
+    try {
+      const [business, history] = await Promise.all([
+        api('business-profile/'),
+        api('campaign-imports/'),
+      ])
+      setProfile(business.profile)
+      setImports(history.imports)
+      setLatestRows(history.latest_rows)
+      setPage(business.profile ? 'overview' : 'onboarding')
+    } catch (cause) {
+      setBackendError(cause.message)
+    } finally {
+      setMemberDataLoading(false)
+    }
+  }, [])
+>>>>>>> Stashed changes
 
   useEffect(() => {
     async function boot() {
@@ -1003,6 +1208,7 @@ function WorkspaceApp() {
     )
   }
 
+<<<<<<< Updated upstream
   return (
     <Shell user={user} profile={profile} page={page} setPage={setPage} logout={logout}>
       {backendError && <Notice>{backendError}</Notice>}
@@ -1043,10 +1249,138 @@ function WorkspaceApp() {
       )}
       {profile && page === 'content' && (
         <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />
+=======
+  // ─── 3. LEADER: Vào giao diện leader ──────────────────────────────────────
+  if (actorRole === 'leader') {
+    return (
+      <Shell
+        user={user}
+        role="leader"
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        logout={logout}
+      >
+        {backendError && <Notice>{backendError}</Notice>}
+        {page === 'overview' && (
+          <LeaderDashboard imports={imports} setPage={setPage} />
+        )}
+        {page === 'approvals' && (
+          <ApprovalQueuePage notify={setToast} role="manager" />
+        )}
+        {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
+        {page === 'reports' && (
+          <ReportsPage profile={profile || { business_name: 'CastraVision Workspace' }} notify={setToast} />
+        )}
+        {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
+        {page === 'import' && (
+          <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+        )}
+        {page === 'strategy' && (
+          <StrategyScreen
+            profile={profile}
+            latestRows={latestRows}
+            result={strategy}
+            setResult={setStrategy}
+            notify={setToast}
+          />
+        )}
+        {page === 'content' && (
+          <ContentScreen
+            result={strategy}
+            profile={profile}
+            setPage={setPage}
+            notify={setToast}
+          />
+        )}
+        {page === 'profile' && (
+          <ProfileScreen
+            profile={profile}
+            onboarding={!profile}
+            saveProfile={saveProfile}
+            busy={busy}
+            error={error}
+            cancel={() => setPage('overview')}
+          />
+        )}
+        <Toast message={toast} clear={() => setToast('')} />
+      </Shell>
+    )
+  }
+
+  // ─── 4. MEMBER: Vào giao diện member ──────────────────────────────────────
+  const memberPage = normalizeMemberPage(page)
+  const memberShellPage = page === 'profile' ? 'account' : memberPage
+
+  return (
+    <MemberShell
+      user={user}
+      profile={profile}
+      page={memberShellPage}
+      setPage={navigateMemberPage}
+      logout={logout}
+    >
+      {backendError && <Notice>{backendError}</Notice>}
+      {memberPage === 'overview' && (
+        <MemberDashboard
+          user={user}
+          profile={profile}
+          imports={imports}
+          latestRows={latestRows}
+          strategy={strategy}
+          setPage={navigateMemberPage}
+          loading={memberDataLoading}
+        />
+      )}
+      {memberPage === 'proposals' && <MemberProposalsPage user={user} onOpenPage={navigateMemberPage} />}
+      {memberPage === 'campaigns' && (
+        <MemberCampaignsPage latestRows={latestRows} imports={imports} />
+      )}
+      {memberPage === 'notifications' && <MemberNotificationsPage />}
+      {memberPage === 'account' && page !== 'profile' && (
+        <MemberAccountPage
+          user={user}
+          profile={profile}
+          onEditProfile={() => navigateMemberPage('profile')}
+          logout={logout}
+        />
+      )}
+      {memberPage === 'import' && (
+        <ImportScreen imports={imports} onImported={onImported} notify={setToast} memberPresentation />
+      )}
+      {memberPage === 'strategy' && (
+        <StrategyScreen
+          profile={profile}
+          latestRows={latestRows}
+          result={strategy}
+          setResult={setStrategy}
+          notify={setToast}
+          memberPresentation
+          setPage={navigateMemberPage}
+        />
+      )}
+      {memberPage === 'content' && (
+        <MemberContentStudio
+          result={strategy}
+          profile={profile}
+          setPage={navigateMemberPage}
+          notify={setToast}
+        />
+      )}
+      {page === 'profile' && (
+        <ProfileScreen
+          profile={profile}
+          onboarding={!profile}
+          saveProfile={saveProfile}
+          busy={busy}
+          error={error}
+          cancel={() => navigateMemberPage('account')}
+        />
+>>>>>>> Stashed changes
       )}
 
       <Toast message={toast} clear={() => setToast('')} />
-    </Shell>
+    </MemberShell>
   )
 }
 
