@@ -15,11 +15,29 @@ import { LEADER_NAV_ITEMS } from '../navigation/roleNavConfig'
  * - Notifications
  * - My Profile
  */
-export default function LeaderSidebar({ activeKey = 'overview', onNavigate }) {
+export default function LeaderSidebar({
+  activeKey = 'overview',
+  onNavigate,
+  isDrawer = false,
+  onClose,
+  companyName = 'Acme Corp Enterprise',
+  companyCode = 'acme-corp-prod-01',
+}) {
   // Map internal/subpage navigation keys to active sidebar item
   const resolveActiveKey = (key) => {
-    if (key === 'approvals') return 'content-reviews'
-    if (key === 'budget' || key === 'reports' || key === 'insights') return 'performance'
+    if (
+      key === 'content-reviews' ||
+      key === 'content-review-detail' ||
+      key === 'budget-review-detail' ||
+      key === 'budget'
+    ) {
+      return 'approvals'
+    }
+    if (key === 'assigned-campaigns') return 'campaigns'
+    if (key === 'submissions') return 'my-proposals'
+    if (key === 'reports' || key === 'insights' || key === 'team-tasks') {
+      return 'performance'
+    }
     return key
   }
 
@@ -28,10 +46,13 @@ export default function LeaderSidebar({ activeKey = 'overview', onNavigate }) {
       navItems={LEADER_NAV_ITEMS}
       activeKey={resolveActiveKey(activeKey)}
       onNavigate={onNavigate}
-      sectionTitle="CORE NAVIGATION"
-      quotaPct={78}
-      quotaOps="78.4K / 100K ops"
-      roleAriaLabel="Leader Sidebar Navigation"
+      sectionTitle="WORKSPACE NAVIGATION"
+      roleBadge="LEADER"
+      tenantName={companyName}
+      tenantCode={companyCode}
+      roleAriaLabel="Leader Workspace Navigation"
+      isDrawer={isDrawer}
+      onClose={onClose}
     />
   )
 }
@@ -39,4 +60,8 @@ export default function LeaderSidebar({ activeKey = 'overview', onNavigate }) {
 LeaderSidebar.propTypes = {
   activeKey: PropTypes.string,
   onNavigate: PropTypes.func,
+  isDrawer: PropTypes.bool,
+  onClose: PropTypes.func,
+  companyName: PropTypes.string,
+  companyCode: PropTypes.string,
 }

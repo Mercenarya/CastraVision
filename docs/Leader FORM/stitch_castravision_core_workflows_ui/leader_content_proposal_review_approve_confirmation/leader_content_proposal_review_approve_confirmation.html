@@ -1,0 +1,635 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-tertiary-fixed": "#23005c",
+          "surface-container-high": "#262a35",
+          "secondary-fixed-dim": "#4cd7f6",
+          "on-primary": "#1000a9",
+          "on-error-container": "#ffdad6",
+          "surface-container-low": "#171b26",
+          "secondary-container": "#03b5d3",
+          "on-tertiary-container": "#340080",
+          "inverse-primary": "#494bd6",
+          "error": "#ffb4ab",
+          "on-surface": "#dfe2f1",
+          "surface-dim": "#0f131d",
+          "primary-fixed-dim": "#c0c1ff",
+          "surface-tint": "#c0c1ff",
+          "on-primary-fixed-variant": "#2f2ebe",
+          "error-container": "#93000a",
+          "tertiary": "#d0bcff",
+          "on-tertiary-fixed-variant": "#5516be",
+          "surface-bright": "#353944",
+          "on-secondary-fixed": "#001f26",
+          "inverse-on-surface": "#2c303b",
+          "tertiary-fixed-dim": "#d0bcff",
+          "inverse-surface": "#dfe2f1",
+          "on-error": "#690005",
+          "on-surface-variant": "#c7c4d7",
+          "primary": "#c0c1ff",
+          "surface-container": "#1c1f2a",
+          "primary-container": "#8083ff",
+          "on-primary-container": "#0d0096",
+          "tertiary-fixed": "#e9ddff",
+          "tertiary-container": "#a078ff",
+          "secondary": "#4cd7f6",
+          "on-primary-fixed": "#07006c",
+          "on-background": "#dfe2f1",
+          "surface": "#0f131d",
+          "on-secondary-fixed-variant": "#004e5c",
+          "on-secondary": "#003640",
+          "surface-container-highest": "#313540",
+          "on-secondary-container": "#00424e",
+          "primary-fixed": "#e1e0ff",
+          "surface-container-lowest": "#0a0e18",
+          "secondary-fixed": "#acedff",
+          "outline": "#908fa0",
+          "outline-variant": "#464554",
+          "surface-variant": "#313540",
+          "background": "#0f131d",
+          "on-tertiary": "#3c0091"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "space-sm": "0.5rem",
+          "space-xl": "2rem",
+          "space-xs": "0.25rem",
+          "space-lg": "1.5rem",
+          "gutter": "1.5rem",
+          "margin": "2rem",
+          "margin-mobile": "1rem",
+          "gutter-mobile": "0.75rem"
+        },
+        "fontFamily": {
+          "body-lg": ["Inter"],
+          "body-md": ["Inter"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "label-lg": ["Inter"],
+          "label-sm": ["Inter"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "headline-xl-mobile": ["Plus Jakarta Sans"],
+          "body-sm": ["Inter"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "label-md": ["Inter"],
+          "headline-xl": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+          "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+          "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+          "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+          "headline-lg-mobile": ["22px", {"lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+          "headline-xl-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+          "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+          "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+        }
+      }
+    }
+  };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="w-[260px] fixed left-0 top-0 bottom-0 flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-50 select-none">
+    <!-- Top Logo Area -->
+    <div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+        <span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+      </div>
+    </div>
+
+    <!-- Navigation Scroll Area -->
+    <div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+      <div>
+        <div class="px-3 mb-2 flex items-center justify-between">
+          <span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">WORKSPACE NAVIGATION</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">LEADER</span>
+        </div>
+        
+        <nav class="space-y-1">
+          <!-- 1. Overview -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="">Overview</span>
+          </a>
+
+          <!-- 2. Approvals (ACTIVE) -->
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#8083ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span class="">Approvals</span>
+            </div>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096]">3</span>
+          </a>
+
+          <!-- 3. My Proposals -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="">My Proposals</span>
+          </a>
+
+          <!-- 4. Campaigns -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span class="">Campaigns</span>
+          </a>
+
+          <!-- 5. Strategy Studio -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="">Strategy Studio</span>
+          </a>
+
+          <!-- 6. Content Gen -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            <span class="">Content Gen</span>
+          </a>
+
+          <!-- 7. Campaign Import -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span class="">Campaign Import</span>
+          </a>
+
+          <!-- 8. Performance & Insights -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span class="">Performance &amp; Insights</span>
+          </a>
+
+          <!-- 9. Account Settings -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span class="">Account Settings</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Area (Inside Sidebar) -->
+    <div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+      <div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+            AC
+          </div>
+          <div class="min-w-0">
+            <p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+            <p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+          </div>
+        </div>
+        <span class="px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono text-[9px] font-semibold uppercase">LEADER</span>
+      </div>
+    </div>
+  </aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-40">
+      <!-- Left Side: Breadcrumb navigation -->
+      <div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Leader Workspace</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Approvals</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="text-[#dfe2f1] font-semibold">Proposal Approved Confirmation</span>
+      </div>
+
+      <!-- Right Side: Utility Widgets -->
+      <div class="flex items-center gap-5">
+        <!-- System Status Widget -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28A745] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]"></span>
+          </span>
+          <span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+        </div>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- Notification Bell Icon (With Red #ffb4ab dot with number "5") -->
+        <button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none" type="button">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+            5
+          </span>
+        </button>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- User Profile Widget -->
+        <div class="flex items-center gap-3 pl-1">
+          <div class="relative">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8083ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+              DK
+            </div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#28A745] rounded-full ring-2 ring-[#171b26]"></div>
+          </div>
+          <div class="flex flex-col text-left">
+            <div class="flex items-center gap-1.5 leading-none">
+              <span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span>
+              <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
+                LEADER
+              </span>
+            </div>
+            <span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span>
+          </div>
+        </div>
+      </div>
+    </header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<!-- Top Command & Stage-Gate Strip -->
+<section class="w-full bg-surface-container-low px-space-xl py-space-md flex flex-wrap items-center justify-between gap-space-md border-b border-outline-variant/30">
+<div class="flex items-center gap-space-md flex-wrap">
+<a class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+        Back to Approvals
+      </a>
+<span class="text-outline-variant font-label-md text-label-md">/</span>
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface tracking-tight">PRP-8402</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">v1.1 (Final)</span>
+</div>
+<div class="h-4 w-px bg-outline-variant/40 hidden sm:block"></div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 font-label-sm text-label-sm font-semibold tracking-wide">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+          APPROVED &amp; RELEASED
+        </span>
+<span class="font-label-sm text-label-sm text-outline hidden md:inline">FR04 Stage-Gate: Authorization Complete</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">Live Pipeline Listener Active</span>
+<span class="text-outline">·</span>
+<span class="font-body-sm text-body-sm text-on-surface">Oct 24, 2026 14:50 UTC</span>
+</div>
+</section>
+<!-- Main Content Space -->
+<div class="w-full max-w-[1400px] mx-auto px-space-lg lg:px-space-xl py-space-lg flex flex-col gap-space-lg">
+<!-- Prominent Affirmative Confirmation Banner -->
+<div class="w-full rounded-xl bg-emerald-950/40 p-space-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-space-lg relative overflow-hidden">
+<div class="flex items-start gap-space-md min-w-0">
+<div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: &quot;FILL&quot; 1;">task_alt</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-2 flex-wrap">
+<h1 class="font-headline-md text-headline-md text-on-surface">Proposal Approved Successfully — PRP-8402</h1>
+<span class="px-2 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-label-sm text-label-sm">Q3 Activewear Omnichannel Copy</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-4xl">
+            Human authorization affirmative signoff confirmed by <strong class="text-on-surface font-semibold">David Kross</strong> (Workspace Manager) on <span class="text-on-surface">Oct 24, 2026 at 14:50 UTC</span>. The proposal has been marked as Approved and queued for campaign staging across target programmatic pipelines.
+          </p>
+</div>
+</div>
+<div class="flex flex-col items-stretch sm:items-end gap-2 shrink-0 self-end md:self-center w-full sm:w-auto"><a class="px-4 py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-md text-label-md inline-flex items-center justify-center gap-2 transition-colors" href="#"><span class="material-symbols-outlined text-[18px]">checklist</span>Return to Queue</a><button class="px-4 py-2.5 rounded-lg bg-surface-container hover:bg-surface-bright text-on-surface font-label-md text-label-md inline-flex items-center justify-center gap-2 border border-outline-variant/30 transition-colors" onclick="window.print()" type="button"><span class="material-symbols-outlined text-[18px]">print</span>Print / Export&nbsp;</button></div>
+</div>
+<!-- Two-Column Grid Area -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg w-full items-start">
+<!-- LEFT COLUMN: Authorized Assets & Specification (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-space-lg">
+<!-- Card 1: Authorized State Snapshot -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-sm">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">verified</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Authorized State Snapshot</h2>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-primary-container/20 text-primary font-label-sm text-label-sm font-semibold tracking-wider uppercase">IMMUTABLE SNAPSHOT</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-space-xs">
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Proposal Record</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">PRP-8402</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Omnichannel Q3 Suite · Version 1.1 Lock</span>
+</div>
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Dispatch Status</span>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-lg text-label-lg text-secondary">Queued for Staging</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Live gateway dispatch pending 15-min sync window</span>
+</div>
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Authorized Signatory</span>
+<span class="font-label-lg text-label-lg text-on-surface">David Kross</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Workspace Manager · Corporate Authority Tier-1</span>
+</div>
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Programmatic Gateways</span>
+<div class="flex items-center gap-1.5 flex-wrap pt-0.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Meta Ads (IG &amp; Reels)</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm">Google Ads (P-Max)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Authorized Copy Specimen (v1.1) (Read-Only Locked) -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">lock</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Authorized Copy Specimen (v1.1)</h2>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[13px]">lock</span>
+                Production Locked
+              </span>
+</div>
+</div>
+<div class="space-y-space-md">
+<!-- Headline Field -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Primary Headline (Stage-Gate Spec)</span>
+<span class="font-label-sm text-label-sm text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check</span>
+                  58 / 65 Chars
+                </span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface font-semibold select-all">
+                Unstoppable Momentum. Engineered for Peak Athletic Training.
+              </p>
+</div>
+<!-- Body Copy Field -->
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Primary Description / Body Copy</span>
+<span class="font-label-sm text-label-sm text-emerald-400 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">check</span>
+                  188 / 220 Chars
+                </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed select-all">
+                Engineered with proprietary thermal-weave fabrics that adapt to your workout intensity. Experience frictionless range of motion with complimentary express shipping on all inaugural fleet orders.
+              </p>
+</div>
+<!-- CTA & Target URL -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Call to Action (CTA)</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                  Shop Collection Now
+                </span>
+</div>
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-1 overflow-hidden">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Target Destination URI</span>
+<span class="font-body-sm text-body-sm text-secondary truncate font-mono">
+                  https://acmeactive.com/collections/q3-performance
+                </span>
+</div>
+</div>
+<!-- Compliance Metrics Breakdown -->
+<div class="bg-surface-container-high rounded-lg p-3 flex flex-wrap items-center justify-between gap-3 text-label-sm font-label-sm">
+<div class="flex items-center gap-2 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-400">verified_user</span>
+<span class="">Content Policy Check: <strong class="text-emerald-400 font-semibold">100% Passed</strong></span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<span class="">Tone Alignment: <strong class="text-on-surface">Athletic / Direct</strong></span>
+<span class="">Legal Disclaimers: <strong class="text-on-surface">Validated (Q3 Terms)</strong></span>
+<span class="">Language: <strong class="text-on-surface">EN-US</strong></span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Authorized Creative Asset -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">image</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Authorized Creative Asset Pair</h2>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Ref ID: AST-901-PRO</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-space-md items-center bg-surface-container rounded-xl p-space-md">
+<div class="sm:col-span-4 aspect-square rounded-lg overflow-hidden bg-surface-container-lowest relative group">
+<img class="w-full h-full object-cover" data-alt="Editorial product hero shot of aerodynamic high-performance running sneakers in obsidian black with hyper-cyan technical accents, photographed in a sharp modern studio against deep slate geometric backdrops with directional softbox illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAN-madcGNmceQ1TuzY65_4L8AQzYZqzdd0vvQlUp6RjcsTlVXbcDnNwyyFKZ3LfLy4M2sE0etJn4FKb2WOaABeqwAX6iafJt23RMJO-iRLjPlXMRQBGL-rx2wRO9K6fX4LAzcWxpnP1aNPL7ZyYYgpiBd9RRmZ0t5BAADtBY4JZ1loVIodn_cOViibKd17EqWdQ_kA5kWnpjCHiQUwp9fsEFZHk-2axcywZs7PkLjkRr-kdQ4mWKES">
+<span class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-surface-dim/80 backdrop-blur-sm text-on-surface font-label-sm text-label-sm">
+                Asset #01
+              </span>
+</div>
+<div class="sm:col-span-8 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">AirStride V2 Black Edition</span>
+<span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-label-sm text-label-sm font-semibold">Approved Format</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                High-fidelity 1:1 master square asset locked for deployment across Meta Feed and Google Performance Max display placements. Color profiled for high-DPI OLED screens.
+              </p>
+<div class="grid grid-cols-2 gap-2 pt-2 text-label-sm font-label-sm text-outline">
+<div class="">Dimensions: <span class="text-on-surface font-medium">2048 × 2048 px</span></div>
+<div class="">Format: <span class="text-on-surface font-medium">WebP (94% Q)</span></div>
+<div class="">File Size: <span class="text-on-surface font-medium">642 KB</span></div>
+<div class="">Status: <span class="text-emerald-400 font-medium">CDN Cached</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Audit Trail & Gateway Status (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-space-lg">
+<!-- Card 1: Stage-Gate Audit Trail -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between pb-space-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">history</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Stage-Gate Audit Trail</h2>
+</div>
+<span class="font-label-sm text-label-sm text-outline font-mono">FR04.v1.1</span>
+</div>
+<!-- Chronologic Milestones -->
+<div class="relative pl-6 space-y-space-lg before:content-[''] before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-outline-variant/40">
+<!-- Milestone 1: Approved -->
+<div class="relative flex flex-col gap-1">
+<span class="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-emerald-500 text-surface-dim flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[12px]">check</span>
+</span>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-emerald-400 font-semibold">Approval Decision (Approved)</span>
+<span class="font-label-sm text-label-sm text-outline">14:50 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+                David Kross (Workspace Manager) granted affirmative human authorization.
+              </p>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-mono">Signoff ID: AUTH-DK-8402-99</span>
+</div>
+<!-- Milestone 2: Refined -->
+<div class="relative flex flex-col gap-1">
+<span class="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[12px]">edit</span>
+</span>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-primary font-semibold">Manager Refinement (v1.1)</span>
+<span class="font-label-sm text-label-sm text-outline">14:48 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+                David Kross updated headline &amp; body copy for peak athletic urgency and delivery incentives.
+              </p>
+</div>
+<!-- Milestone 3: Policy Validation -->
+<div class="relative flex flex-col gap-1">
+<span class="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-surface-container-highest text-secondary flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[12px]">rule</span>
+</span>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Policy Gate Passed</span>
+<span class="font-label-sm text-label-sm text-outline">14:34 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                CastraVision automated safety and length constraints passed with zero deviations.
+              </p>
+</div>
+<!-- Milestone 4: Proposal Submitted -->
+<div class="relative flex flex-col gap-1">
+<span class="absolute -left-6 top-0.5 w-4 h-4 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center font-bold text-[10px]">
+<span class="material-symbols-outlined text-[12px]">send</span>
+</span>
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-semibold">Proposal Submitted (v1.0)</span>
+<span class="font-label-sm text-label-sm text-outline">14:32 UTC</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Initial creative copy synthesis submitted for review by Sarah Jenkins (Campaign Lead).
+              </p>
+</div>
+</div>
+</div>
+<!-- Card 2: Pipeline Dispatch & Sync Status -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">sync_alt</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Pipeline Dispatch &amp; Sync Status</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-secondary-container/20 text-secondary font-label-sm text-label-sm font-semibold">Armed</span>
+</div>
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-on-surface font-medium">Automated Sync Window</span>
+<span class="font-label-md text-label-md text-secondary font-semibold">T-minus 14:12</span>
+</div>
+<!-- Progress bar -->
+<div class="w-full bg-surface-container-highest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full w-1/12 transition-all duration-500"></div>
+</div>
+<div class="space-y-2 pt-1 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-emerald-400">check_circle</span>
+                  Meta Marketing API Gateway
+                </span>
+<span class="text-on-surface font-mono">200 OK (Handshake Valid)</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px] text-emerald-400">check_circle</span>
+                  Google Ads REST v16 Gateway
+                </span>
+<span class="text-on-surface font-mono">200 OK (Armed)</span>
+</div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-outline">
+            Once synchronized, assets will be accessible inside Campaign Import as staged components ready for final bidding activation.
+          </p>
+</div>
+<!-- Card 3: Manager Signoff Record -->
+<div class="w-full rounded-xl bg-surface-container-low p-space-lg flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[20px]">rate_review</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Manager Signoff Record</h2>
+</div>
+<span class="text-tertiary font-label-sm text-label-sm font-semibold uppercase">Authorized</span>
+</div>
+<div class="bg-surface-container rounded-lg p-space-md flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Recorded Manager Justification</span>
+<p class="font-body-md text-body-md text-on-surface italic">
+              “Refined headline cadence for greater athletic urgency and updated body copy to highlight complimentary delivery. Authorized for campaign staging.”
+            </p>
+<div class="pt-2 flex items-center justify-between border-t border-outline-variant/20">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary text-[11px] font-bold">
+                  DK
+                </div>
+<span class="font-label-sm text-label-sm text-on-surface">David Kross</span>
+</div>
+<span class="font-label-sm text-label-sm text-emerald-400 font-medium">Digital Signature Attached</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Sticky-Like Action & Verification Bar -->
+
+</div>
+</div></main></div>
+
+
+
+
+
+
+
+
+
+</body></html>

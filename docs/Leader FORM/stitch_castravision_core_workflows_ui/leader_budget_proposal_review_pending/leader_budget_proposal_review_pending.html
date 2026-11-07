@@ -1,0 +1,854 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-background":"#dfe2f1","on-tertiary-fixed":"#23005c","on-error":"#690005","on-primary":"#1000a9","secondary-container":"#03b5d3","surface-container-highest":"#313540","outline":"#908fa0","on-surface":"#dfe2f1","surface":"#0f131d","surface-container":"#1c1f2a","on-surface-variant":"#c7c4d7","primary":"#c0c1ff","tertiary-fixed":"#e9ddff","tertiary-fixed-dim":"#d0bcff","tertiary":"#d0bcff","on-error-container":"#ffdad6","primary-fixed-dim":"#c0c1ff","inverse-on-surface":"#2c303b","surface-dim":"#0f131d","outline-variant":"#464554","secondary-fixed":"#acedff","error-container":"#93000a","on-tertiary-container":"#340080","surface-container-lowest":"#0a0e18","on-secondary-container":"#00424e","on-tertiary":"#3c0091","tertiary-container":"#a078ff","background":"#0f131d","inverse-primary":"#494bd6","surface-bright":"#353944","on-secondary-fixed-variant":"#004e5c","on-secondary-fixed":"#001f26","primary-container":"#8083ff","surface-container-low":"#171b26","surface-tint":"#c0c1ff","surface-container-high":"#262a35","primary-fixed":"#e1e0ff","inverse-surface":"#dfe2f1","secondary-fixed-dim":"#4cd7f6","surface-variant":"#313540","on-primary-container":"#0d0096","on-tertiary-fixed-variant":"#5516be","on-secondary":"#003640","on-primary-fixed":"#07006c","secondary":"#4cd7f6","on-primary-fixed-variant":"#2f2ebe","error":"#ffb4ab"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"space-xl":"2rem","gutter-mobile":"0.75rem",gutter:"1.5rem","margin-mobile":"1rem","space-md":"1rem","space-lg":"1.5rem","space-sm":"0.5rem","space-xs":"0.25rem",margin:"2rem"},fontFamily:{"body-sm":["Inter"],"headline-sm":["Plus Jakarta Sans"],"headline-lg-mobile":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"label-md":["Inter"],"label-sm":["Inter"],"headline-lg":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"body-lg":["Inter"],"label-lg":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-md":["Inter"]},fontSize:{"body-sm":["12px",{lineHeight:"16px",fontWeight:"400"}],"headline-sm":["16px",{lineHeight:"24px",fontWeight:"600"}],"headline-lg-mobile":["22px",{lineHeight:"30px",letterSpacing:"-0.01em",fontWeight:"600"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"500"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"600"}],"headline-lg":["28px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"label-lg":["14px",{lineHeight:"20px",letterSpacing:"0.01em",fontWeight:"600"}],"headline-xl-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"700"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}]}}}}</script></head><body class="bg-background font-body-md text-on-surface antialiased"><aside class="w-[260px] fixed left-0 top-0 flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-50 select-none">
+    <!-- Top Logo Area -->
+    <div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+        <span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+      </div>
+    </div>
+
+    <!-- Navigation Scroll Area -->
+    <div class="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+      <div>
+        <div class="px-3 mb-2 flex items-center justify-between">
+          <span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">LEADER</span>
+        </div>
+        
+        <nav class="space-y-1">
+          <!-- 1. Overview -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="">Overview</span>
+          </a>
+
+          <!-- 2. Approvals (ACTIVE) -->
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#8083ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span class="">Approvals</span>
+            </div>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096]">3</span>
+          </a>
+
+          <!-- 3. My Proposals -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="">My Proposals</span>
+          </a>
+
+          <!-- 4. Campaigns -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span class="">Campaigns</span>
+          </a>
+
+          <!-- 5. Strategy Studio -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="">Strategy Studio</span>
+          </a>
+
+          <!-- 6. Content Gen -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            <span class="">Content Gen</span>
+          </a>
+
+          <!-- 7. Campaign Import -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span class="">Campaign Import</span>
+          </a>
+
+          <!-- 8. Performance & Insights -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span class="">Performance &amp; Insights</span>
+          </a>
+
+          <!-- 9. Account Settings -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span class="">Account Settings</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Area (Inside Sidebar) -->
+    <div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+      <div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+            AC
+          </div>
+          <div class="min-w-0">
+            <p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+            <p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+          </div>
+        </div>
+        <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none shrink-0">
+          LEADER
+        </span>
+      </div>
+    </div>
+  </aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-40">
+      <!-- Left Side: Breadcrumb navigation -->
+      <div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Leader Workspace</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Approvals</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="text-[#dfe2f1] font-semibold">Proposal Review (Budget)</span>
+      </div>
+
+      <!-- Right Side: Utility Widgets -->
+      <div class="flex items-center gap-5">
+        <!-- System Status Widget -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28A745] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]"></span>
+          </span>
+          <span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+        </div>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- Notification Bell Icon (With Red #ffb4ab dot with number "5") -->
+        <button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+            5
+          </span>
+        </button>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- User Profile Widget -->
+        <div class="flex items-center gap-3 pl-1">
+          <div class="relative">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8083ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+              DK
+            </div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#28A745] rounded-full ring-2 ring-[#171b26]"></div>
+          </div>
+          <div class="flex flex-col text-left">
+            <div class="flex items-center gap-1.5 leading-none">
+              <span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span>
+              <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
+                LEADER
+              </span>
+            </div>
+            <span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span>
+          </div>
+        </div>
+      </div>
+    </header><main class="relative pt-16 min-h-screen bg-background w-full px-gutter"><div class="flex flex-col w-full pb-20">
+<!-- Top Navigation & Metadata Anchor -->
+<div class="flex flex-col gap-space-sm pt-space-md pb-space-lg">
+<!-- Back to Approvals Link Bar -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex flex-wrap items-center gap-space-sm font-label-sm text-label-sm">
+<a class="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors font-medium" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span class="">Back to Approval Queue</span>
+</a>
+<span class="text-outline-variant">•</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-mono font-semibold">PRP-8403</span>
+<span class="text-outline-variant">•</span>
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px] text-tertiary">smart_toy</span>
+          Submitted by Engine Agent [Beta] (Autonomous Pipeline)
+        </span>
+<span class="text-outline-variant">•</span>
+<span class="text-outline">Oct 24, 2026 · 13:15 UTC</span>
+</div>
+<!-- Pending Badge -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container-high border border-outline-variant/40">
+<span class="w-2 h-2 rounded-full bg-[#EAB308]"></span>
+<span class="font-label-sm text-label-sm font-semibold text-[#FDE047] uppercase tracking-wider">Pending Review</span>
+</div>
+</div>
+<!-- Main Title & Primary Actions Area -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex flex-wrap items-center gap-space-sm font-label-sm text-label-sm">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-semibold uppercase tracking-wider">BUDGET ALLOCATION PROPOSAL</span>
+<span class="text-outline">Version 1.0 (Autonomous Draft)</span>
+<span class="text-outline-variant">•</span>
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-outline">tune</span>
+            Target: Meta Ads, Google Ads &amp; TikTok Ads
+          </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight truncate">
+          Proposal Review — Dynamic Budget Reallocation
+        </h1>
+</div>
+<!-- Top Action Buttons (Desktop Synchronized) -->
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-lg text-label-lg flex items-center gap-1.5 transition-colors border border-outline-variant/40" id="btn-edit-top">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span class="">Edit Allocation</span>
+</button>
+<button class="px-4 py-2 rounded-lg bg-[#3F1219] hover:bg-[#5C1B25] text-error font-label-lg text-label-lg flex items-center gap-1.5 transition-colors border border-error/30" id="btn-reject-top">
+<span class="material-symbols-outlined text-[18px]">block</span>
+<span class="">Reject with Reason</span>
+</button>
+<button class="px-5 py-2.5 rounded-lg bg-[#16A34A] hover:bg-[#15803D] text-white font-label-lg text-label-lg font-semibold flex items-center gap-2 transition-colors shadow-sm" id="btn-approve-top">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span class="">Approve &amp; Proceed</span>
+</button>
+</div>
+</div>
+</div>
+<!-- FR04 Human-in-the-Loop Governance Notice Banner -->
+<div class="mb-space-lg p-space-md rounded-xl bg-surface-container-low border border-tertiary-container/30 flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0 border border-tertiary/20">
+<span class="material-symbols-outlined text-tertiary text-[22px]">gavel</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm font-semibold tracking-wider uppercase text-tertiary">FR04 Human-in-the-Loop Governance Notice</span>
+<span class="px-1.5 py-0.2 rounded text-[10px] font-label-sm bg-surface-container-highest text-outline uppercase font-mono">Mandatory Signoff Protocol</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+        Automated advertising spend reallocations are held in pre-flight staging. This budget allocation proposal requires explicit human manager signoff on capital shift parameters, channel distribution proportions, and monthly budget pacing limits before external dispatch.
+      </p>
+</div>
+<div class="hidden sm:flex items-center gap-1 text-tertiary-fixed font-label-sm text-label-sm shrink-0 self-center px-3 py-1.5 rounded bg-surface-container-high border border-tertiary-container/20">
+<span class="material-symbols-outlined text-[16px]">verified_user</span>
+<span class="">Policy Active</span>
+</div>
+</div>
+<!-- Two-Column Primary Workspace Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- Left Main Column (65% width = 8 cols on 12-col grid) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- 1. Budget Context & Campaign Objectives Card -->
+<section class="rounded-xl bg-surface-container border border-outline-variant/30 overflow-hidden">
+<div class="px-space-md py-3.5 bg-surface-container-high/60 border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">account_balance_wallet</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">1. Budget Context &amp; Campaign Objectives</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container-lowest text-outline font-mono text-[11px] font-label-sm uppercase">SOURCE BRIEF: Q4-ROAS-OPT-771</span>
+</div>
+<div class="p-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">Target Campaign</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Q3 Activewear Omnichannel Campaign</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Omnichannel E-Commerce</span>
+</div>
+<div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">Primary Objective</span>
+<span class="font-body-md text-body-md font-semibold text-secondary">CPA Reduction &amp; ROAS Optimization</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Target ROAS: 3.80x (Floor 3.20x)</span>
+</div>
+<div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">Monthly Spend Envelope</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold tracking-tight">$45,000.00 / mo</span>
+<span class="font-body-sm text-body-sm text-emerald-400">Fixed Envelope (Zero Tolerance)</span>
+</div>
+<div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">Target Period</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Nov 1 – Nov 30, 2026</span>
+<span class="font-body-sm text-body-sm text-outline">30 Days Scheduled Pacing</span>
+</div>
+<div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">Pacing Strategy</span>
+<span class="font-body-md text-body-md font-semibold text-on-surface">Even Daily + Weekend Bias</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Friday 18:00 to Sunday 23:59 (+15%)</span>
+</div>
+<div class="flex flex-col gap-1 p-3 rounded-lg bg-surface-container-low border border-outline-variant/20">
+<span class="font-label-sm text-label-sm text-outline">Authorization Tier</span>
+<span class="font-body-md text-body-md font-semibold text-tertiary">Tier 2 Manager Review</span>
+<span class="font-body-sm text-body-sm text-outline">Threshold: Spend &gt; $10,000</span>
+</div>
+</div>
+</section>
+<!-- 2. Proposed Channel Allocations & Reallocation Breakdown Card -->
+<section class="rounded-xl bg-surface-container border border-outline-variant/30 overflow-hidden">
+<div class="px-space-md py-3.5 bg-surface-container-high/60 border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">waterfall_chart</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">2. Proposed Channel Allocations &amp; Reallocation Breakdown</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 font-label-sm text-[11px] font-semibold border border-emerald-500/30">DELTA AUDITED</span>
+</div>
+<!-- Banner Statistics Block -->
+<div class="p-space-md grid grid-cols-1 md:grid-cols-3 gap-space-md border-b border-outline-variant/20 bg-surface-container-lowest/50">
+<div class="flex flex-col justify-between p-4 rounded-xl bg-surface-container-low border border-outline-variant/30 shadow-sm">
+<div>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider font-medium">Total Proposed Budget</span>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight">$45,000.00</span>
+<span class="font-label-sm text-label-sm text-outline">USD</span>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-outline-variant/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-outline">lock</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Retains exact monthly capital boundary</span>
+</div>
+</div>
+<div class="flex flex-col justify-between p-4 rounded-xl bg-surface-container-low border border-secondary/30 shadow-sm">
+<div>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider font-medium">Shifted Capital Reallocation</span>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-headline-lg text-headline-lg font-bold text-secondary tracking-tight">+$8,500.00</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-label-sm font-semibold bg-secondary/10 text-secondary border border-secondary/30">Rebalanced</span>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-outline-variant/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-secondary">swap_horiz</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Shifted away from saturated TikTok ads</span>
+</div>
+</div>
+<div class="flex flex-col justify-between p-4 rounded-xl bg-surface-container-low border border-emerald-500/30 shadow-sm">
+<div>
+<span class="font-label-sm text-label-sm text-emerald-300 uppercase tracking-wider font-medium">Net Budget Variance Impact</span>
+<div class="flex items-baseline gap-2 mt-2">
+<span class="font-headline-lg text-headline-lg font-bold text-emerald-400 tracking-tight">$0.00</span>
+<span class="px-2 py-0.5 rounded text-[11px] font-label-sm font-semibold bg-emerald-950/80 text-emerald-300 border border-emerald-500/30">NEUTRAL</span>
+</div>
+</div>
+<div class="mt-3 pt-2.5 border-t border-outline-variant/20 flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-emerald-400">check_circle</span>
+<span class="font-body-sm text-body-sm text-emerald-400/90">Zero net increase / Fully compliant</span>
+</div>
+</div>
+</div>
+<!-- Channel Allocation Table -->
+<div class="p-space-md overflow-x-auto">
+<table class="w-full text-left border-collapse min-w-[620px]">
+<thead>
+<tr class="border-b border-outline-variant/40 font-label-sm text-label-sm uppercase tracking-wider text-outline">
+<th class="pb-3 pl-2">Channel / Network</th>
+<th class="pb-3 text-right">Current Spend</th>
+<th class="pb-3 text-right">Proposed Allocation</th>
+<th class="pb-3 text-right">Share (%)</th>
+<th class="pb-3 text-right">Net Change</th>
+<th class="pb-3 pl-6 pr-2 w-44">Allocation Bar</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20 font-body-md text-body-md">
+<!-- Row 1: Google Search & Performance Max -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 pl-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<div>
+<div class="font-semibold text-on-surface">Google Search &amp; Performance Max</div>
+<div class="font-body-sm text-body-sm text-outline">High-intent intent capture &amp; Merchant feed</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 text-right font-mono text-on-surface-variant">$15,000.00 <span class="text-outline text-[12px]">(33.3%)</span></td>
+<td class="py-3.5 text-right font-mono font-semibold text-on-surface">$21,000.00</td>
+<td class="py-3.5 text-right font-mono text-on-surface">46.7%</td>
+<td class="py-3.5 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[12px] font-semibold bg-emerald-950/70 text-emerald-300 border border-emerald-500/30">
+                    +$6,000.00 (+40.0%)
+                  </span>
+</td>
+<td class="py-3.5 pl-6 pr-2">
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full" style="width: 46.7%"></div>
+</div>
+</td>
+</tr>
+<!-- Row 2: Meta Ads (Instagram & FB Reels) -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 pl-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<div>
+<div class="font-semibold text-on-surface">Meta Ads (Instagram &amp; FB Reels)</div>
+<div class="font-body-sm text-body-sm text-outline">Catalog Advantage+ &amp; Remarketing</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 text-right font-mono text-on-surface-variant">$17,500.00 <span class="text-outline text-[12px]">(38.9%)</span></td>
+<td class="py-3.5 text-right font-mono font-semibold text-on-surface">$19,500.00</td>
+<td class="py-3.5 text-right font-mono text-on-surface">43.3%</td>
+<td class="py-3.5 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[12px] font-semibold bg-emerald-950/70 text-emerald-300 border border-emerald-500/30">
+                    +$2,000.00 (+11.4%)
+                  </span>
+</td>
+<td class="py-3.5 pl-6 pr-2">
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full" style="width: 43.3%"></div>
+</div>
+</td>
+</tr>
+<!-- Row 3: TikTok Ads (Video UGC & Spark) -->
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="py-3.5 pl-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<div>
+<div class="font-semibold text-on-surface">TikTok Ads (Video UGC &amp; Spark)</div>
+<div class="font-body-sm text-body-sm text-outline">Upper funnel creative prospecting</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 text-right font-mono text-on-surface-variant">$12,500.00 <span class="text-outline text-[12px]">(27.8%)</span></td>
+<td class="py-3.5 text-right font-mono font-semibold text-on-surface">$4,500.00</td>
+<td class="py-3.5 text-right font-mono text-on-surface">10.0%</td>
+<td class="py-3.5 text-right">
+<span class="inline-flex items-center px-2 py-0.5 rounded font-mono text-[12px] font-semibold bg-[#3F1219] text-error border border-error/30">
+                    -$8,000.00 (-64.0%)
+                  </span>
+</td>
+<td class="py-3.5 pl-6 pr-2">
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 10.0%"></div>
+</div>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="bg-surface-container-high/40 font-semibold border-t-2 border-outline-variant/40">
+<td class="py-3 pl-2 text-on-surface">Total Workspace Allocation</td>
+<td class="py-3 text-right font-mono text-outline">$45,000.00</td>
+<td class="py-3 text-right font-mono text-primary font-bold">$45,000.00</td>
+<td class="py-3 text-right font-mono text-on-surface">100.0%</td>
+<td class="py-3 text-right font-mono text-emerald-400 font-semibold">$0.00 (Neutral)</td>
+<td class="py-3 pl-6 pr-2">
+<div class="flex items-center gap-1.5 text-emerald-400 font-label-sm text-[11px] font-semibold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span class="">100% Balanced</span>
+</div>
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</section>
+<!-- 3. Strategic Recommendation Justification & Pacing Model Card -->
+<section class="rounded-xl bg-surface-container border border-outline-variant/30 overflow-hidden">
+<div class="px-space-md py-3.5 bg-surface-container-high/60 border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[20px]">psychology</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">3. Strategic Recommendation Justification &amp; Pacing Model</h2>
+</div>
+<span class="font-mono text-[11px] text-tertiary font-label-sm">CONFIDENCE SCORE: 94.2%</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-md">
+<!-- Algorithmic narrative callout -->
+<div class="p-space-md rounded-lg bg-surface-container-low border border-outline-variant/20 flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[18px]">trending_up</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Algorithmic Optimization Spike (+18.4% Blended ROAS forecasted):</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+              TikTok CPA increased by 28% over the past 14 days ($4.80 vs target $3.50), reflecting audience saturation in the 18–24 cohort. Concurrently, Google Search and Meta Ads have exhibited consistent margin headroom with conversion rates of 4.62% and 3.42% respectively. Reallocating $8,000 away from TikTok into high-intent Google Search (+ $6,000) and Meta retargeting (+ $2,000) maintains overall campaign reach while restoring blended acquisition costs to target thresholds.
+            </p>
+</div>
+<!-- Parameter validation / guardrails -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm pt-space-xs">
+<div class="flex items-start gap-2 p-2.5 rounded bg-surface-container-high/40 border border-outline-variant/20">
+<span class="material-symbols-outlined text-emerald-400 text-[18px] shrink-0 mt-0.5">verified</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Nonnegative Constraints</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">All channel floors satisfy contractual min spend limits.</span>
+</div>
+</div>
+<div class="flex items-start gap-2 p-2.5 rounded bg-surface-container-high/40 border border-outline-variant/20">
+<span class="material-symbols-outlined text-emerald-400 text-[18px] shrink-0 mt-0.5">check_box</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Cap Compliance</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Matches approved $45,000 workspace envelope exactly.</span>
+</div>
+</div>
+<div class="flex items-start gap-2 p-2.5 rounded bg-surface-container-high/40 border border-outline-variant/20">
+<span class="material-symbols-outlined text-emerald-400 text-[18px] shrink-0 mt-0.5">speed</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Daily Pacing Rate</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Calibrates to $1,500/day across networks evenly.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Sidebar Column (35% width = 4 cols on 12-col grid) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- 1. Manager Stage-Gate Review (FR04) Card -->
+<section class="rounded-xl bg-surface-container border border-outline-variant/30 overflow-hidden shadow-sm">
+<div class="px-space-md py-3.5 bg-surface-container-high/60 border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-tertiary text-[20px]">policy</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Manager Stage-Gate (FR04)</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-tertiary-container text-on-tertiary-container font-label-sm text-[10px] font-bold tracking-wider uppercase">ACTIVE GATE</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-md">
+<!-- Signatory card -->
+<div class="p-3 rounded-lg bg-surface-container-low border border-outline-variant/20 flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 font-bold text-on-primary">
+              DK
+            </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">David Kross</span>
+<span class="font-body-sm text-body-sm text-outline truncate">Workspace Manager · Authorized Signoff</span>
+<span class="font-label-sm text-[10px] text-tertiary font-mono">ROLE: Tier-2 Governance Lead</span>
+</div>
+</div>
+<!-- Mandatory Stage-Gate Verification Checkbox List -->
+<div class="flex flex-col gap-2.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Pre-Flight Verification Protocol</span>
+<label class="flex items-start gap-2.5 p-2 rounded bg-surface-container-low/60 border border-outline-variant/20 cursor-default select-none">
+<input checked="" class="mt-0.5 accent-primary h-4 w-4 rounded bg-surface-container-highest cursor-not-allowed" disabled="" type="checkbox">
+<span class="font-body-sm text-body-sm text-on-surface leading-tight">Total budget does not exceed approved workspace cap ($45,000)</span>
+</label>
+<label class="flex items-start gap-2.5 p-2 rounded bg-surface-container-low/60 border border-outline-variant/20 cursor-default select-none">
+<input checked="" class="mt-0.5 accent-primary h-4 w-4 rounded bg-surface-container-highest cursor-not-allowed" disabled="" type="checkbox">
+<span class="font-body-sm text-body-sm text-on-surface leading-tight">Channel minimum spends respected (No channel zeroed without notice)</span>
+</label>
+<label class="flex items-start gap-2.5 p-2 rounded bg-surface-container-low/60 border border-outline-variant/20 cursor-default select-none">
+<input checked="" class="mt-0.5 accent-primary h-4 w-4 rounded bg-surface-container-highest cursor-not-allowed" disabled="" type="checkbox">
+<span class="font-body-sm text-body-sm text-on-surface leading-tight">High-intent search allocation prioritized over speculative channels</span>
+</label>
+<label class="flex items-start gap-2.5 p-2 rounded bg-surface-container-highest/50 border border-secondary/30 cursor-pointer hover:bg-surface-container-highest transition-colors">
+<input class="mt-0.5 accent-secondary h-4 w-4 rounded cursor-pointer" id="chk-affirm-signoff" type="checkbox">
+<span class="font-body-sm text-body-sm text-secondary font-medium leading-tight">Affirmative Human Authorization Confirmed</span>
+</label>
+</div>
+<!-- Policy Notice callout -->
+<div class="p-2.5 rounded bg-surface-container-low border-l-2 border-tertiary text-on-surface-variant font-body-sm text-body-sm">
+            Stage-Gate Policy Note: Human-in-the-loop authorization required before external ad network budget adjustments are deployed.
+          </div>
+<!-- Primary Sidebar Approval Action -->
+<div class="pt-2 flex flex-col gap-2">
+<button class="w-full py-2.5 rounded-lg bg-[#16A34A] hover:bg-[#15803D] text-white font-label-lg text-label-lg font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm" id="btn-sidebar-approve">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="">Execute Proposal Approval</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md flex items-center justify-center gap-1 border border-outline-variant/40" id="btn-sidebar-edit">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span class="">Edit</span>
+</button>
+<button class="py-2 rounded-lg bg-[#3F1219] hover:bg-[#5C1B25] text-error font-label-md text-label-md flex items-center justify-center gap-1 border border-error/30" id="btn-sidebar-reject">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span class="">Reject</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 2. Version History & Audit Log Card -->
+<section class="rounded-xl bg-surface-container border border-outline-variant/30 overflow-hidden">
+<div class="px-space-md py-3.5 bg-surface-container-high/60 border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[20px]">history</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Version &amp; Audit Log</h2>
+</div>
+<span class="font-mono text-primary font-semibold text-[11px]">v1.0 DRAFT</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-md">
+<div class="flex flex-col gap-1 text-body-sm font-body-sm border-b border-outline-variant/20 pb-3">
+<div class="flex justify-between">
+<span class="text-outline">Worker Instance:</span>
+<span class="font-mono text-on-surface">Engine Agent [Beta]</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Algorithm Worker:</span>
+<span class="font-mono text-on-surface">Core Opt v2.4</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline">Created At:</span>
+<span class="font-mono text-on-surface">Oct 24, 2026, 13:15 UTC</span>
+</div>
+</div>
+<!-- Chronology List -->
+<div class="flex flex-col gap-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Chronological Trace</span>
+<div class="flex items-start gap-2.5">
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant mt-1.5 shrink-0"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-mono text-outline">13:10 UTC</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cross-channel CPA telemetry anomaly triggered reallocation routine.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<div class="w-1.5 h-1.5 rounded-full bg-outline-variant mt-1.5 shrink-0"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-mono text-outline">13:12 UTC</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pacing constraints and non-negative parameters validated.</span>
+</div>
+</div>
+<div class="flex items-start gap-2.5">
+<div class="w-1.5 h-1.5 rounded-full bg-[#EAB308] mt-1.5 shrink-0"></div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-mono text-[#FDE047]">13:15 UTC</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Proposal PRP-8403 compiled and queued for Manager Signoff.</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. Telemetry & Pacing Safeguards Card -->
+<section class="rounded-xl bg-surface-container border border-outline-variant/30 overflow-hidden">
+<div class="px-space-md py-3 bg-surface-container-high/60 border-b border-outline-variant/30 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-outline text-[18px]">verified</span>
+<span class="font-headline-sm text-headline-sm text-on-surface text-[14px]">Telemetry &amp; Pacing Safeguards</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<div class="p-space-md grid grid-cols-3 gap-2">
+<div class="flex flex-col items-center justify-center p-2 rounded bg-surface-container-low border border-outline-variant/20 text-center">
+<span class="font-headline-sm text-headline-sm font-bold text-emerald-400 font-mono">1.00</span>
+<span class="font-label-sm text-[10px] text-outline mt-0.5">Budget Balance</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded bg-surface-container-low border border-outline-variant/20 text-center">
+<span class="font-headline-sm text-headline-sm font-bold text-secondary font-mono">0.00</span>
+<span class="font-label-sm text-[10px] text-outline mt-0.5">Variance Risk</span>
+</div>
+<div class="flex flex-col items-center justify-center p-2 rounded bg-surface-container-low border border-outline-variant/20 text-center">
+<span class="font-headline-sm text-headline-sm font-bold text-primary font-mono">$45k</span>
+<span class="font-label-sm text-[10px] text-outline mt-0.5">Invariant Cap</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Persistent Bottom Action Bar (Fixed Staging Strip) -->
+<aside class="fixed bottom-0 left-[260px] right-0 bg-surface-container-low/95 border-t border-outline-variant/40 px-space-lg py-3 z-40 flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-2 max-w-2xl min-w-0">
+<span class="material-symbols-outlined text-secondary text-[20px] shrink-0">shield</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+<strong class="text-on-surface font-semibold">FR04 Human-in-the-Loop Authority:</strong> Final affirmative authorization or rejection with justification required before external channel deployment.
+      </span>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md flex items-center gap-1.5 transition-colors border border-outline-variant/40" id="btn-edit-bottom">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+<span class="">Edit Allocation</span>
+</button>
+<button class="px-4 py-2 rounded-lg bg-[#3F1219] hover:bg-[#5C1B25] text-error font-label-md text-label-md flex items-center gap-1.5 transition-colors border border-error/30" id="btn-reject-bottom">
+<span class="material-symbols-outlined text-[16px]">close</span>
+<span class="">Reject with Reason</span>
+</button>
+<button class="px-5 py-2.5 rounded-lg bg-[#16A34A] hover:bg-[#15803D] text-white font-label-lg text-label-lg font-semibold flex items-center gap-2 transition-colors shadow-sm" id="btn-approve-bottom">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span class="">Approve &amp; Proceed</span>
+</button>
+</div>
+</aside>
+<!-- Interactive Modal: Reject Reason Modal (Hidden by Default) -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 hidden" id="modal-reject">
+<div class="w-full max-w-lg bg-surface-container border border-outline-variant/40 rounded-xl p-space-lg flex flex-col gap-space-md shadow-2xl">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[22px]">error</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Reject Allocation Proposal</h3>
+</div>
+<button class="text-outline hover:text-on-surface transition-colors" id="btn-close-modal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Please state the operational justification for rejecting Proposal <span class="font-mono text-primary font-semibold">PRP-8403</span>. The autonomous engine agent will consume this feedback for recalibration.
+      </p>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-outline uppercase font-semibold">Rejection Justification</label>
+<textarea class="w-full rounded-lg bg-surface-container-low border border-outline-variant/40 p-3 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary transition-colors resize-none" id="txt-reject-reason" placeholder="E.g., TikTok reduction exceeds brand awareness minimum requirements, or reallocation to Meta catalog requires Creative Refresh first..." rows="4"></textarea>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-2">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md border border-outline-variant/40" id="btn-cancel-modal">
+          Cancel
+        </button>
+<button class="px-4 py-2 rounded-lg bg-[#EF4444] hover:bg-[#DC2626] text-white font-label-md text-label-md font-semibold flex items-center gap-1.5" id="btn-confirm-rejection">
+<span class="material-symbols-outlined text-[16px]">send</span>
+<span class="">Submit Rejection</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Interactive Modal: Edit Allocation Inline Notice -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 hidden" id="modal-edit">
+<div class="w-full max-w-lg bg-surface-container border border-outline-variant/40 rounded-xl p-space-lg flex flex-col gap-space-md shadow-2xl">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[22px]">tune</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Edit Budget Allocation</h3>
+</div>
+<button class="text-outline hover:text-on-surface transition-colors" id="btn-close-edit-modal">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Switch to manual override mode. Adjusting channel spend limits will generate a revised draft version <span class="font-mono text-secondary font-semibold">v1.1 (Human Modified)</span>.
+      </p>
+<div class="flex flex-col gap-3 font-body-sm text-body-sm">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low border border-outline-variant/20">
+<span class="">Google Search &amp; P-Max:</span>
+<input class="w-32 bg-surface-container-high px-2 py-1 rounded text-right font-mono border border-outline-variant/40 text-on-surface" type="text" value="$21,000.00">
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low border border-outline-variant/20">
+<span class="">Meta Ads (IG &amp; FB):</span>
+<input class="w-32 bg-surface-container-high px-2 py-1 rounded text-right font-mono border border-outline-variant/40 text-on-surface" type="text" value="$19,500.00">
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container-low border border-outline-variant/20">
+<span class="">TikTok Ads (Video UGC):</span>
+<input class="w-32 bg-surface-container-high px-2 py-1 rounded text-right font-mono border border-outline-variant/40 text-on-surface" type="text" value="$4,500.00">
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-2">
+<button class="px-4 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md border border-outline-variant/40" id="btn-cancel-edit-modal">
+          Discard
+        </button>
+<button class="px-4 py-2 rounded-lg bg-primary hover:bg-primary-fixed-dim text-on-primary font-label-md text-label-md font-semibold flex items-center gap-1.5" id="btn-save-edit">
+<span class="material-symbols-outlined text-[16px]">save</span>
+<span class="">Save Changes as v1.1</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+    (function initBudgetProposalReview() {
+      // Elements
+      const rejectModal = document.getElementById('modal-reject');
+      const editModal = document.getElementById('modal-edit');
+      const affirmCheckbox = document.getElementById('chk-affirm-signoff');
+
+      const rejectButtons = [
+        document.getElementById('btn-reject-top'),
+        document.getElementById('btn-reject-bottom'),
+        document.getElementById('btn-sidebar-reject')
+      ];
+
+      const approveButtons = [
+        document.getElementById('btn-approve-top'),
+        document.getElementById('btn-approve-bottom'),
+        document.getElementById('btn-sidebar-approve')
+      ];
+
+      const editButtons = [
+        document.getElementById('btn-edit-top'),
+        document.getElementById('btn-edit-bottom'),
+        document.getElementById('btn-sidebar-edit')
+      ];
+
+      // Rejection modal handlers
+      rejectButtons.forEach(btn => {
+        if(btn) {
+          btn.addEventListener('click', () => {
+            rejectModal.classList.remove('hidden');
+          });
+        }
+      });
+
+      document.getElementById('btn-close-modal')?.addEventListener('click', () => {
+        rejectModal.classList.add('hidden');
+      });
+      document.getElementById('btn-cancel-modal')?.addEventListener('click', () => {
+        rejectModal.classList.add('hidden');
+      });
+
+      document.getElementById('btn-confirm-rejection')?.addEventListener('click', () => {
+        const reason = document.getElementById('txt-reject-reason').value;
+        alert('Proposal PRP-8403 rejected. Feedback dispatched to Autonomous Pipeline.');
+        rejectModal.classList.add('hidden');
+      });
+
+      // Edit modal handlers
+      editButtons.forEach(btn => {
+        if(btn) {
+          btn.addEventListener('click', () => {
+            editModal.classList.remove('hidden');
+          });
+        }
+      });
+
+      document.getElementById('btn-close-edit-modal')?.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+      });
+      document.getElementById('btn-cancel-edit-modal')?.addEventListener('click', () => {
+        editModal.classList.add('hidden');
+      });
+      document.getElementById('btn-save-edit')?.addEventListener('click', () => {
+        alert('Modifications saved as Draft v1.1. Invariant constraints verified.');
+        editModal.classList.add('hidden');
+      });
+
+      // Approve handlers
+      approveButtons.forEach(btn => {
+        if(btn) {
+          btn.addEventListener('click', () => {
+            if (!affirmCheckbox.checked) {
+              affirmCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              affirmCheckbox.focus();
+              alert('Mandatory Stage-Gate Verification: Please check "Affirmative Human Authorization Confirmed" to complete FR04 compliance.');
+              return;
+            }
+            alert('Proposal PRP-8403 APPROVED. Advertising spend reallocations dispatched to Meta, Google, and TikTok APIs.');
+          });
+        }
+      });
+    })();
+  </script>
+</div></main></div>
+
+
+
+
+
+
+
+
+
+</body></html>

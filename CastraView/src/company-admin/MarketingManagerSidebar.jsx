@@ -43,18 +43,49 @@ export default function MarketingManagerSidebar({
   planName = 'Enterprise Workspace',
   canApprove = true,
   canViewAudit = true,
+  isDrawer = false,
+  onClose,
 }) {
   return (
-    <aside className="ca-sidebar" aria-label="Marketing Manager Navigation">
+    <aside
+      className={`ca-sidebar ${isDrawer ? 'ca-sidebar-drawer' : ''}`}
+      aria-label="Marketing Manager Navigation"
+    >
       {/* Top Logo & Admin Badge */}
       <div className="ca-sidebar-top">
-        <div className="ca-brand" role="button" tabIndex={0} onClick={() => onNavigate('overview')} onKeyDown={(e) => e.key === 'Enter' && onNavigate('overview')}>
+        <div
+          className="ca-brand"
+          role="button"
+          tabIndex={0}
+          onClick={() => {
+            onNavigate('overview')
+            if (isDrawer && onClose) onClose()
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              onNavigate('overview')
+              if (isDrawer && onClose) onClose()
+            }
+          }}
+        >
           <span className="ca-brand-glyph" aria-hidden="true">
             <BrandLogo size={22} />
           </span>
           <span className="ca-brand-text">CastraVision</span>
         </div>
-        <span className="ca-admin-badge" title="Marketing Manager Context">MARKETING MANAGER</span>
+        <span className="ca-admin-badge" title="Marketing Manager Context">
+          MARKETING MANAGER
+        </span>
+        {isDrawer && (
+          <button
+            type="button"
+            className="ca-drawer-close-btn"
+            onClick={onClose}
+            aria-label="Đóng menu điều hướng"
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       {/* Navigation List */}
@@ -75,7 +106,10 @@ export default function MarketingManagerSidebar({
                 <button
                   type="button"
                   className={`ca-nav-item ${isActive ? 'active' : ''}`}
-                  onClick={() => onNavigate(item.key)}
+                  onClick={() => {
+                    onNavigate(item.key)
+                    if (isDrawer && onClose) onClose()
+                  }}
                   aria-current={isActive ? 'page' : undefined}
                 >
                   <span className="ca-nav-icon" aria-hidden="true">

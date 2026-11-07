@@ -357,7 +357,7 @@ function CampaignPerformanceSection() {
 }
 
 // ── Team Execution Panel ───────────────────────────────────────────────────
-function TeamExecutionPanel() {
+function TeamExecutionPanel({ onOpenPage }) {
   const completed = 42, total = 48
   const pct = Math.round((completed / total) * 100)
 
@@ -441,7 +441,11 @@ function TeamExecutionPanel() {
         ))}
       </div>
 
-      <button className="ldr-team-matrix-link" aria-label="View Squad Task Matrix">
+      <button
+        className="ldr-team-matrix-link"
+        onClick={() => onOpenPage?.('performance')}
+        aria-label="View Squad Task Matrix"
+      >
         View Squad Task Matrix →
       </button>
     </div>
@@ -449,7 +453,7 @@ function TeamExecutionPanel() {
 }
 
 // ── Pending Content Reviews ────────────────────────────────────────────────
-function PendingContentReviewsSection({ _onOpenPage, notify }) {
+function PendingContentReviewsSection({ onOpenPage, notify }) {
   const [search, setSearch] = useState('')
 
   const filtered = MOCK_REVIEWS.filter(r => {
@@ -457,8 +461,12 @@ function PendingContentReviewsSection({ _onOpenPage, notify }) {
     return !q || r.title.toLowerCase().includes(q) || r.submitter.toLowerCase().includes(q)
   })
 
-  function handleReview() {
-    notify?.('Content review workflow is in preview mode. Connect to backend for live approvals.')
+  function handleReview(_reviewItem) {
+    if (onOpenPage) {
+      onOpenPage('content-review-detail')
+    } else {
+      notify?.('Opening Content Proposal Review page.')
+    }
   }
 
   return (
@@ -589,11 +597,15 @@ function AssignedCampaignsOverview() {
 }
 
 // ── AI Campaign Insights Panel ─────────────────────────────────────────────
-function AICampaignInsightsPanel({ notify }) {
+function AICampaignInsightsPanel({ onOpenPage, notify }) {
   const [dismissed, setDismissed] = useState(false)
 
   function handlePropose() {
-    notify?.('Proposal requires Marketing Manager sign-off before dispatching to execution pool. Feature connected in next sprint.')
+    if (onOpenPage) {
+      onOpenPage('budget-review-detail')
+    } else {
+      notify?.('Proposal requires Marketing Manager sign-off before dispatching to execution pool.')
+    }
   }
 
   function handleDismiss() {
@@ -759,8 +771,8 @@ export function LeaderDashboardView({ _importCount, _onOpenBudget, onRefresh, on
 
         {/* Right Column */}
         <div className="ldr-right-col">
-          <TeamExecutionPanel />
-          <AICampaignInsightsPanel notify={notify} />
+          <TeamExecutionPanel onOpenPage={onOpenPage} />
+          <AICampaignInsightsPanel onOpenPage={onOpenPage} notify={notify} />
         </div>
       </div>
     </div>

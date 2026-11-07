@@ -1,0 +1,300 @@
+<!DOCTYPE html><html lang="en" class="h-full"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leader Workspace — Master Layout Shell</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#0f131d',
+            shell: '#171b26',
+            card: '#1c1f2a',
+            subtle: '#0a0e18',
+            bordercol: '#464554',
+            activebg: '#262a35',
+            accent: '#8083ff',
+            accenttext: '#0d0096',
+            success: '#28A745',
+            alertred: '#ffb4ab',
+            textprimary: '#dfe2f1',
+            textsecondary: '#c7c4d7'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0f131d;
+      color: #dfe2f1;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #171b26;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #464554;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="h-full flex overflow-hidden bg-[#0f131d]">
+
+  <!-- ASIDE: Left Sidebar Navigation (Fixed Width ~260px) -->
+  <aside class="w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none">
+    
+    <!-- Top Logo Area -->
+    <div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+        <span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+      </div>
+    </div>
+
+    <!-- Navigation Scroll Area -->
+    <div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+      <div>
+        <div class="px-3 mb-2 flex items-center justify-between">
+          <span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">LEADER</span>
+        </div>
+        
+        <nav class="space-y-1">
+          <!-- 1. Overview (ACTIVE) -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150">
+            <svg class="w-4 h-4 text-[#8083ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="">Overview</span>
+          </a>
+
+          <!-- 2. Approvals (With notification pill/badge "3") -->
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span class="">Approvals</span>
+            </div>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096]">3</span>
+          </a>
+
+          <!-- 3. My Proposals -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="">My Proposals</span>
+          </a>
+
+          <!-- 4. Campaigns -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span class="">Campaigns</span>
+          </a>
+
+          <!-- 5. Strategy Studio -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="">Strategy Studio</span>
+          </a>
+
+          <!-- 6. Content Gen -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            <span class="">Content Gen</span>
+          </a>
+
+          <!-- 7. Campaign Import -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span class="">Campaign Import</span>
+          </a>
+
+          <!-- 8. Performance & Insights -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span class="">Performance &amp; Insights</span>
+          </a>
+
+          <!-- 9. Account Settings -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span class="">Account Settings</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Area (Inside Sidebar) -->
+    <div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+      <div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+            AC
+          </div>
+          <div class="min-w-0">
+            <p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+            <p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN WRAPPER (Top Header + Blank Main Canvas) -->
+  <div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+    
+    <!-- HEADER: Top Bar (Fixed Height ~64px) -->
+    <header class="h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-20">
+      <!-- Left Side: Breadcrumb navigation -->
+      <div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Leader Workspace</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="text-[#dfe2f1] font-semibold">Overview</span>
+      </div>
+
+      <!-- Right Side: Utility Widgets -->
+      <div class="flex items-center gap-5">
+        
+        <!-- System Status Widget -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28A745] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]"></span>
+          </span>
+          <span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+        </div>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- Notification Bell Icon (With Red #ffb4ab dot with number "5") -->
+        <button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+            5
+          </span>
+        </button>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- User Profile Widget -->
+        <div class="flex items-center gap-3 pl-1">
+          <div class="relative">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8083ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+              DK
+            </div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#28A745] rounded-full ring-2 ring-[#171b26]"></div>
+          </div>
+          <div class="flex flex-col text-left">
+            <div class="flex items-center gap-1.5 leading-none">
+              <span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span>
+              <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
+                LEADER
+              </span>
+            </div>
+            <span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- MAIN CANVAS: The <main> tag area (Background #0f131d) -->
+    <main class="flex-1 bg-[#0f131d] relative p-8 flex items-center justify-center overflow-auto">
+      
+      <!-- Centered Dashed Outline Box with developer guides -->
+      <div class="w-full max-w-4xl h-[520px] rounded-2xl border-2 border-dashed border-[#464554] bg-[#0a0e18]/40 p-8 flex flex-col items-center justify-center text-center backdrop-blur-sm shadow-2xl relative overflow-hidden group">
+        
+        <!-- Subtle background watermark grid -->
+        <div class="absolute inset-0 opacity-[0.03] pointer-events-none" style="background-image: radial-gradient(#8083ff 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+        <!-- Developer Layout Marker Icon -->
+        <div class="w-16 h-16 rounded-2xl bg-[#1c1f2a] border border-[#464554] flex items-center justify-center mb-6 shadow-inner text-[#8083ff]">
+          <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+        </div>
+
+        <!-- Marker Title -->
+        <h2 class="text-2xl font-extrabold tracking-wider text-[#dfe2f1] font-mono mb-2 uppercase">
+          DYNAMIC LEADER CONTENT GOES HERE
+        </h2>
+
+        <!-- Explanatory Scaffolding Metadata -->
+        <p class="text-sm text-[#c7c4d7] max-w-xl mb-6 leading-relaxed">
+          Leader workspace layout shell active. Left navigation (<span class="font-mono text-[#8083ff]">260px</span>) and top application header (<span class="font-mono text-[#8083ff]">64px</span>) are pinned. The canvas viewport occupies all remaining flexible space with strict <span class="font-mono text-[#8083ff]">#0f131d</span> background.
+        </p>
+
+        <!-- Technical Boundary Chips -->
+        <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-mono text-[#c7c4d7]/80">
+          <span class="px-2.5 py-1 rounded-md bg-[#171b26] border border-[#464554]">Canvas: #0f131d</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#171b26] border border-[#464554]">Shell: #171b26</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#171b26] border border-[#464554]">Border: #464554</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#171b26] border border-[#464554]">Active: #8083ff</span>
+          <span class="px-2.5 py-1 rounded-md bg-[#171b26] border border-[#464554]">Badge: 3 Approvals</span>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+
+
+
+</body></html>

@@ -15,7 +15,14 @@ import { EMPLOYEE_NAV_ITEMS } from '../navigation/roleNavConfig'
  * - Notifications (Badge: 2)
  * - My Profile
  */
-export default function EmployeeSidebar({ activeKey = 'overview', onNavigate }) {
+export default function EmployeeSidebar({
+  activeKey = 'overview',
+  onNavigate,
+  isDrawer = false,
+  onClose,
+  companyName = 'Acme Corp Enterprise',
+  companyCode = 'acme-corp-prod-01',
+}) {
   // Map internal/subpage navigation keys to active sidebar item
   const resolveActiveKey = (key) => {
     if (key === 'emp-tasks') return 'tasks'
@@ -28,10 +35,13 @@ export default function EmployeeSidebar({ activeKey = 'overview', onNavigate }) 
       navItems={EMPLOYEE_NAV_ITEMS}
       activeKey={resolveActiveKey(activeKey)}
       onNavigate={onNavigate}
-      sectionTitle="CORE NAVIGATION"
-      quotaPct={78}
-      quotaOps="78.4K / 100K ops"
-      roleAriaLabel="Employee Sidebar Navigation"
+      sectionTitle="WORKSPACE NAVIGATION"
+      roleBadge="MEMBER"
+      tenantName={companyName}
+      tenantCode={companyCode}
+      roleAriaLabel="Employee Workspace Navigation"
+      isDrawer={isDrawer}
+      onClose={onClose}
     />
   )
 }
@@ -39,4 +49,8 @@ export default function EmployeeSidebar({ activeKey = 'overview', onNavigate }) 
 EmployeeSidebar.propTypes = {
   activeKey: PropTypes.string,
   onNavigate: PropTypes.func,
+  isDrawer: PropTypes.bool,
+  onClose: PropTypes.func,
+  companyName: PropTypes.string,
+  companyCode: PropTypes.string,
 }

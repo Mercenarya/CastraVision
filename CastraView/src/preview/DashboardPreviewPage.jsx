@@ -273,12 +273,12 @@ export default function DashboardPreviewPage({ onExit, role: defaultRole = 'mark
                 notify={handleNotify}
               />
             )}
-            {previewPage === 'assigned-campaigns' && (
+            {(previewPage === 'assigned-campaigns' || previewPage === 'campaigns') && (
               <div className="card" style={{ padding: 32, margin: '20px 0', background: '#0b1120', border: '1px solid #1e293b', borderRadius: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
                   <div>
                     <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', color: '#38bdf8' }}>LEADER WORKSPACE // CAMPAIGNS</span>
-                    <h2 style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc', marginTop: 4 }}>Assigned Campaigns</h2>
+                    <h2 style={{ fontSize: 22, fontWeight: 800, color: '#f8fafc', marginTop: 4 }}>Campaigns</h2>
                     <p style={{ color: '#94a3b8', fontSize: 14, marginTop: 4 }}>
                       Active campaigns assigned to Growth Squad Alpha and performance governance.
                     </p>
@@ -347,7 +347,7 @@ export default function DashboardPreviewPage({ onExit, role: defaultRole = 'mark
                 </button>
               </div>
             )}
-            {(previewPage === 'content-reviews' || previewPage === 'approvals') && (
+            {(previewPage === 'content-reviews' || previewPage === 'approvals' || previewPage === 'my-proposals') && (
               <ApprovalQueuePage notify={handleNotify} role="manager" />
             )}
             {(previewPage === 'performance' || previewPage === 'budget') && (

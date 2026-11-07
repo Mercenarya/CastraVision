@@ -3,7 +3,7 @@
  * Integrates the standardized Sidebar, Header, and views matching approved Figma designs.
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './company-admin.css'
 import MarketingManagerSidebar from './MarketingManagerSidebar'
 import MarketingManagerHeader from './MarketingManagerHeader'
@@ -49,6 +49,24 @@ export default function MarketingManagerLayout({
   const [selectedAuditRecord, setSelectedAuditRecord] = useState(null)
   const [inviteModalOpen, setInviteModalOpen] = useState(false)
   const [headerSearch, setHeaderSearch] = useState('')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  // Manage drawer keyboard accessibility (Escape) and prevent background scrolling
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+      window.addEventListener('keydown', handleKeyDown)
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [mobileMenuOpen])
 
   // Map internal page keys
   const activeKey = page === 'admin' ? 'overview' : page
@@ -140,6 +158,37 @@ export default function MarketingManagerLayout({
         canViewAudit={canViewAudit}
       />
 
+      {/* ── MOBILE DRAWER NAVIGATION ── */}
+      {mobileMenuOpen && (
+        <div
+          className="ca-drawer-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Menu điều hướng di động"
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <MarketingManagerSidebar
+              activeKey={selectedAuditRecord && page === 'audit' ? 'audit' : activeKey}
+              onNavigate={(target) => {
+                setSelectedAuditRecord(null)
+                handleNavigate(target)
+                setMobileMenuOpen(false)
+              }}
+              pendingApprovalsCount={
+                proposals.filter((p) => p.status === 'pending' || p.status === 'edited').length
+              }
+              workspaceName={workspace.name}
+              planName={workspace.tierShort}
+              canApprove={canApprove}
+              canViewAudit={canViewAudit}
+              isDrawer
+              onClose={() => setMobileMenuOpen(false)}
+            />
+          </div>
+        </div>
+      )}
+
       {/* ── MAIN CONTENT WRAPPER ── */}
       <div className="ca-main-wrap">
         {/* ── UNIFIED HEADER (Shared across all Marketing Manager screens) ── */}
@@ -150,6 +199,7 @@ export default function MarketingManagerLayout({
           onSearchChange={setHeaderSearch}
           user={user}
           onSignOut={onSignOut}
+          onOpenMobileMenu={() => setMobileMenuOpen(true)}
         />
 
         {/* ── PAGE CONTENT ── */}

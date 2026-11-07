@@ -5,11 +5,13 @@ import {
   IconMegaphone,
   IconFolder,
   IconBookOpen,
-  IconTrendingUp,
-  IconUsers,
-  IconMessageSquare,
   IconBell,
   IconUser,
+  IconFileText,
+  IconGlobe,
+  IconUpload,
+  IconBarChart,
+  IconSettings,
 } from '../dashboards/dashboardIcons'
 
 /**
@@ -29,15 +31,25 @@ export const EMPLOYEE_NAV_ITEMS = [
 
 /**
  * LEADER_NAV_ITEMS
- * Preserves the Leader-specific navigation structure matching Stitch standardized design.
+ * Matches the Google Stitch Leader Workspace Master Layout Shell specification:
+ * 1. Overview
+ * 2. Approvals (badge: 3)
+ * 3. My Proposals
+ * 4. Campaigns
+ * 5. Strategy Studio
+ * 6. Content Gen
+ * 7. Campaign Import
+ * 8. Performance & Insights
+ * 9. Account Settings
  */
 export const LEADER_NAV_ITEMS = [
-  { key: 'overview', label: 'Dashboard Overview', icon: IconGrid },
-  { key: 'assigned-campaigns', label: 'Assigned Campaigns', icon: IconFolder },
-  { key: 'team-tasks', label: 'Team Tasks', icon: IconUsers },
-  { key: 'content-reviews', label: 'Content Reviews', icon: IconMessageSquare, badge: 4, badgeColor: 'cyan' },
-  { key: 'strategy', label: 'Strategy & Insights', icon: IconSparkles },
-  { key: 'performance', label: 'Campaign Performance', icon: IconTrendingUp },
-  { key: 'notifications', label: 'Notifications', icon: IconBell },
-  { key: 'profile', label: 'My Profile', icon: IconUser },
+  { key: 'overview', label: 'Overview', icon: IconGrid },
+  { key: 'approvals', label: 'Approvals', icon: IconCheckSquare, badge: 3, badgeColor: 'accent' },
+  { key: 'my-proposals', label: 'My Proposals', icon: IconFileText },
+  { key: 'campaigns', label: 'Campaigns', icon: IconMegaphone },
+  { key: 'strategy', label: 'Strategy Studio', icon: IconGlobe },
+  { key: 'content', label: 'Content Gen', icon: IconSparkles },
+  { key: 'import', label: 'Campaign Import', icon: IconUpload },
+  { key: 'performance', label: 'Performance & Insights', icon: IconBarChart },
+  { key: 'profile', label: 'Account Settings', icon: IconSettings },
 ]
