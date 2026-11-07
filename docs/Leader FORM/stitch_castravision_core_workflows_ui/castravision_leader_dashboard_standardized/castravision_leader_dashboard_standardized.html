@@ -1,0 +1,508 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Plus+Jakarta+Sans:wght@100..900&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"inverse-surface":"#dfe2f1","surface-dim":"#0f131d","on-tertiary":"#3c0091","tertiary-container":"#a078ff","on-primary":"#1000a9","error":"#ffb4ab","on-secondary":"#003640","inverse-on-surface":"#2c303b","on-background":"#dfe2f1","primary-fixed-dim":"#c0c1ff","on-tertiary-fixed-variant":"#5516be","surface-tint":"#c0c1ff","error-container":"#93000a","primary":"#c0c1ff","on-tertiary-container":"#340080","tertiary":"#d0bcff","secondary":"#4cd7f6","on-error-container":"#ffdad6","primary-fixed":"#e1e0ff","surface-container-high":"#262a35","surface-container":"#1c1f2a","outline-variant":"#464554","background":"#0f131d","surface-container-highest":"#313540","inverse-primary":"#494bd6","on-error":"#690005","on-secondary-fixed-variant":"#004e5c","surface":"#0f131d","on-secondary-container":"#00424e","tertiary-fixed-dim":"#d0bcff","on-primary-fixed-variant":"#2f2ebe","on-tertiary-fixed":"#23005c","secondary-container":"#03b5d3","surface-container-low":"#171b26","surface-variant":"#313540","on-surface-variant":"#c7c4d7","primary-container":"#8083ff","outline":"#908fa0","tertiary-fixed":"#e9ddff","on-primary-fixed":"#07006c","secondary-fixed-dim":"#4cd7f6","surface-container-lowest":"#0a0e18","on-secondary-fixed":"#001f26","secondary-fixed":"#acedff","on-primary-container":"#0d0096","surface-bright":"#353944","on-surface":"#dfe2f1"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-xl":"2rem","gutter-mobile":"0.75rem","margin":"2rem","gutter":"1.5rem","space-lg":"1.5rem","space-md":"1rem","space-xs":"0.25rem","margin-mobile":"1rem","space-sm":"0.5rem"},fontFamily:{"headline-xl":["Plus Jakarta Sans"],"label-sm":["Inter"],"body-md":["Inter"],"label-md":["Inter"],"headline-lg":["Plus Jakarta Sans"],"body-lg":["Inter"],"headline-xl-mobile":["Plus Jakarta Sans"],"body-sm":["Inter"],"headline-md":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"label-lg":["Inter"],"headline-lg-mobile":["Plus Jakarta Sans"]},fontSize:{"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.02em","fontWeight":"700"}],"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"600"}],"body-md":["14px",{"lineHeight":"20px","fontWeight":"400"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"500"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"600"}],"body-lg":["16px",{"lineHeight":"24px","fontWeight":"400"}],"headline-xl-mobile":["28px",{"lineHeight":"36px","letterSpacing":"-0.01em","fontWeight":"700"}],"body-sm":["12px",{"lineHeight":"16px","fontWeight":"400"}],"headline-md":["20px",{"lineHeight":"28px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-sm":["16px",{"lineHeight":"24px","fontWeight":"600"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-lg-mobile":["22px",{"lineHeight":"30px","letterSpacing":"-0.01em","fontWeight":"600"}]}}}};</script></head><body class="bg-surface font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 w-60 h-full bg-[#171b26] border-r border-[#464554] flex flex-col justify-between z-50 select-none"><div class="flex flex-col"><div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3"><div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20"><svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg></div><div class="flex flex-col"><span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span><span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span></div></div><div class="px-3 pt-4 pb-2 flex items-center justify-between"><span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">WORKSPACE NAVIGATION</span><span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">LEADER</span></div><nav class="space-y-1 px-3"><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all"><svg class="w-4 h-4 text-[#8083ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg><span class="">Overview</span></a><a href="#" class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><div class="flex items-center gap-3"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg><span class="">Approvals</span></div><span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096]">3</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg><span class="">My Proposals</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg><span class="">Campaigns</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><span class="">Strategy Studio</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg><span class="">Content Gen</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg><span class="">Campaign Import</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg><span class="">Performance &amp; Insights</span></a><a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group"><svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg><span class="">Account Settings</span></a></nav></div><div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0"><div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between"><div class="flex items-center gap-2.5 min-w-0"><div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">AC</div><div class="min-w-0"><p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p><p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p></div></div><span class="px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono text-[9px] font-medium">LEADER</span></div></div></aside><div class="pl-60"><header class="fixed top-0 left-60 right-0 h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-40"><div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]"><span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Leader Workspace</span><svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg><span class="text-[#dfe2f1] font-semibold">Overview</span></div><div class="flex items-center gap-5"><div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60"><span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28A745] opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]"></span></span><span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span></div><div class="h-5 w-px bg-[#464554]"></div><button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">5</span></button><div class="h-5 w-px bg-[#464554]"></div><div class="flex items-center gap-3 pl-1"><div class="relative"><div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8083ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">DK</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#28A745] rounded-full ring-2 ring-[#171b26]"></div></div><div class="flex flex-col text-left"><div class="flex items-center gap-1.5 leading-none"><span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span><span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">LEADER</span></div><span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full text-on-surface">
+<div class="p-space-lg flex flex-col gap-space-lg max-w-[1560px] mx-auto w-full">
+<!-- SECTION A: DASHBOARD HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md"><div class="flex flex-col gap-1"><div class="flex items-center gap-space-xs text-secondary font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-secondary inline-block animate-pulse"></span><span class="uppercase tracking-wider font-semibold">Real-time Telemetry Synced</span><span class="text-outline">/</span><span class="text-on-surface-variant font-normal">Growth Squad Alpha • Synchronized 2 mins ago</span></div><h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight font-bold">Campaign &amp; Team Performance Overview</h1><p class="font-body-md text-body-md text-on-surface-variant">Monitor assigned campaigns, coordinate your team, and review marketing deliverables. • Growth Squad Alpha • Synchronized 2 mins ago</p></div><div class="flex items-center flex-wrap gap-space-sm"><button class="h-9 px-3.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-md font-label-md rounded-lg flex items-center gap-1.5 transition-colors border border-outline-variant"><span class="material-symbols-outlined text-[18px]">sync</span>Sync Squad Data</button><button class="h-9 px-4 bg-primary-container text-on-primary-container hover:opacity-95 text-label-md font-label-md rounded-lg flex items-center gap-2 transition-colors font-semibold shadow-sm"><span class="material-symbols-outlined text-[18px]">rate_review</span>Review Pending Content (4)</button></div></div>
+<!-- AI ENGINE TOKEN BANNER (REFERENCE REPLICA) -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-[24px]">cognition</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface">Squad Copilot Quota Active</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary text-surface-dim font-label-sm text-label-sm">62.3% Consumed</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+            Squad Alpha Compute Engine: 62,300 / 100,000 Ops logged across real-time bid adjustments and copy synthesis.
+          </span>
+</div>
+</div>
+<div class="flex items-center gap-space-md w-full md:w-auto justify-between md:justify-end">
+<div class="flex flex-col min-w-[180px]">
+<div class="flex justify-between font-label-sm text-label-sm mb-1 text-on-surface-variant">
+<span class="">62,300 tkn</span>
+<span class="text-secondary font-semibold">100,000 tkn</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full w-[62.3%]"></div>
+</div>
+</div>
+<button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-lg transition-colors whitespace-nowrap">
+          Adjust Limit
+        </button>
+</div>
+</div>
+<!-- SECTION B: 5 ALIGNED KPI CARDS -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-space-md">
+<!-- Card 1 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between h-36">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Assigned Campaigns</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-secondary font-label-sm text-label-sm">+2 this cycle</span>
+</div>
+<div>
+<div class="font-headline-xl text-headline-xl text-on-surface">6 Active</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Across 3 marketing channels</div>
+</div>
+<!-- Sparkline Cyan -->
+<svg class="w-full h-4 text-secondary" preserveAspectRatio="none" viewBox="0 0 100 16">
+<path d="M0,13 L20,11 L40,14 L60,8 L80,9 L100,3" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between h-36">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Tasks Completed</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm">87.5%</span>
+</div>
+<div>
+<div class="font-headline-xl text-headline-xl text-on-surface">42 <span class="text-body-md text-on-surface-variant font-normal">/ 48</span></div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Sprint deadline in 2 days</div>
+</div>
+<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[87.5%]"></div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between h-36"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-medium">Pending Content Reviews</span><span class="px-2 py-0.5 rounded bg-surface-container-highest text-secondary font-label-sm text-label-sm font-semibold">Action Req</span></div><div><div class="font-headline-xl text-headline-xl text-on-surface font-bold">4 Items</div><div class="font-body-sm text-body-sm text-on-surface-variant">Avg review time: 1.8 hrs</div></div><div class="flex items-center gap-1.5 font-label-sm text-label-sm text-secondary"><span class="material-symbols-outlined text-[15px]">schedule</span><span class="">Highest wait: 2h 10m</span></div></div>
+<!-- Card 4 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between h-36">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">Campaign ROAS</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-tertiary font-label-sm text-label-sm">+0.6x target</span>
+</div>
+<div>
+<div class="font-headline-xl text-headline-xl text-on-surface">4.15×</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">Google 4.9x • Meta 3.8x</div>
+</div>
+<!-- Sparkline Purple -->
+<svg class="w-full h-4 text-tertiary" preserveAspectRatio="none" viewBox="0 0 100 16">
+<path d="M0,14 L20,13 L40,10 L60,11 L80,6 L100,2" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+<!-- Card 5 -->
+<div class="bg-surface-container-low p-space-md rounded-xl flex flex-col justify-between h-36"><div class="flex items-center justify-between"><span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-medium">Overdue Tasks</span><span class="px-2 py-0.5 rounded bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">Attention</span></div><div><div class="flex items-baseline gap-1.5"><span class="font-headline-lg text-headline-lg text-on-surface font-bold leading-tight">1</span><span class="font-label-md text-label-md text-error font-semibold">Overdue</span></div><div class="font-body-sm text-[11px] text-on-surface-variant truncate mt-0.5">TikTok Creator Brief v2</div></div><div class="flex items-center gap-1 font-label-sm text-[11px] text-error truncate"><span class="material-symbols-outlined text-[14px]">warning</span><span class="truncate">Assigned to Maya Lin</span></div></div>
+</div>
+<!-- MAIN CONTENT LAYOUT: 68% LEFT, 32% RIGHT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN (68% -> lg:col-span-8) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg min-w-0">
+<!-- SECTION C: CAMPAIGN PERFORMANCE CHART -->
+<div class="bg-surface-container-low p-space-lg rounded-xl flex flex-col gap-space-md border border-[#464554]/60 shadow-sm">
+  <!-- Header Row -->
+  <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-sm">
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center gap-2">
+        <h2 class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">Assigned Campaign Performance</h2>
+        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary/15 text-secondary text-label-sm font-semibold border border-secondary/30">
+          <span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>Live
+        </span>
+      </div>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">
+        Comparative daily CPA performance across Meta Ads, Google Search, and TikTok Video for Squad Alpha.
+      </p>
+    </div>
+    <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+      <!-- Metric Selector Dropdown -->
+      <div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-lg text-label-md font-medium text-on-surface border border-outline-variant hover:border-outline cursor-pointer transition-colors">
+        <span class="">Cost Per Acquisition (CPA)</span>
+        <span class="material-symbols-outlined text-[18px] text-outline">arrow_drop_down</span>
+      </div>
+      <!-- Segmented Time Range -->
+      <div class="flex items-center bg-surface-container p-0.5 rounded-lg border border-outline-variant text-label-sm font-medium">
+        <button class="px-3 py-1 rounded bg-[#262a35] text-on-surface font-semibold shadow-sm transition-colors">7 Days</button>
+        <button class="px-3 py-1 text-on-surface-variant hover:text-on-surface transition-colors">14 Days</button>
+        <button class="px-3 py-1 text-on-surface-variant hover:text-on-surface transition-colors">30 Days</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Visual Surface -->
+  <div class="bg-[#0f131d] p-space-md rounded-xl border border-[#464554]/70 flex flex-col gap-space-md">
+    <!-- Top Legend Row -->
+    <div class="flex flex-wrap items-center justify-between gap-space-sm pb-1 border-b border-[#464554]/40">
+      <div class="flex items-center gap-space-lg text-label-sm">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#38bdf8] shadow-sm"></span>
+          <span class="text-[#dfe2f1] font-medium">Facebook Ads</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#818cf8] shadow-sm"></span>
+          <span class="text-[#dfe2f1] font-medium">Google Search</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#f43f5e] shadow-sm"></span>
+          <span class="text-[#dfe2f1] font-medium">TikTok Video</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 font-label-sm text-[#c7c4d7]">
+        <span class="w-4 h-0 border-b border-dashed border-[#ffb4ab]"></span>
+        <span class="">Ceiling Target: <strong class="text-[#dfe2f1]">$3.50</strong></span>
+      </div>
+    </div>
+
+    <!-- Redesigned Bar Chart Visualization -->
+    <div class="relative w-full h-60 flex flex-col justify-end pt-4 select-none">
+      <!-- Grid lines with Y-Axis Values (0 to 5) -->
+      <div class="absolute inset-0 flex flex-col justify-between pointer-events-none pb-7 z-0">
+        <div class="flex items-center w-full">
+          <span class="w-10 text-[11px] font-mono text-[#908fa0] text-right pr-2">$5.00</span>
+          <div class="flex-1 h-px bg-[#464554]/40"></div>
+        </div>
+        <div class="flex items-center w-full">
+          <span class="w-10 text-[11px] font-mono text-[#908fa0] text-right pr-2">$4.00</span>
+          <div class="flex-1 h-px bg-[#464554]/40"></div>
+        </div>
+        <!-- Target Ceiling ($3.50) Reference Line -->
+        <div class="absolute left-10 right-0 top-[30%] flex items-center z-10">
+          <div class="w-full border-t border-dashed border-[#ffb4ab]/80"></div>
+          <span class="absolute right-2 -top-2.5 px-1.5 py-0.2 rounded bg-[#262a35] border border-[#ffb4ab]/40 text-[#ffb4ab] text-[10px] font-mono font-medium">Limit: $3.50</span>
+        </div>
+        <div class="flex items-center w-full">
+          <span class="w-10 text-[11px] font-mono text-[#908fa0] text-right pr-2">$3.00</span>
+          <div class="flex-1 h-px bg-[#464554]/40"></div>
+        </div>
+        <div class="flex items-center w-full">
+          <span class="w-10 text-[11px] font-mono text-[#908fa0] text-right pr-2">$2.00</span>
+          <div class="flex-1 h-px bg-[#464554]/40"></div>
+        </div>
+        <div class="flex items-center w-full">
+          <span class="w-10 text-[11px] font-mono text-[#908fa0] text-right pr-2">$1.00</span>
+          <div class="flex-1 h-px bg-[#464554]/40"></div>
+        </div>
+        <div class="flex items-center w-full">
+          <span class="w-10 text-[11px] font-mono text-[#908fa0] text-right pr-2">$0.00</span>
+          <div class="flex-1 h-px bg-[#464554]/70"></div>
+        </div>
+      </div>
+
+      <!-- Grouped Bars Columns (D1 to Today) -->
+      <div class="relative z-10 grid grid-cols-7 gap-2 h-48 items-end pl-10 pr-2">
+        <!-- Day 1 -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-28 hover:opacity-90 transition-opacity" title="Facebook: $3.10"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-20 hover:opacity-90 transition-opacity" title="Google: $2.20"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-36 hover:opacity-90 transition-opacity" title="TikTok: $4.00"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-[#908fa0] group-hover:text-on-surface">D1</span>
+        </div>
+        <!-- Day 2 -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-26 hover:opacity-90 transition-opacity" title="Facebook: $2.90"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-24 hover:opacity-90 transition-opacity" title="Google: $2.60"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-38 hover:opacity-90 transition-opacity" title="TikTok: $4.20"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-[#908fa0] group-hover:text-on-surface">D2</span>
+        </div>
+        <!-- Day 3 -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-30 hover:opacity-90 transition-opacity" title="Facebook: $3.30"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-22 hover:opacity-90 transition-opacity" title="Google: $2.40"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-40 hover:opacity-90 transition-opacity" title="TikTok: $4.40"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-[#908fa0] group-hover:text-on-surface">D3</span>
+        </div>
+        <!-- Day 4 -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-28 hover:opacity-90 transition-opacity" title="Facebook: $3.10"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-24 hover:opacity-90 transition-opacity" title="Google: $2.60"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-39 hover:opacity-90 transition-opacity" title="TikTok: $4.30"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-[#908fa0] group-hover:text-on-surface">D4</span>
+        </div>
+        <!-- Day 5 -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-26 hover:opacity-90 transition-opacity" title="Facebook: $2.85"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-20 hover:opacity-90 transition-opacity" title="Google: $2.15"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-41 hover:opacity-90 transition-opacity" title="TikTok: $4.50"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-[#908fa0] group-hover:text-on-surface">D5</span>
+        </div>
+        <!-- Day 6 -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end group">
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-29 hover:opacity-90 transition-opacity" title="Facebook: $3.20"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-22 hover:opacity-90 transition-opacity" title="Google: $2.40"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-42 hover:opacity-90 transition-opacity" title="TikTok: $4.65"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-[#908fa0] group-hover:text-on-surface">D6</span>
+        </div>
+        <!-- Today (Distinct Highlight Container) -->
+        <div class="flex flex-col items-center gap-1.5 h-full justify-end bg-[#262a35]/80 border border-[#8083ff]/40 rounded-lg p-1 relative shadow-sm">
+          <span class="absolute -top-3 px-1.5 py-0.5 rounded bg-primary-container text-on-primary-container text-[9px] font-bold uppercase tracking-wider shadow-sm">Live</span>
+          <div class="flex items-end gap-1 w-full justify-center">
+            <div class="w-2.5 sm:w-3 bg-[#38bdf8] rounded-t-xs h-27" title="Facebook: $3.00"></div>
+            <div class="w-2.5 sm:w-3 bg-[#818cf8] rounded-t-xs h-21" title="Google: $2.30"></div>
+            <div class="w-2.5 sm:w-3 bg-[#f43f5e] rounded-t-xs h-44 shadow-sm" title="TikTok: $4.80 (Spike)"></div>
+          </div>
+          <span class="font-label-sm text-[11px] text-secondary font-bold">Today</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Polished 4-Metric Summary Cards Footer -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-sm pt-2 border-t border-[#464554]/50">
+      <div class="bg-surface-container p-2.5 rounded-lg border border-[#464554]/50 flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="text-[11px] text-outline uppercase tracking-wider font-label-sm">Facebook Ads</span>
+          <span class="text-[13px] font-semibold text-on-surface">Stable Avg: <span class="text-secondary font-mono">$3.12</span></span>
+        </div>
+        <span class="w-2 h-2 rounded-full bg-[#38bdf8]"></span>
+      </div>
+      <div class="bg-surface-container p-2.5 rounded-lg border border-[#464554]/50 flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="text-[11px] text-outline uppercase tracking-wider font-label-sm">Lowest CPA</span>
+          <span class="text-[13px] font-semibold text-on-surface">Google Search: <span class="text-secondary font-mono">$2.45</span></span>
+        </div>
+        <span class="w-2 h-2 rounded-full bg-[#818cf8]"></span>
+      </div>
+      <div class="bg-surface-container p-2.5 rounded-lg border border-error/30 flex items-center justify-between bg-error-container/10">
+        <div class="flex flex-col">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[11px] text-error uppercase tracking-wider font-semibold font-label-sm">Spike Anomaly</span>
+            <span class="material-symbols-outlined text-[14px] text-error">warning</span>
+          </div>
+          <span class="text-[13px] font-bold text-error">TikTok: <span class="font-mono">$4.80</span></span>
+        </div>
+        <span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container text-[10px] font-bold">+37%</span>
+      </div>
+      <div class="bg-surface-container p-2.5 rounded-lg border border-[#464554]/50 flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="text-[11px] text-outline uppercase tracking-wider font-label-sm">Target Ceiling</span>
+          <span class="text-[13px] font-semibold text-on-surface font-mono">≤ $3.50</span>
+        </div>
+        <span class="material-symbols-outlined text-[16px] text-outline">tune</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- SECTION E: PENDING CONTENT REVIEWS -->
+<div class="bg-surface-container-low p-space-lg rounded-xl flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Pending Content Reviews</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Review and approve creative deliverables submitted by team members.</p>
+</div>
+<!-- Search bar -->
+<div class="flex items-center gap-2 bg-surface-container px-3 py-1.5 rounded-lg w-full sm:w-64">
+<span class="material-symbols-outlined text-[18px] text-outline">search</span>
+<input class="bg-transparent text-body-sm text-on-surface focus:outline-none w-full placeholder:text-outline" placeholder="Search deliverables or submitters..." type="text">
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="py-2.5 px-3">Content Title</th>
+<th class="py-2.5 px-3">Submitted By</th>
+<th class="py-2.5 px-3">Channel</th>
+<th class="py-2.5 px-3">Submission Date</th>
+<th class="py-2.5 px-3">Status</th>
+<th class="py-2.5 px-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high"><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">AirStride Reels Hook Variant C</span><span class="text-outline text-body-sm">Format: 9:16 Vertical Video (34MB)</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-primary font-bold">ER</div><span class="text-on-surface font-medium">Elena Rostova</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-secondary text-label-sm font-medium">Meta Video</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Today, 11:20</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-label-sm font-semibold">Pending Review</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Review</button><button class="px-3 py-1.5 bg-primary-container hover:opacity-95 text-on-primary-container text-label-sm rounded-lg transition-colors font-semibold">Approve</button></div></td></tr><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">Back-to-School Search Copy Brief</span><span class="text-outline text-body-sm">Format: Responsive Search Ad Assets</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-secondary font-bold">AM</div><span class="text-on-surface font-medium">Alex Mercer</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-outline text-label-sm font-medium">Google Search</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Today, 09:45</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-label-sm font-semibold">Pending Review</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Review</button><button class="px-3 py-1.5 bg-primary-container hover:opacity-95 text-on-primary-container text-label-sm rounded-lg transition-colors font-semibold">Approve</button></div></td></tr><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">TikTok UGC Trend Script #4</span><span class="text-outline text-body-sm">Format: Audio Sync Storyboard</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-error font-bold">ML</div><span class="text-on-surface font-medium">Maya Lin</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-error text-label-sm font-medium">TikTok Feed</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Yesterday, 16:30</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-error-container text-on-error-container text-label-sm font-semibold">Changes Req.</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">View Notes</button><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-error text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Request Changes</button></div></td></tr><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">Retargeting Dynamic Banner Set</span><span class="text-outline text-body-sm">Format: 5 Sizes (Static Display Kit)</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-tertiary font-bold">LP</div><span class="text-on-surface font-medium">Liam Patel</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-tertiary text-label-sm font-medium">Meta Display</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Yesterday, 14:10</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-label-sm font-semibold">Approved</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Specimen</button></div></td></tr></tbody>
+</table>
+</div>
+</div>
+<!-- SECTION F: ASSIGNED CAMPAIGNS TABLE -->
+<div class="bg-surface-container-low p-space-lg rounded-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-md text-headline-md text-on-surface">Assigned Campaigns Overview</h2>
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Growth Squad Alpha</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-sm text-body-sm">
+<thead class="bg-surface-container text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<tr>
+<th class="py-2.5 px-3">Campaign &amp; Engine</th>
+<th class="py-2.5 px-3">Status</th>
+<th class="py-2.5 px-3">Assigned Pod</th>
+<th class="py-2.5 px-3">Live ROAS</th>
+<th class="py-2.5 px-3">Next Milestone</th>
+<th class="py-2.5 px-3 text-right">Telemetry</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high"><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">AirStride Reels Hook Variant C</span><span class="text-outline text-body-sm">Format: 9:16 Vertical Video (34MB)</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-primary font-bold">ER</div><span class="text-on-surface font-medium">Elena Rostova</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-secondary text-label-sm font-medium">Meta Video</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Today, 11:20</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-label-sm font-semibold">Pending Review</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Review</button><button class="px-3 py-1.5 bg-primary-container hover:opacity-95 text-on-primary-container text-label-sm rounded-lg transition-colors font-semibold">Approve</button></div></td></tr><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">Back-to-School Search Copy Brief</span><span class="text-outline text-body-sm">Format: Responsive Search Ad Assets</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-secondary font-bold">AM</div><span class="text-on-surface font-medium">Alex Mercer</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-outline text-label-sm font-medium">Google Search</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Today, 09:45</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-label-sm font-semibold">Pending Review</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Review</button><button class="px-3 py-1.5 bg-primary-container hover:opacity-95 text-on-primary-container text-label-sm rounded-lg transition-colors font-semibold">Approve</button></div></td></tr><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">TikTok UGC Trend Script #4</span><span class="text-outline text-body-sm">Format: Audio Sync Storyboard</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-error font-bold">ML</div><span class="text-on-surface font-medium">Maya Lin</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-error text-label-sm font-medium">TikTok Feed</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Yesterday, 16:30</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-error-container text-on-error-container text-label-sm font-semibold">Changes Req.</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">View Notes</button><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-error text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Request Changes</button></div></td></tr><tr class="hover:bg-surface-container transition-colors"><td class="py-3.5 px-4 min-w-[240px]"><div class="flex flex-col"><span class="font-label-lg text-label-lg text-on-surface font-medium">Retargeting Dynamic Banner Set</span><span class="text-outline text-body-sm">Format: 5 Sizes (Static Display Kit)</span></div></td><td class="py-3.5 px-4 min-w-[170px]"><div class="flex items-center gap-2.5"><div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center font-label-sm text-[11px] text-tertiary font-bold">LP</div><span class="text-on-surface font-medium">Liam Patel</span></div></td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container text-tertiary text-label-sm font-medium">Meta Display</span></td><td class="py-3.5 px-4 text-on-surface-variant whitespace-nowrap">Yesterday, 14:10</td><td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-surface-container-highest text-secondary text-label-sm font-semibold">Approved</span></td><td class="py-3.5 px-4 text-right"><div class="flex items-center justify-end gap-2"><button class="px-3 py-1.5 bg-surface-container hover:bg-surface-container-high text-on-surface text-label-sm rounded-lg transition-colors font-medium border border-outline-variant">Specimen</button></div></td></tr></tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (32% -> lg:col-span-4) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- SECTION D: TEAM EXECUTION STATUS -->
+<div class="bg-surface-container-low p-space-lg rounded-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">groups</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">Team Execution Status</h2>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Sprint #22</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant -mt-2">
+            Current sprint progress for 6 assigned team specialists in Squad Alpha.
+          </p>
+<!-- Stacked Progress Breakdown -->
+<div class="flex flex-col gap-2 pt-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span class="">Overall Deliverables Pace</span>
+<span class="text-secondary font-bold">42 / 48 (87.5%)</span>
+</div>
+<div class="w-full h-3 bg-surface-container rounded-full overflow-hidden flex">
+<div class="h-full bg-secondary" style="width: 87.5%;" title="Completed: 42"></div>
+<div class="h-full bg-primary" style="width: 6.2%;" title="In-Progress: 3"></div>
+<div class="h-full bg-outline" style="width: 4.2%;" title="Pending: 2"></div>
+<div class="h-full bg-error" style="width: 2.1%;" title="Overdue: 1"></div>
+</div>
+<div class="grid grid-cols-2 gap-2 pt-2">
+<div class="flex items-center gap-2 bg-surface-container p-2 rounded-lg">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-outline">Completed</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">42 tasks (87.5%)</span>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-surface-container p-2 rounded-lg">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-outline">In-Progress</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">5 tasks (10.4%)</span>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-surface-container p-2 rounded-lg">
+<span class="w-2.5 h-2.5 rounded-full bg-outline"></span>
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-outline">Pending Review</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">4 deliverables</span>
+</div>
+</div>
+<div class="flex items-center gap-2 bg-surface-container p-2 rounded-lg">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<div class="flex flex-col">
+<span class="font-label-sm text-[11px] text-outline">Overdue</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">1 deliverable</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Team Member Workload Feed -->
+<div class="flex flex-col gap-2 pt-2 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Member Workload Allocation</span>
+<!-- Member 1 -->
+<div class="flex items-center justify-between bg-surface-container p-2.5 rounded-lg">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label-md text-primary font-bold">ER</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Elena Rostova</span>
+<span class="text-[11px] text-outline">Senior Media Buyer</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-secondary font-semibold">8 done</span>
+<span class="text-outline text-body-sm"> / 1 review</span>
+</div>
+</div>
+<!-- Member 2 -->
+<div class="flex items-center justify-between bg-surface-container p-2.5 rounded-lg"><div class="flex items-center gap-2.5"><div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label-md text-secondary font-bold">AM</div><div class="flex flex-col"><span class="font-label-md text-label-md text-on-surface font-medium">Alex Mercer</span><span class="text-[11px] text-outline">Search Intent Specialist</span></div></div><div class="text-right"><span class="font-label-sm text-label-sm text-secondary font-semibold">11 done</span><span class="text-outline text-body-sm"> / 1 active</span></div></div>
+<!-- Member 3 -->
+<div class="flex items-center justify-between bg-surface-container p-2.5 rounded-lg">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label-md text-error font-bold">ML</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Maya Lin</span>
+<span class="text-[11px] text-outline">Short-form Video Lead</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-error font-semibold">7 done</span>
+<span class="text-error text-body-sm"> (1 revision)</span>
+</div>
+</div>
+<!-- Member 4 -->
+<div class="flex items-center justify-between bg-surface-container p-2.5 rounded-lg">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-label-md text-tertiary font-bold">LP</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Liam Patel</span>
+<span class="text-[11px] text-outline">Creative Visual Designer</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-secondary font-semibold">9 done</span>
+<span class="text-outline text-body-sm"> / 1 active</span>
+</div>
+</div>
+</div>
+<button class="w-full py-2 bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md rounded-lg flex items-center justify-center gap-2 transition-colors mt-1">
+<span class="">View Squad Task Matrix</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- SECTION G: AI CAMPAIGN INSIGHTS (STYLE COMPLIANT WITH REFERENCE IMAGE) -->
+<div class="bg-surface-container-low p-space-lg rounded-xl flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-primary-container text-on-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface">AI Campaign Insights</h2>
+</div>
+<span class="px-2 py-0.5 rounded bg-surface-container text-primary font-label-sm text-label-sm">Copilot Model v4.2</span>
+</div>
+<!-- Alert Callout Card -->
+<div class="bg-surface-container p-space-md rounded-xl flex flex-col gap-space-sm border-l-2 border-secondary">
+<div class="flex items-center gap-2 text-secondary font-label-sm text-label-sm uppercase tracking-wider font-bold">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="">Advisory: Reallocation Detected</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">
+              TikTok CPA spiked to <strong class="text-error">$4.80</strong> on Squad Alpha assets. Machine learning predicts higher blended yield by shifting budget immediately.
+            </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              Recommending shifting <strong class="text-on-surface">$100.00/day</strong> from TikTok UGC to Google Search P-Max (operating at 5.1x ROAS). Expected blended CPA reduction: <strong class="text-secondary">-18.4%</strong>.
+            </p>
+<!-- Comparison Pill Box -->
+<div class="bg-surface-container-high p-space-sm rounded-lg flex items-center justify-between text-body-sm mt-1">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline uppercase font-label-sm">TikTok Ads</span>
+<span class="text-error font-semibold font-mono">-$100.00/day</span>
+</div>
+<span class="material-symbols-outlined text-outline text-[20px]">arrow_forward</span>
+<div class="flex flex-col text-right">
+<span class="text-[10px] text-outline uppercase font-label-sm">Google Search Ads</span>
+<span class="text-secondary font-semibold font-mono">+$100.00/day</span>
+</div>
+</div>
+</div>
+<!-- Governance Note -->
+<div class="flex items-start gap-2 text-outline font-body-sm text-body-sm px-1">
+<span class="material-symbols-outlined text-[18px] text-outline mt-0.5">verified_user</span>
+<span class="">Human-in-the-loop Governance: Requires Leader sign-off before dispatching to Marketing Manager execution pool.</span>
+</div>
+<!-- Governance Action Buttons -->
+<div class="flex flex-col gap-2 pt-1"><button class="w-full py-2.5 bg-primary-container hover:opacity-95 text-on-primary-container font-label-lg text-label-lg rounded-lg flex items-center justify-center gap-2 transition-colors font-semibold shadow-sm"><span class="material-symbols-outlined text-[18px]">send</span><span class="">Propose to Marketing Manager</span></button><button class="w-full py-2 bg-surface-container hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-md text-label-md rounded-lg transition-colors border border-outline-variant">Dismiss Insight</button></div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div>
+
+
+
+
+
+
+
+
+
+
+
+</body></html>

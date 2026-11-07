@@ -3050,3 +3050,133 @@
     transform: rotate(360deg);
   }
 }
+
+/* ─── SYSTEM ADMIN MOBILE RESPONSIVE & DRAWER SYSTEM ──────────────────────── */
+.sa-hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: var(--sa-surface);
+  border: 1px solid var(--sa-border);
+  color: var(--sa-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.sa-hamburger-btn:hover {
+  background: var(--sa-border);
+  color: #ffffff;
+}
+
+.sa-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: saFadeIn 0.2s ease-out;
+}
+
+.sa-sidebar.sa-sidebar-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  max-width: 85vw;
+  height: 100vh;
+  z-index: 10000;
+  background-color: var(--sa-sidebar-bg);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.6);
+  animation: saSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex !important;
+}
+
+.sa-drawer-close-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid var(--sa-border);
+  background: transparent;
+  color: var(--sa-text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: 8px;
+}
+
+.sa-drawer-close-btn:hover {
+  background: var(--sa-surface);
+  color: #ffffff;
+}
+
+@keyframes saFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes saSlideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@media (max-width: 767px) {
+  .sa-sidebar:not(.sa-sidebar-drawer) {
+    display: none !important;
+  }
+
+  .sa-shell,
+  .sa-app-layout {
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .sa-main-wrap,
+  .sa-main-content {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .sa-header {
+    padding: 0 16px;
+    height: auto;
+    min-height: 56px;
+    gap: 12px;
+  }
+
+  .sa-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .sa-hamburger-btn {
+    display: inline-flex;
+  }
+
+  .sa-node-status {
+    display: none !important;
+  }
+
+  .sa-header-search {
+    max-width: 150px;
+  }
+
+  .sa-content,
+  .sa-body-area,
+  .sa-page-container {
+    padding: 16px 16px 32px 16px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}

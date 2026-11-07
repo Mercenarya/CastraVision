@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { SystemAdminSidebar } from './SystemAdminSidebar'
 import { SystemAdminHeader } from './SystemAdminHeader'
 import { PlatformOverviewScreen } from './screens/PlatformOverviewScreen'
@@ -13,6 +13,7 @@ import './system-admin.css'
  */
 export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
   const [activeTab, setActiveTab] = useState('sa-dashboard')
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [companies, setCompanies] = useState(INITIAL_COMPANIES)
   const [selectedCompanyId, setSelectedCompanyId] = useState(
     INITIAL_COMPANIES[0]?.id || 'cv-org-9041'
@@ -20,6 +21,21 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
   const [globalSearch, setGlobalSearch] = useState('')
 
   const handleSignOut = onLogout || onSignOut
+
+  // Close drawer on Escape key and prevent body scroll when drawer is open
+  useEffect(() => {
+    if (!mobileMenuOpen) return
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false)
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    const originalOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = originalOverflow
+    }
+  }, [mobileMenuOpen])
 
   // Dynamically compute platform metrics from current companies registry
   const metrics = useMemo(() => {
@@ -71,6 +87,7 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
   // Navigation handler
   const handleNavigate = (tab) => {
     setActiveTab(tab)
+    setMobileMenuOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -78,6 +95,7 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
   const handleSelectCompany = (company) => {
     setSelectedCompanyId(company.id)
     setActiveTab('sa-company-overview')
+    setMobileMenuOpen(false)
   }
 
   // Create company handler
@@ -110,8 +128,26 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
 
   return (
     <div className="sa-app-layout">
-      {/* Fixed Left Sidebar */}
+      {/* Fixed Left Sidebar (Desktop) */}
       <SystemAdminSidebar activeTab={activeTab} onNavigate={handleNavigate} />
+
+      {/* Mobile Drawer Backdrop */}
+      {mobileMenuOpen && (
+        <div
+          className="sa-drawer-backdrop"
+          onClick={() => setMobileMenuOpen(false)}
+          role="presentation"
+        >
+          <div onClick={(e) => e.stopPropagation()} role="presentation">
+            <SystemAdminSidebar
+              activeTab={activeTab}
+              onNavigate={handleNavigate}
+              isDrawer={true}
+              onClose={() => setMobileMenuOpen(false)}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Main Content Area */}
       <div className="sa-main-content">
@@ -124,6 +160,7 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
           onNavigate={handleNavigate}
           searchTerm={globalSearch}
           onSearchChange={handleHeaderSearch}
+          onOpenMobileMenu={() => setMobileMenuOpen(true)}
         />
 
         {/* Screen Routing */}
