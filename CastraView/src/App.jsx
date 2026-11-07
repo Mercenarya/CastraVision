@@ -477,6 +477,9 @@ function WorkspaceApp() {
     setBusy(true)
     setError('')
     try {
+      let supabaseAuthFailed = false
+      let supabaseErrorMessage = ''
+
       // 1. Try Supabase Auth first
       if (supabase) {
         if (isSignup) {
@@ -491,32 +494,49 @@ function WorkspaceApp() {
           return
         }
 
-        const { data, error: authError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        })
+        try {
+          const { data, error: authError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          })
 
-        if (!authError && data?.user) {
-          setUser(data.user)
-          await loadUserRoleAndData(data.user)
-          setToast('Đăng nhập Supabase thành công.')
-          return
-        }
+          if (!authError && data?.user) {
+            setUser(data.user)
+            await loadUserRoleAndData(data.user)
+            setToast('Đăng nhập Supabase thành công.')
+            return
+          }
 
-        if (authError && !authError.message.includes('fetch')) {
-          throw new Error('Email hoặc mật khẩu không đúng: ' + authError.message)
+          if (authError) {
+            supabaseAuthFailed = true
+            supabaseErrorMessage = authError.message
+          }
+        } catch (err) {
+          supabaseAuthFailed = true
+          supabaseErrorMessage = err.message
         }
       }
 
-      // 2. Fallback to Django API session if Supabase is not ready
-      const endpoint = isSignup ? 'auth/register/' : 'auth/login/'
-      const res = await api(endpoint, {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      })
-      setUser(res.user)
-      setBackendError('')
-      await refreshData()
+      // 2. Fallback to Django API session if Supabase is not configured or user is stored locally
+      try {
+        const endpoint = isSignup ? 'auth/register/' : 'auth/login/'
+        const res = await api(endpoint, {
+          method: 'POST',
+          body: JSON.stringify({ email, password }),
+        })
+        setUser(res.user)
+        setBackendError('')
+        await refreshData()
+        return
+      } catch (djangoErr) {
+        if (supabaseAuthFailed && supabaseErrorMessage) {
+          if (supabaseErrorMessage.toLowerCase().includes('invalid login credentials')) {
+            throw new Error('Email hoặc mật khẩu không chính xác. Nếu chưa có tài khoản, hãy chuyển sang tab Đăng ký hoặc dùng nút Demo bên dưới.')
+          }
+          throw new Error('Đăng nhập thất bại: ' + supabaseErrorMessage)
+        }
+        throw djangoErr
+      }
     } catch (cause) {
       setError(cause.message || 'Đăng nhập thất bại.')
     } finally {
