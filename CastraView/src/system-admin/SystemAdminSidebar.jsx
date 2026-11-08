@@ -4,7 +4,7 @@ import React from 'react'
  * SystemAdminSidebar
  * Shared sidebar for all System Admin screens with strictly scoped platform navigation.
  */
-export function SystemAdminSidebar({ activeTab, onNavigate }) {
+export function SystemAdminSidebar({ activeTab, onNavigate, isDrawer = false, onClose }) {
   const navItems = [
     {
       id: 'sa-dashboard',
@@ -44,7 +44,7 @@ export function SystemAdminSidebar({ activeTab, onNavigate }) {
     activeTab === 'sa-create-company'
 
   return (
-    <aside className="sa-sidebar">
+    <aside className={`sa-sidebar ${isDrawer ? 'sa-sidebar-drawer' : ''}`}>
       {/* Brand Header */}
       <div className="sa-sidebar-brand">
         <div className="sa-brand-row">
@@ -53,6 +53,16 @@ export function SystemAdminSidebar({ activeTab, onNavigate }) {
             <span className="sa-brand-title">CastraVision</span>
           </div>
           <span className="sa-badge-purple">SYS ADMIN</span>
+          {isDrawer && (
+            <button
+              type="button"
+              className="sa-drawer-close-btn"
+              onClick={onClose}
+              aria-label="Đóng menu điều hướng"
+            >
+              ✕
+            </button>
+          )}
         </div>
       </div>
 
@@ -69,7 +79,10 @@ export function SystemAdminSidebar({ activeTab, onNavigate }) {
                 key={item.id}
                 type="button"
                 className={`sa-nav-item ${isActive ? 'active' : ''}`}
-                onClick={() => onNavigate(item.id)}
+                onClick={() => {
+                  onNavigate(item.id)
+                  if (isDrawer && onClose) onClose()
+                }}
               >
                 <span className="sa-nav-icon">{item.icon}</span>
                 <span className="sa-nav-text">{item.label}</span>

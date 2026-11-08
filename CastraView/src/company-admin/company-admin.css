@@ -5956,3 +5956,128 @@
   line-height: 1.4;
   margin: 0;
 }
+
+/* ─── Responsive Styles for Marketing Manager (< 768px) ──────────────────── */
+.ca-hamburger-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--ca-border);
+  color: var(--ca-text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.ca-hamburger-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.ca-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ca-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  animation: stdFadeIn 0.2s ease-out;
+}
+
+.ca-sidebar-drawer {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px !important;
+  max-width: 85vw;
+  height: 100vh !important;
+  z-index: 101 !important;
+  background-color: var(--ca-sidebar-bg) !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  display: flex !important;
+  flex-direction: column;
+  animation: stdSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ca-drawer-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--ca-text-secondary);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-left: auto;
+}
+
+.ca-drawer-close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .ca-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .ca-sidebar:not(.ca-sidebar-drawer) {
+    display: none !important;
+  }
+
+  .ca-hamburger-btn {
+    display: flex !important;
+  }
+
+  .ca-header {
+    height: 60px !important;
+    padding: 0 14px !important;
+    gap: 8px !important;
+  }
+
+  .ca-breadcrumbs {
+    display: none !important;
+  }
+
+  .ca-system-status {
+    display: none !important;
+  }
+
+  .ca-search-input-wrap {
+    display: none !important;
+  }
+
+  .ca-user-meta {
+    display: none !important;
+  }
+
+  .ca-header-actions {
+    gap: 8px !important;
+    flex-shrink: 0;
+  }
+
+  .ca-content {
+    padding: 16px 14px 48px !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden;
+    box-sizing: border-box;
+  }
+}

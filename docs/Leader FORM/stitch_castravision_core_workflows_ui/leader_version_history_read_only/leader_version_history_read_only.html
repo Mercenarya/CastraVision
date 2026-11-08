@@ -1,0 +1,704 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-background": "#dfe2f1",
+          "on-surface": "#dfe2f1",
+          "primary": "#c0c1ff",
+          "on-tertiary-container": "#340080",
+          "tertiary": "#d0bcff",
+          "tertiary-fixed": "#e9ddff",
+          "on-tertiary-fixed-variant": "#5516be",
+          "tertiary-fixed-dim": "#d0bcff",
+          "secondary": "#4cd7f6",
+          "surface-container": "#1c1f2a",
+          "inverse-primary": "#494bd6",
+          "on-surface-variant": "#c7c4d7",
+          "secondary-fixed-dim": "#4cd7f6",
+          "inverse-surface": "#dfe2f1",
+          "outline-variant": "#464554",
+          "background": "#0f131d",
+          "surface": "#0f131d",
+          "on-secondary-container": "#00424e",
+          "on-primary-fixed-variant": "#2f2ebe",
+          "on-secondary-fixed": "#001f26",
+          "primary-container": "#8083ff",
+          "surface-container-highest": "#313540",
+          "on-error-container": "#ffdad6",
+          "outline": "#908fa0",
+          "on-error": "#690005",
+          "error-container": "#93000a",
+          "on-secondary-fixed-variant": "#004e5c",
+          "on-tertiary": "#3c0091",
+          "on-secondary": "#003640",
+          "surface-tint": "#c0c1ff",
+          "surface-container-lowest": "#0a0e18",
+          "surface-variant": "#313540",
+          "secondary-fixed": "#acedff",
+          "error": "#ffb4ab",
+          "surface-container-low": "#171b26",
+          "on-primary-fixed": "#07006c",
+          "primary-fixed-dim": "#c0c1ff",
+          "on-primary": "#1000a9",
+          "surface-dim": "#0f131d",
+          "primary-fixed": "#e1e0ff",
+          "tertiary-container": "#a078ff",
+          "secondary-container": "#03b5d3",
+          "on-tertiary-fixed": "#23005c",
+          "surface-container-high": "#262a35",
+          "on-primary-container": "#0d0096",
+          "surface-bright": "#353944",
+          "inverse-on-surface": "#2c303b"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-xl": "2rem",
+          "margin": "2rem",
+          "space-xs": "0.25rem",
+          "space-sm": "0.5rem",
+          "space-lg": "1.5rem",
+          "gutter-mobile": "0.75rem",
+          "space-md": "1rem",
+          "margin-mobile": "1rem",
+          "gutter": "1.5rem"
+        },
+        "fontFamily": {
+          "body-lg": ["Inter"],
+          "label-sm": ["Inter"],
+          "label-lg": ["Inter"],
+          "headline-xl-mobile": ["Plus Jakarta Sans"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "label-md": ["Inter"],
+          "body-md": ["Inter"],
+          "headline-md": ["Plus Jakarta Sans"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "headline-xl": ["Plus Jakarta Sans"],
+          "body-sm": ["Inter"]
+        },
+        "fontSize": {
+          "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+          "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+          "headline-xl-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+          "headline-lg-mobile": ["22px", {"lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+          "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+          "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+          "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+          "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+        }
+      }
+    }
+  };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 bottom-0 w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-50 select-none">
+    <!-- Top Logo Area -->
+    <div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+        <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+        <span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+      </div>
+    </div>
+
+    <!-- Navigation Scroll Area -->
+    <div class="flex-1 overflow-y-auto py-4 px-3 space-y-6">
+      <div>
+        <div class="px-3 mb-2 flex items-center justify-between">
+          <span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">WORKSPACE NAVIGATION</span>
+          <span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">LEADER</span>
+        </div>
+        
+        <nav class="space-y-1">
+          <!-- 1. Overview -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span class="">Overview</span>
+          </a>
+
+          <!-- 2. Approvals (ACTIVE) -->
+          <a href="#" class="flex items-center justify-between px-3 py-2.5 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150">
+            <div class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#8083ff]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+              <span class="">Approvals</span>
+            </div>
+            <span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096]">3</span>
+          </a>
+
+          <!-- 3. My Proposals -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+            <span class="">My Proposals</span>
+          </a>
+
+          <!-- 4. Campaigns -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span class="">Campaigns</span>
+          </a>
+
+          <!-- 5. Strategy Studio -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span class="">Strategy Studio</span>
+          </a>
+
+          <!-- 6. Content Gen -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+            </svg>
+            <span class="">Content Gen</span>
+          </a>
+
+          <!-- 7. Campaign Import -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <span class="">Campaign Import</span>
+          </a>
+
+          <!-- 8. Performance & Insights -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+            <span class="">Performance &amp; Insights</span>
+          </a>
+
+          <!-- 9. Account Settings -->
+          <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group">
+            <svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            <span class="">Account Settings</span>
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Bottom Footer Area (Inside Sidebar) -->
+    <div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+      <div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+            AC
+          </div>
+          <div class="min-w-0">
+            <p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+            <p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+          </div>
+        </div>
+        <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none shrink-0">
+          LEADER
+        </span>
+      </div>
+    </div>
+  </aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-40">
+      <!-- Left Side: Breadcrumb navigation -->
+      <div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Leader Workspace</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Approvals</span>
+        <svg class="w-3.5 h-3.5 text-[#464554]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+        <span class="text-[#dfe2f1] font-semibold">Proposal Version History</span>
+      </div>
+
+      <!-- Right Side: Utility Widgets -->
+      <div class="flex items-center gap-5">
+        
+        <!-- System Status Widget -->
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28A745] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]"></span>
+          </span>
+          <span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+        </div>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- Notification Bell Icon (With Red #ffb4ab dot with number "5") -->
+        <button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none" type="button">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+            5
+          </span>
+        </button>
+
+        <div class="h-5 w-px bg-[#464554]"></div>
+
+        <!-- User Profile Widget -->
+        <div class="flex items-center gap-3 pl-1">
+          <div class="relative">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8083ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+              DK
+            </div>
+            <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#28A745] rounded-full ring-2 ring-[#171b26]"></div>
+          </div>
+          <div class="flex flex-col text-left">
+            <div class="flex items-center gap-1.5 leading-none">
+              <span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span>
+              <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
+                LEADER
+              </span>
+            </div>
+            <span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span>
+          </div>
+        </div>
+
+      </div>
+    </header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="px-space-lg py-space-lg max-w-[1240px] w-full mx-auto flex flex-col gap-space-lg">
+<!-- Header Section with Breadcrumbs & Context Badges -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs font-label-sm text-label-sm text-outline uppercase tracking-wider">
+<span class="">CastraVision</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="">Acme Corp</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="">Approvals</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-on-surface-variant">Proposal PRP-8402</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-semibold">Version History</span>
+</div>
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm flex-wrap">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Proposal Version History — PRP-8402</h1>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-label-sm text-label-sm font-semibold tracking-wide uppercase flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                STATUS: APPROVED
+              </span>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm font-medium">
+                2 REVISIONS RECORDED
+              </span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Read-only revision records and comparative diff analysis for Q3 Activewear Omnichannel Copy.
+          </p>
+</div>
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm self-start lg:self-center">
+<span class="material-symbols-outlined text-[18px] text-outline">lock</span>
+<span class="">Immutable Inspection Mode (FR04)</span>
+</div>
+</div>
+</div>
+<!-- Top Control & Filter Ribbon -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<!-- View Selector Tabs -->
+<div class="flex items-center gap-1 bg-surface-container-lowest p-1 rounded-lg">
+<button class="px-3.5 py-1.5 rounded font-label-sm text-label-sm font-semibold bg-primary-container text-on-primary-container transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">difference</span>
+          Detailed Diff View
+        </button>
+<button class="px-3.5 py-1.5 rounded font-label-sm text-label-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">timeline</span>
+          Unified Timeline View
+        </button>
+<button class="px-3.5 py-1.5 rounded font-label-sm text-label-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">preview</span>
+          Approved Specimen
+        </button>
+</div>
+<!-- Right Metadata / Context -->
+<div class="flex items-center gap-3 px-3 py-1 text-on-surface-variant font-label-sm text-label-sm">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-outline">person_outline</span>
+<span class="">Creator: <strong class="text-on-surface font-semibold">Sarah Jenkins</strong></span>
+</div>
+<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-emerald-400">verified_user</span>
+<span class="">Approved by: <strong class="text-on-surface font-semibold">David Kross</strong> (Workspace Manager)</span>
+</div>
+</div>
+</div>
+<!-- Visual Diff Header Summary Banner -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-sm">
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Base Artifact</span>
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface">Revision v1.0</span>
+<span class="px-2 py-0.5 rounded bg-surface-container-highest font-label-sm text-label-sm text-on-surface-variant">Baseline Draft</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Authored via Generative Engine · Sarah Jenkins</span>
+</div>
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Live Signoff Target</span>
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-primary">Revision v1.1 (Final)</span>
+<span class="px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-300 font-label-sm text-label-sm font-semibold">Active State</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Supervisory Edits Applied · David Kross</span>
+</div>
+<div class="p-space-md rounded-lg bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline">Modifications Metric</span>
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-secondary">2 Fields Updated</span>
+<span class="px-2 py-0.5 rounded bg-secondary-container/20 text-secondary font-label-sm text-label-sm">3 Unchanged</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">+18 Net Characters added to Omnichannel bundle</span>
+</div>
+</div>
+<!-- Card 1: Comprehensive Field Comparison Table -->
+<div class="rounded-lg bg-surface-container-low overflow-hidden">
+<!-- Card Title Bar -->
+<div class="px-space-lg py-space-md bg-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">compare_arrows</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Comparative Field Matrix</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Direct delta mapping between baseline submission and manager-approved release</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-2.5 h-2.5 rounded-sm bg-error/20 inline-block"></span>
+<span class="">Removed</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface-variant">
+<span class="w-2.5 h-2.5 rounded-sm bg-emerald-500/20 inline-block"></span>
+<span class="">Modified / Added</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-outline">
+<span class="w-2.5 h-2.5 rounded-sm bg-surface-container-highest inline-block"></span>
+<span class="">Unchanged</span>
+</div>
+</div>
+</div>
+<!-- Comparison Matrix Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse table-fixed">
+<thead>
+<tr class="bg-surface-container-lowest font-label-sm text-label-sm text-outline uppercase tracking-wider"><th class="py-3 px-space-md w-[20%] font-semibold">Field Name</th><th class="py-3 px-space-md w-[32%] font-semibold">Baseline Draft (v1.0 · Sarah / AI)</th><th class="py-3 px-space-md w-[32%] font-semibold">Approved Revision (v1.1 · David Kross)</th><th class="py-3 px-space-md w-[16%] font-semibold">Change Summary &amp; Impact</th></tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/40 font-body-md text-body-md">
+<!-- Row 1: Headline -->
+<tr class="bg-surface-container-low/70 hover:bg-surface-container transition-colors">
+<td class="py-space-md px-space-md align-top">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">title</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Headline</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 block">Hero Copy Variant A</span>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-surface-container font-body-sm text-body-sm text-on-surface-variant line-through decoration-error/70">
+                  Unstoppable Momentum. Built for High-Performance Training.
+                </div>
+<div class="mt-1 font-label-sm text-label-sm text-outline">61 characters</div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-emerald-950/30 text-on-surface font-body-sm text-body-sm">
+                  Unstoppable Momentum. <span class="bg-emerald-500/20 text-emerald-300 font-semibold px-1 rounded">Engineered for Peak Athletic</span> Training.
+                </div>
+<div class="mt-1 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-emerald-400 font-semibold">67 characters (+6 chars)</span>
+<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-label-sm text-label-sm font-semibold uppercase">CHANGED</span>
+</div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-2.5 rounded bg-surface-container-lowest flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface font-medium">Cadence Enhancement</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Replaced generic phrasing with authoritative athletic lexicon to improve primary conversion trigger.</span>
+</div>
+</td>
+</tr>
+<!-- Row 2: Description -->
+<tr class="bg-surface-container-low hover:bg-surface-container transition-colors">
+<td class="py-space-md px-space-md align-top">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">notes</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Primary Description</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 block">Body Text</span>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-surface-container font-body-sm text-body-sm text-on-surface-variant">
+                  Engineered with proprietary thermal-weave fabrics that adapt to your workout intensity. <span class="line-through decoration-error/70 text-error-container">Discover the next generation of performance apparel with zero friction and complimentary express delivery.</span>
+</div>
+<div class="mt-1 font-label-sm text-label-sm text-outline">211 characters</div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-emerald-950/30 text-on-surface font-body-sm text-body-sm">
+                  Engineered with proprietary thermal-weave fabrics that adapt to your workout intensity. <span class="bg-emerald-500/20 text-emerald-300 font-semibold px-1 rounded">Experience frictionless range of motion with complimentary express shipping on all inaugural fleet orders.</span>
+</div>
+<div class="mt-1 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-emerald-400 font-semibold">223 characters (+12 chars)</span>
+<span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-label-sm text-label-sm font-semibold uppercase">CHANGED</span>
+</div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-2.5 rounded bg-surface-container-lowest flex flex-col gap-1">
+<span class="font-label-md text-label-md text-on-surface font-medium">Value Proposition Polish</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Refined for higher sports urgency and conversion clarity (+18 chars total across proposal).</span>
+</div>
+</td>
+</tr>
+<!-- Row 3: Call to Action -->
+<tr class="bg-surface-container-low/70 hover:bg-surface-container transition-colors">
+<td class="py-space-md px-space-md align-top">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-outline">smart_button</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Call to Action</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 block">Primary CTA Label</span>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-surface-container font-body-sm text-body-sm text-on-surface font-mono">
+                  Shop Collection Now
+                </div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-surface-container font-body-sm text-body-sm text-on-surface font-mono flex items-center justify-between">
+<span class="">Shop Collection Now</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-outline font-label-sm text-label-sm uppercase">UNCHANGED</span>
+</div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<span class="font-body-sm text-body-sm text-outline italic">Retained from AI baseline. Passed compliance threshold.</span>
+</td>
+</tr>
+<!-- Row 4: Target URL -->
+<tr class="bg-surface-container-low hover:bg-surface-container transition-colors">
+<td class="py-space-md px-space-md align-top">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-outline">link</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Target URL</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1 block">Destination URI</span>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-surface-container font-body-sm text-body-sm text-secondary truncate font-mono">
+                  https://acmeactive.com/collections/q3-performance
+                </div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<div class="p-3 rounded bg-surface-container font-body-sm text-body-sm text-secondary font-mono flex items-center justify-between">
+<span class="truncate">https://acmeactive.com/collections/q3-performance</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-outline font-label-sm text-label-sm uppercase shrink-0 ml-2">UNCHANGED</span>
+</div>
+</td>
+<td class="py-space-md px-space-md align-top">
+<span class="font-body-sm text-body-sm text-outline italic">Direct product taxonomy route confirmed by automated link check.</span>
+</td>
+</tr>
+<!-- Row 5: Creative Asset -->
+<tr class="bg-surface-container-low/70 hover:bg-surface-container transition-colors"><td class="py-space-md px-space-md align-top"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-outline">image</span><span class="font-label-lg text-label-lg text-on-surface font-semibold">Creative Asset</span></div><span class="font-label-sm text-label-sm text-outline mt-1 block">Key Visual #01</span></td><td class="py-space-md px-space-md align-top"><div class="p-2.5 rounded bg-surface-container flex items-center gap-3"><img class="w-12 h-12 rounded object-cover shrink-0" data-alt="High-contrast technical studio photograph of AirStride V2 Black Edition athletic shoe resting on dark carbon fiber floor, dramatic directional blue rim lighting, premium activewear catalog shot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDV1_idneuvtWmWDMwrqILGL3eBgE_ld1ZMNXRnEcpCnjvIatBt4LkDf96yyVuQGLRTCjsSgxESo1J80HVR0ytNFVdBGQGs5sdXEVjZ_wgJ9B-flUfkk0THEk03eRUsNdIg8XhS9kTt8QpD-bMnHdfP6aK8xaT6CvWi_vMNVfxVV5imOpHzXNtueBPb-KJDZ2jIAcBRsRpIFQPDaaU53NLn8X1zHf2le8tz0jJTdWqyOKrEXwMBDWZc"><div class="flex flex-col min-w-0 flex-1"><span class="font-label-md text-label-md text-on-surface font-medium truncate">Asset #01</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">AirStride V2 Black Edition</span></div></div><div class="mt-1 font-label-sm text-label-sm text-outline">4096x2048 px · Primary Key Visual</div></td><td class="py-space-md px-space-md align-top"><div class="p-2.5 rounded bg-surface-container flex items-center justify-between gap-3"><div class="flex items-center gap-3 min-w-0 flex-1"><img class="w-12 h-12 rounded object-cover shrink-0" data-alt="High-contrast technical studio photograph of AirStride V2 Black Edition athletic shoe resting on dark carbon fiber floor, dramatic directional blue rim lighting, premium activewear catalog shot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBySOZHvWEt1bL0HHnEAc8Op50LK8gw7LAVFoqj4PDXKN4YGUZ-tVA-8kUrTEt9yngZY8bZgyX7c0x_7YeYVKrrAS0gmDWLEHREW38q8qg_62EN6nn3R6W8MlCoJqDY_IosxGqPrp6lThx25Wi1rO3QTGnygu_JBBbA2OoQmOQmc647cgVRjwKwfYBJagNwBWoVKbUxybjcdAro98EeUVdU-5uyr4BiUGJ-h6MV-qL0dQeJyBk1h4Yq"><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md text-on-surface font-medium truncate">Asset #01</span><span class="font-body-sm text-body-sm text-on-surface-variant truncate">AirStride V2 Black Edition</span></div></div><span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-outline font-label-sm text-label-sm uppercase shrink-0">UNCHANGED</span></div><div class="mt-1 flex items-center justify-between font-label-sm text-label-sm text-outline"><span class="">Identical Key Visual Master</span><span class="text-emerald-400 font-medium">Verified</span></div></td><td class="py-space-md px-space-md align-top"><div class="p-2.5 rounded bg-surface-container-lowest flex flex-col gap-1"><span class="font-label-md text-label-md text-on-surface font-medium">Asset Parity</span><span class="font-body-sm text-body-sm text-outline italic">Master resolution approved (4096x2048 px 24-bit sRGB).</span></div></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Card 2: Immutable Event Log for PRP-8402 (Proposal-Specific Scope) -->
+<div class="rounded-lg bg-surface-container-low overflow-hidden">
+<!-- Card Header -->
+<div class="px-space-lg py-space-md bg-surface-container flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-secondary text-[22px]">history</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Immutable Event Log for PRP-8402</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Chronological lifecycle of PRP-8402 (Read-Only)</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-1 rounded bg-surface-container-lowest font-label-sm text-label-sm text-outline">
+            Audit Scope: Single Proposal Lifecycle
+          </span>
+</div>
+</div>
+<!-- Timeline Entries -->
+<div class="p-space-lg flex flex-col gap-space-md">
+<!-- Entry 1: Approved -->
+<div class="flex gap-space-md relative">
+<!-- Connector Pin and Vertical Line -->
+<div class="flex flex-col items-center">
+<div class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-highest my-1"></div>
+</div>
+<!-- Content Panel -->
+<div class="flex-1 pb-6">
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-2">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-emerald-500 text-on-primary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                    DECISION: APPROVED
+                  </span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Affirmative Signoff Granted</span>
+</div>
+<div class="flex items-center gap-2 text-outline font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="">Today · 14:50:12 UTC</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary">badge</span>
+<span class="">Operator: <strong class="text-on-surface">David Kross</strong> (Workspace Manager)</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface pt-1">
+                Affirmative signoff granted. Proposal moved to approved status. Campaign automation locks engaged for omnichannel sync.
+              </p>
+</div>
+</div>
+</div>
+<!-- Entry 2: Revised -->
+<div class="flex gap-space-md relative">
+<!-- Connector Pin and Vertical Line -->
+<div class="flex flex-col items-center">
+<div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[20px]">edit_note</span>
+</div>
+<div class="w-0.5 h-full bg-surface-container-highest my-1"></div>
+</div>
+<!-- Content Panel -->
+<div class="flex-1 pb-6">
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-2">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-primary-container text-on-primary-container font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                    ACTION: REVISED (v1.1)
+                  </span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Copy Modification &amp; Polish</span>
+</div>
+<div class="flex items-center gap-2 text-outline font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="">Today · 14:48:05 UTC</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-primary">badge</span>
+<span class="">Operator: <strong class="text-on-surface">David Kross</strong> (Workspace Manager)</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface pt-1">
+                Manager modified headline and description copy.
+              </p>
+<!-- Supervisory Justification Quote Box -->
+<div class="p-3 rounded bg-surface-container-lowest flex items-start gap-2.5 mt-1">
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 mt-0.5">format_quote</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Manager Justification</span>
+<span class="font-body-sm text-body-sm text-on-surface italic">"Refined headline cadence for greater athletic urgency."</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 3: Submitted -->
+<div class="flex gap-space-md relative">
+<!-- Connector Pin (Terminal) -->
+<div class="flex flex-col items-center">
+<div class="w-9 h-9 rounded-full bg-surface-container-highest text-on-surface flex items-center justify-center shrink-0 z-10">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</div>
+</div>
+<!-- Content Panel -->
+<div class="flex-1">
+<div class="p-space-md rounded-lg bg-surface-container flex flex-col gap-2">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-2 flex-wrap">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                    EVENT: SUBMITTED (v1.0)
+                  </span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Proposal Ingested</span>
+</div>
+<div class="flex items-center gap-2 text-outline font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="">Today · 14:32:08 UTC</span>
+</div>
+</div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[16px] text-outline">badge</span>
+<span class="">Operator: <strong class="text-on-surface">Sarah Jenkins</strong> (Campaign Lead)</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant pt-1">
+                Proposal created and submitted to Approval Queue via Q3 Performance campaign orchestration workflow.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Governance Notice Banner -->
+<div class="p-space-md rounded-lg bg-surface-container-low flex items-start gap-space-md">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center text-outline shrink-0">
+<span class="material-symbols-outlined text-[20px]">policy</span>
+</div>
+<div class="flex flex-col gap-0.5">
+<span class="font-label-md text-label-md text-on-surface font-semibold">Governance &amp; Audit Scope (FR04)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Scope Notice: Version history displays proposal-specific revisions under FR04 Human-in-the-Loop Governance. Workspace-wide activity and cross-team security audit trails are restricted to Workspace Administrators (FR11).
+        </p>
+</div>
+</div>
+<!-- Bottom Navigation Actions -->
+<div class="flex items-center justify-between pt-space-xs pb-space-lg">
+<button class="px-space-md py-2.5 rounded-lg bg-primary-container text-on-primary-container font-label-lg text-label-lg font-semibold hover:bg-inverse-primary hover:text-on-primary transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Back to Approval Queue
+      </button>
+<div class="flex items-center gap-3">
+<button class="px-space-md py-2.5 rounded-lg bg-surface-container text-on-surface font-label-lg text-label-lg font-medium hover:bg-surface-container-high transition-colors flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">article</span>
+          View Proposal
+        </button>
+</div>
+</div>
+</div>
+</div></main></div>
+
+
+
+
+
+</body></html>

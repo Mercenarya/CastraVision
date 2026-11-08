@@ -19,6 +19,7 @@ export default function MarketingManagerHeader({
   onSearchChange,
   user,
   onSignOut,
+  onOpenMobileMenu,
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
@@ -63,14 +64,30 @@ export default function MarketingManagerHeader({
 
   return (
     <header className="ca-header" aria-label="Marketing Manager Header">
-      {/* Breadcrumb Navigation */}
-      <nav aria-label="Breadcrumb" className="ca-breadcrumbs">
-        <span className="ca-breadcrumb-item">CastraVision</span>
-        <IconChevronRight size={13} className="ca-breadcrumb-sep" />
-        <span className="ca-breadcrumb-item">{workspaceName}</span>
-        <IconChevronRight size={13} className="ca-breadcrumb-sep" />
-        <span className="ca-breadcrumb-item active">{currentPageTitle}</span>
-      </nav>
+      {/* Left side: Mobile hamburger & Breadcrumbs */}
+      <div className="ca-header-left">
+        <button
+          type="button"
+          className="ca-hamburger-btn"
+          onClick={onOpenMobileMenu}
+          aria-label="Mở menu điều hướng"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+
+        {/* Breadcrumb Navigation */}
+        <nav aria-label="Breadcrumb" className="ca-breadcrumbs">
+          <span className="ca-breadcrumb-item">CastraVision</span>
+          <IconChevronRight size={13} className="ca-breadcrumb-sep" />
+          <span className="ca-breadcrumb-item">{workspaceName}</span>
+          <IconChevronRight size={13} className="ca-breadcrumb-sep" />
+          <span className="ca-breadcrumb-item active">{currentPageTitle}</span>
+        </nav>
+      </div>
 
       {/* Header Actions & Utilities */}
       <div className="ca-header-actions">

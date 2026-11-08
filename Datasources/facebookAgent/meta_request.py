@@ -10,7 +10,7 @@ Yêu cầu cài đặt:
 
 Yêu cầu file .env (KHÔNG commit vào git):
     FB_APP_ID=xxxxxxxxxx
-    FB_APP_SECRET=xxxxxxxxxx
+    FB_APP_SECRET=xxxxxxxxxx        # Không bắt buộc nếu dùng User / System User Token
     FB_ACCESS_TOKEN=xxxxxxxxxx      # System User Token hoặc User Access Token
     FB_AD_ACCOUNT_ID=act_xxxxxxxxxx # Bắt buộc có tiền tố "act_"
 """
@@ -84,12 +84,14 @@ def build_params(days_back: int = 7) -> dict:
 
 def init_facebook_api() -> None:
     """Khởi tạo kết nối tới Facebook Marketing API."""
-    if not all([APP_ID, APP_SECRET, ACCESS_TOKEN, AD_ACCOUNT_ID]):
+    if not all([APP_ID, ACCESS_TOKEN, AD_ACCOUNT_ID]):
         raise EnvironmentError(
-            "Thiếu biến môi trường. Cần FB_APP_ID, FB_APP_SECRET, "
+            "Thiếu biến môi trường. Cần FB_APP_ID, "
             "FB_ACCESS_TOKEN, FB_AD_ACCOUNT_ID trong file .env"
         )
-    FacebookAdsApi.init(APP_ID, APP_SECRET, ACCESS_TOKEN)
+    # Không truyền app_secret vào SDK để tránh sinh `appsecret_proof` sai lệch
+    # khi Token được tạo từ Graph API Explorer hoặc khác với App Secret trong .env.
+    FacebookAdsApi.init(APP_ID, None, ACCESS_TOKEN)
     logger.info("Đã khởi tạo kết nối Facebook Marketing API.")
 
 
@@ -190,6 +192,7 @@ def run(days_back: int = 7) -> pd.DataFrame:
     """Hàm chính — gọi từ scheduler, API endpoint, hoặc script CLI."""
     init_facebook_api()
     raw_data = fetch_raw_insights(days_back=days_back)
+    print(raw_data)
     df = normalize_insights(raw_data)
     save_output(df)
     return df

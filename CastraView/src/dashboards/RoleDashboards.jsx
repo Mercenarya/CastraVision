@@ -4,6 +4,8 @@
  */
 
 import { canAccessFR04ApprovalQueue } from '../auth/permissions'
+import LeaderLayout from '../leader/LeaderLayout'
+import MemberLayout from '../member/MemberLayout'
 
 const SIZES = {
   Micro: '1–10 employees',
@@ -38,6 +40,35 @@ export function Shell({ user, profile, page, setPage, logout, children }) {
   const isAdmin = user?.role === 'admin'
   const isLeader = user?.role === 'manager'
   const isEmployee = user?.role === 'member'
+
+  if (isLeader) {
+    return (
+      <LeaderLayout
+        user={user}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        logout={logout}
+      >
+        {children}
+      </LeaderLayout>
+    )
+  }
+
+  if (isEmployee) {
+    return (
+      <MemberLayout
+        user={user}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        logout={logout}
+      >
+        {children}
+      </MemberLayout>
+    )
+  }
+
   const canApprove = canAccessFR04ApprovalQueue(user)
 
   const dashboardLabel = isLeader

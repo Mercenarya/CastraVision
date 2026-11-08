@@ -38,6 +38,13 @@ export function resolveWorkspaceRole(user, membership = null) {
   return 'member'
 }
 
+export const KNOWN_USER_ROLES = {
+  'tritran0932523321@gmail.com': 'system_admin',
+  'grfdonk@gmail.com': 'manager',
+  'tranthanhtri2@gmail.com': 'leader',
+  'bengin2@gmail.com': 'member',
+}
+
 /**
  * Resolves the four canonical actor interface roles:
  * - 'system_admin' -> System Admin Layout
@@ -83,6 +90,9 @@ export function resolveActorRole(user, membership = null) {
   }
 
   const email = (user?.email || '').trim().toLowerCase()
+  if (KNOWN_USER_ROLES[email]) {
+    return KNOWN_USER_ROLES[email]
+  }
   if (email.startsWith('system') || email.includes('system_admin') || email.includes('sysadmin')) {
     return 'system_admin'
   }
