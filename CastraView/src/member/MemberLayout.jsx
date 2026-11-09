@@ -104,14 +104,14 @@ export default function MemberLayout({
       )}
 
       {/* Main Wrapper */}
-      <div className="std-main-wrap flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+      <div className="std-main-wrap flex-1 flex flex-col min-w-0 bg-[#0f131d]">
         {/* HEADER: Top Bar (Fixed Height 64px) */}
-        <header className="h-16 bg-[#171b26] border-b border-[#464554] px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
+        <header className="sticky top-0 h-16 bg-[#171b26] border-b border-[#464554] px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
           {/* Left Side: Mobile Hamburger & Breadcrumb navigation */}
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
-              className="std-hamburger-btn"
+              className="std-hamburger-btn md:hidden"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={mobileMenuOpen}
@@ -279,7 +279,7 @@ export default function MemberLayout({
         </header>
 
         {/* Content Viewport */}
-        <div className="std-content flex-1 bg-[#0f131d] overflow-auto">
+        <div className="std-content flex-1 bg-[#0f131d]">
           {children}
         </div>
       </div>

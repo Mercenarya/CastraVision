@@ -35,8 +35,8 @@ export default function RoleSidebar({
 
   return (
     <aside
-      className={`std-sidebar w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none ${
-        isDrawer ? 'std-sidebar-drawer' : ''
+      className={`std-sidebar w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col z-30 select-none ${
+        isDrawer ? 'std-sidebar-drawer' : 'hidden md:flex sticky top-0 h-screen'
       }`}
       aria-label={roleAriaLabel}
     >
