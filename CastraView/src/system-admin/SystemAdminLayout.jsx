@@ -6,13 +6,15 @@ import { CompanyManagementScreen } from './screens/CompanyManagementScreen'
 import { CompanyOverviewScreen } from './screens/CompanyOverviewScreen'
 import { CreateCompanyScreen } from './screens/CreateCompanyScreen'
 import { INITIAL_COMPANIES } from './mockData'
+import SettingsPage from '@/pages/SettingsPage'
 import './system-admin.css'
 
 /**
  * SystemAdminLayout — Master layout container for System Admin operations
  */
-export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
-  const [activeTab, setActiveTab] = useState('sa-dashboard')
+export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut, notify, onUserUpdate }) {
+  const [internalTab, setInternalTab] = useState(page || 'sa-dashboard')
+  const activeTab = page === 'profile' ? 'profile' : internalTab
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [companies, setCompanies] = useState(INITIAL_COMPANIES)
   const [selectedCompanyId, setSelectedCompanyId] = useState(
@@ -86,7 +88,8 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
 
   // Navigation handler
   const handleNavigate = (tab) => {
-    setActiveTab(tab)
+    setInternalTab(tab)
+    if (onNavigate) onNavigate(tab)
     setMobileMenuOpen(false)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -200,6 +203,17 @@ export function SystemAdminLayout({ user, onLogout, onSignOut, notify }) {
               onNavigate={handleNavigate}
               onCreateCompany={handleCreateCompany}
             />
+          )}
+
+          {activeTab === 'profile' && (
+            <div className="p-6 max-w-7xl mx-auto w-full">
+              <SettingsPage
+                user={user}
+                actorRole="system_admin"
+                notify={notify}
+                onUserUpdate={onUserUpdate}
+              />
+            </div>
           )}
         </main>
       </div>

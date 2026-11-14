@@ -23,12 +23,13 @@ import BudgetOptimizationPage from './pages/BudgetOptimizationPage'
 import RecommendationReviewPage from './pages/RecommendationReviewPage'
 import ReportsPage from './pages/ReportsPage'
 import DashboardPreviewPage from './preview/DashboardPreviewPage'
+import SettingsPage from './pages/SettingsPage'
+import ChannelPicker from './components/ChannelPicker'
 import { supabase } from './lib/supabase'
+import { getBusinessProfile, saveBusinessProfile as persistBusinessProfile } from './services/businessProfileService'
 import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
-const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: 'Over 250 employees' }
-const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'USD' }
 
 function csrfToken() { return decodeURIComponent(document.cookie.split('; ').find((part) => part.startsWith('csrftoken='))?.split('=')[1] || '') }
 async function api(path, options = {}) {
@@ -72,7 +73,7 @@ function Heading({ eyebrow, title, subtitle, children }) {
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Dismiss notification">×</button></div> }
 
-function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
+function AuthScreen({ mode, setMode, onLogin, busy, error }) {
   const signup = mode === 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -98,17 +99,17 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
         <div className="auth-card">
           <div className="auth-heading">
             <Brand />
-            <span className="auth-pill">● SUPABASE AUTH &amp; RBAC ACCESS</span>
+            <span className="auth-pill">● SECURE AUTHENTICATION &amp; RBAC</span>
             <h1>{signup ? 'Create an Account' : 'Welcome Back'}</h1>
             <p>
               {signup
-                ? 'Register your account to access CastraVision RBAC workspaces.'
-                : 'Sign in with your credentials for automated role-based redirection.'}
+                ? 'Register your account to access CastraVision workspaces.'
+                : 'Sign in with your credentials to access your workspace.'}
             </p>
           </div>
           <form className="auth-form" onSubmit={submit}>
             <label>
-              Account Email
+              Email Address
               <input
                 type="email"
                 autoComplete="email"
@@ -125,7 +126,7 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete={signup ? 'new-password' : 'current-password'}
                   minLength={6}
-                  placeholder="Enter password"
+                  placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -146,7 +147,7 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   minLength={6}
-                  placeholder="Confirm password"
+                  placeholder="Re-enter your password"
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
                   required
@@ -155,12 +156,12 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
             )}
             {displayError && <Notice>{displayError}</Notice>}
             <button className="button primary full" disabled={busy}>
-              {busy ? 'Authenticating…' : signup ? 'Create Account →' : 'Sign In to Workspace →'}
+              {busy ? 'Authenticating…' : signup ? 'Create Account →' : 'Sign In →'}
             </button>
           </form>
 
           <div className="auth-switch">
-            {signup ? 'Already have an account?' : "Don't have an account?"}
+            <span>{signup ? 'Already have an account?' : "Don't have an account?"}</span>{' '}
             <button
               type="button"
               onClick={() => {
@@ -171,70 +172,11 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
               {signup ? 'Sign In' : 'Sign Up'}
             </button>
           </div>
-
-          {/* Quick role testing access for demonstration and inspection */}
-          <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-            <div style={{ fontSize: 11, color: '#94a3b8', textAlign: 'center', fontWeight: 700, letterSpacing: '.06em', marginBottom: 10 }}>
-              QUICK RBAC DEMO ACCESS
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
-              <button
-                id="demo-login-system-admin"
-                type="button"
-                className="button subtle"
-                style={{ fontSize: 11, padding: '8px 6px', borderColor: '#38bdf8', color: '#38bdf8', textAlign: 'center', lineHeight: 1.3 }}
-                onClick={() => onDemoLogin('system_admin')}
-                title="tritran0932523321@gmail.com (System Admin)"
-              >
-                <strong>🛡 System Admin</strong>
-                <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>tritran0932523321@gmail.com</div>
-              </button>
-              <button
-                id="demo-login-manager"
-                type="button"
-                className="button subtle"
-                style={{ fontSize: 11, padding: '8px 6px', borderColor: '#818cf8', color: '#818cf8', textAlign: 'center', lineHeight: 1.3 }}
-                onClick={() => onDemoLogin('manager')}
-                title="GRFDonk@gmail.com (Manager)"
-              >
-                <strong>🏢 Manager</strong>
-                <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>GRFDonk@gmail.com</div>
-              </button>
-              <button
-                id="demo-login-leader"
-                type="button"
-                className="button subtle"
-                style={{ fontSize: 11, padding: '8px 6px', borderColor: '#34d399', color: '#34d399', textAlign: 'center', lineHeight: 1.3 }}
-                onClick={() => onDemoLogin('leader')}
-                title="tranthanhtri2@gmail.com (Leader)"
-              >
-                <strong>✓ Leader</strong>
-                <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>tranthanhtri2@gmail.com</div>
-              </button>
-              <button
-                id="demo-login-member"
-                type="button"
-                className="button subtle"
-                style={{ fontSize: 11, padding: '8px 6px', borderColor: '#a78bfa', color: '#a78bfa', textAlign: 'center', lineHeight: 1.3 }}
-                onClick={() => onDemoLogin('member')}
-                title="Bengin2@gmail.com (Member)"
-              >
-                <strong>✦ Member</strong>
-                <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Bengin2@gmail.com</div>
-              </button>
-            </div>
-          </div>
-
-          <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.08)', textAlign: 'center' }}>
-            <a href="/dashboard-preview" style={{ color: '#818cf8', fontSize: 13, textDecoration: 'none' }}>
-              🔍 Dashboard Workspace Preview →
-            </a>
-          </div>
         </div>
       </main>
       <footer className="auth-footer">
         <span>© 2026 CastraVision</span>
-        <span>Supabase RBAC Authentication</span>
+        <span>Enterprise AI Marketing Platform</span>
       </footer>
     </div>
   )
@@ -275,154 +217,6 @@ function Shell({ user, role, profile, page, setPage, logout, children }) {
   return <div className="shell">{children}</div>
 }
 
-function ChannelPicker({ channels, toggle }) { return <div className="channel-grid">{CHANNELS.map((channel) => <button type="button" key={channel} className={`channel-card ${channels.includes(channel) ? 'selected' : ''}`} onClick={() => toggle(channel)}><span className="channel-glyph">{channel === 'Meta' ? '∞' : channel === 'TikTok' ? '♪' : 'G'}</span><strong>{channel}</strong><span className="check-box">{channels.includes(channel) ? '✓' : ''}</span></button>)}</div> }
-
-function ProfileScreen({ profile, onboarding, saveProfile, busy, error, cancel }) {
-  const [draft, setDraft] = useState(profile || EMPTY_PROFILE)
-  const [step, setStep] = useState(1)
-  const set = (key, value) => setDraft((current) => ({ ...current, [key]: value }))
-  const toggle = (channel) => setDraft((current) => ({
-    ...current,
-    preferred_channels: current.preferred_channels.includes(channel)
-      ? current.preferred_channels.filter((item) => item !== channel)
-      : [...current.preferred_channels, channel],
-  }))
-  return (
-    <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-      <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-        <Heading
-          eyebrow={onboarding ? 'NEW ACCOUNT SETUP' : 'BUSINESS SETTINGS'}
-          title={onboarding ? 'Business Setup' : 'Business Profile & Settings'}
-          subtitle="Provide information about your business to personalize AI marketing strategies."
-        />
-        <div className="stepper">
-          <div className={step === 1 ? 'current' : 'done'}><b>1</b> Company Information</div>
-          <div className={step === 2 ? 'current' : ''}><b>2</b> Goals &amp; Channels</div>
-          <div className="step-track"><span style={{ width: step === 1 ? '50%' : '100%' }} /></div>
-        </div>
-        <form
-          className="card profile-card"
-          onSubmit={(event) => {
-            event.preventDefault()
-            if (step === 1) setStep(2)
-            else saveProfile(draft)
-          }}
-        >
-          {step === 1 ? (
-            <div className="form-grid">
-              <label className="wide">
-                Company Name *
-                <input
-                  value={draft.business_name}
-                  onChange={(e) => set('business_name', e.target.value)}
-                  minLength={2}
-                  maxLength={120}
-                  required
-                  placeholder="e.g., Acme Corporation"
-                />
-              </label>
-              <label>
-                Industry *
-                <input
-                  value={draft.industry}
-                  onChange={(e) => set('industry', e.target.value)}
-                  minLength={2}
-                  maxLength={120}
-                  required
-                  placeholder="e.g., Fashion &amp; Apparel"
-                />
-              </label>
-              <label>
-                Company Size *
-                <select
-                  value={draft.business_size}
-                  onChange={(e) => set('business_size', e.target.value)}
-                  required
-                >
-                  <option value="">Select company size</option>
-                  {Object.entries(SIZES).map(([value, label]) => (
-                    <option value={value} key={value}>{label}</option>
-                  ))}
-                </select>
-              </label>
-              <label className="wide">
-                Target Audience *
-                <textarea
-                  value={draft.target_customers}
-                  onChange={(e) => set('target_customers', e.target.value)}
-                  minLength={3}
-                  maxLength={500}
-                  required
-                  placeholder="Demographics, age groups, pain points, interests, and regional focus..."
-                />
-              </label>
-            </div>
-          ) : (
-            <div className="form-grid">
-              <label className="wide">
-                Core Product / Service
-                <input
-                  value={draft.product_service}
-                  onChange={(e) => set('product_service', e.target.value)}
-                  maxLength={500}
-                  placeholder="Products or services to promote"
-                />
-              </label>
-              <label className="wide">
-                Primary Objective
-                <input
-                  value={draft.primary_goal}
-                  onChange={(e) => set('primary_goal', e.target.value)}
-                  maxLength={300}
-                  placeholder="e.g., Maximize multi-channel ROAS and qualified leads"
-                />
-              </label>
-              <label>
-                Monthly Budget
-                <input
-                  type="number"
-                  min="0"
-                  max="1000000000"
-                  value={draft.monthly_budget}
-                  onChange={(e) => set('monthly_budget', e.target.value)}
-                  placeholder="30000"
-                />
-              </label>
-              <label>
-                Currency
-                <select value={draft.currency} onChange={(e) => set('currency', e.target.value)}>
-                  <option>USD</option>
-                  <option>VND</option>
-                </select>
-              </label>
-              <div className="wide">
-                <div className="field-title">Priority Channels</div>
-                <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
-              </div>
-            </div>
-          )}
-          {error && <Notice>{error}</Notice>}
-          <div className="form-actions">
-            <button
-              type="button"
-              className="button coral"
-              onClick={step === 2 ? () => setStep(1) : cancel}
-            >
-              {step === 2 ? '← Back' : 'Cancel'}
-            </button>
-            <button className="button primary" disabled={busy}>
-              {busy ? 'Saving…' : step === 1 ? 'Continue →' : 'Save Profile ✓'}
-            </button>
-          </div>
-        </form>
-        <div className="under-card">
-          <span>◈ Profile settings can be adjusted anytime in Account Settings.</span>
-          <span>Linked directly to your workspace account</span>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 function ImportScreen({ imports, onImported, notify }) {
   const [file, setFile] = useState(null)
@@ -1049,7 +843,7 @@ function getValidPageForRole(pageKey, role) {
       'budget-review', 'reports', 'insights', 'import', 'content', 'profile',
     ]),
     system_admin: new Set([
-      'overview', 'sa-dashboard', 'sa-company-mgmt', 'sa-company-overview', 'sa-create-company',
+      'overview', 'sa-dashboard', 'sa-company-mgmt', 'sa-company-overview', 'sa-create-company', 'profile',
     ]),
   }
 
@@ -1145,25 +939,37 @@ function WorkspaceApp() {
           .eq('user_id', activeUser.id)
           .limit(2)
 
+        let resolvedMembership = null
         if (memberRows && memberRows.length > 0) {
           const item = memberRows[0]
-          setMembership({
+          resolvedMembership = {
             workspaceId: item.workspace_id,
             workspaceName: item.workspaces?.name || 'CastraVision Workspace',
             role: item.role,
-          })
-          setProfile((current) => current || {
-            business_name: item.workspaces?.name || 'CastraVision Workspace',
-            industry: 'Marketing & Retail',
-            business_size: 'Medium',
-            currency: 'USD',
-          })
+          }
+          setMembership(resolvedMembership)
+
+          // Load authoritative Business Profile from Supabase
+          try {
+            const bpResult = await getBusinessProfile(item.workspace_id, item.workspaces?.name)
+            if (bpResult?.profile) {
+              setProfile(bpResult.profile)
+            }
+          } catch {
+            setProfile((current) => current || {
+              business_name: item.workspaces?.name || 'CastraVision Workspace',
+              industry: 'Marketing & Retail',
+              business_size: 'Medium',
+              currency: 'USD',
+            })
+          }
         } else {
-          setMembership((current) => current || {
+          resolvedMembership = {
             workspaceId: 'default-workspace',
             workspaceName: 'Acme Marketing Corp',
             role: 'member',
-          })
+          }
+          setMembership((current) => current || resolvedMembership)
           setProfile((current) => current || {
             business_name: 'Acme Marketing Corp',
             industry: 'Fashion & Retail',
@@ -1175,6 +981,7 @@ function WorkspaceApp() {
             preferred_channels: ['Meta', 'Google Ads', 'TikTok'],
           })
         }
+        return resolvedMembership
       }
 
       // Load business profile and campaign data if available from backend API
@@ -1192,6 +999,7 @@ function WorkspaceApp() {
     } catch (cause) {
       console.warn('Membership resolution warning:', cause)
     }
+    return null
   }, [])
 
   const refreshData = useCallback(async () => {
@@ -1218,8 +1026,8 @@ function WorkspaceApp() {
           if (session?.user) {
             clearDemoSession()
             setUser(session.user)
-            await loadUserRoleAndData(session.user)
-            const resolvedRole = resolveActorRole(session.user, membership)
+            const activeMembership = await loadUserRoleAndData(session.user)
+            const resolvedRole = resolveActorRole(session.user, activeMembership)
             const savedPage = typeof window !== 'undefined' ? localStorage.getItem(PAGE_STORAGE_KEY) : null
             if (savedPage) {
               setPageState(getValidPageForRole(savedPage, resolvedRole))
@@ -1322,7 +1130,7 @@ function WorkspaceApp() {
             clearDemoSession()
             setUser(data.user)
             await loadUserRoleAndData(data.user)
-            setToast('Đăng nhập Supabase thành công.')
+            setToast('Signed in successfully.')
             return
           }
 
@@ -1351,9 +1159,9 @@ function WorkspaceApp() {
       } catch (djangoErr) {
         if (supabaseAuthFailed && supabaseErrorMessage) {
           if (supabaseErrorMessage.toLowerCase().includes('invalid login credentials')) {
-            throw new Error('Email hoặc mật khẩu không chính xác. Nếu chưa có tài khoản, hãy chuyển sang tab Đăng ký hoặc dùng nút Demo bên dưới.')
+            throw new Error('Invalid email or password. Please verify your credentials or create a new account.')
           }
-          throw new Error('Đăng nhập thất bại: ' + supabaseErrorMessage)
+          throw new Error('Authentication failed: ' + supabaseErrorMessage)
         }
         throw djangoErr
       }
@@ -1369,12 +1177,21 @@ function WorkspaceApp() {
     setBusy(true)
     setError('')
     try {
+      if (supabase && membership?.workspaceId) {
+        const isManager = actorRole === 'manager'
+        const saved = await persistBusinessProfile(membership.workspaceId, draft, isManager)
+        setProfile(saved)
+        setToast('Lưu hồ sơ doanh nghiệp thành công.')
+        return
+      }
+
+      // Legacy Django API fallback if running on standalone Django session
       const data = await api('business-profile/', { method: 'PUT', body: JSON.stringify(draft) })
       setProfile(data.profile)
-      setPage('overview')
-      setToast('Business profile saved successfully.')
+      setToast('Lưu hồ sơ doanh nghiệp thành công.')
     } catch (cause) {
       setError(cause.message)
+      throw cause
     } finally {
       setBusy(false)
     }
@@ -1418,7 +1235,6 @@ function WorkspaceApp() {
         mode={authMode}
         setMode={setAuthMode}
         onLogin={handleLogin}
-        onDemoLogin={handleDemoLogin}
         busy={busy}
         error={error || backendError}
       />
@@ -1430,9 +1246,12 @@ function WorkspaceApp() {
     return (
       <SystemAdminLayout
         user={user}
+        page={page}
+        onNavigate={setPage}
         onLogout={logout}
         onSignOut={logout}
         notify={setToast}
+        onUserUpdate={setUser}
       />
     )
   }
@@ -1490,13 +1309,17 @@ function WorkspaceApp() {
           />
         )}
         {page === 'profile' && (
-          <ProfileScreen
+          <SettingsPage
+            user={user}
+            actorRole="manager"
+            membership={membership}
             profile={profile}
-            onboarding={!profile}
             saveProfile={saveProfile}
             busy={busy}
             error={error}
-            cancel={() => setPage('overview')}
+            notify={setToast}
+            onUserUpdate={setUser}
+            onProfileUpdated={setProfile}
           />
         )}
       </MarketingManagerLayout>
@@ -1590,13 +1413,14 @@ function WorkspaceApp() {
           />
         )}
         {page === 'profile' && (
-          <ProfileScreen
+          <SettingsPage
+            user={user}
+            actorRole="leader"
+            membership={membership}
             profile={profile}
-            onboarding={!profile}
-            saveProfile={saveProfile}
-            busy={busy}
-            error={error}
-            cancel={() => setPage('overview')}
+            notify={setToast}
+            onUserUpdate={setUser}
+            onProfileUpdated={setProfile}
           />
         )}
         <Toast message={toast} clear={() => setToast('')} />
@@ -1727,13 +1551,14 @@ function WorkspaceApp() {
         />
       )}
       {page === 'profile' && (
-        <ProfileScreen
+        <SettingsPage
+          user={user}
+          actorRole="member"
+          membership={membership}
           profile={profile}
-          onboarding={!profile}
-          saveProfile={saveProfile}
-          busy={busy}
-          error={error}
-          cancel={() => setPage('overview')}
+          notify={setToast}
+          onUserUpdate={setUser}
+          onProfileUpdated={setProfile}
         />
       )}
       <Toast message={toast} clear={() => setToast('')} />

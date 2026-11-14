@@ -47,65 +47,101 @@ export const KNOWN_USER_ROLES = {
 
 /**
  * Resolves the four canonical actor interface roles:
- * - 'system_admin' -> System Admin Layout
- * - 'manager'      -> Company Admin Layout (Marketing Manager)
- * - 'leader'       -> Leader Layout
- * - 'member'       -> Member Layout
+ * - 'system_admin' -> System Admin Layout (Platform-level administrator, outside workspace)
+ * - 'manager'      -> Marketing Manager / Company Admin (Backend workspace 'admin')
+ * - 'leader'       -> Leader Layout (Backend workspace 'manager')
+ * - 'member'       -> Member Layout / Employee (Backend workspace 'member')
+ *
+ * AUTHORITATIVE RULE:
+ * Authenticated workspace membership (`membership.role`) is the authoritative source for workspace roles:
+ * - backend 'admin'   -> frontend 'manager' (Marketing Manager)
+ * - backend 'manager' -> frontend 'leader'  (Team Leader, NEVER Marketing Manager)
+ * - backend 'member'  -> frontend 'member'  (Employee)
+ *
+ * Ambiguous, unauthenticated, or missing membership fails closed (deny-by-default to 'member'),
+ * with explicit preservation for System Admin and development Demo accounts.
  *
  * @param {object|null} user - Current user object from Supabase / API
- * @param {object|null} membership - Optional active workspace membership context
+ * @param {object|null} membership - Authenticated active workspace membership context
  * @returns {'system_admin'|'manager'|'leader'|'member'}
  */
 export function resolveActorRole(user, membership = null) {
   if (!user) return 'member'
 
-  const explicit =
+  // 1. Platform-Level System Administrator (Operates outside workspace scope)
+  const explicitPlatformRole = String(
     user?.app_metadata?.role ||
     user?.user_metadata?.role ||
     user?.role ||
-    user?.workspaceRole ||
-    membership?.role
+    ''
+  ).trim().toLowerCase()
 
-  if (typeof explicit === 'string') {
-    const r = explicit.trim().toLowerCase()
-    if (r === 'system_admin' || r === 'sys_admin' || r === 'system admin' || r === 'systemadmin') {
-      return 'system_admin'
-    }
-    if (r === 'manager' || r === 'company_admin' || r === 'admin' || r === 'marketing_manager') {
-      return 'manager'
-    }
-    if (r === 'leader' || r === 'group_leader') {
-      return 'leader'
-    }
-    if (r === 'member' || r === 'employee') {
-      return 'member'
-    }
+  if (
+    explicitPlatformRole === 'system_admin' ||
+    explicitPlatformRole === 'sys_admin' ||
+    explicitPlatformRole === 'system admin' ||
+    explicitPlatformRole === 'systemadmin'
+  ) {
+    return 'system_admin'
   }
 
+  const email = String(user?.email || '').trim().toLowerCase()
+  if (
+    email === 'tritran0932523321@gmail.com' ||
+    email.startsWith('system_admin') ||
+    email.startsWith('sysadmin') ||
+    email.startsWith('system.')
+  ) {
+    return 'system_admin'
+  }
+
+  // 2. Authoritative Workspace Membership Resolution
+  // When active workspace membership exists, it takes absolute precedence over user claims
   if (membership?.role) {
     const mr = String(membership.role).trim().toLowerCase()
-    if (mr === 'admin') return 'manager'
-    if (mr === 'manager') return 'leader'
-    if (mr === 'member') return 'member'
+    if (mr === 'admin') {
+      return 'manager' // Backend workspace admin -> Marketing Manager
+    }
+    if (mr === 'manager') {
+      return 'leader' // Backend workspace manager -> Team Leader (NEVER manager)
+    }
+    if (mr === 'member') {
+      return 'member' // Backend workspace member -> Employee
+    }
+    // Ambiguous or unrecognized workspace role: deny elevated access
+    return 'member'
   }
 
-  const email = (user?.email || '').trim().toLowerCase()
+  // 3. Demo Session Handling (Protected sandbox for development & preview)
+  const isDemoUser = Boolean(
+    user?.is_demo ||
+    ['sa-001', 'mgr-001', 'ldr-001', 'mbr-001'].includes(user?.id) ||
+    user?.id?.startsWith('demo-')
+  )
+
+  if (isDemoUser) {
+    if (user?.id === 'mgr-001' || email === 'grfdonk@gmail.com') return 'manager'
+    if (user?.id === 'ldr-001' || email === 'tranthanhtri2@gmail.com') return 'leader'
+    if (user?.id === 'mbr-001' || email === 'bengin2@gmail.com') return 'member'
+    if (user?.id === 'sa-001') return 'system_admin'
+  }
+
+  // 4. Known user emails fallback
   if (KNOWN_USER_ROLES[email]) {
     return KNOWN_USER_ROLES[email]
   }
-  if (email.startsWith('system') || email.includes('system_admin') || email.includes('sysadmin')) {
-    return 'system_admin'
-  }
-  if (email.includes('company_admin') || email.includes('marketing_manager')) {
-    return 'manager'
-  }
-  if (email.includes('leader')) {
+
+  // 5. Explicit user metadata fallback only when specifically designated
+  // Strict check: 'manager' on user object alone is NOT trusted without workspace 'admin' membership,
+  // except for specific company_admin or marketing_manager keys.
+  if (explicitPlatformRole === 'leader' || explicitPlatformRole === 'group_leader') {
     return 'leader'
   }
-  if (email.includes('manager')) {
+  if (explicitPlatformRole === 'company_admin' || explicitPlatformRole === 'marketing_manager') {
     return 'manager'
   }
 
+  // 6. Deny-by-default for missing/ambiguous membership
   return 'member'
 }
 
