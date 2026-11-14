@@ -69,7 +69,12 @@ export default function MarketingManagerLayout({
   }, [mobileMenuOpen])
 
   // Map internal page keys
-  const activeKey = page === 'admin' ? 'overview' : page
+  const activeKey =
+    page === 'admin'
+      ? 'overview'
+      : page === 'budget-review'
+        ? 'budget'
+        : page
 
   function handleNavigate(targetPage) {
     if (setPage) {
@@ -124,6 +129,7 @@ export default function MarketingManagerLayout({
     'audit-details': 'Audit Log Record Details',
     approvals: 'Proposal Approval Queue',
     budget: 'Budget Optimization & ROAS',
+    'budget-review': 'Budget Recommendation Review',
     reports: 'Omnichannel Performance Reports',
     insights: 'Competitor Intelligence & Insights',
     import: 'Campaign Data Import',
@@ -141,7 +147,7 @@ export default function MarketingManagerLayout({
   const canViewAudit = canAccessFR11AuditLog(user, profile)
 
   return (
-    <div className="ca-shell">
+    <div className="flex h-screen overflow-hidden bg-[#0f131d] text-[#dfe2f1] font-sans antialiased">
       {/* ── UNIFIED SIDEBAR (Shared across all Marketing Manager screens) ── */}
       <MarketingManagerSidebar
         activeKey={selectedAuditRecord && page === 'audit' ? 'audit' : activeKey}
@@ -161,13 +167,13 @@ export default function MarketingManagerLayout({
       {/* ── MOBILE DRAWER NAVIGATION ── */}
       {mobileMenuOpen && (
         <div
-          className="ca-drawer-backdrop"
+          className="fixed inset-0 bg-black/70 z-50 flex lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
           role="dialog"
           aria-modal="true"
           aria-label="Menu điều hướng di động"
         >
-          <div onClick={(e) => e.stopPropagation()}>
+          <div onClick={(e) => e.stopPropagation()} className="h-full">
             <MarketingManagerSidebar
               activeKey={selectedAuditRecord && page === 'audit' ? 'audit' : activeKey}
               onNavigate={(target) => {
@@ -190,7 +196,7 @@ export default function MarketingManagerLayout({
       )}
 
       {/* ── MAIN CONTENT WRAPPER ── */}
-      <div className="ca-main-wrap">
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
         {/* ── UNIFIED HEADER (Shared across all Marketing Manager screens) ── */}
         <MarketingManagerHeader
           workspaceName={workspace.name}
@@ -200,91 +206,95 @@ export default function MarketingManagerLayout({
           user={user}
           onSignOut={onSignOut}
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
+          onNavigate={handleNavigate}
         />
 
-        {/* ── PAGE CONTENT ── */}
-        <main className="ca-content">
-          {/* Screen 1: Marketing Manager Console Dashboard / Overview */}
-          {(page === 'overview' || page === 'admin') && (
-            (children && (!Array.isArray(children) || children.some(Boolean)))
-              ? children
-              : (
-                <MarketingManagerDashboardScreen
-                  workspace={workspace}
-                  proposals={proposals}
-                  auditLogs={auditLogs}
-                  onNavigate={handleNavigate}
-                  onOpenInvite={handleOpenInvite}
-                  notify={notify}
-                />
-              )
-          )}
+        {/* ── PAGE CONTENT CANVAS ── */}
+        <main className="flex-1 bg-[#0f131d] overflow-y-auto custom-scrollbar p-6 lg:p-8 space-y-6">
+          <div className="max-w-7xl mx-auto space-y-6 w-full">
+            {/* Screen 1: Marketing Manager Console Dashboard / Overview */}
+            {(page === 'overview' || page === 'admin') && (
+              (children && (!Array.isArray(children) || children.some(Boolean)))
+                ? children
+                : (
+                  <MarketingManagerDashboardScreen
+                    workspace={workspace}
+                    proposals={proposals}
+                    auditLogs={auditLogs}
+                    onNavigate={handleNavigate}
+                    onOpenInvite={handleOpenInvite}
+                    notify={notify}
+                  />
+                )
+            )}
 
-          {/* Screen 6: Workspace Members & Access Control */}
-          {page === 'members' && (
-            <WorkspaceMembersScreen
-              workspace={workspace}
-              members={members}
-              onOpenInvite={handleOpenInvite}
-              onNavigate={handleNavigate}
-              onUpdateMemberRole={handleUpdateMemberRole}
-              onRemoveMember={handleRemoveMember}
-              notify={notify}
-              currentUser={user}
-            />
-          )}
+            {/* Screen 6: Workspace Members & Access Control */}
+            {page === 'members' && (
+              <WorkspaceMembersScreen
+                workspace={workspace}
+                members={members}
+                onOpenInvite={handleOpenInvite}
+                onNavigate={handleNavigate}
+                onUpdateMemberRole={handleUpdateMemberRole}
+                onRemoveMember={handleRemoveMember}
+                notify={notify}
+                currentUser={user}
+              />
+            )}
 
-          {/* Screen 5: Role Management & RBAC */}
-          {page === 'roles' && (
-            <RoleManagementScreen
-              members={members}
-              workspace={workspace}
-              onNavigate={handleNavigate}
-              notify={notify}
-            />
-          )}
+            {/* Screen 5: Role Management & RBAC */}
+            {page === 'roles' && (
+              <RoleManagementScreen
+                members={members}
+                workspace={workspace}
+                onNavigate={handleNavigate}
+                notify={notify}
+              />
+            )}
 
-          {/* Screen 7: Proposal Approval Queue (FR04 Gated) */}
-          {page === 'approvals' && (
-            <ApprovalQueueScreen
-              user={user}
-              workspaceRole={activeWorkspaceRole}
-              onNavigate={handleNavigate}
-              notify={notify}
-              proposals={proposals}
-              setProposals={setProposals}
-            />
-          )}
+            {/* Screen 7: Proposal Approval Queue (FR04 Gated) */}
+            {page === 'approvals' && (
+              <ApprovalQueueScreen
+                user={user}
+                workspaceRole={activeWorkspaceRole}
+                onNavigate={handleNavigate}
+                notify={notify}
+                proposals={proposals}
+                setProposals={setProposals}
+              />
+            )}
 
-          {/* Screen 2 & 3: Audit Log and Details */}
-          {page === 'audit' && !selectedAuditRecord && (
-            <AuditLogScreen
-              auditLogs={auditLogs}
-              onSelectRecord={(rec) => setSelectedAuditRecord(rec)}
-              notify={notify}
-              user={user}
-              workspaceRole={activeWorkspaceRole}
-              workspace={workspace}
-            />
-          )}
+            {/* Screen 2 & 3: Audit Log and Details */}
+            {page === 'audit' && !selectedAuditRecord && (
+              <AuditLogScreen
+                auditLogs={auditLogs}
+                onSelectRecord={(rec) => setSelectedAuditRecord(rec)}
+                notify={notify}
+                user={user}
+                workspaceRole={activeWorkspaceRole}
+                workspace={workspace}
+              />
+            )}
 
-          {page === 'audit' && selectedAuditRecord && (
-            <AuditLogDetailsScreen
-              record={selectedAuditRecord}
-              onBack={() => setSelectedAuditRecord(null)}
-              notify={notify}
-              user={user}
-              workspaceRole={activeWorkspaceRole}
-              workspace={workspace}
-            />
-          )}
+            {page === 'audit' && selectedAuditRecord && (
+              <AuditLogDetailsScreen
+                record={selectedAuditRecord}
+                onBack={() => setSelectedAuditRecord(null)}
+                notify={notify}
+                user={user}
+                workspaceRole={activeWorkspaceRole}
+                workspace={workspace}
+              />
+            )}
 
-          {/* Pass-through for existing workspace screens (Import, Content, Settings/Profile, Workgroups) */}
-          {!['overview', 'admin', 'members', 'roles', 'approvals', 'audit'].includes(page) && (
-            <div style={{ padding: '8px 0' }}>{children}</div>
-          )}
+            {/* Pass-through for existing workspace screens (Import, Content, Settings/Profile, Budget, Reports, Insights) */}
+            {!['overview', 'admin', 'members', 'roles', 'approvals', 'audit'].includes(page) && (
+              children
+            )}
+          </div>
         </main>
       </div>
+
 
       {/* ── REUSABLE INVITE MEMBER MODAL ── */}
       <InviteMemberModal

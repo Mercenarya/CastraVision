@@ -11,11 +11,17 @@ import LeaderContentReview from './leader/screens/LeaderContentReview'
 import LeaderBudgetReview from './leader/screens/LeaderBudgetReview'
 import LeaderCampaigns from './leader/screens/LeaderCampaigns'
 import LeaderPerformance from './leader/screens/LeaderPerformance'
+import LeaderStrategyStudio from './leader/screens/LeaderStrategyStudio'
 import MemberDashboard from './member/screens/MemberDashboard'
+import MemberStrategyReferences from './member/screens/MemberStrategyReferences'
 import {
-  BudgetOptimizationPage,
-  CompetitorInsightsPage,
+  BudgetOptimizationPage as LegacyBudgetOptimizationPage,
+  CompetitorInsightsPage as LegacyCompetitorInsightsPage,
 } from './actor-ui/ActorPages'
+import CompetitorInsightsPage from './pages/CompetitorInsightsPage'
+import BudgetOptimizationPage from './pages/BudgetOptimizationPage'
+import RecommendationReviewPage from './pages/RecommendationReviewPage'
+import ReportsPage from './pages/ReportsPage'
 import DashboardPreviewPage from './preview/DashboardPreviewPage'
 import { supabase } from './lib/supabase'
 import './App.css'
@@ -173,6 +179,7 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 }}>
               <button
+                id="demo-login-system-admin"
                 type="button"
                 className="button subtle"
                 style={{ fontSize: 11, padding: '8px 6px', borderColor: '#38bdf8', color: '#38bdf8', textAlign: 'center', lineHeight: 1.3 }}
@@ -183,6 +190,7 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
                 <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>tritran0932523321@gmail.com</div>
               </button>
               <button
+                id="demo-login-manager"
                 type="button"
                 className="button subtle"
                 style={{ fontSize: 11, padding: '8px 6px', borderColor: '#818cf8', color: '#818cf8', textAlign: 'center', lineHeight: 1.3 }}
@@ -193,6 +201,7 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
                 <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>GRFDonk@gmail.com</div>
               </button>
               <button
+                id="demo-login-leader"
                 type="button"
                 className="button subtle"
                 style={{ fontSize: 11, padding: '8px 6px', borderColor: '#34d399', color: '#34d399', textAlign: 'center', lineHeight: 1.3 }}
@@ -203,6 +212,7 @@ function AuthScreen({ mode, setMode, onLogin, onDemoLogin, busy, error }) {
                 <div style={{ fontSize: 10, opacity: 0.8, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>tranthanhtri2@gmail.com</div>
               </button>
               <button
+                id="demo-login-member"
                 type="button"
                 className="button subtle"
                 style={{ fontSize: 11, padding: '8px 6px', borderColor: '#a78bfa', color: '#a78bfa', textAlign: 'center', lineHeight: 1.3 }}
@@ -965,6 +975,91 @@ function ContentScreen({ result, profile, setPage, notify }) {
   )
 }
 
+const DEMO_STORAGE_KEY = 'castravision_demo_role'
+const PAGE_STORAGE_KEY = 'castravision_active_page'
+const DEMO_ROLES = ['system_admin', 'manager', 'leader', 'member']
+
+const DEMO_USERS = {
+  system_admin: {
+    id: 'sa-001',
+    email: 'tritran0932523321@gmail.com',
+    full_name: 'Tran Thanh Tri (Admin)',
+    role: 'system_admin',
+    app_metadata: { role: 'system_admin' },
+    user_metadata: { role: 'system_admin' },
+  },
+  manager: {
+    id: 'mgr-001',
+    email: 'GRFDonk@gmail.com',
+    full_name: 'GRF Donk (Manager)',
+    role: 'manager',
+    app_metadata: { role: 'manager' },
+    user_metadata: { role: 'manager' },
+    business_name: 'Acme Marketing Corp',
+  },
+  leader: {
+    id: 'ldr-001',
+    email: 'tranthanhtri2@gmail.com',
+    full_name: 'Tran Thanh Tri (Leader)',
+    role: 'leader',
+    app_metadata: { role: 'leader' },
+    user_metadata: { role: 'leader' },
+    business_name: 'Acme Marketing Corp',
+  },
+  member: {
+    id: 'mbr-001',
+    email: 'Bengin2@gmail.com',
+    full_name: 'Bengin (Member)',
+    role: 'member',
+    app_metadata: { role: 'member' },
+    user_metadata: { role: 'member' },
+    business_name: 'Acme Marketing Corp',
+  },
+}
+
+function clearDemoSession() {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(DEMO_STORAGE_KEY)
+      window.localStorage.removeItem(PAGE_STORAGE_KEY)
+    }
+  } catch {
+    // Storage access fallback
+  }
+}
+
+function getValidPageForRole(pageKey, role) {
+  if (!pageKey || typeof pageKey !== 'string') return 'overview'
+  const cleanKey = pageKey.trim().toLowerCase()
+
+  const ROLE_ALLOWED_PAGES = {
+    leader: new Set([
+      'overview', 'approvals', 'content-reviews', 'content-review-detail',
+      'budget-review-detail', 'budget', 'campaigns', 'assigned-campaigns',
+      'my-proposals', 'submissions', 'strategy', 'content', 'import',
+      'performance', 'reports', 'insights', 'team-tasks', 'profile', 'notifications',
+    ]),
+    member: new Set([
+      'overview', 'tasks', 'emp-tasks', 'content', 'assigned-campaigns',
+      'submissions', 'reports', 'strategy', 'notifications', 'profile',
+      'budget', 'insights', 'import',
+    ]),
+    manager: new Set([
+      'overview', 'members', 'roles', 'approvals', 'audit', 'budget',
+      'budget-review', 'reports', 'insights', 'import', 'content', 'profile',
+    ]),
+    system_admin: new Set([
+      'overview', 'sa-dashboard', 'sa-company-mgmt', 'sa-company-overview', 'sa-create-company',
+    ]),
+  }
+
+  const allowed = ROLE_ALLOWED_PAGES[role]
+  if (allowed && allowed.has(cleanKey)) {
+    return cleanKey
+  }
+  return 'overview'
+}
+
 function WorkspaceApp() {
   const [ready, setReady] = useState(false)
   const [backendError, setBackendError] = useState('')
@@ -972,7 +1067,7 @@ function WorkspaceApp() {
   const [user, setUser] = useState(null)
   const [membership, setMembership] = useState(null)
   const [profile, setProfile] = useState(null)
-  const [page, setPage] = useState('overview')
+  const [page, setPageState] = useState('overview')
   const [imports, setImports] = useState([])
   const [latestRows, setLatestRows] = useState([])
   const [strategy, setStrategy] = useState(null)
@@ -982,6 +1077,62 @@ function WorkspaceApp() {
   const [selectedProposal, setSelectedProposal] = useState(null)
 
   const actorRole = resolveActorRole(user, membership)
+
+  const setPage = useCallback((nextPage) => {
+    setPageState(nextPage)
+    try {
+      if (typeof window !== 'undefined' && window.localStorage && typeof nextPage === 'string') {
+        window.localStorage.setItem(PAGE_STORAGE_KEY, nextPage)
+      }
+    } catch {
+      // Safe fallback
+    }
+  }, [])
+
+  const handleDemoLogin = useCallback((roleKey, targetPage = null) => {
+    if (!DEMO_ROLES.includes(roleKey)) {
+      clearDemoSession()
+      return
+    }
+
+    const demo = DEMO_USERS[roleKey]
+    if (demo) {
+      setUser(demo)
+      const workspaceRole = roleKey === 'manager' ? 'admin' : roleKey === 'leader' ? 'manager' : 'member'
+      setMembership({
+        workspaceId: 'ws-demo-001',
+        role: workspaceRole,
+        workspaceName: demo.business_name || 'CastraVision Workspace',
+      })
+      setProfile({
+        business_name: demo.business_name || 'CastraVision Workspace',
+        industry: 'Fashion & Retail',
+        business_size: 'Medium',
+        target_customers: 'Modern shoppers aged 20–35 seeking premium apparel',
+        primary_goal: 'Multi-channel sales growth across Meta, Google, and TikTok',
+        monthly_budget: '50000',
+        currency: 'USD',
+        preferred_channels: ['Meta', 'Google Ads', 'TikTok'],
+      })
+
+      const rawPage = targetPage || (typeof window !== 'undefined' ? localStorage.getItem(PAGE_STORAGE_KEY) : null) || 'overview'
+      const validatedPage = getValidPageForRole(rawPage, roleKey)
+      setPageState(validatedPage)
+
+      // Development-only demo session persistence
+      if (import.meta.env.DEV) {
+        try {
+          if (typeof window !== 'undefined' && window.localStorage) {
+            window.localStorage.setItem(DEMO_STORAGE_KEY, roleKey)
+            window.localStorage.setItem(PAGE_STORAGE_KEY, validatedPage)
+          }
+        } catch {
+          // LocalStorage unavailable
+        }
+      }
+      setToast(`Switched to workspace role: ${roleKey.toUpperCase()}`)
+    }
+  }, [])
 
   const loadUserRoleAndData = useCallback(async (activeUser) => {
     if (!activeUser) return
@@ -1056,30 +1207,58 @@ function WorkspaceApp() {
     } catch (cause) {
       setBackendError(cause.message)
     }
-  }, [])
+  }, [setPage])
 
   useEffect(() => {
     async function boot() {
       try {
+        // 1. Absolute Priority: Real Supabase Session
         if (supabase) {
           const { data: { session } } = await supabase.auth.getSession()
           if (session?.user) {
+            clearDemoSession()
             setUser(session.user)
             await loadUserRoleAndData(session.user)
+            const resolvedRole = resolveActorRole(session.user, membership)
+            const savedPage = typeof window !== 'undefined' ? localStorage.getItem(PAGE_STORAGE_KEY) : null
+            if (savedPage) {
+              setPageState(getValidPageForRole(savedPage, resolvedRole))
+            }
             setReady(true)
             return
           }
         }
 
+        // 2. Real Django API Session
         try {
           await api('auth/csrf/')
           const session = await api('auth/session/')
-          if (session.user) {
+          if (session?.user) {
+            clearDemoSession()
             setUser(session.user)
             await refreshData()
+            setReady(true)
+            return
           }
         } catch {
           // No active Django session
+        }
+
+        // 3. Permitted Development Demo Session Restoration
+        if (import.meta.env.DEV) {
+          try {
+            const savedDemoRole = typeof window !== 'undefined' ? localStorage.getItem(DEMO_STORAGE_KEY) : null
+            if (savedDemoRole && DEMO_ROLES.includes(savedDemoRole)) {
+              const savedPage = localStorage.getItem(PAGE_STORAGE_KEY)
+              handleDemoLogin(savedDemoRole, savedPage)
+              setReady(true)
+              return
+            } else if (savedDemoRole) {
+              clearDemoSession()
+            }
+          } catch {
+            clearDemoSession()
+          }
         }
       } catch (cause) {
         setBackendError(cause.message)
@@ -1093,6 +1272,7 @@ function WorkspaceApp() {
     if (supabase) {
       const { data: listener } = supabase.auth.onAuthStateChange(async (_event, nextSession) => {
         if (nextSession?.user) {
+          clearDemoSession()
           setUser(nextSession.user)
           await loadUserRoleAndData(nextSession.user)
         } else if (!nextSession) {
@@ -1100,14 +1280,15 @@ function WorkspaceApp() {
           setMembership(null)
           setProfile(null)
           setStrategy(null)
-          setPage('overview')
+          setPageState('overview')
+          clearDemoSession()
         }
       })
       return () => {
         listener?.subscription?.unsubscribe()
       }
     }
-  }, [loadUserRoleAndData, refreshData])
+  }, [handleDemoLogin, loadUserRoleAndData, membership, refreshData])
 
   async function handleLogin(email, password, isSignup = false) {
     setBusy(true)
@@ -1122,6 +1303,7 @@ function WorkspaceApp() {
             options: { data: { role: 'member' } },
           })
           if (authError) throw authError
+          clearDemoSession()
           setUser(data.user)
           setToast('Supabase account initialized successfully.')
           return
@@ -1133,6 +1315,7 @@ function WorkspaceApp() {
         })
 
         if (!authError && data?.user) {
+          clearDemoSession()
           setUser(data.user)
           await loadUserRoleAndData(data.user)
           setToast('Signed in via Supabase successfully.')
@@ -1150,6 +1333,7 @@ function WorkspaceApp() {
         method: 'POST',
         body: JSON.stringify({ email, password }),
       })
+      clearDemoSession()
       setUser(res.user)
       setBackendError('')
       await refreshData()
@@ -1157,67 +1341,6 @@ function WorkspaceApp() {
       setError(cause.message || 'Authentication failed.')
     } finally {
       setBusy(false)
-    }
-  }
-
-  function handleDemoLogin(roleKey) {
-    const demos = {
-      system_admin: {
-        id: 'sa-001',
-        email: 'tritran0932523321@gmail.com',
-        full_name: 'Tran Thanh Tri (Admin)',
-        role: 'system_admin',
-        app_metadata: { role: 'system_admin' },
-        user_metadata: { role: 'system_admin' },
-      },
-      manager: {
-        id: 'mgr-001',
-        email: 'GRFDonk@gmail.com',
-        full_name: 'GRF Donk (Manager)',
-        role: 'manager',
-        app_metadata: { role: 'manager' },
-        user_metadata: { role: 'manager' },
-        business_name: 'Acme Marketing Corp',
-      },
-      leader: {
-        id: 'ldr-001',
-        email: 'tranthanhtri2@gmail.com',
-        full_name: 'Tran Thanh Tri (Leader)',
-        role: 'leader',
-        app_metadata: { role: 'leader' },
-        user_metadata: { role: 'leader' },
-        business_name: 'Acme Marketing Corp',
-      },
-      member: {
-        id: 'mbr-001',
-        email: 'Bengin2@gmail.com',
-        full_name: 'Bengin (Member)',
-        role: 'member',
-        app_metadata: { role: 'member' },
-        user_metadata: { role: 'member' },
-        business_name: 'Acme Marketing Corp',
-      },
-    }
-
-    const demo = demos[roleKey]
-    if (demo) {
-      setUser(demo)
-      setMembership({
-        role: roleKey === 'manager' ? 'admin' : roleKey === 'leader' ? 'manager' : 'member',
-        workspaceName: demo.business_name || 'CastraVision Workspace',
-      })
-      setProfile({
-        business_name: demo.business_name || 'CastraVision Workspace',
-        industry: 'Fashion & Retail',
-        business_size: 'Medium',
-        target_customers: 'Modern shoppers aged 20–35 seeking premium apparel',
-        primary_goal: 'Multi-channel sales growth across Meta, Google, and TikTok',
-        monthly_budget: '50000',
-        currency: 'USD',
-        preferred_channels: ['Meta', 'Google Ads', 'TikTok'],
-      })
-      setPage('overview')
-      setToast(`Switched to workspace role: ${roleKey.toUpperCase()}`)
     }
   }
 
@@ -1238,6 +1361,7 @@ function WorkspaceApp() {
 
   async function logout() {
     try {
+      clearDemoSession()
       if (supabase) {
         await supabase.auth.signOut().catch(() => {})
       }
@@ -1247,7 +1371,8 @@ function WorkspaceApp() {
       setMembership(null)
       setProfile(null)
       setStrategy(null)
-      setPage('overview')
+      setPageState('overview')
+      clearDemoSession()
     }
   }
 
@@ -1319,6 +1444,27 @@ function WorkspaceApp() {
             result={strategy}
             profile={profile}
             setPage={setPage}
+            notify={setToast}
+          />
+        )}
+        {page === 'insights' && (
+          <CompetitorInsightsPage notify={setToast} />
+        )}
+        {page === 'budget' && (
+          <BudgetOptimizationPage
+            user={user}
+            profile={profile}
+            membership={membership}
+            notify={setToast}
+            setPage={setPage}
+          />
+        )}
+        {page === 'budget-review' && (
+          <RecommendationReviewPage setPage={setPage} notify={setToast} />
+        )}
+        {page === 'reports' && (
+          <ReportsPage
+            profile={profile || { business_name: user?.business_name || 'Acme Corp' }}
             notify={setToast}
           />
         )}
@@ -1412,13 +1558,7 @@ function WorkspaceApp() {
           <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
         )}
         {page === 'strategy' && (
-          <StrategyScreen
-            profile={profile}
-            latestRows={latestRows}
-            result={strategy}
-            setResult={setStrategy}
-            notify={setToast}
-          />
+          <LeaderStrategyStudio setPage={setPage} notify={setToast} />
         )}
         {page === 'content' && (
           <ContentScreen
@@ -1544,17 +1684,16 @@ function WorkspaceApp() {
           </div>
         </div>
       )}
-      {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
-      {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
+      {page === 'budget' && <LegacyBudgetOptimizationPage notify={setToast} />}
+      {page === 'insights' && <LegacyCompetitorInsightsPage notify={setToast} />}
       {page === 'import' && (
         <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
       )}
       {page === 'strategy' && (
-        <StrategyScreen
+        <MemberStrategyReferences
           profile={profile}
-          latestRows={latestRows}
-          result={strategy}
-          setResult={setStrategy}
+          strategy={strategy}
+          setPage={setPage}
           notify={setToast}
         />
       )}
