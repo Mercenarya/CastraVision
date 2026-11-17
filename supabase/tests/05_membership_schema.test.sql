@@ -1,0 +1,15 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+select plan(10);
+select has_table('public','workspace_recruitment_settings','recruitment settings exist');
+select has_table('public','workspace_join_requests','join requests exist');
+select has_table('public','workspace_invitations','invitations exist');
+select has_table('public','workspace_teams','teams exist');
+select has_table('public','workspace_team_members','team membership exists');
+select has_table('public','membership_notifications','onboarding notifications exist');
+select is((select count(*)::int from pg_class where relnamespace='public'::regnamespace and relname in ('workspace_recruitment_settings','workspace_join_requests','workspace_invitations','workspace_teams','workspace_team_members','membership_notifications') and relrowsecurity),6,'all six tables have RLS');
+select has_function('public','membership_onboarding_state',array[]::text[],'own credential state function exists');
+select has_function('public','membership_company_directory',array['text','integer','integer'],'minimal company directory exists');
+select ok(not has_function_privilege('anon','public.membership_onboarding_state()','execute'),'anonymous cannot inspect credential state');
+select * from finish();
+rollback;

@@ -16,7 +16,7 @@
 
 #### **Tuỳ chọn A: Luồng OAuth2** (Đề xuất cho đa số người dùng)
 - **Client ID**: Từ Google Cloud Console → APIs & Services → Credentials
-- **Client Secret**: Từ Google Cloud Console → APIs & Services → Credentials  
+- **Client Secret**: Từ Google Cloud Console → APIs & Services → Credentials
 - **Refresh Token**: Được nhận sau khi hoàn thành quy trình ủy quyền OAuth2
 - **Where to learn more (Đọc thêm tại)**: https://developers.google.com/google-ads/api/docs/oauth/overview
 

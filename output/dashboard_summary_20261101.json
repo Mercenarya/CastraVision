@@ -1,0 +1,224 @@
+{
+  "metadata": {
+    "platform_name": "CastraVision Marketing Analytics",
+    "version": "1.0",
+    "generated_at": "2026-11-01",
+    "days_analyzed": 7,
+    "period": {
+      "since": "2026-10-25",
+      "until": "2026-11-01"
+    }
+  },
+  "summary": {
+    "total_spend": 25000000.0,
+    "formatted_total_spend": "25.000.000 VND",
+    "total_revenue": 74130000.0,
+    "formatted_total_revenue": "74.130.000 VND",
+    "avg_roas": 2.97,
+    "avg_cpa": 37258.0,
+    "formatted_avg_cpa": "37.258 VND",
+    "avg_ctr": 3.65,
+    "total_impressions": 286300,
+    "total_clicks": 10460,
+    "total_conversions": 671
+  },
+  "channels": {
+    "Meta Ads": {
+      "spend": 10000000.0,
+      "formatted_spend": "10.000.000 VND",
+      "revenue": 30750000.0,
+      "formatted_revenue": "30.750.000 VND",
+      "roas": 3.08,
+      "cpa": 38462.0,
+      "formatted_cpa": "38.462 VND",
+      "ctr": 3.12,
+      "clicks": 2400,
+      "impressions": 76800,
+      "conversions": 260,
+      "budget_share_pct": 40.0,
+      "status": "Hoạt động tốt"
+    },
+    "Google Ads": {
+      "spend": 8000000.0,
+      "formatted_spend": "8.000.000 VND",
+      "revenue": 25680000.0,
+      "formatted_revenue": "25.680.000 VND",
+      "roas": 3.21,
+      "cpa": 33333.0,
+      "formatted_cpa": "33.333 VND",
+      "ctr": 4.48,
+      "clicks": 3470,
+      "impressions": 77500,
+      "conversions": 240,
+      "budget_share_pct": 32.0,
+      "status": "Hoạt động tốt"
+    },
+    "TikTok Ads": {
+      "spend": 7000000.0,
+      "formatted_spend": "7.000.000 VND",
+      "revenue": 17700000.0,
+      "formatted_revenue": "17.700.000 VND",
+      "roas": 2.53,
+      "cpa": 40936.0,
+      "formatted_cpa": "40.936 VND",
+      "ctr": 3.48,
+      "clicks": 4590,
+      "impressions": 132000,
+      "conversions": 171,
+      "budget_share_pct": 28.0,
+      "status": "Cần tối ưu"
+    }
+  },
+  "budget_allocation": [
+    {
+      "channel": "Meta Ads",
+      "percentage": 40.0,
+      "spend": 10000000.0,
+      "formatted_spend": "10.000.000 VND"
+    },
+    {
+      "channel": "Google Ads",
+      "percentage": 32.0,
+      "spend": 8000000.0,
+      "formatted_spend": "8.000.000 VND"
+    },
+    {
+      "channel": "TikTok Ads",
+      "percentage": 28.0,
+      "spend": 7000000.0,
+      "formatted_spend": "7.000.000 VND"
+    }
+  ],
+  "alerts": [
+    {
+      "type": "opportunity",
+      "channel": "Google Ads",
+      "title": "Cơ hội tăng trưởng: Google Ads",
+      "message": "ROAS đạt 3.21x vượt mức benchmark. Đề xuất tăng 15-20% ngân sách để tối đa hóa doanh thu.",
+      "action": "Scale ngân sách"
+    },
+    {
+      "type": "warning",
+      "channel": "TikTok Ads",
+      "title": "Cảnh báo tối ưu: TikTok Ads",
+      "message": "CPA đạt 40.936 VND và ROAS 2.53x. Cân nhắc tinh chỉnh đối tượng hoặc phân bổ lại ngân sách.",
+      "action": "Tối ưu ngân sách"
+    }
+  ],
+  "campaigns": [
+    {
+      "platform": "facebook",
+      "date": "2026-10-30",
+      "campaign_id": "meta-camp-101",
+      "campaign_name": "Combo Thu Đông - Chuyển đổi",
+      "adset_name": "Nhóm 18-35 Lifestyle",
+      "ad_name": "Video Short Sneaker 15s",
+      "impressions": 48200,
+      "clicks": 1420,
+      "spend": 4500000.0,
+      "reach": 42100,
+      "ctr": 2.95,
+      "cpc": 3169.0,
+      "cpm": 93361.0,
+      "conversions": 105,
+      "revenue": 12600000.0,
+      "cpa": 42857.0,
+      "roas": 2.8
+    },
+    {
+      "platform": "facebook",
+      "date": "2026-10-31",
+      "campaign_id": "meta-camp-102",
+      "campaign_name": "Retargeting Giỏ hàng chưa thanh toán",
+      "adset_name": "Khách truy cập 14 ngày",
+      "ad_name": "Carousel Ưu đãi đặc biệt",
+      "impressions": 28600,
+      "clicks": 980,
+      "spend": 5500000.0,
+      "reach": 24500,
+      "ctr": 3.43,
+      "cpc": 5612.0,
+      "cpm": 192308.0,
+      "conversions": 155,
+      "revenue": 18150000.0,
+      "cpa": 35484.0,
+      "roas": 3.3
+    },
+    {
+      "platform": "google_ads",
+      "date": "2026-10-30",
+      "campaign_id": "gg-camp-201",
+      "campaign_name": "Google Search - Từ khóa Thương hiệu & Giày dép",
+      "adset_name": "Nhóm từ khóa tìm kiếm cao",
+      "ad_name": "RSA Mẫu giày Sneaker cao cấp",
+      "impressions": 35400,
+      "clicks": 1820,
+      "spend": 4200000.0,
+      "reach": 31200,
+      "ctr": 5.14,
+      "cpc": 2307.0,
+      "cpm": 118644.0,
+      "conversions": 128,
+      "revenue": 14280000.0,
+      "cpa": 32812.0,
+      "roas": 3.4
+    },
+    {
+      "platform": "google_ads",
+      "date": "2026-10-31",
+      "campaign_id": "gg-camp-202",
+      "campaign_name": "Google Performance Max - Toàn diện",
+      "adset_name": "Tài sản đa kênh PMax",
+      "ad_name": "Asset Group Shopping & Display",
+      "impressions": 42100,
+      "clicks": 1650,
+      "spend": 3800000.0,
+      "reach": 38900,
+      "ctr": 3.92,
+      "cpc": 2303.0,
+      "cpm": 90261.0,
+      "conversions": 112,
+      "revenue": 11400000.0,
+      "cpa": 33928.0,
+      "roas": 3.0
+    },
+    {
+      "platform": "tiktok",
+      "date": "2026-10-30",
+      "campaign_id": "tt-camp-301",
+      "campaign_name": "TikTok TopFeed - Viral Giới trẻ",
+      "adset_name": "Đối tượng Gen Z 18-24",
+      "ad_name": "Spark Ads OOTD Challenge",
+      "impressions": 78000,
+      "clicks": 2650,
+      "spend": 4000000.0,
+      "reach": 69000,
+      "ctr": 3.4,
+      "cpc": 1509.0,
+      "cpm": 51282.0,
+      "conversions": 96,
+      "revenue": 9600000.0,
+      "cpa": 41666.0,
+      "roas": 2.4
+    },
+    {
+      "platform": "tiktok",
+      "date": "2026-10-31",
+      "campaign_id": "tt-camp-302",
+      "campaign_name": "TikTok Shop Ads - Mua sắm liền mạch",
+      "adset_name": "Người xem Live & Video sản phẩm",
+      "ad_name": "Video Review 30s gắn link",
+      "impressions": 54000,
+      "clicks": 1940,
+      "spend": 3000000.0,
+      "reach": 48200,
+      "ctr": 3.59,
+      "cpc": 1546.0,
+      "cpm": 55555.0,
+      "conversions": 75,
+      "revenue": 8100000.0,
+      "cpa": 40000.0,
+      "roas": 2.7
+    }
+  ]
+}

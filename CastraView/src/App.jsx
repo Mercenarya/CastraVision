@@ -1,97 +1,99 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import './App.css'
-import './actor-ui/actor-ui.css'
-import './actor-ui/admin-workspaces.css'
-import { useAuth } from './auth/AuthContext'
-import { ROLE_LABELS, can, defaultPage } from './auth/permissions'
-import { navigationFor } from './navigation'
-import { backendApi as api } from './lib/api'
+
+import { resolveActorRole } from './auth/permissions'
+import AccountEntryPage from './pages/onboarding/AccountEntryPage'
+import CompanyJoinPage from './pages/onboarding/CompanyJoinPage'
+import SetPasswordPage from './pages/onboarding/SetPasswordPage'
+import AuthCompletePage from './pages/onboarding/AuthCompletePage'
+import EmailLinkSentPage from './pages/onboarding/EmailLinkSentPage'
+import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
+import MarketingManagerLayout from './company-admin/MarketingManagerLayout'
+import LeaderLayout from './leader/LeaderLayout'
+import MemberLayout from './member/MemberLayout'
+import LeaderDashboard from './leader/screens/LeaderDashboard'
+import LeaderApprovalQueue from './leader/screens/LeaderApprovalQueue'
+import LeaderContentReview from './leader/screens/LeaderContentReview'
+import LeaderBudgetReview from './leader/screens/LeaderBudgetReview'
+import LeaderCampaigns from './leader/screens/LeaderCampaigns'
+import LeaderPerformance from './leader/screens/LeaderPerformance'
+import MemberDashboard from './member/screens/MemberDashboard'
 import {
-  ApprovalQueuePage,
-  AdminWorkspaceDashboard,
-  AuditLogPage,
   BudgetOptimizationPage,
   CompetitorInsightsPage,
-  MembersPage,
-  PerformanceDashboardPage,
-  ReportsPage,
-  RoleManagementPage,
 } from './actor-ui/ActorPages'
-import {
-  createWorkspaceAndProfile,
-  loadAdminWorkspaceOverview,
-  loadWorkspaceData,
-  saveBusinessProfile,
-} from './lib/workspace'
+import DashboardPreviewPage from './preview/DashboardPreviewPage'
+import { AuthProvider } from './auth/AuthProvider'
+import { useAuth } from './auth/AuthContext'
+import { api } from './services/api'
+import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
-const SIZES = { Micro: '1–10 nhân sự', Small: '11–50 nhân sự', Medium: '51–250 nhân sự', Large: 'Trên 250 nhân sự' }
-const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'VND' }
+const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: 'Over 250 employees' }
+const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'USD' }
+
 function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
-function Heading({ eyebrow, title, subtitle, children }) { return <div className="page-heading"><div><div className="eyebrow"><i /> {eyebrow}</div><h1>{title}</h1><p>{subtitle}</p></div>{children}</div> }
+function Heading({ eyebrow, title, subtitle, children }) {
+  return (
+    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <div>
+        {eyebrow && (
+          <div className="flex items-center gap-2 mb-1.5">
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#03b5d3]">
+              {eyebrow}
+            </span>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#03b5d3]" />
+          </div>
+        )}
+        <h1 className="text-xl md:text-2xl font-bold text-[#dfe2f1] tracking-tight m-0">
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="text-xs md:text-sm text-[#c7c4d7] mt-1 m-0">
+            {subtitle}
+          </p>
+        )}
+      </div>
+      {children && <div className="flex items-center gap-3">{children}</div>}
+    </div>
+  )
+}
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
-function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Đóng thông báo">×</button></div> }
+function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Dismiss notification">×</button></div> }
 
-function AuthScreen({ mode, setMode, signIn, signUp, backendError }) {
-  const signup = mode === 'signup'
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirm, setConfirm] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
-  async function submit(event) {
-    event.preventDefault(); setError(''); setSuccess('')
-    if (signup && password !== confirm) return setError('Mật khẩu xác nhận không khớp.')
-    setBusy(true)
-    try {
-      if (signup) {
-        const result = await signUp(email, password)
-        if (!result.session) setSuccess('Đăng ký thành công. Hãy kiểm tra email để xác nhận tài khoản trước khi đăng nhập.')
-      } else await signIn(email, password)
-    }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+
+function Shell({ user, role, profile, page, setPage, logout, children }) {
+  const isLeader = role === 'leader' || user?.role === 'manager' || user?.role === 'leader'
+  const isEmployee = role === 'member' || user?.role === 'member'
+
+  if (isLeader) {
+    return (
+      <LeaderLayout
+        user={user}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        logout={logout}
+      >
+        {children}
+      </LeaderLayout>
+    )
   }
-  return <div className="auth-page"><header className="auth-top"><Brand /></header><main className="auth-main"><div className="auth-card">
-    <div className="auth-heading"><Brand /><span className="auth-pill">● AI MARKETING ASSISTANT FOR SMBS</span><h1>{signup ? 'Tạo tài khoản' : 'Chào mừng trở lại'}</h1><p>{signup ? 'Bắt đầu xây dựng chiến lược marketing trong vài phút.' : 'Đăng nhập để quản lý chiến lược marketing của bạn.'}</p></div>
-    <form className="auth-form" onSubmit={submit}><label>Email công việc<input type="email" autoComplete="email" maxLength={254} placeholder="name@company.com" value={email} onChange={(e) => setEmail(e.target.value)} required /></label><label>Mật khẩu<div className="password-field"><input type={showPassword ? 'text' : 'password'} autoComplete={signup ? 'new-password' : 'current-password'} minLength={8} maxLength={72} placeholder="Nhập mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required /><button type="button" onClick={() => setShowPassword(!showPassword)} aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}>{showPassword ? 'Ẩn' : 'Hiện'}</button></div></label>{signup && <label>Xác nhận mật khẩu<input type={showPassword ? 'text' : 'password'} autoComplete="new-password" minLength={8} maxLength={72} placeholder="Nhập lại mật khẩu" value={confirm} onChange={(e) => setConfirm(e.target.value)} required /></label>}{success && <Notice kind="success">{success}</Notice>}{(error || backendError) && <Notice>{error || backendError}</Notice>}<button className="button primary full" disabled={busy}>{busy ? 'Đang xử lý…' : signup ? 'Tạo tài khoản →' : 'Đăng nhập →'}</button></form>
-    {signup && <p className="auth-terms">Tài khoản được xác thực bởi Supabase Auth; mật khẩu không được lưu trong cơ sở dữ liệu nghiệp vụ.</p>}<div className="auth-switch">{signup ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'} <button type="button" onClick={() => { setError(''); setSuccess(''); setMode(signup ? 'login' : 'signup') }}>{signup ? 'Đăng nhập' : 'Đăng ký'}</button></div>
-  </div></main><footer className="auth-footer"><span>© 2026 CastraVision · Sprint 1</span><span>AI marketing workspace for SMBs</span></footer></div>
-}
 
-function Shell({ user, role, profile, memberships = [], workspaceId, selectWorkspace, page, setPage, logout, onboarding = false, children }) {
-  const navigation = navigationFor(role, onboarding)
-  const current = navigation.find(([key]) => key === page)?.[2] || 'Tổng quan'
-  return <div className="shell"><aside className="sidebar"><div className="sidebar-brand"><Brand /><span className="sme-tag">SME AI</span></div><div className="workspace-switch"><span className="workspace-avatar">{(profile?.business_name || user.email).slice(0, 2).toUpperCase()}</span><span><strong>{profile?.business_name || 'Không gian mới'}</strong><small>{ROLE_LABELS[role] || 'Đang thiết lập'} · CastraVision</small></span>{memberships.length > 1 ? <select aria-label="Chọn Workspace đang hoạt động" value={workspaceId || ''} onChange={(event) => selectWorkspace(event.target.value)}>{memberships.map((item) => <option key={item.workspaceId} value={item.workspaceId}>{item.workspaceName}</option>)}</select> : <span>⌄</span>}</div><div className="nav-caption">ENGINE NAVIGATION</div><nav aria-label="Điều hướng chính">{navigation.map(([key, icon, label]) => <button key={key} className={`nav-item ${page === key ? 'active' : ''}`} onClick={() => setPage(key)} aria-current={page === key ? 'page' : undefined}><span aria-hidden="true">{icon}</span>{label}</button>)}</nav><div className="sidebar-bottom"><div><i /> Sprint 1 workspace <strong>Online</strong></div><div className="quota-line"><span /></div><small>FR12 · FR08 · FR01</small></div></aside><div className="main-wrap"><header className="app-topbar"><span className="mobile-brand"><Brand /></span><div className="topbar-context"><i /> {current.toUpperCase()}</div><div className="topbar-actions"><span className="sprint-label">{ROLE_LABELS[role] || 'SPRINT 1'}</span><span className="user-avatar">{user.email[0].toUpperCase()}</span><span className="user-email">{user.email}</span><button onClick={logout} className="text-button" type="button">Đăng xuất</button></div></header><main className="app-content">{children}</main></div></div>
-}
-
-export function RoleDashboard({ role, profile, imports, strategy, setPage }) {
-  const definitions = {
-    admin: {
-      eyebrow: 'ADMIN GOVERNANCE', title: 'Quản trị CastraVision',
-      subtitle: 'Quản lý Workspace, phân quyền, dữ liệu chiến dịch và các quyết định cần phê duyệt.',
-      cards: [['members', 'Thành viên & vai trò', 'Quản lý Admin, Manager và Member.'], ['approvals', 'Hàng chờ phê duyệt', 'Kiểm soát nội dung và đề xuất ngân sách.'], ['import', 'Dữ liệu chiến dịch', `${imports.length} nguồn dữ liệu gần đây.`]],
-    },
-    manager: {
-      eyebrow: 'MANAGER OPERATIONS', title: 'Điều hành chiến dịch',
-      subtitle: 'Đồng bộ dữ liệu, tạo chiến lược và điều phối nội dung đa kênh.',
-      cards: [['import', 'Nhập dữ liệu', 'CSV, XLSX hoặc Sandbox.'], ['strategy', 'Tạo chiến lược', strategy ? 'Đã có chiến lược đang hoạt động.' : 'Sẵn sàng phân tích dữ liệu mới.'], ['content', 'Content Studio', 'Biên tập nội dung theo từng kênh.']],
-    },
-    member: {
-      eyebrow: 'MEMBER WORKSPACE', title: 'Không gian nội dung',
-      subtitle: 'Theo dõi chiến lược được chia sẻ và hoàn thiện nội dung trong phạm vi được giao.',
-      cards: [['strategy', 'Chiến lược được chia sẻ', strategy ? 'Xem đề xuất mới nhất.' : 'Chưa có chiến lược được chia sẻ.'], ['content', 'Content Studio', 'Soạn và chỉnh sửa bản nháp đa kênh.']],
-    },
+  if (isEmployee) {
+    return (
+      <MemberLayout
+        user={user}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        logout={logout}
+      >
+        {children}
+      </MemberLayout>
+    )
   }
-  const view = definitions[role] || definitions.member
-  const icons = { members: '♙', approvals: '✓', import: '⇥', strategy: '◈', content: '✦' }
-  return <><Heading eyebrow={view.eyebrow} title={view.title} subtitle={view.subtitle} /><div className="overview-grid">{view.cards.map(([target, title, text], index) => <button type="button" className="card overview-card" key={target} onClick={() => setPage(target)}><span className="overview-number">0{index + 1}</span><span className={`overview-icon ${index % 2 ? 'cyan' : 'violet'}`} aria-hidden="true">{icons[target] || '◈'}</span><strong>{title}</strong><p>{text}</p><span className="card-link">Mở chức năng →</span></button>)}</div><div className="card overview-note"><span aria-hidden="true">◈</span><div><strong>{profile.business_name}</strong><p>{profile.industry} · Vai trò {ROLE_LABELS[role]}</p></div></div></>
-}
 
-function PlaceholderPage({ title, subtitle }) {
-  return <><Heading eyebrow="SPRINT 1 · ROLE CONTROL" title={title} subtitle={subtitle} /><div className="card result-empty"><span>◈</span><h3>Phân quyền đã được áp dụng</h3><p>Dữ liệu chi tiết sẽ được tải từ Supabase sau khi migration role-aware được áp dụng.</p></div></>
+  return <div className="shell">{children}</div>
 }
 
 function ChannelPicker({ channels, toggle }) { return <div className="channel-grid">{CHANNELS.map((channel) => <button type="button" key={channel} className={`channel-card ${channels.includes(channel) ? 'selected' : ''}`} onClick={() => toggle(channel)}><span className="channel-glyph">{channel === 'Meta' ? '∞' : channel === 'TikTok' ? '♪' : 'G'}</span><strong>{channel}</strong><span className="check-box">{channels.includes(channel) ? '✓' : ''}</span></button>)}</div> }
@@ -106,173 +108,1177 @@ function ProfileScreen({ profile, onboarding, saveProfile, busy, error, cancel }
       ? current.preferred_channels.filter((item) => item !== channel)
       : [...current.preferred_channels, channel],
   }))
-  return <><Heading eyebrow={onboarding ? 'NEW ACCOUNT SETUP' : 'BUSINESS SETTINGS'} title={onboarding ? 'Thiết lập doanh nghiệp' : 'Hồ sơ doanh nghiệp'} subtitle="Cho CastraVision biết về doanh nghiệp để cá nhân hóa đề xuất." /><div className="stepper"><div className={step === 1 ? 'current' : 'done'}><b>1</b> Thông tin doanh nghiệp</div><div className={step === 2 ? 'current' : ''}><b>2</b> Mục tiêu & kênh</div><div className="step-track"><span style={{ width: step === 1 ? '50%' : '100%' }} /></div></div><form className="card profile-card" onSubmit={(event) => { event.preventDefault(); if (step === 1) setStep(2); else saveProfile(draft) }}>
-    {step === 1 ? <div className="form-grid"><label className="wide">Tên doanh nghiệp *<input value={draft.business_name} onChange={(e) => set('business_name', e.target.value)} minLength={2} maxLength={120} required placeholder="Ví dụ: SneakerX Việt Nam" /></label><label>Ngành hàng *<input value={draft.industry} onChange={(e) => set('industry', e.target.value)} minLength={2} maxLength={120} required placeholder="Ví dụ: Thời trang & phụ kiện" /></label><label>Quy mô doanh nghiệp *<select value={draft.business_size} onChange={(e) => set('business_size', e.target.value)} required><option value="">Chọn quy mô</option>{Object.entries(SIZES).map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label><label className="wide">Khách hàng mục tiêu *<textarea value={draft.target_customers} onChange={(e) => set('target_customers', e.target.value)} minLength={3} maxLength={500} required placeholder="Nhóm tuổi, khu vực, sở thích và nhu cầu..." /></label></div> : <div className="form-grid"><label className="wide">Sản phẩm / dịch vụ chính<input value={draft.product_service} onChange={(e) => set('product_service', e.target.value)} maxLength={500} placeholder="Sản phẩm hoặc dịch vụ sẽ quảng bá" /></label><label className="wide">Mục tiêu chính<input value={draft.primary_goal} onChange={(e) => set('primary_goal', e.target.value)} maxLength={300} placeholder="Ví dụ: Tăng doanh số trực tuyến" /></label><label>Ngân sách mỗi tháng<input type="number" min="0" max="1000000000" value={draft.monthly_budget} onChange={(e) => set('monthly_budget', e.target.value)} placeholder="30000000" /></label><label>Đơn vị tiền<select value={draft.currency} onChange={(e) => set('currency', e.target.value)}><option>VND</option><option>USD</option></select></label><div className="wide"><div className="field-title">Kênh ưu tiên</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} /></div></div>}
-    {error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={step === 2 ? () => setStep(1) : cancel}>{step === 2 ? '← Quay lại' : 'Hủy'}</button><button className="button primary" disabled={busy}>{busy ? 'Đang lưu…' : step === 1 ? 'Tiếp tục →' : 'Lưu hồ sơ ✓'}</button></div></form><div className="under-card"><span>◈ Hồ sơ có thể cập nhật sau trong phần cài đặt.</span><span>Dữ liệu gắn với tài khoản của bạn</span></div></>
+  return (
+    <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+      <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+        <Heading
+          eyebrow={onboarding ? 'NEW ACCOUNT SETUP' : 'BUSINESS SETTINGS'}
+          title={onboarding ? 'Business Setup' : 'Business Profile & Settings'}
+          subtitle="Provide information about your business to personalize AI marketing strategies."
+        />
+        <div className="stepper">
+          <div className={step === 1 ? 'current' : 'done'}><b>1</b> Company Information</div>
+          <div className={step === 2 ? 'current' : ''}><b>2</b> Goals &amp; Channels</div>
+          <div className="step-track"><span style={{ width: step === 1 ? '50%' : '100%' }} /></div>
+        </div>
+        <form
+          className="card profile-card"
+          onSubmit={(event) => {
+            event.preventDefault()
+            if (step === 1) setStep(2)
+            else saveProfile(draft)
+          }}
+        >
+          {step === 1 ? (
+            <div className="form-grid">
+              <label className="wide">
+                Company Name *
+                <input
+                  value={draft.business_name}
+                  onChange={(e) => set('business_name', e.target.value)}
+                  minLength={2}
+                  maxLength={120}
+                  required
+                  placeholder="e.g., Acme Corporation"
+                />
+              </label>
+              <label>
+                Industry *
+                <input
+                  value={draft.industry}
+                  onChange={(e) => set('industry', e.target.value)}
+                  minLength={2}
+                  maxLength={120}
+                  required
+                  placeholder="e.g., Fashion &amp; Apparel"
+                />
+              </label>
+              <label>
+                Company Size *
+                <select
+                  value={draft.business_size}
+                  onChange={(e) => set('business_size', e.target.value)}
+                  required
+                >
+                  <option value="">Select company size</option>
+                  {Object.entries(SIZES).map(([value, label]) => (
+                    <option value={value} key={value}>{label}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="wide">
+                Target Audience *
+                <textarea
+                  value={draft.target_customers}
+                  onChange={(e) => set('target_customers', e.target.value)}
+                  minLength={3}
+                  maxLength={500}
+                  required
+                  placeholder="Demographics, age groups, pain points, interests, and regional focus..."
+                />
+              </label>
+            </div>
+          ) : (
+            <div className="form-grid">
+              <label className="wide">
+                Core Product / Service
+                <input
+                  value={draft.product_service}
+                  onChange={(e) => set('product_service', e.target.value)}
+                  maxLength={500}
+                  placeholder="Products or services to promote"
+                />
+              </label>
+              <label className="wide">
+                Primary Objective
+                <input
+                  value={draft.primary_goal}
+                  onChange={(e) => set('primary_goal', e.target.value)}
+                  maxLength={300}
+                  placeholder="e.g., Maximize multi-channel ROAS and qualified leads"
+                />
+              </label>
+              <label>
+                Monthly Budget
+                <input
+                  type="number"
+                  min="0"
+                  max="1000000000"
+                  value={draft.monthly_budget}
+                  onChange={(e) => set('monthly_budget', e.target.value)}
+                  placeholder="30000"
+                />
+              </label>
+              <label>
+                Currency
+                <select value={draft.currency} onChange={(e) => set('currency', e.target.value)}>
+                  <option>USD</option>
+                  <option>VND</option>
+                </select>
+              </label>
+              <div className="wide">
+                <div className="field-title">Priority Channels</div>
+                <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
+              </div>
+            </div>
+          )}
+          {error && <Notice>{error}</Notice>}
+          <div className="form-actions">
+            <button
+              type="button"
+              className="button coral"
+              onClick={step === 2 ? () => setStep(1) : cancel}
+            >
+              {step === 2 ? '← Back' : 'Cancel'}
+            </button>
+            <button className="button primary" disabled={busy}>
+              {busy ? 'Saving…' : step === 1 ? 'Continue →' : 'Save Profile ✓'}
+            </button>
+          </div>
+        </form>
+        <div className="under-card">
+          <span>◈ Profile settings can be adjusted anytime in Account Settings.</span>
+          <span>Linked directly to your workspace account</span>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export function ImportScreen({ imports, onImported, notify }) {
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
-  const [report, setReport] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const input = useRef(null)
   async function stage(selected) {
     if (!selected) return
-    setFile(selected); setPreview(null); setReport(null); setError(''); setBusy(true)
-    try { const body = new FormData(); body.append('file', selected); setPreview(await api('campaign-imports/upload/', { method: 'POST', body })) }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+    setFile(selected)
+    setPreview(null)
+    setError('')
+    setBusy(true)
+    try {
+      const body = new FormData()
+      body.append('file', selected)
+      setPreview(await api('campaign-imports/upload/', { method: 'POST', body }))
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
   async function commit() {
-    setBusy(true); setError('')
-    try { const body = new FormData(); body.append('file', file); body.append('mode', 'commit'); const data = await api('campaign-imports/upload/', { method: 'POST', body }); await onImported(); setReport(data); notify(`${data.success_count} dòng dữ liệu đã được nhập.`); setFile(null); setPreview(null); if (input.current) input.current.value = '' }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
-  }
-  async function syncSandbox() {
-    setBusy(true); setError(''); setFile(null); setPreview(null); setReport(null)
-    if (input.current) input.current.value = ''
+    setBusy(true)
+    setError('')
     try {
-      const data = await api('campaign-imports/sandbox/', { method: 'POST' })
-      setReport(data)
-      setPreview({ row_count: data.row_count, error_count: data.failed_count, errors: data.errors, preview: data.preview })
+      const body = new FormData()
+      body.append('file', file)
+      body.append('mode', 'commit')
+      const data = await api('campaign-imports/upload/', { method: 'POST', body })
       await onImported()
-      notify(`Đã đồng bộ ${data.success_count} dòng từ Sandbox.`)
-    } catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+      notify(`${data.row_count} records imported successfully.`)
+      setFile(null)
+      setPreview(null)
+      if (input.current) input.current.value = ''
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
-  function downloadSample() { const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500000,320,18000,25,3900000\nGoogle Ads,2026-09,1000000,240,12000,18,2800000\n'; const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' })); link.download = 'castravision_sample.csv'; link.click(); URL.revokeObjectURL(link.href) }
-  return <><Heading eyebrow="DATA INGESTION HUB" title="Nhập dữ liệu chiến dịch" subtitle="Tải lên dữ liệu hiệu suất hoặc đồng bộ bộ dữ liệu mẫu để làm giàu chiến lược marketing." /><div className={`upload-zone card ${file ? 'has-file' : ''}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); stage(e.dataTransfer.files[0]) }}><div className="upload-icon">⇧</div><h2>Kéo thả tệp vào đây</h2><p>hoặc chọn một nguồn dữ liệu bên dưới</p><span className="upload-separator">NGUỒN DỮ LIỆU</span><div className="upload-actions"><button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>⇧ Chọn tệp CSV / Excel</button><button className="button subtle sandbox-button" type="button" onClick={syncSandbox} disabled={busy}>↻ Đồng bộ từ Sandbox</button></div><input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} /><small>Tối đa 5 MB · CSV UTF-8 hoặc XLSX</small><button type="button" className="inline-link" onClick={downloadSample}>↓ Tải CSV mẫu</button></div>
-    {file && <div className="file-card card"><div className="file-success">✓</div><div className="file-info"><span className="mini-label">TỆP ĐÃ CHỌN · {(file.size / 1024 / 1024).toFixed(2)} MB</span><strong>{file.name}</strong><small>{busy ? 'Đang kiểm tra…' : preview ? `${preview.row_count} dòng hợp lệ · ${preview.error_count} dòng lỗi` : 'Chưa xác thực'}</small></div><div className="file-actions"><button className="button coral" type="button" onClick={() => { setFile(null); setPreview(null); setError('') }}>Gỡ bỏ</button><button className="button primary" type="button" disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0} onClick={commit}>Nhập dữ liệu →</button></div></div>}
-    {error && <Notice>{error}</Notice>}{report && <section className="card import-report" role="status" aria-live="polite"><div className="report-heading"><div><span className="mini-label">BÁO CÁO NHẬP DỮ LIỆU</span><h3>{report.source === 'sandbox' ? 'Đồng bộ Sandbox hoàn tất' : 'Nhập tệp hoàn tất'}</h3></div><span className="report-badge">✓ Thành công</span></div><div className="report-stats"><div className="report-stat success"><strong>{report.success_count}</strong><span>Dòng thành công</span></div><div className="report-stat failure"><strong>{report.failed_count}</strong><span>Dòng thất bại</span></div></div><div className="report-meta"><span>Nguồn: <b>{report.source === 'sandbox' ? 'Sandbox' : report.filename}</b></span><span>Mã lần nhập: <b>#{report.import_id}</b></span></div></section>}{preview?.errors?.length > 0 && <div className="card validation-card"><h3>Cần sửa {preview.error_count} dòng trước khi nhập</h3>{preview.errors.map((item) => <p key={item.row}>Dòng {item.row}: {item.message}</p>)}</div>}{preview?.preview?.length > 0 && <div className="card preview-card"><h3>Xem trước dữ liệu chuẩn hóa</h3><div className="table-wrap"><table><thead><tr>{['Kênh', 'Kỳ', 'Chi phí', 'Clicks', 'Hiển thị', 'Chuyển đổi', 'Doanh thu'].map((value) => <th key={value}>{value}</th>)}</tr></thead><tbody>{preview.preview.map((row, index) => <tr key={index}><td>{row.channel}</td><td>{row.period}</td><td>{row.spend.toLocaleString('vi-VN')}</td><td>{row.clicks}</td><td>{row.impressions}</td><td>{row.conversions}</td><td>{row.revenue.toLocaleString('vi-VN')}</td></tr>)}</tbody></table></div></div>}
-    <div className="benefit-grid"><div className="card"><b>▣</b><strong>Định dạng chuẩn</strong><p>Tự ánh xạ cột chi phí, lượt nhấp, hiển thị và chuyển đổi.</p></div><div className="card"><b>♢</b><strong>Kiểm tra tự động</strong><p>Phát hiện cột thiếu, số âm và dòng không hợp lệ trước khi lưu.</p></div><div className="card"><b>ϟ</b><strong>Dùng cho phân tích</strong><p>Chỉ số từ tệp đã nhập được đưa vào yêu cầu tạo chiến lược.</p></div></div>{imports.length > 0 && <div className="card import-history"><h3>Lần nhập gần đây</h3>{imports.map((item) => <div key={item.id}><span>{item.filename}</span><small>{item.row_count} dòng · {new Date(item.created_at).toLocaleDateString('vi-VN')}</small></div>)}</div>}</>
+  function downloadSample() {
+    const csv = 'channel,period,spend,clicks,impressions,conversions,revenue\nMeta,2026-09,1500000,320,18000,25,3900000\nGoogle Ads,2026-09,1000000,240,12000,18,2800000\n'
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8' }))
+    link.download = 'castravision_sample.csv'
+    link.click()
+    URL.revokeObjectURL(link.href)
+  }
+  return (
+    <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+      <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+        <Heading
+          eyebrow="DATA INGESTION HUB"
+          title="Campaign Data Import"
+          subtitle="Upload historical campaign performance data to enrich AI strategy blueprints."
+        />
+        <div
+          className={`upload-zone card ${file ? 'has-file' : ''}`}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault()
+            stage(e.dataTransfer.files[0])
+          }}
+        >
+          <div className="upload-icon">⇧</div>
+          <h2>Drag &amp; drop file here</h2>
+          <p>or browse from your device</p>
+          <span className="upload-separator">OR</span>
+          <button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>
+            ⇧ Select CSV / Excel File
+          </button>
+          <input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} />
+          <small>Max 5 MB · CSV UTF-8 or XLSX</small>
+          <button type="button" className="inline-link" onClick={downloadSample}>
+            ↓ Download Sample CSV
+          </button>
+        </div>
+        {file && (
+          <div className="file-card card">
+            <div className="file-success">✓</div>
+            <div className="file-info">
+              <span className="mini-label">SELECTED FILE · {(file.size / 1024 / 1024).toFixed(2)} MB</span>
+              <strong>{file.name}</strong>
+              <small>
+                {busy ? 'Validating…' : preview ? `${preview.row_count} valid rows · ${preview.error_count} errors` : 'Unverified'}
+              </small>
+            </div>
+            <div className="file-actions">
+              <button
+                className="button coral"
+                type="button"
+                onClick={() => {
+                  setFile(null)
+                  setPreview(null)
+                  setError('')
+                }}
+              >
+                Remove
+              </button>
+              <button
+                className="button primary"
+                type="button"
+                disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0}
+                onClick={commit}
+              >
+                Import Data →
+              </button>
+            </div>
+          </div>
+        )}
+        {error && <Notice>{error}</Notice>}
+        {preview?.errors?.length > 0 && (
+          <div className="card validation-card">
+            <h3>Resolve {preview.error_count} error(s) before importing</h3>
+            {preview.errors.map((item) => (
+              <p key={item.row}>Row {item.row}: {item.message}</p>
+            ))}
+          </div>
+        )}
+        {preview?.preview?.length > 0 && (
+          <div className="card preview-card">
+            <h3>Standardized Data Preview</h3>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    {['Channel', 'Period', 'Spend', 'Clicks', 'Impressions', 'Conversions', 'Revenue'].map((value) => (
+                      <th key={value}>{value}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {preview.preview.map((row, index) => (
+                    <tr key={index}>
+                      <td>{row.channel}</td>
+                      <td>{row.period}</td>
+                      <td>{Number(row.spend).toLocaleString('en-US')}</td>
+                      <td>{row.clicks}</td>
+                      <td>{row.impressions}</td>
+                      <td>{row.conversions}</td>
+                      <td>{Number(row.revenue).toLocaleString('en-US')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        <div className="benefit-grid">
+          <div className="card">
+            <b>▣</b>
+            <strong>Standardized Formatting</strong>
+            <p>Automatically maps spend, clicks, impressions, and conversions.</p>
+          </div>
+          <div className="card">
+            <b>♢</b>
+            <strong>Automated Verification</strong>
+            <p>Flags missing columns, negative numbers, and invalid rows prior to ingestion.</p>
+          </div>
+          <div className="card">
+            <b>ϟ</b>
+            <strong>Strategic Analytics</strong>
+            <p>Ingested performance metrics feed directly into the AI strategy engine.</p>
+          </div>
+        </div>
+        {imports.length > 0 && (
+          <div className="card import-history">
+            <h3>Recent Ingestions</h3>
+            {imports.map((item) => (
+              <div key={item.id}>
+                <span>{item.filename}</span>
+                <small>{item.row_count} rows · {new Date(item.created_at).toLocaleDateString('en-US')}</small>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
 }
 
 function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
-  const initial = () => ({ campaign_goal: profile.primary_goal || '', target_audience: profile.target_customers || '', budget: profile.monthly_budget || '', preferred_channels: profile.preferred_channels.length ? profile.preferred_channels : CHANNELS })
+  const initial = () => ({
+    campaign_goal: profile?.primary_goal || '',
+    target_audience: profile?.target_customers || '',
+    budget: profile?.monthly_budget || '',
+    preferred_channels: profile?.preferred_channels?.length ? profile.preferred_channels : CHANNELS,
+  })
   const [draft, setDraft] = useState(initial)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
-  const toggle = (channel) => setDraft((current) => ({ ...current, preferred_channels: current.preferred_channels.includes(channel) ? current.preferred_channels.filter((item) => item !== channel) : [...current.preferred_channels, channel] }))
+  const toggle = (channel) => setDraft((current) => ({
+    ...current,
+    preferred_channels: current.preferred_channels.includes(channel)
+      ? current.preferred_channels.filter((item) => item !== channel)
+      : [...current.preferred_channels, channel],
+  }))
   async function generate(event) {
-    event?.preventDefault(); setBusy(true); setError('')
-    try { const historical_data = latestRows.slice(0, 30).map((row) => ({ channel: CHANNELS.includes(row.channel) ? row.channel : 'Other', period: row.period, ctr: row.impressions ? +(row.clicks / row.impressions * 100).toFixed(2) : 0, cpa: row.conversions ? +(row.spend / row.conversions).toFixed(2) : 0, roas: row.spend ? +(row.revenue / row.spend).toFixed(2) : 0 })); const payload = { business_name: profile.business_name, industry: profile.industry, business_size: profile.business_size, product_service: profile.product_service || profile.business_name, target_audience: draft.target_audience, campaign_goal: draft.campaign_goal, budget: Number(draft.budget), currency: profile.currency, preferred_channels: draft.preferred_channels, historical_data }; const data = await api('strategies/generate/', { method: 'POST', body: JSON.stringify(payload) }); setResult(data); notify('Chiến lược đã được tạo. Hãy xem lại trước khi sử dụng.') }
-    catch (cause) { setError(cause.message) }
-    finally { setBusy(false) }
+    event?.preventDefault()
+    setBusy(true)
+    setError('')
+    try {
+      const historical_data = latestRows.slice(0, 30).map((row) => ({
+        channel: CHANNELS.includes(row.channel) ? row.channel : 'Other',
+        period: row.period,
+        ctr: row.impressions ? +((row.clicks / row.impressions) * 100).toFixed(2) : 0,
+        cpa: row.conversions ? +(row.spend / row.conversions).toFixed(2) : 0,
+        roas: row.spend ? +(row.revenue / row.spend).toFixed(2) : 0,
+      }))
+      const payload = {
+        business_name: profile.business_name,
+        industry: profile.industry,
+        business_size: profile.business_size,
+        product_service: profile.product_service || profile.business_name,
+        target_audience: draft.target_audience,
+        campaign_goal: draft.campaign_goal,
+        budget: Number(draft.budget),
+        currency: profile.currency || 'USD',
+        preferred_channels: draft.preferred_channels,
+        historical_data,
+      }
+      const data = await api('strategies/generate/', { method: 'POST', body: JSON.stringify(payload) })
+      setResult(data)
+      notify('Strategy generated successfully. Please review recommendations.')
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
   }
-  const money = (percentage) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: profile.currency, maximumFractionDigits: 0 }).format(Number(draft.budget) * percentage / 100)
-  return <><Heading eyebrow="STRATEGY ENGINE" title="Tạo chiến lược" subtitle="Đặt mục tiêu và đối tượng để xây dựng đề xuất marketing dựa trên dữ liệu.">{latestRows.length > 0 && <span className="data-chip">✓ {latestRows.length} dòng lịch sử được sử dụng</span>}</Heading><div className="strategy-grid"><form className="card strategy-form" onSubmit={generate}><div className="section-head"><h2><i /> Thiết lập chiến dịch</h2><span className="step-badge">FR01 · Sprint 1</span></div><label>Mục tiêu chiến dịch<input value={draft.campaign_goal} onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })} minLength={3} required placeholder="Ví dụ: Tăng doanh số mùa hè" /></label><label>Khách hàng mục tiêu<input value={draft.target_audience} onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })} minLength={3} required placeholder="Ví dụ: Người trẻ 18–28 tuổi" /></label><label>Ngân sách tháng ({profile.currency})<input type="number" min="1" value={draft.budget} onChange={(e) => setDraft({ ...draft, budget: e.target.value })} required placeholder="30000000" /></label><div className="field-title">Kênh dự kiến</div><ChannelPicker channels={draft.preferred_channels} toggle={toggle} />{error && <Notice>{error}</Notice>}<div className="form-actions"><button type="button" className="button coral" onClick={() => setDraft(initial())}>↻ Đặt lại</button><button className="button primary" disabled={busy || !draft.preferred_channels.length}>{busy ? 'Đang phân tích…' : 'ϟ Tạo chiến lược'}</button></div></form><div className="card result-card"><div className="section-head"><div><h2>Đề xuất chiến lược AI</h2><p>Dựa trên hồ sơ và dữ liệu lịch sử của bạn</p></div>{result && <span className="active-badge">{result.strategy.confidence}% tin cậy</span>}</div>{!result ? <div className="result-empty"><span>◈</span><h3>Chưa có đề xuất</h3><p>Hoàn thành biểu mẫu và nhấn “Tạo chiến lược” để xem kênh, thông điệp và phân bổ ngân sách.</p></div> : <><div className="insight-box"><span className="mini-label">TRỌNG TÂM CHIẾN LƯỢC</span><p>{result.strategy.rationale}</p></div><div className="insight-box"><div className="allocation-head"><span className="mini-label">PHÂN BỔ ĐỀ XUẤT</span><span>{money(100)} tổng</span></div><div className="stacked-bar">{result.strategy.budget_allocation.map((item, index) => <span key={index} style={{ width: `${item.percentage}%` }} />)}</div><div className="allocation-grid">{result.strategy.budget_allocation.map((item, index) => <div key={index}><i className={`legend-dot d${index}`} /><strong>{item.channel}</strong><small>{item.percentage}% · {money(item.percentage)}</small></div>)}</div></div><div className="insight-box"><span className="mini-label">THÔNG ĐIỆP & PHÂN KHÚC</span><p>“{result.strategy.message}”</p><small>{result.strategy.segment}</small></div><div className="insight-box"><span className="mini-label">HÀNH ĐỘNG TIẾP THEO</span><ol>{result.strategy.actions.map((action, index) => <li key={index}>{action}</li>)}</ol></div><div className="result-footer"><span>{result.provider === 'openai' ? 'OpenAI' : 'Bản dự phòng có quy tắc'} · {result.context_sources.length} nguồn tham chiếu</span><button className="button subtle" type="button" onClick={generate} disabled={busy}>↻ Phân tích lại</button></div>{result.warning && <Notice kind="warning">{result.warning}</Notice>}</>}</div></div></>
+  const money = (percentage) =>
+    new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: profile?.currency || 'USD',
+      maximumFractionDigits: 0,
+    }).format((Number(draft.budget || 0) * percentage) / 100)
+
+  return (
+    <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+      <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+        <Heading
+          eyebrow="STRATEGY ENGINE"
+          title="Strategy Studio"
+          subtitle="Set campaign goals and target audience to generate data-driven marketing blueprints."
+        >
+          {latestRows.length > 0 && (
+            <span className="data-chip">✓ {latestRows.length} historical records utilized</span>
+          )}
+        </Heading>
+        <div className="strategy-grid">
+          <form className="card strategy-form" onSubmit={generate}>
+            <div className="section-head">
+              <h2><i /> Campaign Setup</h2>
+              <span className="step-badge">FR01 · Strategy Studio</span>
+            </div>
+            <label>
+              Campaign Objective
+              <input
+                value={draft.campaign_goal}
+                onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })}
+                minLength={3}
+                required
+                placeholder="e.g., Q4 Multi-channel Sales Growth"
+              />
+            </label>
+            <label>
+              Target Audience
+              <input
+                value={draft.target_audience}
+                onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })}
+                minLength={3}
+                required
+                placeholder="e.g., Active millennials aged 22–35"
+              />
+            </label>
+            <label>
+              Monthly Budget ({profile?.currency || 'USD'})
+              <input
+                type="number"
+                min="1"
+                value={draft.budget}
+                onChange={(e) => setDraft({ ...draft, budget: e.target.value })}
+                required
+                placeholder="30000"
+              />
+            </label>
+            <div className="field-title">Planned Channels</div>
+            <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
+            {error && <Notice>{error}</Notice>}
+            <div className="form-actions">
+              <button type="button" className="button coral" onClick={() => setDraft(initial())}>
+                ↻ Reset
+              </button>
+              <button className="button primary" disabled={busy || !draft.preferred_channels.length}>
+                {busy ? 'Analyzing…' : 'ϟ Generate Strategy'}
+              </button>
+            </div>
+          </form>
+
+          <div className="card result-card">
+            <div className="section-head">
+              <div>
+                <h2>AI Strategy Recommendations</h2>
+                <p>Based on your business profile and historical data</p>
+              </div>
+              {result && <span className="active-badge">{result.strategy.confidence}% confidence</span>}
+            </div>
+            {!result ? (
+              <div className="result-empty">
+                <span>◈</span>
+                <h3>No Strategy Generated Yet</h3>
+                <p>Complete the setup form and click “Generate Strategy” to view channels, messaging, and budget allocation.</p>
+              </div>
+            ) : (
+              <>
+                <div className="insight-box">
+                  <span className="mini-label">STRATEGIC FOCUS</span>
+                  <p>{result.strategy.rationale}</p>
+                </div>
+                <div className="insight-box">
+                  <div className="allocation-head">
+                    <span className="mini-label">RECOMMENDED ALLOCATION</span>
+                    <span>{money(100)} total</span>
+                  </div>
+                  <div className="stacked-bar">
+                    {result.strategy.budget_allocation.map((item, index) => (
+                      <span key={index} style={{ width: `${item.percentage}%` }} />
+                    ))}
+                  </div>
+                  <div className="allocation-grid">
+                    {result.strategy.budget_allocation.map((item, index) => (
+                      <div key={index}>
+                        <i className={`legend-dot d${index}`} />
+                        <strong>{item.channel}</strong>
+                        <small>{item.percentage}% · {money(item.percentage)}</small>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="insight-box">
+                  <span className="mini-label">MESSAGING &amp; SEGMENT</span>
+                  <p>“{result.strategy.message}”</p>
+                  <small>{result.strategy.segment}</small>
+                </div>
+                <div className="insight-box">
+                  <span className="mini-label">RECOMMENDED ACTIONS</span>
+                  <ol>
+                    {result.strategy.actions.map((action, index) => (
+                      <li key={index}>{action}</li>
+                    ))}
+                  </ol>
+                </div>
+                <div className="result-footer">
+                  <span>
+                    {result.provider === 'openai' ? 'OpenAI Engine' : 'Rule-based Fallback'} · {result.context_sources.length} reference sources
+                  </span>
+                  <button className="button subtle" type="button" onClick={generate} disabled={busy}>
+                    ↻ Re-analyze
+                  </button>
+                </div>
+                {result.warning && <Notice kind="warning">{result.warning}</Notice>}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export function ContentScreen({ result, profile, setPage, notify }) {
   const [channels, setChannels] = useState(CHANNELS)
-  const [tone, setTone] = useState('Năng động & táo bạo')
-  const [versions, setVersions] = useState({ Meta: 0, 'Google Ads': 0, TikTok: 0 })
+  const [tone, setTone] = useState('Dynamic & Bold')
+  const [version, setVersion] = useState(0)
   const [edits, setEdits] = useState({})
   const [editing, setEditing] = useState(null)
   const message = result?.strategy.message || ''
+  const businessName = profile?.business_name || 'CastraVision'
   const drafts = {
-    Meta: { title: versions.Meta % 2 ? `${profile.business_name} — Ưu đãi dành riêng cho bạn` : `${profile.business_name} — Khám phá điều khác biệt`, body: versions.Meta % 2 ? `Một lựa chọn mới cho bạn. ${message}` : `${message} Khám phá ngay và tìm cảm hứng cho hành trình tiếp theo.`, cta: versions.Meta % 2 ? 'Khám phá ngay' : 'Tìm hiểu thêm' },
-    'Google Ads': { title: versions['Google Ads'] % 2 ? `${profile.business_name} | Giải pháp đáng tin cậy` : `${profile.business_name} | ${profile.industry} phù hợp với bạn`, body: versions['Google Ads'] % 2 ? `${message} Tìm hiểu lựa chọn phù hợp với nhu cầu của bạn.` : `${profile.product_service || profile.business_name}. Xem giải pháp cho ${profile.target_customers}.`, cta: versions['Google Ads'] % 2 ? 'Xem giải pháp' : 'Truy cập website' },
-    TikTok: { title: versions.TikTok % 2 ? `Bạn đã biết điều này về ${profile.business_name}?` : `Hook 0–3s · ${profile.business_name}`, body: versions.TikTok % 2 ? `Mở đầu bằng câu hỏi của ${profile.target_customers}. Chuyển cảnh nhanh sang giải pháp: ${profile.product_service || profile.business_name}.` : `Bắt đầu bằng tình huống gần gũi với ${profile.target_customers}. Giới thiệu lợi ích chính và kết bằng lời mời tìm hiểu thêm.`, cta: versions.TikTok % 2 ? 'Thử ngay hôm nay' : 'Xem ngay' },
+    Meta: {
+      title: `${businessName} — Discover the Difference`,
+      body: version % 2
+        ? `A new choice tailored for you. ${message}`
+        : `${message} Explore now and find inspiration for your next breakthrough.`,
+      cta: 'Learn More',
+    },
+    'Google Ads': {
+      title: `${businessName} | Solutions Built for Your Growth`,
+      body: `${profile?.product_service || businessName}. Explore proven solutions for ${profile?.target_customers || 'customers'}.`,
+      cta: 'Visit Website',
+    },
+    TikTok: {
+      title: `Hook 0–3s · ${businessName}`,
+      body: version % 2
+        ? `Open with a compelling question for ${profile?.target_customers || 'customers'}. Fast-cut to the solution: ${profile?.product_service || businessName}.`
+        : `Start with a relatable scenario for ${profile?.target_customers || 'customers'}. Highlight key benefits and close with a clear CTA.`,
+      cta: 'Watch Now',
+    },
   }
-  const toggle = (channel) => setChannels((current) => current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel])
-  const effective = (channel) => ({ ...drafts[channel], ...(edits[channel] || {}) })
-  const updateField = (channel, field, value) => setEdits((current) => ({ ...current, [channel]: { ...effective(channel), ...current[channel], [field]: value } }))
-  const regenerate = (channel) => {
-    setVersions((current) => ({ ...current, [channel]: current[channel] + 1 }))
-    setEdits((current) => { const next = { ...current }; delete next[channel]; return next })
-    setEditing(null)
-    notify(`Đã tạo lại nội dung cho kênh ${channel}.`)
+  const toggle = (channel) =>
+    setChannels((current) =>
+      current.includes(channel) ? current.filter((item) => item !== channel) : [...current, channel]
+    )
+  async function copy(value) {
+    try {
+      await navigator.clipboard.writeText(value)
+      notify('Content copied to clipboard.')
+    } catch {
+      notify('Unable to copy on this browser.')
+    }
   }
-  const regenerateAll = () => {
-    setVersions((current) => Object.fromEntries(CHANNELS.map((channel) => [channel, current[channel] + 1])))
-    setEdits({}); setEditing(null); notify('Đã làm mới bản nháp nội dung.')
-  }
-  async function copy(value) { try { await navigator.clipboard.writeText(value); notify('Đã sao chép nội dung.') } catch { notify('Không thể sao chép trên trình duyệt này.') } }
-  return <>
-    <Heading eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO" title="Tạo nội dung" subtitle="Phác thảo nội dung đa kênh từ chiến lược vừa tạo." />
-    <div className="content-notice"><span>ⓘ</span><p>Đây là bản nháp nội dung theo mẫu. Hãy biên tập và kiểm tra trước khi đăng.</p></div>
-    {!result ? <div className="card content-empty"><span>✦</span><h2>Hãy tạo chiến lược trước</h2><p>Content Studio sử dụng phân khúc và thông điệp từ đề xuất chiến lược của bạn.</p><button className="button primary" onClick={() => setPage('strategy')}>Đến màn hình chiến lược →</button></div> : <>
-      <div className="content-steps">{['Chiến lược', 'Kênh', 'Đối tượng', 'Tạo nháp', 'Rà soát'].map((step, index) => <div key={step}><b>{index + 1}</b>{step}</div>)}</div>
-      <div className="card content-controls">
-        <div><span className="mini-label">CHIẾN LƯỢC</span><strong>{profile.business_name}</strong></div>
-        <div className="control-channels"><span className="mini-label">KÊNH MỤC TIÊU</span><div>{CHANNELS.map((channel) => <button type="button" key={channel} onClick={() => toggle(channel)} className={channels.includes(channel) ? 'selected' : ''}>{channel} {channels.includes(channel) && '✓'}</button>)}</div></div>
-        <div><span className="mini-label">KHÁCH HÀNG</span><strong>{result.strategy.segment}</strong></div>
-        <label>GIỌNG ĐIỆU<select value={tone} onChange={(e) => setTone(e.target.value)}><option>Năng động & táo bạo</option><option>Thân thiện & gần gũi</option><option>Chuyên nghiệp & rõ ràng</option></select></label>
-        <div className="content-control-actions"><button className="button coral" onClick={() => { setChannels(CHANNELS); setTone('Năng động & táo bạo'); setEdits({}); setEditing(null) }}>↻ Đặt lại</button><button className="button primary" onClick={regenerateAll}>✦ Tạo bản nháp</button></div>
+  return (
+    <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+      <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+        <Heading
+          eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO"
+          title="Content Studio"
+          subtitle="Draft multi-channel creative assets aligned with your campaign strategy."
+        />
+        <div className="content-notice">
+          <span>ⓘ</span>
+          <p>Template-assisted creative workspace. Review and refine creative copy prior to final submission.</p>
+        </div>
+        {!result ? (
+          <div className="card content-empty">
+            <span>✦</span>
+            <h2>Generate a Strategy First</h2>
+            <p>Content Studio utilizes audience segments and core messaging from your active strategy proposal.</p>
+            <button className="button primary" onClick={() => setPage('strategy')}>
+              Go to Strategy Studio →
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="content-steps">
+              {['Strategy', 'Channels', 'Audience', 'Draft Copy', 'Review'].map((step, index) => (
+                <div key={step}>
+                  <b>{index + 1}</b>{step}
+                </div>
+              ))}
+            </div>
+            <div className="card content-controls">
+              <div>
+                <span className="mini-label">STRATEGY</span>
+                <strong>{businessName}</strong>
+              </div>
+              <div className="control-channels">
+                <span className="mini-label">TARGET CHANNELS</span>
+                <div>
+                  {CHANNELS.map((channel) => (
+                    <button
+                      type="button"
+                      key={channel}
+                      onClick={() => toggle(channel)}
+                      className={channels.includes(channel) ? 'selected' : ''}
+                    >
+                      {channel} {channels.includes(channel) && '✓'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <span className="mini-label">AUDIENCE</span>
+                <strong>{result.strategy.segment}</strong>
+              </div>
+              <label>
+                TONE OF VOICE
+                <select value={tone} onChange={(e) => setTone(e.target.value)}>
+                  <option>Dynamic &amp; Bold</option>
+                  <option>Friendly &amp; Approachable</option>
+                  <option>Professional &amp; Clear</option>
+                </select>
+              </label>
+              <div className="content-control-actions">
+                <button
+                  className="button coral"
+                  onClick={() => {
+                    setChannels(CHANNELS)
+                    setTone('Dynamic & Bold')
+                    setEdits({})
+                  }}
+                >
+                  ↻ Reset
+                </button>
+                <button
+                  className="button primary"
+                  onClick={() => {
+                    setVersion(version + 1)
+                    setEdits({})
+                    notify('Creative copy drafts refreshed.')
+                  }}
+                >
+                  ✦ Generate Drafts
+                </button>
+              </div>
+            </div>
+
+            <div className="content-results-heading">
+              <h2>Channel Drafts <span>{channels.length} channels</span></h2>
+              <small>Tone: {tone}</small>
+            </div>
+
+            <div className="content-grid">
+              {channels.map((channel) => {
+                const item = drafts[channel]
+                const value = edits[channel] ?? item.body
+                return (
+                  <div className="card content-card" key={channel}>
+                    <div className="content-card-top">
+                      <span>
+                        {channel === 'Meta' ? 'Facebook Feed' : channel === 'Google Ads' ? 'Google Search Ads' : 'TikTok / Reels'}
+                      </span>
+                      <small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small>
+                    </div>
+                    <span className="mini-label">HEADLINE / HOOK</span>
+                    <h3>{item.title}</h3>
+                    <span className="mini-label">PRIMARY COPY</span>
+                    {editing === channel ? (
+                      <textarea value={value} onChange={(e) => setEdits({ ...edits, [channel]: e.target.value })} rows={7} />
+                    ) : (
+                      <p>{value}</p>
+                    )}
+                    <div className="content-preview">
+                      <span>{channel === 'TikTok' ? '0s Hook · 8s Benefit · 15s CTA' : item.cta}</span>
+                      <strong>{channel === 'Google Ads' ? '✓ Aligned Messaging' : '✦ Ready for Review'}</strong>
+                    </div>
+                    <div className="content-card-actions">
+                      <button className="button subtle" onClick={() => setEditing(editing === channel ? null : channel)}>
+                        {editing === channel ? '✓ Done' : '✎ Edit'}
+                      </button>
+                      <button className="button subtle" onClick={() => copy(`${item.title}\n\n${value}\n\n${item.cta}`)}>
+                        ⧉ Copy
+                      </button>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            <div className="content-bottom card">
+              <strong>{channels.length} / 3 channels active</strong>
+              <span>Review creative copy and ensure ad policy compliance prior to final publishing.</span>
+            </div>
+          </>
+        )}
       </div>
-      <div className="content-results-heading"><h2>Bản nháp theo kênh <span>{channels.length} kênh</span></h2><small>Giọng điệu: {tone}</small></div>
-      <div className="content-grid">{channels.map((channel) => {
-        const item = effective(channel)
-        const isEditing = editing === channel
-        return <article className="card content-card" key={channel}>
-          <div className="content-card-top"><span>{channel === 'Meta' ? 'Facebook Feed' : channel === 'Google Ads' ? 'Google Search Ads' : 'TikTok / Reels'}</span><small>{channel === 'Meta' ? '1080 × 1080' : channel === 'Google Ads' ? 'RSA' : '9:16'}</small></div>
-          {isEditing ? <div className="inline-editor">
-            <label>TIÊU ĐỀ / HOOK<input value={item.title} maxLength={120} onChange={(event) => updateField(channel, 'title', event.target.value)} /></label>
-            <label>NỘI DUNG CHÍNH<textarea value={item.body} maxLength={1000} onChange={(event) => updateField(channel, 'body', event.target.value)} rows={7} /></label>
-            <label>KÊU GỌI HÀNH ĐỘNG<input value={item.cta} maxLength={80} onChange={(event) => updateField(channel, 'cta', event.target.value)} /></label>
-          </div> : <><span className="mini-label">TIÊU ĐỀ / HOOK</span><h3>{item.title}</h3><span className="mini-label">NỘI DUNG CHÍNH</span><p>{item.body}</p></>}
-          <div className="content-preview"><span>{channel === 'TikTok' ? `0s Hook · 8s Lợi ích · CTA: ${item.cta}` : item.cta}</span><strong>{channel === 'Google Ads' ? '✓ Thông điệp nhất quán' : '✦ Bản nháp sẵn để rà soát'}</strong></div>
-          <div className="content-card-actions"><button className="button subtle" onClick={() => setEditing(isEditing ? null : channel)}>{isEditing ? '✓ Lưu' : '✎ Sửa'}</button><button className="button subtle" onClick={() => regenerate(channel)}>↻ Tạo lại</button><button className="button subtle" onClick={() => copy(`${item.title}\n\n${item.body}\n\n${item.cta}`)}>⧉ Sao chép</button></div>
-        </article>
-      })}</div>
-      <div className="content-bottom card"><strong>{channels.length} / 3 kênh được chọn</strong><span>Rà soát nội dung và tuân thủ chính sách quảng cáo trước khi xuất bản.</span></div>
-    </>}
-  </>
+    </div>
+  )
 }
 
-function App() {
+function WorkspaceApp() {
   const auth = useAuth()
-  const { ready, user, membership, workspaceId, needsOnboarding } = auth
+  const { user, membership, ready } = auth
   const [backendError, setBackendError] = useState('')
   const [authMode, setAuthMode] = useState('login')
+  const [emailSent, setEmailSent] = useState('')
   const [profile, setProfile] = useState(null)
-  const [page, setPage] = useState('overview')
+  const [page, setPage] = useState(() => window.location.hash === '#personnel-requests' ? 'members' : 'overview')
   const [imports, setImports] = useState([])
   const [latestRows, setLatestRows] = useState([])
   const [strategy, setStrategy] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
-  const [adminWorkspaces, setAdminWorkspaces] = useState([])
-  const [creatingWorkspace, setCreatingWorkspace] = useState(false)
-  const refreshData = useCallback(async (targetWorkspaceId = workspaceId) => { if (!targetWorkspaceId) return; const data = await loadWorkspaceData(targetWorkspaceId); setProfile(data.profile); setImports(data.imports); setLatestRows(data.latestRows); setStrategy(null); setPage(data.profile ? defaultPage(auth.role) : 'onboarding'); if (auth.role === 'admin') setAdminWorkspaces(await loadAdminWorkspaceOverview(auth.memberships)) }, [auth.memberships, auth.role, workspaceId])
-  // Loading remote workspace state is the synchronization performed by this effect.
-  // oxlint-disable-next-line react/set-state-in-effect
-  useEffect(() => { if (user && membership) refreshData().catch((cause) => setBackendError(cause.message)) }, [membership, refreshData, user])
-  async function saveProfile(draft) { setBusy(true); setError(''); try { let targetWorkspaceId = workspaceId; if (creatingWorkspace || !targetWorkspaceId) { targetWorkspaceId = await createWorkspaceAndProfile(draft); await auth.refreshMembership(targetWorkspaceId); setCreatingWorkspace(false) } else { await saveBusinessProfile(targetWorkspaceId, draft) } await refreshData(targetWorkspaceId); setPage(defaultPage(auth.role || 'admin')); setToast('Hồ sơ doanh nghiệp đã được lưu.') } catch (cause) { setError(cause.message) } finally { setBusy(false) } }
-  function selectWorkspace(targetWorkspaceId) { setBackendError(''); auth.selectWorkspace(targetWorkspaceId); setPage('admin-dashboard') }
-  function beginCreateWorkspace() { setCreatingWorkspace(true); setError(''); setPage('onboarding') }
-  async function logout() { try { await auth.signOut() } finally { setProfile(null); setStrategy(null); setPage(defaultPage('member')) } }
-  async function onImported() { await refreshData() }
-  if (!ready) return <div className="loading-screen"><Brand /><span>Đang kết nối không gian làm việc…</span></div>
-  const visibleError = backendError || auth.error
-  if (!user) return <AuthScreen mode={authMode} setMode={setAuthMode} signIn={auth.signIn} signUp={auth.signUp} backendError={visibleError} />
-  const onboarding = creatingWorkspace || !profile || needsOnboarding
-  return <Shell user={user} role={auth.role} profile={profile} memberships={auth.memberships} workspaceId={workspaceId} selectWorkspace={selectWorkspace} page={onboarding ? 'onboarding' : page} setPage={setPage} logout={logout} onboarding={onboarding}>
-    {visibleError && <Notice>{visibleError}</Notice>}
-    {(onboarding || page === 'onboarding' || page === 'profile') && <ProfileScreen profile={creatingWorkspace ? null : profile} onboarding={creatingWorkspace || !profile} saveProfile={saveProfile} busy={busy} error={error} cancel={profile ? () => { setCreatingWorkspace(false); setPage(defaultPage(auth.role)) } : logout} />}
-    {profile && !onboarding && page === defaultPage(auth.role) && (auth.role === 'admin'
-      ? <AdminWorkspaceDashboard workspaces={adminWorkspaces} activeWorkspaceId={workspaceId} onSelectWorkspace={selectWorkspace} onCreateWorkspace={beginCreateWorkspace} />
-      : auth.role === 'manager'
-        ? <PerformanceDashboardPage setPage={setPage} imports={imports} />
-        : <RoleDashboard role={auth.role} profile={profile} imports={imports} strategy={strategy} setPage={setPage} />)}
-    {profile && !onboarding && page === 'import' && can(auth.role, 'campaign:import') && <ImportScreen imports={imports} onImported={onImported} notify={setToast} />}
-    {profile && !onboarding && page === 'strategy' && can(auth.role, 'strategy:generate') && <StrategyScreen profile={profile} latestRows={latestRows} result={strategy} setResult={setStrategy} notify={setToast} />}
-    {profile && !onboarding && page === 'strategy' && !can(auth.role, 'strategy:generate') && <PlaceholderPage title="Chiến lược được chia sẻ" subtitle="Member có thể xem kết quả mới nhất nhưng không thể tạo hoặc phân tích lại chiến lược." />}
-    {profile && !onboarding && page === 'content' && <ContentScreen result={strategy} profile={profile} setPage={setPage} notify={setToast} />}
-    {profile && !onboarding && page === 'members' && can(auth.role, 'members:manage') && <MembersPage profile={profile} notify={setToast} />}
-    {profile && !onboarding && page === 'roles' && can(auth.role, 'members:manage') && <RoleManagementPage />}
-    {profile && !onboarding && page === 'audit' && can(auth.role, 'audit:read') && <AuditLogPage />}
-    {profile && !onboarding && page === 'approvals' && can(auth.role, 'approval:write') && <ApprovalQueuePage notify={setToast} />}
-    {profile && !onboarding && page === 'budget' && can(auth.role, 'budget:write') && <BudgetOptimizationPage notify={setToast} />}
-    {profile && !onboarding && page === 'reports' && can(auth.role, 'reports:write') && <ReportsPage profile={profile} notify={setToast} />}
-    {profile && !onboarding && page === 'insights' && can(auth.role, 'competitor:read') && <CompetitorInsightsPage notify={setToast} />}
-    <Toast message={toast} clear={() => setToast('')} />
-  </Shell>
+  const [selectedProposal, setSelectedProposal] = useState(null)
+  const [dataReady, setDataReady] = useState(false)
+  const actorRole = resolveActorRole(user, membership, { platformRole: auth.platformRole })
+  const userId = user?.id
+  const workspaceId = membership?.workspaceId
+  const workspaceRole = membership?.role
+
+  const refreshData = useCallback(async () => {
+    const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')])
+    setProfile(business.profile)
+    setImports(history.imports)
+    setLatestRows(history.latest_rows)
+    setBackendError('')
+    setDataReady(true)
+    if (!business.profile && membership?.role === 'admin') setPage('profile')
+  }, [membership?.role])
+
+  useEffect(() => {
+    if (!userId || !workspaceId || auth.platformRole) return undefined
+    let active = true
+    Promise.all([api('business-profile/'), api('campaign-imports/')]).then(([business, history]) => {
+      if (!active) return
+      setProfile(business.profile)
+      setImports(history.imports)
+      setLatestRows(history.latest_rows)
+      setBackendError('')
+      setDataReady(true)
+      if (!business.profile && workspaceRole === 'admin') setPage('profile')
+    }).catch(cause => { if (active) setBackendError(cause.message) })
+    return () => { active = false }
+  }, [userId, workspaceId, workspaceRole, auth.platformRole])
+
+  async function handleLogin(email, password, isSignup = false) {
+    setBusy(true)
+    setError('')
+    try {
+      if (isSignup) {
+        await auth.requestEmailLink(email)
+        setEmailSent(email)
+      } else {
+        await auth.signIn(email, password)
+      }
+    } catch (cause) { setError(cause.message) }
+    finally { setBusy(false) }
+  }
+
+  async function saveProfile(draft) {
+    setBusy(true)
+    setError('')
+    try {
+      const data = await api('business-profile/', { method: 'PUT', body: JSON.stringify(draft) })
+      setProfile(data.profile)
+      setPage('overview')
+      setToast('Business profile saved successfully.')
+    } catch (cause) {
+      setError(cause.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function logout() {
+    try { await auth.signOut() }
+    catch (cause) { setError(cause.message) }
+  }
+
+  async function onImported() {
+    const data = await api('campaign-imports/')
+    setImports(data.imports)
+    setLatestRows(data.latest_rows)
+  }
+
+  if (!ready) {
+    return (
+      <div className="loading-screen">
+        <Brand />
+        <span>Connecting to Supabase workspace…</span>
+      </div>
+    )
+  }
+
+  if (!user) {
+    if (emailSent) return <EmailLinkSentPage email={emailSent} onResend={() => auth.requestEmailLink(emailSent)} onBack={() => { setEmailSent(''); setAuthMode('login') }} />
+    return (
+      <AccountEntryPage
+        mode={authMode}
+        setMode={setAuthMode}
+        onLogin={handleLogin}
+        busy={busy}
+        error={error || auth.error || backendError}
+        notice={toast}
+      />
+    )
+  }
+
+  if (auth.passwordSetupRequired) return <SetPasswordPage auth={auth} />
+  if (!auth.platformRole && !membership && !auth.memberships.length) return <CompanyJoinPage auth={auth} />
+  if (!auth.platformRole && !membership) {
+    return <div className="loading-screen"><Brand />
+      <h1>{auth.memberships.length ? 'Chọn không gian làm việc' : 'Tài khoản đang chờ được cấp quyền'}</h1>
+      <p>{auth.memberships.length ? 'Chọn Workspace đã được cấp trong danh sách phía trên.' : 'Đăng ký không tự cấp quyền doanh nghiệp. Liên hệ người quản lý để được mời.'}</p>
+      <button className="button subtle" onClick={logout}>Đăng xuất</button>
+    </div>
+  }
+  if (!auth.platformRole && !dataReady) {
+    return <div className="loading-screen"><Brand /><p role="status">{backendError || 'Đang tải dữ liệu Workspace…'}</p>
+      {backendError && <button className="button primary" onClick={() => refreshData().catch(cause => setBackendError(cause.message))}>Thử lại</button>}
+      <button className="button subtle" onClick={logout}>Đăng xuất</button>
+    </div>
+  }
+  if (!auth.platformRole && !profile && membership?.role !== 'admin') {
+    return <div className="loading-screen"><Brand /><p>Doanh nghiệp chưa hoàn tất hồ sơ. Vui lòng liên hệ Marketing Manager.</p>
+      <button className="button subtle" onClick={logout}>Đăng xuất</button>
+    </div>
+  }
+
+  // ─── 1. SYSTEM ADMIN: Vào giao diện system-admin ──────────────────────────
+  if (actorRole === 'system_admin') {
+    return (
+      <SystemAdminLayout
+        user={user}
+        onLogout={logout}
+        onSignOut={logout}
+        onSelectWorkspace={auth.selectWorkspace}
+        notify={setToast}
+      />
+    )
+  }
+
+  // ─── 2. MANAGER: Vào giao diện company-admin ──────────────────────────────
+  if (actorRole === 'manager') {
+    return (
+      <MarketingManagerLayout
+        user={user}
+        membership={membership}
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        onSignOut={logout}
+        notify={setToast}
+      >
+        {page === 'import' && (
+          <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+        )}
+        {page === 'strategy' && (
+          <StrategyScreen
+            profile={profile}
+            latestRows={latestRows}
+            result={strategy}
+            setResult={setStrategy}
+            notify={setToast}
+          />
+        )}
+        {page === 'content' && (
+          <ContentScreen
+            result={strategy}
+            profile={profile}
+            setPage={setPage}
+            notify={setToast}
+          />
+        )}
+        {page === 'profile' && (
+          <ProfileScreen
+            profile={profile}
+            onboarding={!profile}
+            saveProfile={saveProfile}
+            busy={busy}
+            error={error}
+            cancel={() => setPage('overview')}
+          />
+        )}
+      </MarketingManagerLayout>
+    )
+  }
+
+  // ─── 3. LEADER: Vào giao diện leader ──────────────────────────────────────
+  if (actorRole === 'leader') {
+    return (
+      <Shell
+        user={user}
+        role="leader"
+        profile={profile}
+        page={page}
+        setPage={setPage}
+        logout={logout}
+      >
+        {backendError && <Notice>{backendError}</Notice>}
+        {page === 'overview' && (
+          <LeaderDashboard imports={imports} setPage={setPage} notify={setToast} />
+        )}
+        {(page === 'approvals' || page === 'content-reviews' || page === 'my-proposals' || page === 'submissions') && (
+          <LeaderApprovalQueue
+            setPage={setPage}
+            onSelectContentReview={(p) => {
+              setSelectedProposal(p)
+              setPage('content-review-detail')
+            }}
+            onSelectBudgetReview={(p) => {
+              setSelectedProposal(p)
+              setPage('budget-review-detail')
+            }}
+            notify={setToast}
+          />
+        )}
+        {page === 'content-review-detail' && (
+          <LeaderContentReview
+            proposal={selectedProposal}
+            onBack={() => setPage('approvals')}
+            onComplete={() => setPage('approvals')}
+            setPage={setPage}
+            notify={setToast}
+          />
+        )}
+        {(page === 'budget-review-detail' || page === 'budget') && (
+          <LeaderBudgetReview
+            proposal={selectedProposal}
+            onBack={() => setPage('approvals')}
+            onComplete={() => setPage('approvals')}
+            setPage={setPage}
+            notify={setToast}
+          />
+        )}
+        {(page === 'assigned-campaigns' || page === 'campaigns') && (
+          <LeaderCampaigns setPage={setPage} notify={setToast} />
+        )}
+        {(page === 'performance' || page === 'reports' || page === 'insights' || page === 'team-tasks') && (
+          <LeaderPerformance setPage={setPage} notify={setToast} />
+        )}
+        {page === 'notifications' && (
+          <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+            <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+              <Heading
+                eyebrow="COMMUNICATION &amp; ALERTS"
+                title="Notifications &amp; Alerts"
+                subtitle="Real-time approval requests, status updates, and AI Engine compute notifications."
+              />
+              <div className="card p-6">
+                <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
+                  All systems are operating normally. No pending urgent notifications.
+                </p>
+                <button className="button primary mt-4" onClick={() => setPage('overview')}>
+                  ← Return to Overview
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {page === 'import' && (
+          <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+        )}
+        {page === 'strategy' && (
+          <StrategyScreen
+            profile={profile}
+            latestRows={latestRows}
+            result={strategy}
+            setResult={setStrategy}
+            notify={setToast}
+          />
+        )}
+        {page === 'content' && (
+          <ContentScreen
+            result={strategy}
+            profile={profile}
+            setPage={setPage}
+            notify={setToast}
+          />
+        )}
+        {page === 'profile' && (
+          <ProfileScreen
+            profile={profile}
+            onboarding={!profile}
+            saveProfile={saveProfile}
+            busy={busy}
+            error={error}
+            cancel={() => setPage('overview')}
+          />
+        )}
+        <Toast message={toast} clear={() => setToast('')} />
+      </Shell>
+    )
+  }
+
+  // ─── 4. MEMBER: Vào giao diện member ──────────────────────────────────────
+  return (
+    <Shell
+      user={user}
+      role="member"
+      profile={profile}
+      page={page}
+      setPage={setPage}
+      logout={logout}
+    >
+      {backendError && <Notice>{backendError}</Notice>}
+      {page === 'overview' && (
+        <MemberDashboard
+          profile={profile}
+          imports={imports}
+          strategy={strategy}
+          setPage={setPage}
+          notify={setToast}
+        />
+      )}
+      {(page === 'tasks' || page === 'emp-tasks') && (
+        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+            <Heading
+              eyebrow="CREATIVE DELIVERABLES"
+              title="My Tasks"
+              subtitle="Content generation and creative review tasks assigned to you."
+            />
+            <div className="card p-6">
+              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
+                You have active tasks waiting for review and copywriting execution.
+              </p>
+              <div className="flex gap-3 mt-4">
+                <button className="button primary" onClick={() => setPage('content')}>
+                  Go to Content Studio →
+                </button>
+                <button className="button subtle" onClick={() => setPage('overview')}>
+                  ← Back to Dashboard
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {(page === 'submissions' || page === 'reports') && (
+        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+            <Heading
+              eyebrow="APPROVAL STATUS"
+              title="My Submissions"
+              subtitle="History of content drafts and proposals submitted for Leader review."
+            />
+            <div className="card p-6">
+              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
+                Check status and feedback on your submitted deliverables.
+              </p>
+              <button className="button primary mt-4" onClick={() => setPage('overview')}>
+                ← Back to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {page === 'assigned-campaigns' && (
+        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+            <Heading
+              eyebrow="SQUAD INVOLVEMENT"
+              title="Assigned Campaigns"
+              subtitle="Active campaigns where you are contributing creative and copy assets."
+            />
+            <div className="card p-6">
+              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
+                Track campaigns linked to your marketing squad.
+              </p>
+              <button className="button primary mt-4" onClick={() => setPage('overview')}>
+                ← Back to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {page === 'notifications' && (
+        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
+          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
+            <Heading
+              eyebrow="FEEDBACK INBOX"
+              title="Notifications &amp; Feedback"
+              subtitle="Leader feedback, revision requests, and proposal status notifications."
+            />
+            <div className="card p-6">
+              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
+                No new unread feedback from your squad leader.
+              </p>
+              <button className="button primary mt-4" onClick={() => setPage('overview')}>
+                ← Back to Dashboard
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
+      {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
+      {page === 'import' && (
+        <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
+      )}
+      {page === 'strategy' && (
+        <StrategyScreen
+          profile={profile}
+          latestRows={latestRows}
+          result={strategy}
+          setResult={setStrategy}
+          notify={setToast}
+        />
+      )}
+      {page === 'content' && (
+        <ContentScreen
+          result={strategy}
+          profile={profile}
+          setPage={setPage}
+          notify={setToast}
+        />
+      )}
+      {page === 'profile' && (
+        <ProfileScreen
+          profile={profile}
+          onboarding={!profile}
+          saveProfile={saveProfile}
+          busy={busy}
+          error={error}
+          cancel={() => setPage('overview')}
+        />
+      )}
+      <Toast message={toast} clear={() => setToast('')} />
+    </Shell>
+  )
 }
 
-export default App
+function WorkspaceEntry() {
+  const auth = useAuth()
+  const [joinUser, setJoinUser] = useState(null)
+  const invitationCallback = new URLSearchParams(window.location.search).has('invitationId')
+  if (auth.user && !auth.platformRole && !auth.passwordSetupRequired && auth.memberships.length > 0 && (joinUser === auth.user.id || invitationCallback)) {
+    return <CompanyJoinPage auth={auth} onBack={() => { window.history.replaceState({}, '', '/'); setJoinUser(null) }} />
+  }
+  return <>
+    {auth.user && !auth.platformRole && auth.memberships.length > 0 && <div className="flex justify-end border-b border-border bg-background p-2 text-foreground"><button className="rounded-lg border border-border px-3 py-2 text-sm hover:bg-muted" onClick={() => setJoinUser(auth.user.id)}>Lời mời và yêu cầu gia nhập công ty</button></div>}
+    {auth.user && auth.memberships.length > 1 && <div className="flex items-center gap-3 border-b border-border bg-background p-2 text-foreground">
+      <label htmlFor="active-workspace">Không gian làm việc</label>
+      <select id="active-workspace" className="rounded border border-border bg-background p-1" value={auth.workspaceId || ''} onChange={event => auth.selectWorkspace(event.target.value)}>
+        <option value="" disabled>Chọn Workspace</option>
+        {auth.memberships.map(item => <option key={item.workspaceId} value={item.workspaceId}>{item.workspaceName}</option>)}
+      </select>
+    </div>}
+    <WorkspaceApp key={String(auth.user?.id || 'signed-out') + ':' + String(auth.workspaceId || 'none')} />
+  </>
+}
+
+function App() {
+  // ─── Development Preview Route (/dashboard-preview) ───────────────────────
+  const isPreviewPath =
+    typeof window !== 'undefined' &&
+    (window.location.pathname === '/dashboard-preview' ||
+      window.location.pathname.startsWith('/dashboard-preview/') ||
+      window.location.hash === '#/dashboard-preview')
+
+  if (isPreviewPath) {
+    if (import.meta.env.DEV) {
+      return <DashboardPreviewPage onExit={() => { window.location.href = '/' }} />
+    }
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#070b14', color: '#f1f5f9', fontFamily: 'sans-serif', padding: 24, textAlign: 'center' }}>
+        <div style={{ maxWidth: 440, padding: 32, background: '#0e1726', border: '1px solid #1e293b', borderRadius: 12 }}>
+          <div style={{ fontSize: 40, marginBottom: 16 }}>🔒</div>
+          <h1 style={{ fontSize: 20, marginBottom: 8, fontWeight: 700 }}>404 — Not Found</h1>
+          <p style={{ color: '#94a3b8', fontSize: 14, marginBottom: 20 }}>
+            The requested development preview page is not accessible in production.
+          </p>
+          <a href="/" style={{ display: 'inline-block', padding: '10px 18px', background: '#4f46e5', color: '#fff', borderRadius: 8, textDecoration: 'none', fontSize: 13, fontWeight: 600 }}>
+            Return to Login
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  return <AuthProvider>{window.location.pathname === '/auth/complete' ? <AuthCompletePage><WorkspaceEntry /></AuthCompletePage> : <WorkspaceEntry />}</AuthProvider>
+}
+
+export default App;

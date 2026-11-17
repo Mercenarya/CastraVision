@@ -39,7 +39,7 @@ def require_workspace_roles(*allowed_roles: str):
             try:
                 context = authenticate_request(request)
             except AuthenticationError as exc:
-                return _error(exc.code, exc.message, 401)
+                return _error(exc.code, exc.message, 503 if exc.code == "AUTH_UNAVAILABLE" else 401)
             except WorkspaceAuthorizationError as exc:
                 return _error(exc.code, exc.message, 403)
             if context.role not in allowed:

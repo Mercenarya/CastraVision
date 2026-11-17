@@ -22,7 +22,9 @@ values
   ('22000000-0000-0000-0000-000000000002', '12000000-0000-0000-0000-000000000002', 'admin'),
   ('22000000-0000-0000-0000-000000000002', '12000000-0000-0000-0000-000000000003', 'admin');
 
-set local role authenticated;
+-- Test the underlying last-admin trigger even for an authorized DB operator.
+-- Authenticated direct writes are separately denied in membership privacy tests.
+set local role service_role;
 select set_config(
   'request.jwt.claims',
   '{"sub":"12000000-0000-0000-0000-000000000001","role":"authenticated"}',
@@ -41,10 +43,11 @@ select throws_ok(
   'demoting the last admin is blocked'
 );
 
--- Test the trigger independently of client-facing RLS. The privacy migration
--- intentionally limits authenticated users to selecting their own membership;
--- cross-member role changes must go through a privileged API/RPC.
-reset role;
+select set_config(
+  'request.jwt.claims',
+  '{"sub":"12000000-0000-0000-0000-000000000003","role":"authenticated"}',
+  true
+);
 select lives_ok(
   $$update public.workspace_members set role = 'manager' where workspace_id = '22000000-0000-0000-0000-000000000002' and user_id = '12000000-0000-0000-0000-000000000002'$$,
   'one of two admins can be demoted'
@@ -61,6 +64,7 @@ select throws_ok(
   'the remaining admin cannot be demoted'
 );
 
+reset role;
 select lives_ok(
   $$delete from public.workspaces where id = '22000000-0000-0000-0000-000000000002'$$,
   'deleting a workspace is allowed to cascade through memberships'

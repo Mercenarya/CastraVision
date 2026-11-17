@@ -102,7 +102,10 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Test
-        run: npm test
+        run: |
+          npm test
+          npm run test:auth
+          npm run test:membership
       - name: Build
         run: npm run build
 

@@ -5,9 +5,10 @@ import Field from '@/components/Field'
 import Notice from '@/components/Notice'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { api } from '@/services/api'
+import { useAuth } from '@/auth/AuthContext'
 
 export default function AuthPage({ mode, setMode, onAuth, backendError }) {
+  const auth = useAuth()
   const signup = mode === 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,6 +16,7 @@ export default function AuthPage({ mode, setMode, onAuth, backendError }) {
   const [showPassword, setShowPassword] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  const [notice, setNotice] = useState('')
 
   async function submit(event) {
     event.preventDefault()
@@ -22,11 +24,13 @@ export default function AuthPage({ mode, setMode, onAuth, backendError }) {
     if (signup && password !== confirm) return setError('Mật khẩu xác nhận không khớp.')
     setBusy(true)
     try {
-      const data = await api(`auth/${signup ? 'register' : 'login'}/`, {
-        method: 'POST',
-        body: JSON.stringify({ email, password }),
-      })
-      onAuth(data.user)
+      if (signup) {
+        const data = await auth.signUp(email.trim(), password)
+        if (!data.session) setNotice('Kiểm tra email để xác nhận tài khoản, sau đó đăng nhập.')
+      } else {
+        await auth.signIn(email.trim(), password)
+        onAuth?.()
+      }
     } catch (cause) {
       setError(cause.message)
     } finally {
@@ -84,6 +88,7 @@ export default function AuthPage({ mode, setMode, onAuth, backendError }) {
               </Field>
             )}
             {(error || backendError) && <Notice>{error || backendError}</Notice>}
+            {notice && <Notice>{notice}</Notice>}
             <Button type="submit" size="lg" className="w-full bg-[#6267ed] text-white shadow-lg shadow-[#6267ed]/20 hover:bg-[#6267ed]/90" disabled={busy}>
               {busy ? 'Đang xử lý…' : signup ? 'Tạo tài khoản →' : 'Đăng nhập →'}
             </Button>
@@ -115,6 +120,6 @@ export default function AuthPage({ mode, setMode, onAuth, backendError }) {
 AuthPage.propTypes = {
   mode: PropTypes.oneOf(['login', 'signup']).isRequired,
   setMode: PropTypes.func.isRequired,
-  onAuth: PropTypes.func.isRequired,
+  onAuth: PropTypes.func,
   backendError: PropTypes.string,
 }

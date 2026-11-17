@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
-import { can, defaultPage } from './permissions'
+import { can, defaultPage, resolveWorkspaceRole } from './permissions'
 import { navigationFor } from '../navigation'
 
 describe('actor permission map', () => {
+  it('resolves only explicit workspace roles and defaults safely', () => {
+    expect(resolveWorkspaceRole({ id: 'user' }, { role: 'manager' })).toBe('manager')
+    expect(resolveWorkspaceRole({ id: 'user' }, { role: 'admin' })).toBe('admin')
+    expect(resolveWorkspaceRole({ role: 'admin', email: 'manager@example.com' })).toBeNull()
+    expect(resolveWorkspaceRole(null)).toBeNull()
+  })
+
   it('gives Admin governance permissions', () => {
     expect(can('admin', 'members:manage')).toBe(true)
     expect(can('admin', 'approval:write')).toBe(true)
@@ -29,10 +36,10 @@ describe('actor permission map', () => {
   })
 
   it('locks navigation to onboarding until the business profile exists', () => {
-    expect(navigationFor('admin', true).map(([page]) => page)).toEqual(['onboarding'])
+    expect(navigationFor('admin', true).map(([page]) => page)).toEqual(['emp-onboarding'])
     expect(navigationFor('admin', false).map(([page]) => page)).not.toContain('members')
     expect(navigationFor('admin', false).map(([page]) => page)).not.toContain('audit')
-    expect(navigationFor('manager', false).map(([page]) => page)).toContain('approvals')
-    expect(navigationFor('member', false).map(([page]) => page)).not.toContain('approvals')
+    expect(navigationFor('manager', false).map(([page]) => page)).toContain('emp-approvals')
+    expect(navigationFor('member', false).map(([page]) => page)).not.toContain('emp-approvals')
   })
 })

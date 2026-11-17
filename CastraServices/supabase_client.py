@@ -13,8 +13,17 @@ from django.conf import settings
 class SupabaseAPIError(RuntimeError):
     """A sanitized Data API failure safe to expose to application code."""
 
+    def __init__(self, message, *, code="SUPABASE_UNAVAILABLE", status=502):
+        super().__init__(message)
+        self.code = code
+        self.status = status
+
 
 class MembershipNotFound(SupabaseAPIError):
+    pass
+
+
+class MembershipAmbiguous(SupabaseAPIError):
     pass
 
 
@@ -57,35 +66,80 @@ class SupabaseDataClient:
                 json=json,
                 timeout=settings.SUPABASE_HTTP_TIMEOUT_SECONDS,
             )
+            if response.is_error:
+                safe_codes = {
+                    "AUTH_REQUIRED": 401,
+                    "PERMISSION_DENIED": 403,
+                    "PASSWORD_SETUP_REQUIRED": 403,
+                    "VALIDATION_ERROR": 400,
+                    "REQUEST_CLOSED": 409,
+                    "ALREADY_MEMBER": 409,
+                    "INVITATION_CONFLICT": 409,
+                    "INVITATION_EXPIRED": 410,
+                    "INVITATION_REVOKED": 410,
+                    "RATE_LIMITED": 429,
+                }
+                try:
+                    safe_code = response.json().get("message")
+                except (ValueError, AttributeError):
+                    safe_code = None
+                if safe_code in safe_codes:
+                    raise SupabaseAPIError(
+                        "Membership request rejected.", code=safe_code, status=safe_codes[safe_code]
+                    )
             response.raise_for_status()
             return response.json() if response.content else None
         except (httpx.HTTPError, ValueError) as exc:
             raise SupabaseAPIError("Supabase Data API request failed.") from exc
 
-    def workspace_membership(
-        self, user_id: UUID, workspace_id: UUID
-    ) -> WorkspaceMembership:
+    def rpc(self, name, params=None):
+        if not name.startswith("membership_") or not name.replace("_", "").isalnum():
+            raise SupabaseAPIError("Unsupported product RPC.")
+        return self.request("POST", "rpc/" + name, json=params or {})
+
+    def single_workspace_membership(self, user_id: UUID) -> WorkspaceMembership:
+        rows = self.workspace_memberships(user_id)
+        if not rows:
+            raise MembershipNotFound("No workspace membership exists for this user.")
+        if len(rows) != 1:
+            raise MembershipAmbiguous("Select an active workspace.")
+        return WorkspaceMembership(UUID(rows[0]["workspace_id"]), rows[0]["role"])
+
+    def workspace_memberships(self, user_id: UUID) -> list[dict]:
         rows = self.request(
             "GET",
             "workspace_members",
             params={
-                "select": "workspace_id,role",
+                "select": "workspace_id,role,workspaces(id,name)",
                 "user_id": f"eq.{user_id}",
-                "workspace_id": f"eq.{workspace_id}",
-                "limit": "1",
             },
         )
-        if not isinstance(rows, list) or not rows:
-            raise MembershipNotFound("No workspace membership exists for this user.")
-        row = rows[0]
-        try:
-            workspace_id = UUID(str(row["workspace_id"]))
-            role = str(row["role"])
-        except (KeyError, TypeError, ValueError) as exc:
-            raise SupabaseAPIError("Workspace membership response is invalid.") from exc
-        if role not in {"admin", "manager", "member"}:
-            raise SupabaseAPIError("Workspace membership role is invalid.")
-        return WorkspaceMembership(workspace_id=workspace_id, role=role)
+        if not isinstance(rows, list):
+            raise SupabaseAPIError("Workspace membership response is invalid.")
+        result = []
+        for row in rows:
+            try:
+                workspace_id = UUID(str(row["workspace_id"]))
+                role = str(row["role"])
+            except (KeyError, TypeError, ValueError) as exc:
+                raise SupabaseAPIError("Workspace membership response is invalid.") from exc
+            if role not in {"admin", "manager", "member"}:
+                raise SupabaseAPIError("Workspace membership role is invalid.")
+            result.append(
+                {
+                    "workspace_id": str(workspace_id),
+                    "role": role,
+                    "workspace_name": (row.get("workspaces") or {}).get("name", "Workspace"),
+                }
+            )
+        return result
+
+    def workspace_membership(self, user_id: UUID, workspace_id: UUID) -> WorkspaceMembership:
+        rows = self.workspace_memberships(user_id)
+        for row in rows:
+            if UUID(row["workspace_id"]) == workspace_id:
+                return WorkspaceMembership(workspace_id, row["role"])
+        raise MembershipNotFound("This identity has no membership in the selected Workspace.")
 
 
 def user_client(access_token: str) -> SupabaseDataClient:

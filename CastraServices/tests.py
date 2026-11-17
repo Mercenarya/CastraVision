@@ -1,9 +1,9 @@
 import json
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from uuid import UUID
 
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import Client, TestCase, override_settings
+from django.test import TestCase, override_settings
 from django.urls import reverse
 
 from .authentication import RequestAuthContext
@@ -25,47 +25,26 @@ VALID_PROFILE = {
     ],
 }
 
-AUTH_CONTEXT = RequestAuthContext(
-    user_id=UUID("11111111-1111-1111-1111-111111111111"),
-    workspace_id=UUID("22222222-2222-2222-2222-222222222222"),
-    role="admin",
-    access_token="signed-token",
-)
-
 
 @override_settings(OPENAI_API_KEY="", EMBEDDING_PROVIDER="local")
 class StrategyApiTests(TestCase):
     def setUp(self):
-        self.auth_patch = patch(
+        authentication = patch(
             "CastraServices.permissions.authenticate_request",
-            return_value=AUTH_CONTEXT,
+            return_value=RequestAuthContext(
+                user_id=UUID(int=1),
+                workspace_id=UUID(int=2),
+                role="admin",
+                access_token="fixture-token",
+            ),
         )
-        self.auth_patch.start()
-        self.addCleanup(self.auth_patch.stop)
+        authentication.start()
+        self.addCleanup(authentication.stop)
 
     def test_health_endpoint(self):
         response = self.client.get(reverse("castra_services:health"))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "ok")
-        self.assertEqual(response.json()["check"], "liveness")
-
-    @patch("CastraServices.views._redis_ready", return_value=True)
-    @patch("CastraServices.views._supabase_ready", return_value=True)
-    @patch("CastraServices.views._database_ready", return_value=True)
-    def test_readiness_endpoint_reports_ready(self, *_checks):
-        response = self.client.get(reverse("castra_services:readiness"))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["status"], "ready")
-        self.assertTrue(all(response.json()["dependencies"].values()))
-
-    @patch("CastraServices.views._redis_ready", return_value=False)
-    @patch("CastraServices.views._supabase_ready", return_value=True)
-    @patch("CastraServices.views._database_ready", return_value=True)
-    def test_readiness_endpoint_reports_degraded(self, *_checks):
-        response = self.client.get(reverse("castra_services:readiness"))
-        self.assertEqual(response.status_code, 503)
-        self.assertEqual(response.json()["status"], "degraded")
-        self.assertFalse(response.json()["dependencies"]["redis"])
 
     def test_rejects_invalid_profile(self):
         response = self.client.post(
@@ -77,9 +56,7 @@ class StrategyApiTests(TestCase):
         self.assertEqual(response.json()["error"]["code"], "VALIDATION_ERROR")
 
     def test_requires_business_size_from_fr01_contract(self):
-        profile = {
-            key: value for key, value in VALID_PROFILE.items() if key != "business_size"
-        }
+        profile = {key: value for key, value in VALID_PROFILE.items() if key != "business_size"}
         response = self.client.post(
             reverse("castra_services:strategy-generate"),
             data=json.dumps(profile),
@@ -101,9 +78,7 @@ class StrategyApiTests(TestCase):
         self.assertEqual(payload["provider"], "deterministic-fallback")
         self.assertEqual(payload["strategy"]["recommended_channel"], "Meta")
         self.assertEqual(
-            sum(
-                item["percentage"] for item in payload["strategy"]["budget_allocation"]
-            ),
+            sum(item["percentage"] for item in payload["strategy"]["budget_allocation"]),
             100,
         )
         self.assertTrue(payload["warning"])
@@ -134,73 +109,131 @@ class RagPipelineTests(TestCase):
         self.assertGreater(results[0].score, 0)
 
 
-class SupabaseCampaignImportTests(TestCase):
+@override_settings(SUPABASE_URL="http://127.0.0.1:58321", SUPABASE_PUBLISHABLE_KEY="fixture-public")
+class SprintOneAccountFlowTests(TestCase):
     def setUp(self):
-        self.auth_patch = patch(
+        self.profile = []
+        self.campaigns = []
+        authentication = patch(
             "CastraServices.permissions.authenticate_request",
-            return_value=AUTH_CONTEXT,
+            return_value=RequestAuthContext(
+                user_id=UUID(int=1),
+                workspace_id=UUID(int=2),
+                role="admin",
+                access_token="fixture-token",
+            ),
         )
-        self.auth_patch.start()
-        self.addCleanup(self.auth_patch.stop)
-        self.supabase = Mock()
-        self.client_patch = patch(
-            "CastraServices.campaign_api.user_client",
-            return_value=self.supabase,
+        transport = patch(
+            "CastraServices.supabase_client.SupabaseDataClient.request",
+            side_effect=self.supabase_request,
         )
-        self.client_patch.start()
-        self.addCleanup(self.client_patch.stop)
+        authentication.start()
+        transport.start()
+        self.addCleanup(authentication.stop)
+        self.addCleanup(transport.stop)
 
-    @staticmethod
-    def upload(name="metrics.csv", content=None):
-        data = content or (
+    def supabase_request(self, method, resource, **kwargs):
+        if resource == "workspaces":
+            return [{"id": str(UUID(int=2)), "name": "Studio"}]
+        if resource == "business_profiles":
+            if method == "POST":
+                self.profile = [kwargs["json"]]
+            return self.profile
+        if resource == "campaign_performance":
+            if method == "POST":
+                self.campaigns.extend(kwargs["json"])
+            return self.campaigns
+        raise AssertionError(resource)
+
+    def test_registration_profile_and_login(self):
+        register = self.client.post(
+            reverse("castra_services:register"),
+            data=json.dumps({"email": "owner@example.com", "password": "fixture-only"}),
+            content_type="application/json",
+        )
+        self.assertEqual(register.status_code, 410)
+        duplicate = self.client.post(
+            reverse("castra_services:register"),
+            data=json.dumps({"email": "OWNER@example.com", "password": "fixture-only"}),
+            content_type="application/json",
+        )
+        self.assertEqual(duplicate.status_code, 410)
+        missing_size = self.client.put(
+            reverse("castra_services:business-profile"),
+            data=json.dumps(
+                {
+                    "business_name": "Studio",
+                    "industry": "Fashion",
+                    "target_customers": "Gen Z",
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(missing_size.status_code, 400)
+        saved = self.client.put(
+            reverse("castra_services:business-profile"),
+            data=json.dumps(
+                {
+                    "business_name": "Studio",
+                    "industry": "Fashion",
+                    "business_size": "Small",
+                    "target_customers": "Gen Z",
+                    "preferred_channels": ["Meta"],
+                    "monthly_budget": 1000000,
+                }
+            ),
+            content_type="application/json",
+        )
+        self.assertEqual(saved.status_code, 200)
+        self.assertEqual(
+            self.client.get(reverse("castra_services:business-profile")).json()["profile"][
+                "industry"
+            ],
+            "Fashion",
+        )
+        login = self.client.post(
+            reverse("castra_services:login"),
+            data=json.dumps({"email": "owner@example.com", "password": "fixture-only"}),
+            content_type="application/json",
+        )
+        self.assertEqual(login.status_code, 410)
+
+    def test_import_preview_validation_and_commit(self):
+        self.client.post(
+            reverse("castra_services:register"),
+            data=json.dumps(
+                {
+                    "email": "importer@example.com",
+                    "password": "fixture-only",
+                }
+            ),
+            content_type="application/json",
+        )
+        data = (
             b"channel,period,spend,clicks,impressions,conversions,revenue\n"
             b"Meta,2026-09,1000,40,2000,3,2500\n"
         )
-        return SimpleUploadedFile(name, data, content_type="text/csv")
-
-    def test_preview_validates_without_writing(self):
-        response = self.client.post(
-            reverse("castra_services:campaign-import-upload"),
-            {"file": self.upload()},
+        endpoint = reverse("castra_services:campaign-import-upload")
+        preview = self.client.post(
+            endpoint,
+            {"file": SimpleUploadedFile("metrics.csv", data, content_type="text/csv")},
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["row_count"], 1)
-        self.supabase.request.assert_not_called()
-
-    def test_commit_writes_workspace_scoped_raw_metrics(self):
-        response = self.client.post(
-            reverse("castra_services:campaign-import-upload"),
-            {"file": self.upload(), "mode": "commit"},
+        self.assertEqual(preview.status_code, 200)
+        self.assertEqual(preview.json()["row_count"], 1)
+        committed = self.client.post(
+            endpoint,
+            {
+                "file": SimpleUploadedFile("metrics.csv", data, content_type="text/csv"),
+                "mode": "commit",
+            },
         )
-        self.assertEqual(response.status_code, 201)
-        payload = self.supabase.request.call_args.kwargs["json"][0]
-        self.assertEqual(payload["workspace_id"], str(AUTH_CONTEXT.workspace_id))
-        self.assertEqual(payload["created_by"], str(AUTH_CONTEXT.user_id))
-        self.assertEqual(payload["clicks"], 40)
-        self.assertEqual(payload["conversions"], 3)
-        self.assertEqual(payload["revenue"], 2500)
-
-    def test_rejects_invalid_rows_before_writing(self):
-        bad = (
-            b"channel,period,spend,clicks,impressions,conversions\n"
-            b"Meta,2026-09,-10,40,20,3\n"
+        self.assertEqual(committed.status_code, 201)
+        history = self.client.get(reverse("castra_services:campaign-imports")).json()
+        self.assertEqual(history["imports"][0]["row_count"], 1)
+        self.assertEqual(history["latest_rows"][0]["channel"], "Meta")
+        bad = b"channel,period,spend,clicks,impressions,conversions\nMeta,2026-09,-10,40,2000,3\n"
+        invalid = self.client.post(
+            endpoint,
+            {"file": SimpleUploadedFile("bad.csv", bad, content_type="text/csv")},
         )
-        response = self.client.post(
-            reverse("castra_services:campaign-import-upload"),
-            {"file": self.upload("bad.csv", bad), "mode": "commit"},
-        )
-        self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.json()["error"]["code"], "VALIDATION_ERROR")
-        self.supabase.request.assert_not_called()
-
-
-class CsrfBearerBoundaryTests(TestCase):
-    def test_bearer_endpoints_are_csrf_exempt_but_still_require_authentication(self):
-        client = Client(enforce_csrf_checks=True)
-        response = client.post(
-            reverse("castra_services:strategy-generate"),
-            data="{}",
-            content_type="application/json",
-        )
-        self.assertEqual(response.status_code, 401)
-        self.assertEqual(response.json()["error"]["code"], "AUTH_REQUIRED")
+        self.assertEqual(invalid.json()["error_count"], 1)

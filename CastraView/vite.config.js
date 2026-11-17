@@ -1,23 +1,39 @@
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
 
-const frontendRoot = dirname(fileURLToPath(import.meta.url))
-const projectRoot = resolve(frontendRoot, '..')
+const configDir = dirname(fileURLToPath(import.meta.url))
+const projectRoot = resolve(configDir, '..')
 
-// https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, projectRoot, 'VITE_')
+  const env = loadEnv(mode, projectRoot, ['VITE_', 'SUPABASE_'])
+  const supabaseUrl = env.VITE_SUPABASE_URL || env.SUPABASE_URL || ''
+  const supabaseKey =
+    env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    env.SUPABASE_PUBLISHABLE_KEY ||
+    env.VITE_SUPABASE_ANON_KEY ||
+    env.SUPABASE_ANON_KEY ||
+    ''
 
   return {
     envDir: projectRoot,
-    plugins: [react()],
+    envPrefix: ['VITE_'],
+
+    define: {
+      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(supabaseUrl),
+      'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify(supabaseKey),
+    },
+
+    plugins: [tailwindcss(), react()],
+
     resolve: {
       alias: {
-        '@': resolve(frontendRoot, 'src'),
+        '@': resolve(configDir, 'src'),
       },
     },
+
     server: {
       host: '0.0.0.0',
       proxy: {

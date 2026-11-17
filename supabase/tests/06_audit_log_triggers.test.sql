@@ -68,6 +68,9 @@ values (
   'sme'
 );
 
+-- Membership writes now go through definer RPCs. Keep the Admin JWT while
+-- using the fixture owner to exercise the INSERT trigger without reopening ACLs.
+reset role;
 insert into public.workspace_members (
   workspace_id, user_id, role, invited_email
 )
@@ -77,6 +80,7 @@ values (
   'member',
   'target-member@example.test'
 );
+set local role authenticated;
 
 insert into public.approvals (
   id, workspace_id, target_type, target_id, status

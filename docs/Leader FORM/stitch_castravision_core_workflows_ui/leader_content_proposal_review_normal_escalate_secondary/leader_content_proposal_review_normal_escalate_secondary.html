@@ -1,0 +1,548 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-tertiary-fixed": "#23005c",
+          "surface-container-high": "#262a35",
+          "secondary-fixed-dim": "#4cd7f6",
+          "on-primary": "#1000a9",
+          "on-error-container": "#ffdad6",
+          "surface-container-low": "#171b26",
+          "secondary-container": "#03b5d3",
+          "on-tertiary-container": "#340080",
+          "inverse-primary": "#494bd6",
+          "error": "#ffb4ab",
+          "on-surface": "#dfe2f1",
+          "surface-dim": "#0f131d",
+          "primary-fixed-dim": "#c0c1ff",
+          "surface-tint": "#c0c1ff",
+          "on-primary-fixed-variant": "#2f2ebe",
+          "error-container": "#93000a",
+          "tertiary": "#d0bcff",
+          "on-tertiary-fixed-variant": "#5516be",
+          "surface-bright": "#353944",
+          "on-secondary-fixed": "#001f26",
+          "inverse-on-surface": "#2c303b",
+          "tertiary-fixed-dim": "#d0bcff",
+          "inverse-surface": "#dfe2f1",
+          "on-error": "#690005",
+          "on-surface-variant": "#c7c4d7",
+          "primary": "#c0c1ff",
+          "surface-container": "#1c1f2a",
+          "primary-container": "#8083ff",
+          "on-primary-container": "#0d0096",
+          "tertiary-fixed": "#e9ddff",
+          "tertiary-container": "#a078ff",
+          "secondary": "#4cd7f6",
+          "on-primary-fixed": "#07006c",
+          "on-background": "#dfe2f1",
+          "surface": "#0f131d",
+          "on-secondary-fixed-variant": "#004e5c",
+          "on-secondary": "#003640",
+          "surface-container-highest": "#313540",
+          "on-secondary-container": "#00424e",
+          "primary-fixed": "#e1e0ff",
+          "surface-container-lowest": "#0a0e18",
+          "secondary-fixed": "#acedff",
+          "outline": "#908fa0",
+          "outline-variant": "#464554",
+          "surface-variant": "#313540",
+          "background": "#0f131d",
+          "on-tertiary": "#3c0091"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-md": "1rem",
+          "space-sm": "0.5rem",
+          "space-xl": "2rem",
+          "space-xs": "0.25rem",
+          "space-lg": "1.5rem",
+          "gutter": "1.5rem",
+          "margin": "2rem",
+          "margin-mobile": "1rem",
+          "gutter-mobile": "0.75rem"
+        },
+        "fontFamily": {
+          "body-lg": ["Inter"],
+          "body-md": ["Inter"],
+          "headline-sm": ["Plus Jakarta Sans"],
+          "label-lg": ["Inter"],
+          "label-sm": ["Inter"],
+          "headline-lg-mobile": ["Plus Jakarta Sans"],
+          "headline-xl-mobile": ["Plus Jakarta Sans"],
+          "body-sm": ["Inter"],
+          "headline-lg": ["Plus Jakarta Sans"],
+          "label-md": ["Inter"],
+          "headline-xl": ["Plus Jakarta Sans"],
+          "headline-md": ["Plus Jakarta Sans"]
+        },
+        "fontSize": {
+          "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+          "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+          "headline-sm": ["16px", {"lineHeight": "24px", "fontWeight": "600"}],
+          "label-lg": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+          "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600"}],
+          "headline-lg-mobile": ["22px", {"lineHeight": "30px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+          "headline-xl-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+          "body-sm": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+          "headline-lg": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+          "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+          "headline-xl": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+          "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+        }
+      }
+    }
+  };</script></head><body class="bg-surface font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 bottom-0 w-[260px] bg-surface-container-low z-50 flex flex-col justify-between border-r border-outline-variant"><div class="flex flex-col"><div class="h-16 px-space-md flex items-center justify-between border-b border-outline-variant"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container"><span class="material-symbols-outlined text-[20px]">visibility</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-tight">CastraVision</span><span class="font-label-sm text-[10px] text-secondary font-semibold tracking-wider uppercase">SME AI ENGINE</span></div></div><span class="px-2 py-0.5 rounded-full bg-secondary-container/20 border border-secondary text-secondary font-label-sm text-label-sm font-semibold tracking-wider uppercase">LEADER</span></div><nav class="px-space-sm py-space-md flex flex-col gap-1 overflow-y-auto" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-lg"><div class="flex items-center justify-between px-space-sm pb-1"><span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Workspace Navigation</span><span class="px-1.5 py-0.5 rounded bg-surface-container-high text-outline font-label-sm text-[10px] font-semibold uppercase">Leader</span></div><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="overview" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">dashboard</span><span class="font-label-lg text-label-lg">Overview</span></div></a><a aria-current="page" class="flex items-center justify-between px-space-sm py-2 transition-colors bg-primary-container text-on-primary-container font-semibold rounded-lg" data-path="approvals" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">checklist</span><span class="font-label-lg text-label-lg">Approvals</span></div><span class="w-5 h-5 flex items-center justify-center rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold">3</span></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="my-proposals" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">pending_actions</span><span class="font-label-lg text-label-lg">My Proposals</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="campaigns" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">campaign</span><span class="font-label-lg text-label-lg">Campaigns</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="strategy-studio" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">hub</span><span class="font-label-lg text-label-lg">Strategy Studio</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="content-generation" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">auto_awesome</span><span class="font-label-lg text-label-lg">Content Gen</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="campaign-import" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">publish</span><span class="font-label-lg text-label-lg">Campaign Import</span></div></a><a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="performance-insights" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-[20px]">insights</span><span class="font-label-lg text-label-lg">Performance &amp; Insights</span></div></a><a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span class="font-label-lg text-label-lg">Account Settings</span></a></nav></div><div class="p-space-sm border-t border-outline-variant"><button class="w-full flex items-center justify-between p-2 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors text-left" type="button"><div class="flex items-center gap-space-sm min-w-0"><div class="w-7 h-7 rounded bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs uppercase shrink-0">AC</div><div class="min-w-0 flex flex-col"><div class="flex items-center gap-1"><span class="font-label-md text-label-md text-on-surface truncate font-semibold">Acme Corp</span><span class="px-1 rounded bg-secondary-container/20 text-secondary text-[10px] font-semibold">LEADER</span></div><span class="font-label-sm text-label-sm text-outline truncate">acme-corp-prod-01</span></div></div><span class="material-symbols-outlined text-outline text-[18px]">unfold_more</span></button></div></aside><div class="pl-[260px]"><header class="fixed top-0 left-[260px] right-0 h-16 bg-surface-container-low border-b border-outline-variant z-40 px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-xs font-label-md text-label-md"><span class="text-on-surface-variant">Leader Workspace</span><span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span><span class="text-on-surface-variant">Approvals</span><span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span><span class="text-on-surface font-semibold">Content Review (Normal Flow)</span></div></div><div class="flex items-center gap-space-md"><div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-container border border-outline-variant"><span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span><span class="font-label-sm text-label-sm text-on-surface-variant">All systems nominal</span></div><div class="relative"><button class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span></button><span class="absolute 1.5 -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-error text-on-error font-label-sm text-label-sm font-bold flex items-center justify-center">5</span></div><div class="h-6 w-[1px] bg-outline-variant"></div><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xs shrink-0">DK</div><div class="hidden md:flex flex-col text-left"><div class="flex items-center gap-1.5"><span class="font-label-md text-label-md text-on-surface font-semibold leading-tight">David Kross</span><span class="px-1.5 py-0.2 rounded bg-secondary-container/20 text-secondary font-label-sm text-[10px] font-semibold uppercase">Leader</span></div><span class="font-label-sm text-label-sm text-on-surface-variant leading-tight">Workspace Leader</span></div></div></div></header><main class="w-full pt-16 bg-surface min-h-screen"><div class="flex flex-col w-full">
+<div class="px-space-md md:px-space-lg lg:px-margin py-space-lg max-w-[1440px] mx-auto w-full flex flex-col gap-space-lg pb-32">
+<!-- Top Action Breadcrumb & Stage Gate Banner -->
+<div class="flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<a class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span class="">Back to Queue</span>
+</a>
+<div class="h-4 w-px bg-outline-variant"></div>
+<div class="flex items-center gap-space-sm">
+<span class="font-label-sm text-label-sm tracking-wider uppercase text-outline">Proposal ID</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold tracking-tight">PRP-8402</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-secondary">verified_user</span>
+<span class="">FR04 Stage-Gate: Manager Review</span>
+</div>
+<div class="flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-500/20 text-amber-300 font-label-sm text-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+<span class="">PENDING APPROVAL</span>
+</div>
+<button class="px-3 py-1 rounded-lg border border-outline-variant hover:bg-surface-container-high text-tertiary font-label-md text-label-md font-semibold transition-colors flex items-center gap-1.5" type="button"><span class="material-symbols-outlined text-[16px]">north_east</span><span class="">Escalate</span></button></div>
+</div>
+<!-- Metadata Strip / Campaign Context Card -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md md:p-space-lg shadow-sm">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-space-md">
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Campaign Creator</span>
+<div class="flex items-center gap-2 min-w-0">
+<span class="w-5 h-5 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-[10px] shrink-0">SJ</span>
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Sarah Jenkins</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Campaign Lead</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Engine / Generation</span>
+<span class="font-label-md text-label-md text-secondary font-medium truncate">CastraLM-V4</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">AI Creative Engine</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Generated Timestamp</span>
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Oct 24, 2026</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">14:32:08 UTC</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Target Segment</span>
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Urban Activewear</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Demographic 18–34</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Placement Channel</span>
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Meta &amp; Google Ads</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">FB / IG Dynamic Feed</span>
+</div>
+<div class="flex flex-col gap-1 min-w-0">
+<span class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Draft Version</span>
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-surface-container-high text-primary font-label-sm text-label-sm font-semibold">v1.0</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Baseline</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Original Generation</span>
+</div>
+</div>
+</div>
+<!-- Main Workspace Two-Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- LEFT COLUMN: Payload and Creative Artifacts (8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- Selected Content Variant Card -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<div class="px-space-lg py-4 bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary text-[20px]">description</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Selected Content Variant (Primary v1.0)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded bg-surface-container-highest text-on-surface-variant font-label-sm text-label-sm font-semibold tracking-wider uppercase">en-US</span>
+<span class="px-2.5 py-0.5 rounded bg-secondary-container/20 text-secondary font-label-sm text-label-sm font-semibold tracking-wider uppercase">Content</span>
+</div>
+</div>
+<div class="p-space-lg flex flex-col gap-space-lg">
+<!-- Ad Headline Block -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Ad Headline</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">64 / 90 chars</span>
+</div>
+<div class="p-3.5 bg-surface-container rounded-lg">
+<p class="font-headline-md text-headline-md text-on-surface font-semibold tracking-tight">Unstoppable Momentum. Built for High-Performance Training.</p>
+</div>
+</div>
+<!-- Primary Description / Body Copy Block -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Primary Description Copy</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">194 / 280 chars</span>
+</div>
+<div class="p-3.5 bg-surface-container rounded-lg">
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+                  Engineered with proprietary thermal-weave fabrics that adapt to your workout intensity. Discover the next generation of performance apparel with zero friction and complimentary express delivery.
+                </p>
+</div>
+</div>
+<!-- Call To Action & Destination Block -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<div class="flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Call To Action (CTA)</span>
+<div class="p-3 bg-surface-container rounded-lg flex items-center justify-between">
+<div class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold flex items-center gap-1.5 shadow-sm shrink-0"><span class="">Shop Collection Now</span><span class="material-symbols-outlined text-[16px]">arrow_forward</span></div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Standard Pill</span>
+</div>
+</div>
+<div class="flex flex-col gap-1.5 min-w-0">
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Destination URL</span>
+<div class="p-3 bg-surface-container rounded-lg flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-outline text-[18px] shrink-0">link</span>
+<a class="font-body-sm text-body-sm text-secondary hover:underline truncate" href="https://acmeactive.com/collections/q3-performance" rel="noopener noreferrer" target="_blank">
+                    https://acmeactive.com/collections/q3-performance
+                  </a>
+</div>
+</div>
+</div>
+<!-- Target Audience Keywords / Tags -->
+<div class="flex flex-col gap-2">
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase">Campaign Audience Tokens</span>
+<div class="flex flex-wrap gap-2">
+<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">#activewear</span>
+<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">#athletic-training</span>
+<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">#moisture-wicking</span>
+<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface font-label-sm text-label-sm">#performance-apparel</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Recommended Creative Asset Card -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<div class="px-space-lg py-4 bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-secondary text-[20px]">image</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Recommended Creative Asset</span>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-label-sm text-label-sm font-semibold">Active Match</span>
+</div>
+<div class="p-space-lg">
+<div class="flex flex-col md:flex-row gap-space-lg items-start">
+<!-- Visual Container -->
+<div class="w-full md:w-56 aspect-square rounded-lg bg-surface-container overflow-hidden shrink-0 relative group">
+<img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" data-alt="Editorial commercial product photograph of a modern high-performance aerodynamic running shoe, matte obsidian black finish with neon cyan dynamic sole accents. Clean dark slate background, dramatic low studio rim lighting, 4k ultra-high definition product shot." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb2y5WTs8eCx2SGfr2-XaheQo4kJXEajGZ-xF2ntlnySMwommCO-cprWu9HkPwBfuEIGpU-xuauN89XJeDfvrI6YShQtdSpYyEZREPUu5elpb1lTtOgyHrgZpTntPeGmvhp03yWXLC3yUy6E01LJaZkPsq2u3cSybZp57QtmXIOgOtu8Wzs3CkLc3jcRE4F1ofYVx7PFDMwWmvjWXmQka_AJnBEpoL8Po0EeRoNjoAZcAr9PB4bQE9">
+<div class="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-surface-container-lowest/90 text-on-surface font-label-sm text-label-sm backdrop-blur-sm">
+                  1:1 Ratio
+                </div>
+</div>
+<!-- Metadata & Details -->
+<div class="flex flex-col justify-between self-stretch gap-space-md min-w-0">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold">Asset #01 (AirStride V2 Black Edition)</span>
+<span class="px-2 py-0.5 rounded bg-surface-container text-secondary font-label-sm text-label-sm">Primary</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                    High-contrast product studio rendering formatted in 1:1 ratio for mobile feed optimization. Balanced for Instagram Dynamic Feed and Facebook Carousel tiles.
+                  </p>
+</div>
+<div class="grid grid-cols-3 gap-space-sm p-3 rounded-lg bg-surface-container">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase">Aspect Ratio</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">1:1 Square</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase">Resolution</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">2048 x 2048</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase">Format</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">WEBP / Lossless</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-label-sm text-label-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">fullscreen</span>
+<span class="">Inspect Raw Asset</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors font-label-sm text-label-sm flex items-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+<span class="">Swap Variant</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Governance, Stage-Gate Checklist & Guardrails (4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Card 1: Manager Stage-Gate Verification -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<div class="px-space-md py-3.5 bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment_turned_in</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Stage-Gate Verification</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Stage 4 / 4</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-md">
+<div class="flex items-center gap-3 p-3 bg-surface-container rounded-lg">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xs shrink-0">
+                DK
+              </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">David Kross</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Workspace Manager · Authorized Reviewer</span>
+</div>
+</div>
+<div class="flex flex-col gap-2.5">
+<label class="flex items-start gap-3 p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer select-none">
+<input checked="" class="mt-0.5 w-4 h-4 rounded text-primary focus:ring-0 focus:ring-offset-0 bg-surface-container-lowest" type="checkbox">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Brand Guidelines &amp; Tone</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Complies with energetic athletic positioning</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer select-none">
+<input checked="" class="mt-0.5 w-4 h-4 rounded text-primary focus:ring-0 focus:ring-offset-0 bg-surface-container-lowest" type="checkbox">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Platform Constraints Respected</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Headline (64c) and description (194c) within limits</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer select-none">
+<input checked="" class="mt-0.5 w-4 h-4 rounded text-primary focus:ring-0 focus:ring-offset-0 bg-surface-container-lowest" type="checkbox">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-medium">Target Destination URL</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Active HTTPS destination with UTM tracking</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors cursor-pointer select-none">
+<input class="mt-0.5 w-4 h-4 rounded text-primary focus:ring-0 focus:ring-offset-0 bg-surface-container-lowest" id="humanSignoffCheck" type="checkbox">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-semibold text-primary">Affirmative Manager Signoff</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Mandatory verification prior to campaign dispatch</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<!-- Card 2: Parameters & Campaign Guardrails -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<div class="px-space-md py-3.5 bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">security</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Campaign Guardrails</span>
+</div>
+<span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-label-sm text-label-sm font-semibold">4 / 4 Passed</span>
+</div>
+<div class="p-space-md flex flex-col gap-space-md">
+<div class="grid grid-cols-2 gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase">Target Tone</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">Energetic, Premium</span>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container flex flex-col">
+<span class="font-label-sm text-label-sm text-outline uppercase">Model Temperature</span>
+<span class="font-label-md text-label-md text-on-surface font-medium">0.65 (Deterministic)</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between p-2 rounded bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface">Trademark Safety</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Passed</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface">Regulatory Claim Check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Passed</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface">Text Length Limits</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Passed</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-emerald-400 text-[18px]">check_circle</span>
+<span class="font-body-sm text-body-sm text-on-surface">Profanity &amp; Tone Filter</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Passed</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Card 3: Version & Governance Trace -->
+<div class="bg-surface-container-low rounded-xl overflow-hidden shadow-sm">
+<div class="px-space-md py-3.5 bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[20px]">history</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">Governance Trace</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">Chain Log</span>
+</div>
+<div class="p-space-md flex flex-col gap-3">
+<div class="flex items-start gap-3">
+<div class="w-2 h-2 rounded-full bg-secondary mt-1.5 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Revision v1.0 Generated</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Oct 24, 2026 · 14:32:08 UTC</span>
+<span class="font-body-sm text-body-sm text-outline truncate">Initiated by Sarah Jenkins (Lead)</span>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-2 h-2 rounded-full bg-amber-400 mt-1.5 shrink-0"></div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-medium truncate">Awaiting Manager Signoff</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Queued for David Kross</span>
+<span class="font-body-sm text-body-sm text-outline">Stage-gate compliance mandatory</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Sticky Governance Action Bar -->
+<div class="fixed bottom-0 left-[260px] right-0 bg-surface-container-low shadow-2xl z-30 px-space-md md:px-space-lg py-3.5">
+<div class="max-w-[1440px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-space-md">
+<!-- Left info note -->
+<div class="flex items-center gap-2.5 min-w-0">
+<span class="material-symbols-outlined text-amber-400 text-[20px] shrink-0">gavel</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">
+<strong class="text-on-surface font-semibold">FR04 Human-in-the-Loop Authority:</strong> Final affirmative authorization or rejection with justification required before ad network dispatch.
+        </span>
+</div>
+<!-- Right Action Buttons -->
+<div class="flex items-center gap-space-sm shrink-0">
+<!-- Edit Proposal -->
+<button class="px-4 py-2 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-lg text-label-lg font-semibold transition-colors flex items-center gap-1.5" id="btnEditProposal" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span class="">Edit Proposal</span>
+</button>
+<!-- Reject with Reason -->
+<button class="px-4 py-2 rounded-lg bg-error hover:bg-red-600 text-on-error font-label-lg text-label-lg font-semibold transition-colors flex items-center gap-1.5" id="btnRejectModal" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+<span class="">Reject with Reason</span>
+</button>
+<!-- Approve & Release -->
+<button class="px-4 py-2 rounded-lg border border-outline-variant hover:bg-surface-container-high text-tertiary font-label-lg text-label-lg font-semibold transition-colors flex items-center gap-1.5" id="btnEscalateProposal" type="button"><span class="material-symbols-outlined text-[18px]">north_east</span><span class="">Escalate to Manager</span></button><button class="px-5 py-2 rounded-lg bg-emerald-500 hover:bg-emerald-600 text-surface-container-lowest font-label-lg text-label-lg font-bold transition-colors flex items-center gap-2" id="btnApproveProposal" type="button">
+<span class="material-symbols-outlined text-[18px]">done_all</span>
+<span class="">Approve &amp; Release</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Reject Reason Modal Overlay -->
+<div class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden" id="rejectModal">
+<div class="bg-surface-container-low rounded-xl max-w-lg w-full overflow-hidden shadow-2xl flex flex-col">
+<div class="px-space-lg py-4 bg-surface-container flex items-center justify-between">
+<div class="flex items-center gap-2 text-error">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+<span class="font-headline-sm text-headline-sm font-semibold">Reject Proposal PRP-8402</span>
+</div>
+<button class="w-8 h-8 rounded-lg flex items-center justify-center text-outline hover:text-on-surface hover:bg-surface-container-high" id="btnCloseModal" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="p-space-lg flex flex-col gap-space-md">
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Provide a mandatory justification note. The proposal will return to the Campaign Lead with the revision feedback attached.
+        </p>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Rejection Category</label>
+<select class="w-full h-10 px-3 rounded-lg bg-surface-container text-on-surface font-body-sm text-body-sm focus:outline-none">
+<option>Brand Alignment &amp; Messaging Tone</option>
+<option>Creative Asset Discrepancy</option>
+<option>Channel Platform Limits Exceeded</option>
+<option>Destination Link / Tracking Issue</option>
+<option>Other Operational Reason</option>
+</select>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-outline uppercase tracking-wider">Required Feedback Details</label>
+<textarea class="w-full p-3 rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none resize-none" placeholder="Detail the necessary modifications required before re-submission..." rows="4"></textarea>
+</div>
+</div>
+<div class="px-space-lg py-3.5 bg-surface-container flex items-center justify-end gap-space-sm">
+<button class="px-4 py-2 rounded-lg bg-transparent hover:bg-surface-container-high text-on-surface-variant font-label-lg text-label-lg transition-colors" id="btnCancelModal" type="button">
+          Cancel
+        </button>
+<button class="px-4 py-2 rounded-lg bg-error hover:bg-red-600 text-on-error font-label-lg text-label-lg font-semibold transition-colors" id="btnConfirmReject" type="button">
+          Confirm Rejection
+        </button>
+</div>
+</div>
+</div>
+<script>
+    (function() {
+      const rejectModal = document.getElementById('rejectModal');
+      const btnRejectModal = document.getElementById('btnRejectModal');
+      const btnCloseModal = document.getElementById('btnCloseModal');
+      const btnCancelModal = document.getElementById('btnCancelModal');
+      const btnConfirmReject = document.getElementById('btnConfirmReject');
+      const btnApprove = document.getElementById('btnApproveProposal');
+      const humanSignoff = document.getElementById('humanSignoffCheck');
+
+      function openModal() {
+        rejectModal.classList.remove('hidden');
+      }
+
+      function closeModal() {
+        rejectModal.classList.add('hidden');
+      }
+
+      if (btnRejectModal) btnRejectModal.addEventListener('click', openModal);
+      if (btnCloseModal) btnCloseModal.addEventListener('click', closeModal);
+      if (btnCancelModal) btnCancelModal.addEventListener('click', closeModal);
+
+      if (btnConfirmReject) {
+        btnConfirmReject.addEventListener('click', function() {
+          alert('Proposal PRP-8402 has been rejected and routed back to Sarah Jenkins with revision notes.');
+          closeModal();
+        });
+      }
+
+      if (btnApprove) {
+        btnApprove.addEventListener('click', function() {
+          if (humanSignoff && !humanSignoff.checked) {
+            alert('Stage-Gate Enforcement: Please confirm the "Affirmative Manager Signoff" checklist item before releasing to ad networks.');
+            humanSignoff.focus();
+            return;
+          }
+          alert('Authorization Confirmed: Proposal PRP-8402 has been approved and released for campaign dispatch.');
+        });
+      }
+    })();
+  </script>
+</div></main></div>
+
+
+</body></html>

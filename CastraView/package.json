@@ -8,19 +8,23 @@
     "build": "vite build",
     "lint": "oxlint",
     "test": "vitest run",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:auth": "node --test src/auth/permissions.security.test.mjs src/auth/sessionContext.security.test.mjs src/services/apiClient.security.test.mjs",
+    "test:membership": "node --test src/services/membershipService.test.mjs src/auth/emailOnboarding.test.mjs"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.117.2",
+    "@supabase/supabase-js": "^2.118.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^1.61.0",
+    "lucide-react": "^1.70.0",
     "prop-types": "^15.8.1",
     "radix-ui": "^1.8.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwind-merge": "^3.7.0",
-    "test": "^3.3.0"
+    "test": "^3.3.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",

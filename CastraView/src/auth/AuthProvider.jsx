@@ -1,128 +1,101 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
 import { AuthContext } from './AuthContext'
-import { getActiveWorkspaceId, setActiveWorkspaceId } from '../lib/activeWorkspace'
 import { requireSupabase, supabaseConfigurationError } from '../lib/supabase'
-
-async function fetchMemberships(client, userId) {
-  const { data, error } = await client
-    .from('workspace_members')
-    .select('workspace_id,role,joined_at,workspaces(id,name)')
-    .eq('user_id', userId)
-    .order('joined_at', { ascending: true })
-  if (error) throw new Error('Không thể tải phân quyền không gian làm việc.')
-  return (data || []).map((item) => {
-    if (!['admin', 'manager', 'member'].includes(item.role)) {
-      throw new Error('Vai trò không gian làm việc không hợp lệ.')
-    }
-    return {
-      workspaceId: item.workspace_id,
-      workspaceName: item.workspaces?.name || 'CastraVision Workspace',
-      role: item.role,
-    }
-  })
-}
+import { api, onApiUnauthorized } from '../services/api'
+import { readAuthorization } from './sessionContext'
+import { getActiveWorkspaceId, setActiveWorkspaceId } from './activeWorkspace'
+import { createEmailOnboarding } from './emailOnboarding'
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null)
-  const [memberships, setMemberships] = useState([])
-  const [membership, setMembership] = useState(null)
+  const [authorization, setAuthorization] = useState(null)
   const [ready, setReady] = useState(Boolean(supabaseConfigurationError))
   const [error, setError] = useState(supabaseConfigurationError)
-
-  const loadMembership = useCallback(async (activeSession, preferredWorkspaceId = null) => {
-    if (!activeSession?.user) {
-      setMemberships([])
-      setMembership(null)
-      return null
-    }
-    const values = await fetchMemberships(requireSupabase(), activeSession.user.id)
-    const requestedId = preferredWorkspaceId || getActiveWorkspaceId(activeSession.user.id)
-    const value = values.find((item) => item.workspaceId === requestedId)
-      || values.find((item) => item.role === 'admin')
-      || values[0]
-      || null
-    setMemberships(values)
-    setMembership(value)
-    setActiveWorkspaceId(activeSession.user.id, value?.workspaceId || null)
-    return value
-  }, [])
-
-  const refreshMembership = useCallback(
-    (preferredWorkspaceId = null) => loadMembership(session, preferredWorkspaceId),
-    [loadMembership, session],
-  )
-
-  const selectWorkspace = useCallback((workspaceId) => {
-    const next = memberships.find((item) => item.workspaceId === workspaceId)
-    if (!next || !session?.user) throw new Error('Không gian làm việc không hợp lệ.')
-    setMembership(next)
-    setActiveWorkspaceId(session.user.id, next.workspaceId)
-  }, [memberships, session])
 
   useEffect(() => {
     if (supabaseConfigurationError) return undefined
     const client = requireSupabase()
     let active = true
-    async function boot() {
-      try {
-        const { data, error: sessionError } = await client.auth.getSession()
-        if (sessionError) throw sessionError
-        if (!active) return
-        setSession(data.session)
-        if (data.session) await loadMembership(data.session)
-      } catch {
-        if (active) setError('Không thể khôi phục phiên Supabase.')
-      } finally {
-        if (active) setReady(true)
-      }
-    }
-    boot()
-    const { data: listener } = client.auth.onAuthStateChange((_event, nextSession) => {
-      setSession(nextSession)
+    let eventReceived = false
+    client.auth.getSession().then(({ data, error: failure }) => {
+      if (!active || eventReceived) return
+      if (failure) { setError('Không thể khôi phục phiên Supabase.'); setReady(true); return }
+      setSession(data.session)
+      if (!data.session) setReady(true)
+    }).catch(() => { if (active) { setError('Không thể khôi phục phiên Supabase.'); setReady(true) } })
+    // Do not await Supabase calls inside this callback: SDK auth events hold a lock.
+    const { data: listener } = client.auth.onAuthStateChange((_event, next) => {
+      if (!active) return
+      eventReceived = true
+      setAuthorization(current => current?.user.id === next?.user.id ? current : null)
+      setSession(next)
       setError('')
-      Promise.resolve(loadMembership(nextSession)).catch(() => {
-        setError('Không thể tải phân quyền không gian làm việc.')
-      })
+      setReady(!next)
     })
-    return () => {
-      active = false
-      listener.subscription.unsubscribe()
-    }
-  }, [loadMembership])
+    const removeHandler = onApiUnauthorized(() => {
+      setAuthorization(null)
+      setError('Phiên Supabase không còn hợp lệ. Vui lòng đăng nhập lại.')
+      void client.auth.signOut({ scope: 'local' }).catch(() => {})
+    })
+    return () => { active = false; listener.subscription.unsubscribe(); removeHandler() }
+  }, [])
 
+  const loadContext = useCallback(async (currentSession) => {
+    const payload = await api('auth/session/')
+    const value = readAuthorization(payload, currentSession.user.id, getActiveWorkspaceId(currentSession.user.id))
+    setActiveWorkspaceId(value.user.id, value.workspaceId)
+    return value
+  }, [])
+
+  useEffect(() => {
+    if (!session) return undefined
+    let active = true
+    loadContext(session).then(value => {
+      if (active) { setAuthorization(value); setError('') }
+    }).catch(cause => {
+      if (active) { setAuthorization(null); setError(cause.message) }
+    }).finally(() => { if (active) setReady(true) })
+    return () => { active = false }
+  }, [session, loadContext])
+
+  const membership = authorization?.memberships.find(x => x.workspaceId === authorization.workspaceId) || null
   const value = useMemo(() => ({
-    ready,
-    error,
-    session,
-    user: session?.user || null,
-    memberships,
+    ready, error, session,
+    user: authorization ? { ...authorization.user, role: membership?.role || null } : null,
     membership,
+    memberships: authorization?.memberships || [],
     role: membership?.role || null,
     workspaceId: membership?.workspaceId || null,
-    needsOnboarding: Boolean(session?.user && memberships.length === 0),
-    refreshMembership,
-    selectWorkspace,
-    async signIn(email, password) {
-      const normalizedEmail = email.trim().toLowerCase()
-      const { error: authError } = await requireSupabase().auth.signInWithPassword({ email: normalizedEmail, password })
-      if (authError) throw new Error('Email hoặc mật khẩu không đúng.')
+    platformRole: authorization?.platformRole || null,
+    passwordSetupRequired: authorization?.passwordSetupRequired || false,
+    needsOnboarding: Boolean(authorization && !authorization.platformRole && !membership),
+    async refreshMembership() {
+      if (!session) return null
+      const context = await loadContext(session)
+      setAuthorization(context)
+      return context
     },
-    async signUp(email, password, fullName = '') {
-      const normalizedEmail = email.trim().toLowerCase()
-      const { data, error: authError } = await requireSupabase().auth.signUp({
-        email: normalizedEmail,
-        password,
-        options: { data: { full_name: fullName.trim() } },
-      })
-      if (authError) throw new Error(authError.message)
+    selectWorkspace(id) {
+      if (!authorization?.memberships.some(x => x.workspaceId === id)) throw new Error('Workspace không được cấp quyền.')
+      setActiveWorkspaceId(authorization.user.id, id)
+      setAuthorization(current => ({ ...current, workspaceId: id }))
+    },
+    async signIn(email, password) {
+      setError('')
+      const { data, error: failure } = await requireSupabase().auth.signInWithPassword({ email, password })
+      if (failure) throw new Error('Email hoặc mật khẩu không đúng, hoặc tài khoản chưa xác nhận email.')
+      // onAuthStateChange owns the session transition, including ready/loading.
       return data
     },
+    requestEmailLink(email, options) { return createEmailOnboarding({ auth: requireSupabase().auth, origin: window.location.origin }).sendLink(email, options) },
+    signUp(email) { return createEmailOnboarding({ auth: requireSupabase().auth, origin: window.location.origin }).sendLink(email) },
+    setPassword(password, confirmation) { return createEmailOnboarding({ auth: requireSupabase().auth, origin: window.location.origin }).setPassword(password, confirmation) },
     async signOut() {
-      const { error: authError } = await requireSupabase().auth.signOut()
-      if (authError) throw new Error('Không thể đăng xuất an toàn.')
+      const { error: failure } = await requireSupabase().auth.signOut({ scope: 'local' })
+      if (failure) throw new Error('Chưa thể đăng xuất an toàn. Vui lòng thử lại.')
+      setSession(null)
+      setAuthorization(null)
     },
-  }), [error, membership, memberships, ready, refreshMembership, selectWorkspace, session])
-
+  }), [authorization, error, loadContext, membership, ready, session])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

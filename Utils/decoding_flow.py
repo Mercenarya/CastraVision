@@ -26,8 +26,7 @@ def decoding_flows(filename:str,):
                 "message":f"{filename} is not exists.",
                 "data":None
             }
-        
-        
+
          # Đọc chuỗi JSON từ file
         with open(filename, "r", encoding="utf-8") as file:
             encrypted_data = json.load(file)
@@ -39,19 +38,18 @@ def decoding_flows(filename:str,):
 
         # Chuyển dữ liệu JSON sau giải mã thành Python object
         data = json.loads(result.decode("utf-8"))
-        
+
         return {
             "message":"Decoding data successfully.",
             "data":data
         }
-        
-        
+
     except Exception as error:
         return {
             "message":str(error),
             "data":None
         }
-        
+
 if __name__ == "__main__":
     result = decoding_flows(CONFIG)
     print(result['message'])

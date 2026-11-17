@@ -13,7 +13,7 @@ values (
   '{"full_name":"RPC Owner"}', now(), now()
 );
 
-set local role authenticated;
+-- Retain bootstrap validation coverage using the DB operator, not a public user.
 select set_config(
   'request.jwt.claims',
   '{"sub":"11000000-0000-0000-0000-000000000001","role":"authenticated"}',
@@ -49,9 +49,10 @@ select throws_ok(
   'RPC rejects a workspace name longer than 100 characters'
 );
 
+set local role authenticated;
 select ok(not has_function_privilege('anon', 'public.create_workspace_with_admin(text)', 'EXECUTE'), 'anon has no RPC execute privilege');
 select ok(not has_function_privilege('service_role', 'public.create_workspace_with_admin(text)', 'EXECUTE'), 'service_role has no onboarding RPC execute privilege');
-select ok(has_function_privilege('authenticated', 'public.create_workspace_with_admin(text)', 'EXECUTE'), 'authenticated has RPC execute privilege');
+select ok(not has_function_privilege('authenticated', 'public.create_workspace_with_admin(text)', 'EXECUTE'), 'authenticated cannot bootstrap its own Admin');
 
 set local role anon;
 select throws_ok(

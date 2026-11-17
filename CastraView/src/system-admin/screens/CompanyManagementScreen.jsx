@@ -29,6 +29,12 @@ export function CompanyManagementScreen({
   const activeCount = companies.filter((c) => c.status === 'Active').length
   const inactiveCount = companies.filter((c) => c.status !== 'Active').length
 
+  // Calculate operational rate
+  const operationalRate = useMemo(() => {
+    if (!metrics.totalRegistered) return '0.0'
+    return ((metrics.activeTenants / metrics.totalRegistered) * 100).toFixed(1)
+  }, [metrics.totalRegistered, metrics.activeTenants])
+
   // Filter & Sort
   const processedCompanies = useMemo(() => {
     let result = [...companies]
@@ -46,9 +52,11 @@ export function CompanyManagementScreen({
       result = result.filter(
         (c) =>
           c.name.toLowerCase().includes(term) ||
-          c.accountEmail.toLowerCase().includes(term) ||
+          (c.accountEmail && c.accountEmail.toLowerCase().includes(term)) ||
+          (c.adminEmail && c.adminEmail.toLowerCase().includes(term)) ||
           (c.id && c.id.toLowerCase().includes(term)) ||
-          (c.domain && c.domain.toLowerCase().includes(term))
+          (c.domain && c.domain.toLowerCase().includes(term)) ||
+          (c.internalDomain && c.internalDomain.toLowerCase().includes(term))
       )
     }
 
@@ -75,6 +83,9 @@ export function CompanyManagementScreen({
     return processedCompanies.slice(start, start + pageSize)
   }, [processedCompanies, currentPage, pageSize])
 
+  const startIndex = totalFiltered === 0 ? 0 : (currentPage - 1) * pageSize + 1
+  const endIndex = Math.min(currentPage * pageSize, totalFiltered)
+
   const handleRefreshClick = () => {
     setIsRefreshing(true)
     if (onRefresh) onRefresh()
@@ -83,13 +94,15 @@ export function CompanyManagementScreen({
 
   return (
     <div className="sa-page-container">
-      {/* Page Header */}
+      {/* Page Header with Blue Accent Bar */}
       <div className="sa-page-header">
         <div className="sa-page-header-text">
-          <div className="sa-telemetry-tag">TENANT DIRECTORY CONTROLS</div>
-          <h1 className="sa-page-title">Company Management</h1>
+          <div className="sa-page-title-row">
+            <span className="sa-title-bar" />
+            <h1 className="sa-page-title">Company Management</h1>
+          </div>
           <p className="sa-page-desc">
-            Search, inspect, and manage registered company accounts across the CastraVision platform.
+            Search, inspect, and provision registered tenant organizations across CastraVision platform.
           </p>
         </div>
         <div className="sa-page-actions">
@@ -131,7 +144,7 @@ export function CompanyManagementScreen({
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            Create Company
+            + Create Company
           </button>
         </div>
       </div>
@@ -139,51 +152,74 @@ export function CompanyManagementScreen({
       {/* KPI Cards Grid */}
       <div className="sa-kpi-grid">
         <MetricCard
-          label="Total Registered Tenants"
+          label="TOTAL REGISTERED TENANTS"
           value={metrics.totalRegistered}
-          subtext="Total platform enterprises"
-          badge="Global"
+          unit="organizations"
+          subtext="100% tenant cluster coverage (simulated)"
+          dotColor="cyan"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
-              <path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" />
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
             </svg>
           }
         />
         <MetricCard
-          label="Active Companies"
+          label="ACTIVE ROUTING STATES"
           value={metrics.activeTenants}
-          subtext="In good standing & verified"
-          badge="Operational"
+          badge={`${operationalRate}% operational`}
+          badgeType="green-solid"
+          subtext="Traffic routing nominal (simulated)"
+          dotColor="green"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
-              <circle cx="12" cy="12" r="10" />
-              <polyline points="12 6 12 12 14 14" />
+              <path d="M6 3v12" />
+              <circle cx="18" cy="6" r="3" />
+              <circle cx="6" cy="18" r="3" />
+              <path d="M18 9a9 9 0 0 1-9 9" />
             </svg>
           }
         />
         <MetricCard
-          label="Inactive / Suspended Companies"
+          label="INACTIVE / SUSPENDED"
           value={metrics.inactiveTenants}
-          subtext="Pending verification or inactive"
-          badge="Action Required"
+          unit="non-emitting nodes"
+          subtext="Awaiting reactivations (simulated)"
+          dotColor="slate"
           icon={
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
               <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
+              <line x1="10" y1="15" x2="10" y2="9" />
+              <line x1="14" y1="15" x2="14" y2="9" />
             </svg>
           }
         />
         <MetricCard
-          label="Aggregated Employee Count"
-          value={metrics.aggregateHeadcount.toLocaleString()}
-          subtext="Aggregated platform roster (Zero PII)"
-          badge="Aggregated"
+          label="ALLOCATED TOTAL SEATS"
+          value={
+            metrics.allocatedSeats !== null && metrics.allocatedSeats !== undefined
+              ? metrics.allocatedSeats.toLocaleString()
+              : 'Unavailable'
+          }
+          unit={
+            metrics.allocatedSeats !== null && metrics.allocatedSeats !== undefined
+              ? `demo seats${metrics.isPartialSeats ? ' (partial)' : ''}`
+              : ''
+          }
+          subtext={
+            metrics.allocatedSeats !== null && metrics.allocatedSeats !== undefined
+              ? `Demo capacity ledger (${metrics.seatReportingCount}/${metrics.totalRegistered} tenants reporting)`
+              : 'No tenant seat allocation data recorded'
+          }
+          dotColor={metrics.allocatedSeats !== null ? 'purple' : 'slate'}
           highlight={true}
           icon={
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" strokeWidth="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c084fc" strokeWidth="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
               <circle cx="9" cy="7" r="4" />
+              <rect x="16" y="8" width="6" height="4" rx="1" />
             </svg>
           }
         />
@@ -209,7 +245,7 @@ export function CompanyManagementScreen({
             <input
               type="text"
               className="sa-input-search"
-              placeholder="Filter by company name, email, or domain..."
+              placeholder="Search companies by name or account email..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value)
@@ -218,55 +254,86 @@ export function CompanyManagementScreen({
             />
           </div>
 
-          {/* Status Segmented Buttons */}
-          <div className="sa-filter-pills">
-            <button
-              type="button"
-              className={`sa-filter-pill ${statusFilter === 'ALL' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('ALL')
-                setCurrentPage(1)
-              }}
-            >
-              All Companies <span className="sa-pill-count">{totalCount}</span>
-            </button>
-            <button
-              type="button"
-              className={`sa-filter-pill ${statusFilter === 'ACTIVE' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('ACTIVE')
-                setCurrentPage(1)
-              }}
-            >
-              Active <span className="sa-pill-count">{activeCount}</span>
-            </button>
-            <button
-              type="button"
-              className={`sa-filter-pill ${statusFilter === 'INACTIVE' ? 'active' : ''}`}
-              onClick={() => {
-                setStatusFilter('INACTIVE')
-                setCurrentPage(1)
-              }}
-            >
-              Inactive <span className="sa-pill-count">{inactiveCount}</span>
-            </button>
-          </div>
+          {/* Right Controls: Segmented Group + Sort */}
+          <div className="sa-filter-controls-right">
+            {/* Status Segmented Buttons */}
+            <div className="sa-filter-segmented-group">
+              <button
+                type="button"
+                className={`sa-filter-pill ${statusFilter === 'ALL' ? 'active' : ''}`}
+                onClick={() => {
+                  setStatusFilter('ALL')
+                  setCurrentPage(1)
+                }}
+              >
+                All Companies ({totalCount})
+              </button>
+              <button
+                type="button"
+                className={`sa-filter-pill ${statusFilter === 'ACTIVE' ? 'active' : ''}`}
+                onClick={() => {
+                  setStatusFilter('ACTIVE')
+                  setCurrentPage(1)
+                }}
+              >
+                Active ({activeCount})
+              </button>
+              <button
+                type="button"
+                className={`sa-filter-pill ${statusFilter === 'INACTIVE' ? 'active' : ''}`}
+                onClick={() => {
+                  setStatusFilter('INACTIVE')
+                  setCurrentPage(1)
+                }}
+              >
+                Inactive ({inactiveCount})
+              </button>
+            </div>
 
-          {/* Sort Dropdown */}
-          <div className="sa-sort-wrapper">
-            <label htmlFor="sa-sort-select" className="sa-sort-label">Sort:</label>
-            <select
-              id="sa-sort-select"
-              className="sa-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-            >
-              <option value="newest">Creation Date (Newest)</option>
-              <option value="oldest">Creation Date (Oldest)</option>
-              <option value="name-asc">Company Name (A–Z)</option>
-              <option value="name-desc">Company Name (Z–A)</option>
-              <option value="emp-desc">Employee Count (High to Low)</option>
-            </select>
+            {/* Sort Selector */}
+            <div className="sa-sort-row">
+              <div className="sa-sort-wrapper">
+                <svg
+                  className="sa-sort-icon"
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <line x1="4" y1="12" x2="14" y2="12" />
+                  <line x1="4" y1="18" x2="8" y2="18" />
+                </svg>
+                <select
+                  id="sa-sort-select"
+                  className="sa-sort-select"
+                  value={sortBy}
+                  onChange={(e) => {
+                    setSortBy(e.target.value)
+                    setCurrentPage(1)
+                  }}
+                >
+                  <option value="newest">Sort: Creation Date (Newest)</option>
+                  <option value="oldest">Sort: Creation Date (Oldest)</option>
+                  <option value="name-asc">Sort: Company Name (A–Z)</option>
+                  <option value="name-desc">Sort: Company Name (Z–A)</option>
+                  <option value="emp-desc">Sort: Employee Count (High to Low)</option>
+                </select>
+                <svg
+                  className="sa-sort-chevron"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -279,9 +346,9 @@ export function CompanyManagementScreen({
               <tr>
                 <th>COMPANY NAME</th>
                 <th>ACCOUNT EMAIL</th>
-                <th>STATUS</th>
+                <th>ROUTING STATUS</th>
                 <th>EMPLOYEE COUNT</th>
-                <th>PROVISIONED / CREATED ON</th>
+                <th>PROVISIONED ON</th>
                 <th style={{ textAlign: 'right' }}>ACTIONS</th>
               </tr>
             </thead>
@@ -304,18 +371,19 @@ export function CompanyManagementScreen({
                     <td>
                       <div className="sa-company-cell">
                         <CompanyAvatar
-                          initials={company.avatarInitials}
+                          initials={company.name.charAt(0).toUpperCase()}
                           bg={company.avatarBg}
                           size={36}
+                          rounded="square"
                         />
                         <div className="sa-company-cell-info">
                           <span className="sa-company-name">{company.name}</span>
-                          <span className="sa-company-subid">{company.id}</span>
+                          <span className="sa-company-subid">ID: {company.id}</span>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <span className="sa-text-mono">{company.accountEmail}</span>
+                      <span className="sa-text-mono">{company.accountEmail || company.email}</span>
                     </td>
                     <td>
                       <StatusBadge status={company.status} />
@@ -323,9 +391,9 @@ export function CompanyManagementScreen({
                     <td>
                       <div className="sa-headcount-cell">
                         <span className="sa-headcount-val">
-                          {company.employeeCount}
+                          {company.employeeCount ?? 0}
                         </span>
-                        <span className="sa-headcount-sub">employees</span>
+                        <span className="sa-headcount-sub">roster members</span>
                       </div>
                     </td>
                     <td>
@@ -353,15 +421,7 @@ export function CompanyManagementScreen({
         {/* Pagination Footer */}
         <div className="sa-pagination-bar">
           <div className="sa-pagination-info">
-            Showing{' '}
-            <span className="sa-text-white">
-              {totalFiltered === 0 ? 0 : (currentPage - 1) * pageSize + 1}
-            </span>{' '}
-            to{' '}
-            <span className="sa-text-white">
-              {Math.min(currentPage * pageSize, totalFiltered)}
-            </span>{' '}
-            of <span className="sa-text-white">{totalFiltered}</span> companies
+            Showing {startIndex} - {endIndex} of {totalFiltered} registered companies
           </div>
           <div className="sa-pagination-actions">
             <button
@@ -369,26 +429,35 @@ export function CompanyManagementScreen({
               className="sa-btn sa-btn-pagination"
               disabled={currentPage <= 1}
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              aria-label="Previous Page"
             >
-              Previous
+              ‹
             </button>
-            <span className="sa-page-num-pill">
-              Page {currentPage} of {totalPages}
-            </span>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <button
+                key={pageNum}
+                type="button"
+                className={`sa-pagination-page-btn ${currentPage === pageNum ? 'active' : ''}`}
+                onClick={() => setCurrentPage(pageNum)}
+              >
+                {pageNum}
+              </button>
+            ))}
             <button
               type="button"
               className="sa-btn sa-btn-pagination"
               disabled={currentPage >= totalPages}
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              aria-label="Next Page"
             >
-              Next
+              ›
             </button>
           </div>
         </div>
       </div>
 
-      {/* Bottom Privacy Notice (Compact) */}
-      <TenantPrivacyNotice compact={true} />
+      {/* Bottom Privacy Notice (Management Variant) */}
+      <TenantPrivacyNotice variant="management" />
     </div>
   )
 }

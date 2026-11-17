@@ -15,12 +15,15 @@ supabase_key = (
     or os.getenv("SUPABASE_ANON_KEY")
 )
 
-if not supabase_url or not supabase_key:
-    raise ValueError(
-        "SUPABASE_URL and a Supabase publishable/anon key must be set in environment variables"
-    )
-
-supabase: Client = create_client(supabase_url, supabase_key)
+supabase: Client | None = None
 
 def get_supabase_client() -> Client:
+    global supabase
+    if supabase is None:
+        if not supabase_url or not supabase_key:
+            raise ValueError(
+                "SUPABASE_URL and a Supabase publishable/anon key "
+                "must be set in environment variables"
+            )
+        supabase = create_client(supabase_url, supabase_key)
     return supabase

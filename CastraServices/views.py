@@ -1,17 +1,23 @@
 import json
 
-import httpx
-import redis
-from django.conf import settings
 from django.db import connection
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
 from pydantic import ValidationError
 
-from .permissions import require_workspace_member
+from .permissions import request_auth, require_workspace_member
 from .schemas import BusinessProfile
 from .strategy import generate_strategy
+from .supabase_client import SupabaseAPIError, user_client
+
+# Supabase client integration
+try:
+    from Utils.supabase_client import get_supabase_client
+
+    SUPABASE_AVAILABLE = True
+except ImportError:
+    SUPABASE_AVAILABLE = False
 
 
 def error_response(code: str, message: str, status: int, details=None) -> JsonResponse:
@@ -23,73 +29,21 @@ def error_response(code: str, message: str, status: int, details=None) -> JsonRe
 
 @require_GET
 def health(request):
-    """Process liveness only; use readiness for dependency availability."""
-    return JsonResponse(
-        {
-            "status": "ok",
-            "check": "liveness",
-            "database_backend": connection.vendor,
-        }
-    )
+    health_status = {"status": "ok", "database": connection.vendor}
 
+    # Check Supabase connection if available
+    if SUPABASE_AVAILABLE:
+        try:
+            supabase_client = get_supabase_client()
+            # Simple test query to verify connection
+            supabase_client.table("test").select("*").limit(1).execute()
+            health_status["supabase"] = "connected"
+        except Exception as e:
+            health_status["supabase"] = f"error: {str(e)}"
+    else:
+        health_status["supabase"] = "not configured"
 
-def _database_ready() -> bool:
-    try:
-        with connection.cursor() as cursor:
-            cursor.execute("SELECT 1")
-            return cursor.fetchone() == (1,)
-    except Exception:
-        return False
-
-
-def _supabase_ready() -> bool:
-    api_key = settings.SUPABASE_PUBLISHABLE_KEY or settings.SUPABASE_SERVICE_ROLE_KEY
-    if not settings.SUPABASE_URL or not api_key:
-        return False
-    try:
-        response = httpx.get(
-            f"{settings.SUPABASE_URL.rstrip('/')}/auth/v1/settings",
-            headers={"apikey": api_key},
-            timeout=min(settings.SUPABASE_HTTP_TIMEOUT_SECONDS, 3),
-        )
-        return response.status_code == 200
-    except httpx.RequestError:
-        return False
-
-
-def _redis_ready() -> bool:
-    if not settings.CELERY_BROKER_URL:
-        return False
-    client = redis.Redis.from_url(
-        settings.CELERY_BROKER_URL,
-        socket_connect_timeout=1,
-        socket_timeout=1,
-    )
-    try:
-        return bool(client.ping())
-    except redis.RedisError:
-        return False
-    finally:
-        client.close()
-
-
-@require_GET
-def readiness(request):
-    """Dependency readiness without exposing endpoints, credentials, or errors."""
-    dependencies = {
-        "django_database": _database_ready(),
-        "supabase": _supabase_ready(),
-        "redis": _redis_ready(),
-    }
-    ready = all(dependencies.values())
-    return JsonResponse(
-        {
-            "status": "ready" if ready else "degraded",
-            "check": "readiness",
-            "dependencies": dependencies,
-        },
-        status=200 if ready else 503,
-    )
+    return JsonResponse(health_status)
 
 
 @csrf_exempt
@@ -122,3 +76,24 @@ def strategy_generate(request):
             503,
         )
     return JsonResponse(response.model_dump(mode="json"), status=200)
+
+
+@csrf_exempt
+@require_GET
+@require_workspace_member
+def supabase_test(request):
+    """Probe only the caller's Workspace through the same RLS boundary."""
+    context = request_auth(request)
+    try:
+        user_client(context.access_token).request(
+            "GET",
+            "business_profiles",
+            params={
+                "workspace_id": f"eq.{context.workspace_id}",
+                "select": "workspace_id",
+                "limit": "1",
+            },
+        )
+    except SupabaseAPIError:
+        return error_response("WORKSPACE_DATA_UNAVAILABLE", "Supabase unavailable.", 502)
+    return JsonResponse({"status": "success", "supabase_connected": True})

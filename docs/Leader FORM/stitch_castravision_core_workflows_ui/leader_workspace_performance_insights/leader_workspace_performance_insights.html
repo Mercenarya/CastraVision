@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Leader Workspace — Performance &amp; Insights</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          canvas: '#0f131d',
+          shell: '#171b26',
+          card: '#1c1f2a',
+          cardborder: '#464554',
+          activebg: '#262a35',
+          accent: '#8083ff',
+          accenttext: '#0d0096',
+          success: '#03b5d3',
+          danger: '#ffb4ab',
+          textprimary: '#dfe2f1',
+          textsecondary: '#c7c4d7'
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f131d;
+    color: #dfe2f1;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #171b26;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body class="h-full flex overflow-hidden bg-[#0f131d]">
+<!-- ASIDE: Left Sidebar Navigation (260px) -->
+<aside class="w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none">
+<!-- Top Logo Area -->
+<div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+<span class="text-[9px] font-mono tracking-wider text-[#8083ff] font-semibold mt-1">SME AI ENGINE</span>
+</div>
+</div>
+<!-- Navigation Scroll Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+<div>
+<div class="px-3 mb-2 flex items-center justify-between">
+<span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">LEADER</span>
+</div>
+<nav class="space-y-1">
+<!-- 1. Overview (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="14" y="14"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+</svg>
+<span>Overview</span>
+</a>
+<!-- 2. Approvals (INACTIVE with badge '3') -->
+<a class="flex items-center justify-between px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<div class="flex items-center gap-3">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M9 11l3 3L22 4"></path>
+<path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+</svg>
+<span>Approvals</span>
+</div>
+<span class="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096]">3</span>
+</a>
+<!-- 3. My Proposals (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+<polyline points="14 2 14 8 20 8"></polyline>
+<line x1="16" x2="8" y1="13" y2="13"></line>
+<line x1="16" x2="8" y1="17" y2="17"></line>
+<polyline points="10 9 9 9 8 9"></polyline>
+</svg>
+<span>My Proposals</span>
+</a>
+<!-- 4. Campaigns (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+<path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+</svg>
+<span>Campaigns</span>
+</a>
+<!-- 5. Strategy Studio (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="10"></circle>
+<line x1="2" x2="22" y1="12" y2="12"></line>
+<path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+</svg>
+<span>Strategy Studio</span>
+</a>
+<!-- 6. Content Gen (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+</svg>
+<span>Content Gen</span>
+</a>
+<!-- 7. Campaign Import (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" x2="12" y1="3" y2="15"></line>
+</svg>
+<span>Campaign Import</span>
+</a>
+<!-- 8. Performance & Insights (THE ONLY ACTIVE ITEM) -->
+<a class="flex items-center gap-3 pl-3 pr-3 py-2.5 rounded-r-lg bg-[#262a35] text-[#dfe2f1] font-semibold text-[13px] border-l-4 border-[#8083ff] transition-all" href="#">
+<svg class="w-4 h-4 text-[#8083ff]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<line x1="18" x2="18" y1="20" y2="10"></line>
+<line x1="12" x2="12" y1="20" y2="4"></line>
+<line x1="6" x2="6" y1="20" y2="14"></line>
+</svg>
+<span>Performance &amp; Insights</span>
+</a>
+<!-- 9. Account Settings (INACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#c7c4d7] hover:bg-[#1c1f2a] hover:text-[#dfe2f1] text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+<span>Account Settings</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Bottom Tenant Card (Inside Sidebar) -->
+<div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+          AC
+        </div>
+<div class="min-w-0">
+<p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+<p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+</div>
+</div>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] border border-[#464554] text-[#8083ff] font-mono font-bold flex-shrink-0 ml-1">LEADER</span>
+</div>
+</div>
+</aside>
+<!-- MAIN WRAPPER (Top Header + Canvas) -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+<!-- HEADER: Top Bar (64px, #171b26, border-b border-[#464554]) -->
+<header class="h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-20">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+<span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Leader Workspace</span>
+<svg class="w-3.5 h-3.5 text-[#464554]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+<span class="text-[#dfe2f1] font-semibold">Performance &amp; Insights</span>
+</div>
+<!-- Right Side Utilities -->
+<div class="flex items-center gap-5">
+<!-- System status -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#1c1f2a] border border-[#464554]">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+<span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+</div>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- Notification Bell -->
+<button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+<span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+          5
+        </span>
+</button>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- User profile -->
+<div class="flex items-center gap-3 pl-1">
+<div class="relative">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#3b82f6] to-[#8083ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+            DK
+          </div>
+<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#03b5d3] rounded-full ring-2 ring-[#171b26]"></div>
+</div>
+<div class="flex flex-col text-left">
+<div class="flex items-center gap-1.5 leading-none">
+<span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span>
+<span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
+              LEADER
+            </span>
+</div>
+<span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS: #0f131d background, p-8, scrollable -->
+<main class="flex-1 bg-[#0f131d] overflow-y-auto custom-scrollbar p-8 min-h-[calc(100vh-64px)]">
+<div class="max-w-[1360px] w-full mx-auto space-y-6 pb-8">
+<!-- Page Header with Controls -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<div class="flex items-center gap-2 mb-1.5">
+<span class="text-[11px] font-mono font-bold uppercase tracking-wider text-[#03b5d3]">Performance Diagnostics</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#03b5d3]"></span>
+<span class="text-[11px] font-mono text-[#c7c4d7]/70">NODE-ALPHA-90</span>
+</div>
+<h1 class="text-2xl font-bold text-[#dfe2f1] tracking-tight">Squad Performance &amp; AI Insights</h1>
+<p class="text-sm text-[#c7c4d7] mt-0.5">Analyze campaign metrics and team output for Growth Squad Alpha.</p>
+</div>
+<div class="flex items-center gap-3">
+<!-- Dropdown selector -->
+<div class="relative">
+<button class="flex items-center gap-2 bg-[#1c1f2a] border border-[#464554] text-[#dfe2f1] px-3 py-2 rounded-lg text-sm font-medium hover:border-[#8083ff] transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-[#c7c4d7]">calendar_today</span>
+<span>Last 30 Days</span>
+<span class="material-symbols-outlined text-[18px] text-[#c7c4d7]">expand_more</span>
+</button>
+</div>
+<!-- Ghost button -->
+<button class="flex items-center gap-2 border border-[#464554] text-[#dfe2f1] px-4 py-2 rounded-lg hover:bg-[#1c1f2a] text-sm font-medium transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-[#c7c4d7]">download</span>
+<span>Export Report</span>
+</button>
+</div>
+</div>
+<!-- TOP ROW: 4 KPI Cards in a grid -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+<!-- Card 1: Total Squad Spend -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between text-[#c7c4d7]">
+<span class="text-xs font-semibold uppercase tracking-wider">Total Squad Spend</span>
+<span class="material-symbols-outlined text-[20px] text-[#8083ff]">account_balance_wallet</span>
+</div>
+<div class="text-2xl font-bold text-[#dfe2f1] mt-2 tracking-tight">$42,500</div>
+</div>
+<div class="mt-4 pt-2">
+<div class="flex justify-between items-center text-xs mb-1.5">
+<span class="text-[#c7c4d7]">85% of monthly budget</span>
+<span class="text-[#dfe2f1] font-mono font-medium">85%</span>
+</div>
+<div class="w-full bg-[#262a35] rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#8083ff] h-full rounded-full w-[85%]"></div>
+</div>
+</div>
+</div>
+<!-- Card 2: Blended ROAS -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between text-[#c7c4d7]">
+<span class="text-xs font-semibold uppercase tracking-wider">Blended ROAS</span>
+<span class="material-symbols-outlined text-[20px] text-[#03b5d3]">trending_up</span>
+</div>
+<div class="text-2xl font-bold text-[#dfe2f1] mt-2 tracking-tight">4.2x</div>
+</div>
+<div class="mt-4 pt-2 flex items-center">
+<span class="inline-flex items-center gap-1 bg-[#03b5d3]/15 text-[#03b5d3] px-2 py-0.5 rounded text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+              +12% vs last month
+            </span>
+</div>
+</div>
+<!-- Card 3: Average CPA -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between text-[#c7c4d7]">
+<span class="text-xs font-semibold uppercase tracking-wider">Average CPA</span>
+<span class="material-symbols-outlined text-[20px] text-[#ffb4ab]">toll</span>
+</div>
+<div class="text-2xl font-bold text-[#dfe2f1] mt-2 tracking-tight">$3.15</div>
+</div>
+<div class="mt-4 pt-2 flex items-center">
+<span class="inline-flex items-center gap-1 bg-[#ffb4ab]/15 text-[#ffb4ab] px-2 py-0.5 rounded text-xs font-semibold">
+<span class="material-symbols-outlined text-[14px]">priority_high</span>
+              +$0.20 vs target
+            </span>
+</div>
+</div>
+<!-- Card 4: Team Approval Rate -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between text-[#c7c4d7]">
+<span class="text-xs font-semibold uppercase tracking-wider">Team Approval Rate</span>
+<span class="material-symbols-outlined text-[20px] text-[#03b5d3]">verified</span>
+</div>
+<div class="text-2xl font-bold text-[#dfe2f1] mt-2 tracking-tight">92%</div>
+</div>
+<div class="mt-4 pt-2 flex items-center">
+<span class="inline-flex items-center gap-1.5 text-xs font-medium text-[#03b5d3]">
+<span class="material-symbols-outlined text-[16px] text-[#03b5d3]">check_circle</span>
+              High quality submissions
+            </span>
+</div>
+</div>
+</section>
+<!-- MIDDLE ROW: Split Layout (8 cols vs 4 cols) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Card (8 cols) - Cross-Channel Performance Chart -->
+<div class="lg:col-span-8 bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#464554]">
+<div>
+<h2 class="text-lg font-bold text-[#dfe2f1]">Cross-Channel Performance</h2>
+<p class="text-xs text-[#c7c4d7] mt-0.5">Comparing Spend vs ROAS across Meta, Google, and TikTok.</p>
+</div>
+<!-- Legends -->
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 bg-[#262a35] border border-[#464554] px-2.5 py-1 rounded text-xs">
+<span class="w-2.5 h-2.5 rounded-sm bg-[#8083ff]"></span>
+<span class="text-[#dfe2f1] font-medium">Spend ($)</span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#262a35] border border-[#464554] px-2.5 py-1 rounded text-xs">
+<span class="w-2.5 h-2.5 rounded-sm bg-[#03b5d3]"></span>
+<span class="text-[#dfe2f1] font-medium">ROAS Multiplier</span>
+</div>
+</div>
+</div>
+<!-- Channels Breakdown Visual Bars -->
+<div class="space-y-5 mt-5">
+<!-- Channel 1: Meta Ads -->
+<div class="group">
+<div class="flex justify-between items-baseline mb-2 text-xs">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#8083ff]"></span>
+<span class="text-[#dfe2f1] font-semibold text-sm">Meta Ads</span>
+</div>
+<div class="flex items-center gap-4 font-mono">
+<span class="text-[#c7c4d7]">Spend: <strong class="text-[#dfe2f1] font-semibold">$21,400</strong></span>
+<span class="px-2 py-0.5 rounded bg-[#03b5d3]/15 text-[#03b5d3] font-semibold">4.6x ROAS</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-2 items-center">
+<div class="col-span-9 bg-[#262a35] rounded-lg h-5 overflow-hidden p-0.5 flex">
+<div class="bg-[#8083ff] h-full rounded transition-all duration-500 w-[78%] group-hover:brightness-110"></div>
+</div>
+<div class="col-span-3 bg-[#262a35] rounded-lg h-5 overflow-hidden p-0.5 flex">
+<div class="bg-[#03b5d3] h-full rounded transition-all duration-500 w-[92%] group-hover:brightness-110"></div>
+</div>
+</div>
+</div>
+<!-- Channel 2: Google Search & P-Max -->
+<div class="group">
+<div class="flex justify-between items-baseline mb-2 text-xs">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#03b5d3]"></span>
+<span class="text-[#dfe2f1] font-semibold text-sm">Google Search &amp; P-Max</span>
+</div>
+<div class="flex items-center gap-4 font-mono">
+<span class="text-[#c7c4d7]">Spend: <strong class="text-[#dfe2f1] font-semibold">$14,200</strong></span>
+<span class="px-2 py-0.5 rounded bg-[#03b5d3]/15 text-[#03b5d3] font-semibold">3.8x ROAS</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-2 items-center">
+<div class="col-span-9 bg-[#262a35] rounded-lg h-5 overflow-hidden p-0.5 flex">
+<div class="bg-[#03b5d3] h-full rounded transition-all duration-500 w-[52%] group-hover:brightness-110"></div>
+</div>
+<div class="col-span-3 bg-[#262a35] rounded-lg h-5 overflow-hidden p-0.5 flex">
+<div class="bg-[#03b5d3] h-full rounded transition-all duration-500 w-[76%] group-hover:brightness-110"></div>
+</div>
+</div>
+</div>
+<!-- Channel 3: TikTok Ads -->
+<div class="group">
+<div class="flex justify-between items-baseline mb-2 text-xs">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#a78bfa]"></span>
+<span class="text-[#dfe2f1] font-semibold text-sm">TikTok Ads</span>
+</div>
+<div class="flex items-center gap-4 font-mono">
+<span class="text-[#c7c4d7]">Spend: <strong class="text-[#dfe2f1] font-semibold">$6,900</strong></span>
+<span class="px-2 py-0.5 rounded bg-[#03b5d3]/15 text-[#03b5d3] font-semibold">4.1x ROAS</span>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-2 items-center">
+<div class="col-span-9 bg-[#262a35] rounded-lg h-5 overflow-hidden p-0.5 flex">
+<div class="bg-[#a78bfa] h-full rounded transition-all duration-500 w-[25%] group-hover:brightness-110"></div>
+</div>
+<div class="col-span-3 bg-[#262a35] rounded-lg h-5 overflow-hidden p-0.5 flex">
+<div class="bg-[#03b5d3] h-full rounded transition-all duration-500 w-[82%] group-hover:brightness-110"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Trend SVG with Grid lines -->
+<div class="mt-6 pt-4 border-t border-[#464554]/50">
+<div class="flex items-center justify-between text-[11px] text-[#c7c4d7] font-mono mb-2">
+<span>CHANNEL VELOCITY OVER TIME</span>
+<span class="text-[#03b5d3]">EFFICIENCY CURVE</span>
+</div>
+<div class="relative w-full h-20 bg-[#262a35]/40 rounded border border-[#464554]/60 p-2 overflow-hidden">
+<svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 600 70">
+<!-- Grid horizontal lines -->
+<line stroke="#464554" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="600" y1="18" y2="18"></line>
+<line stroke="#464554" stroke-dasharray="3 3" stroke-width="1" x1="0" x2="600" y1="42" y2="42"></line>
+<!-- Trend lines -->
+<path d="M0,52 Q120,60 220,34 T420,26 T600,14" stroke="#03b5d3" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M0,60 Q130,44 260,48 T480,30 T600,38" stroke="#8083ff" stroke-dasharray="4 4" stroke-linecap="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 border-t border-[#464554]/50 flex items-center justify-between text-xs text-[#c7c4d7]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-[#03b5d3]">insights</span>
+<span>Meta Ads currently driving 50.3% of total revenue output</span>
+</div>
+<span class="font-mono text-[#dfe2f1] text-[11px] bg-[#262a35] px-2 py-0.5 rounded border border-[#464554]">Auto-Synced</span>
+</div>
+</div>
+<!-- Right Card (4 cols) - AI Recommendations -->
+<div class="lg:col-span-4 bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 shadow-sm flex flex-col justify-between">
+<div>
+<!-- Header -->
+<div class="flex items-center justify-between pb-4 border-b border-[#464554]">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-[#8083ff]/15 border border-[#8083ff]/30 flex items-center justify-center text-[#8083ff]">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+</div>
+<div>
+<h2 class="text-base font-bold text-[#dfe2f1] leading-tight">AI Recommendations</h2>
+<span class="text-[10px] text-[#8083ff] font-mono tracking-wider font-semibold">AUTOMATED INFERENCE ENGINE</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] text-xs font-bold font-mono">2 ACTIVE</span>
+</div>
+<!-- Recommendation Item 1 -->
+<div class="py-4">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-bold tracking-wider text-[#8083ff] uppercase font-mono">BUDGET ALLOCATION</span>
+<span class="px-2 py-0.5 rounded bg-[#03b5d3]/15 text-[#03b5d3] font-mono text-[11px] font-semibold">
+                  Est. +0.3x ROAS Lift
+                </span>
+</div>
+<p class="text-xs text-[#dfe2f1] leading-relaxed">
+                Shift $2,000 from Google Search to TikTok Reels to capitalize on decreasing CPA and saturated search impressions.
+              </p>
+<div class="mt-3 flex justify-end">
+<button class="bg-[#8083ff] hover:opacity-90 text-[#0d0096] font-semibold text-xs px-4 py-2 rounded-lg transition-opacity flex items-center gap-1.5 shadow-sm">
+<span>Apply Strategy</span>
+<span class="material-symbols-outlined text-[15px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Divider -->
+<div class="border-t border-[#464554]"></div>
+<!-- Recommendation Item 2 -->
+<div class="py-4">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-bold tracking-wider text-[#ffb4ab] uppercase font-mono">CREATIVE FATIGUE</span>
+<span class="px-2 py-0.5 rounded bg-[#ffb4ab]/15 text-[#ffb4ab] font-mono text-[11px] font-semibold">
+                  CTR dropped -34% in 48h
+                </span>
+</div>
+<p class="text-xs text-[#dfe2f1] leading-relaxed">
+                Pause Ad Variant B in Autumn Campaign due to creative fatigue and high frequency wear-off.
+              </p>
+<div class="mt-3 flex justify-end">
+<button class="border border-[#464554] text-[#dfe2f1] px-4 py-2 rounded-lg hover:bg-[#262a35] text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[15px] text-[#ffb4ab]">pause_circle</span>
+<span>Pause Variant</span>
+</button>
+</div>
+</div>
+</div>
+<div class="pt-3 border-t border-[#464554] flex items-center gap-2 text-xs text-[#c7c4d7]">
+<span class="material-symbols-outlined text-[15px] text-[#8083ff]">bolt</span>
+<span>Predictions modeled on 1.4M localized bid signals</span>
+</div>
+</div>
+</section>
+<!-- BOTTOM ROW: Full Width Data Table Card -->
+<section class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 shadow-sm">
+<!-- Table Header Area -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-[#464554]">
+<div>
+<h2 class="text-lg font-bold text-[#dfe2f1]">Team Member Output &amp; Quality</h2>
+<p class="text-xs text-[#c7c4d7] mt-0.5">Individual execution volume, approval ratios, and triage efficiency.</p>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-[#c7c4d7]">search</span>
+<input class="bg-[#262a35] border border-[#464554] text-[#dfe2f1] placeholder:text-[#c7c4d7]/60 text-xs pl-8 pr-3 py-1.5 rounded-lg outline-none w-52 focus:border-[#8083ff] transition-colors" placeholder="Filter squad..." type="text"/>
+</div>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left text-xs">
+<thead>
+<tr class="border-b border-[#464554] text-[#c7c4d7] uppercase font-mono tracking-wider text-[11px]">
+<th class="py-3 px-4 font-semibold">MEMBER</th>
+<th class="py-3 px-4 font-semibold">ROLE</th>
+<th class="py-3 px-4 font-semibold">PROPOSALS SUBMITTED</th>
+<th class="py-3 px-4 font-semibold">APPROVAL RATE</th>
+<th class="py-3 px-4 font-semibold">AVG REVIEW TIME</th>
+<th class="py-3 px-4 font-semibold">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#464554]/60">
+<!-- Row 1: Elena Rostova -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#03b5d3]/15 border border-[#03b5d3]/30 text-[#03b5d3] flex items-center justify-center font-bold text-xs">
+                      ER
+                    </div>
+<div class="min-w-0">
+<div class="text-sm font-semibold text-[#dfe2f1]">Elena Rostova</div>
+<div class="text-[11px] text-[#c7c4d7]/70 font-mono truncate">e.rostova@acmecorp.com</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex px-2 py-0.5 rounded bg-[#262a35] border border-[#464554] text-[#dfe2f1] text-[11px] font-medium">Employee</span>
+</td>
+<td class="py-3.5 px-4 font-mono font-medium text-[#dfe2f1]">
+                  18 submissions
+                </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-mono font-bold text-[#03b5d3] text-sm">94%</span>
+<div class="w-16 bg-[#262a35] rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#03b5d3] h-full rounded-full w-[94%]"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#dfe2f1]">
+                  1.4 hrs
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#03b5d3]/15 text-[#03b5d3] text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#03b5d3]"></span>
+                    Active • High
+                  </span>
+</td>
+</tr>
+<!-- Row 2: Alex Mercer -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] flex items-center justify-center font-bold text-xs">
+                      AM
+                    </div>
+<div class="min-w-0">
+<div class="text-sm font-semibold text-[#dfe2f1]">Alex Mercer</div>
+<div class="text-[11px] text-[#c7c4d7]/70 font-mono truncate">a.mercer@acmecorp.com</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex px-2 py-0.5 rounded bg-[#262a35] border border-[#464554] text-[#dfe2f1] text-[11px] font-medium">Employee</span>
+</td>
+<td class="py-3.5 px-4 font-mono font-medium text-[#dfe2f1]">
+                  14 submissions
+                </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-mono font-bold text-[#dfe2f1] text-sm">89%</span>
+<div class="w-16 bg-[#262a35] rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#8083ff] h-full rounded-full w-[89%]"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#dfe2f1]">
+                  2.1 hrs
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#262a35] text-[#c7c4d7] text-xs font-medium border border-[#464554]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#c7c4d7]"></span>
+                    Active • Normal
+                  </span>
+</td>
+</tr>
+<!-- Row 3: Maya Lin -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#ffb4ab]/15 border border-[#ffb4ab]/30 text-[#ffb4ab] flex items-center justify-center font-bold text-xs">
+                      ML
+                    </div>
+<div class="min-w-0">
+<div class="text-sm font-semibold text-[#dfe2f1]">Maya Lin</div>
+<div class="text-[11px] text-[#c7c4d7]/70 font-mono truncate">m.lin@acmecorp.com</div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex px-2 py-0.5 rounded bg-[#262a35] border border-[#464554] text-[#dfe2f1] text-[11px] font-medium">Employee</span>
+</td>
+<td class="py-3.5 px-4 font-mono font-medium text-[#dfe2f1]">
+                  9 submissions
+                </td>
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2">
+<span class="font-mono font-bold text-[#ffb4ab] text-sm">72%</span>
+<div class="w-16 bg-[#262a35] rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#ffb4ab] h-full rounded-full w-[72%]"></div>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#ffb4ab] font-semibold">
+                  4.8 hrs
+                </td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#ffb4ab]/15 text-[#ffb4ab] text-xs font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#ffb4ab]"></span>
+                    Revision Bottleneck
+                  </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer -->
+<div class="mt-4 pt-3 border-t border-[#464554] flex flex-col sm:flex-row items-center justify-between text-xs text-[#c7c4d7] gap-3">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#03b5d3]"></span>
+<span>Showing 3 of 3 squad contributors • Data updated 10 minutes ago</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="hover:text-[#dfe2f1] font-medium transition-colors">Export CSV</button>
+<span class="text-[#464554]">•</span>
+<button class="hover:text-[#dfe2f1] font-medium transition-colors">Audit Log</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

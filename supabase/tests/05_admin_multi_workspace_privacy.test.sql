@@ -5,7 +5,7 @@ select plan(6);
 select has_function('public', 'admin_workspace_overview', array[]::text[], 'safe Admin overview RPC exists');
 select policies_are(
   'public', 'workspace_members',
-  array['workspace_members_admin_delete', 'workspace_members_admin_insert', 'workspace_members_admin_update', 'workspace_members_self_select'],
+  array['workspace_members_self_select'],
   'workspace member reads are restricted to the current user'
 );
 

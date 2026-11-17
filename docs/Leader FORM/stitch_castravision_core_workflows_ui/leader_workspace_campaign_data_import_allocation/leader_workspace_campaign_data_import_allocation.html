@@ -1,0 +1,782 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "secondary-fixed-dim": "#4cd7f6",
+          "on-tertiary": "#3c0091",
+          "tertiary-fixed-dim": "#d0bcff",
+          "on-tertiary-container": "#340080",
+          "on-secondary-container": "#00424e",
+          "on-secondary-fixed": "#001f26",
+          "surface-container-high": "#262a35",
+          "tertiary-fixed": "#e9ddff",
+          "primary-container": "#8083ff",
+          "surface-tint": "#c0c1ff",
+          "on-error-container": "#ffdad6",
+          "primary": "#c0c1ff",
+          "surface": "#0f131d",
+          "on-tertiary-fixed-variant": "#5516be",
+          "on-primary": "#1000a9",
+          "on-error": "#690005",
+          "inverse-primary": "#494bd6",
+          "error-container": "#93000a",
+          "inverse-surface": "#dfe2f1",
+          "surface-bright": "#353944",
+          "on-secondary": "#003640",
+          "secondary-container": "#03b5d3",
+          "on-primary-fixed-variant": "#2f2ebe",
+          "primary-fixed": "#e1e0ff",
+          "on-secondary-fixed-variant": "#004e5c",
+          "secondary-fixed": "#acedff",
+          "on-surface-variant": "#c7c4d7",
+          "surface-container": "#1c1f2a",
+          "tertiary-container": "#a078ff",
+          "error": "#ffb4ab",
+          "surface-dim": "#0f131d",
+          "on-surface": "#dfe2f1",
+          "on-tertiary-fixed": "#23005c",
+          "surface-container-low": "#171b26",
+          "secondary": "#4cd7f6",
+          "inverse-on-surface": "#2c303b",
+          "background": "#0f131d",
+          "primary-fixed-dim": "#c0c1ff",
+          "outline-variant": "#464554",
+          "surface-container-highest": "#313540",
+          "tertiary": "#d0bcff",
+          "surface-variant": "#313540",
+          "on-background": "#dfe2f1",
+          "surface-container-lowest": "#0a0e18",
+          "outline": "#908fa0",
+          "on-primary-fixed": "#07006c",
+          "on-primary-container": "#0d0096"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "gutter": "1.5rem",
+          "space-sm": "0.5rem",
+          "space-xl": "2rem",
+          "space-xs": "0.25rem",
+          "margin-mobile": "1rem",
+          "margin": "2rem",
+          "space-lg": "1.5rem",
+          "space-md": "1rem",
+          "gutter-mobile": "0.75rem"
+        },
+        "fontFamily": {
+          "body-md": [
+            "Inter"
+          ],
+          "headline-lg": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-xl-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-xl": [
+            "Plus Jakarta Sans"
+          ],
+          "headline-sm": [
+            "Plus Jakarta Sans"
+          ],
+          "label-md": [
+            "Inter"
+          ],
+          "body-sm": [
+            "Inter"
+          ],
+          "headline-md": [
+            "Plus Jakarta Sans"
+          ],
+          "label-lg": [
+            "Inter"
+          ],
+          "headline-lg-mobile": [
+            "Plus Jakarta Sans"
+          ],
+          "label-sm": [
+            "Inter"
+          ],
+          "body-lg": [
+            "Inter"
+          ]
+        },
+        "fontSize": {
+          "body-md": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-lg": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-xl-mobile": [
+            "28px",
+            {
+              "lineHeight": "36px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-xl": [
+            "36px",
+            {
+              "lineHeight": "44px",
+              "letterSpacing": "-0.02em",
+              "fontWeight": "700"
+            }
+          ],
+          "headline-sm": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "600"
+            }
+          ],
+          "label-md": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "letterSpacing": "0.02em",
+              "fontWeight": "500"
+            }
+          ],
+          "body-sm": [
+            "12px",
+            {
+              "lineHeight": "16px",
+              "fontWeight": "400"
+            }
+          ],
+          "headline-md": [
+            "20px",
+            {
+              "lineHeight": "28px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-lg": [
+            "14px",
+            {
+              "lineHeight": "20px",
+              "letterSpacing": "0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "headline-lg-mobile": [
+            "22px",
+            {
+              "lineHeight": "30px",
+              "letterSpacing": "-0.01em",
+              "fontWeight": "600"
+            }
+          ],
+          "label-sm": [
+            "11px",
+            {
+              "lineHeight": "14px",
+              "letterSpacing": "0.04em",
+              "fontWeight": "600"
+            }
+          ],
+          "body-lg": [
+            "16px",
+            {
+              "lineHeight": "24px",
+              "fontWeight": "400"
+            }
+          ]
+        }
+      },
+    },
+  }</script></head><body class="bg-background font-body-md text-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-low border-r border-outline-variant z-50 flex flex-col justify-between shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col"><div class="h-16 px-space-lg flex items-center justify-between bg-surface-container-low border-b border-outline-variant"><div class="flex items-center gap-space-sm"><div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center"><span class="material-symbols-outlined text-on-primary-container text-[20px]">hub</span></div><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-on-surface tracking-tight leading-none">CastraVision</span><span class="font-label-sm text-label-sm text-primary tracking-wider uppercase mt-0.5">SME AI ENGINE</span></div></div><div class="w-2 h-2 rounded-full bg-secondary-container"></div></div><div class="px-space-md py-space-sm"><div class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider px-space-sm mb-space-xs">Operations</div><nav class="flex flex-col gap-space-xs">
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            <span class="font-label-lg text-label-lg">Overview</span>
+          </a>
+          <a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <div class="flex items-center gap-space-sm">
+              <span class="material-symbols-outlined text-[18px]">approval</span>
+              <span class="font-label-lg text-label-lg">Approvals</span>
+            </div>
+            <span class="px-1.5 py-0.2 rounded-full bg-[#8083ff]/20 text-[#8083ff] border border-[#8083ff]/30 text-[10px] font-bold">3</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+            <span class="font-label-lg text-label-lg">My Proposals</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">campaign</span>
+            <span class="font-label-lg text-label-lg">Campaigns</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">psychology</span>
+            <span class="font-label-lg text-label-lg">Strategy Studio</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+            <span class="font-label-lg text-label-lg">Content Gen</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px] text-[#8083ff]">publish</span>
+            <span class="font-label-lg text-label-lg text-[#dfe2f1]">Campaign Import</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">analytics</span>
+            <span class="font-label-lg text-label-lg">Performance &amp; Insights</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">settings</span>
+            <span class="font-label-lg text-label-lg">Account Settings</span>
+          </a>
+        </nav></div></div><div class="p-space-md bg-surface-container-low border-t border-outline-variant">
+          <div class="bg-[#1c1f2a] border border-[#464554] p-3 rounded-lg flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#8083ff]/20 text-[#8083ff] font-bold text-[11px] flex items-center justify-center border border-[#8083ff]/30">AC</div>
+                <div class="flex flex-col">
+                  <span class="font-label-sm text-[11px] text-[#dfe2f1] font-semibold leading-tight">Acme Corp Enterprise</span>
+                  <span class="font-label-sm text-[9px] text-[#c7c4d7] leading-none">acme-corp-prod-01</span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[#03b5d3] text-[16px]">verified</span>
+            </div>
+            <div class="h-px bg-[#464554] w-full"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-[#8083ff] text-[#0d0096] flex items-center justify-center font-bold text-[11px]">DK</div>
+                <div class="flex flex-col">
+                  <span class="font-label-md text-label-md text-[#dfe2f1] font-medium leading-none">David Kross</span>
+                  <span class="font-label-sm text-[10px] text-[#c7c4d7] mt-0.5">Growth Squad Lead</span>
+                </div>
+              </div>
+              <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/20 text-[#8083ff] border border-[#8083ff]/40 font-label-sm text-[10px] font-bold uppercase tracking-wider">LEADER</span>
+            </div>
+          </div>
+        </div></aside><div class="pl-64 flex flex-col min-h-screen"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-low/90 backdrop-blur-xl z-40 flex items-center justify-between px-gutter border-b border-outline-variant shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs font-label-md text-label-md">
+          <span class="text-[#c7c4d7]">Leader Workspace</span>
+          <span class="material-symbols-outlined text-[#908fa0] text-[14px]">chevron_right</span>
+          <span class="text-[#dfe2f1] font-semibold">Campaign Import &amp; Allocation</span>
+        </div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-space-sm py-1 rounded-full bg-surface-container border border-outline-variant"><span class="w-2 h-2 rounded-full bg-secondary-container"></span><span class="font-label-sm text-label-sm text-on-surface-variant">All systems nominal</span></div><button class="relative p-space-xs rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[20px]">notifications</span><span class="absolute -top-1 -right-1 w-4 h-4 rounded-full text-white font-label-sm text-[10px] flex items-center justify-center font-bold bg-error-container">5</span></button><div class="h-6 w-px bg-outline-variant"></div><div class="flex items-center gap-space-sm"><div class="flex flex-col text-right"><span class="font-label-md text-label-md text-on-surface font-semibold">Alex Rivera</span><span class="font-label-sm text-label-sm text-on-surface-variant">Marketing Specialist • <span class="text-primary font-bold">EMPLOYEE</span></span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="relative pt-16 flex-1 w-full px-gutter bg-surface"><div class="flex flex-col w-full gap-space-lg pb-12">
+<!-- 1. Page Header Card -->
+<div class="w-full bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 flex flex-col md:flex-row md:items-center justify-between gap-space-md shadow-sm">
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center gap-2.5 flex-wrap">
+<h1 class="font-headline-lg text-headline-lg text-[#dfe2f1] tracking-tight m-0">Campaign Data Import &amp; Squad Allocation</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/40 text-[#8083ff] font-label-sm text-label-sm tracking-wider uppercase font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#8083ff]"></span>
+          LEADER TELEMETRY ENGINE
+        </span>
+</div>
+<p class="font-body-md text-body-md text-[#c7c4d7] m-0">
+        Import global datasets and monitor team telemetry ingestion across Growth Squad Alpha.
+      </p>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-[#464554] bg-transparent text-[#dfe2f1] font-label-lg text-label-lg hover:bg-[#262a35] transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined text-[18px] text-[#c7c4d7]">dataset</span>
+<span class="">Schema Template Library</span>
+</button>
+<button class="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#8083ff] text-[#0d0096] font-label-lg text-label-lg font-semibold hover:bg-[#999bff] transition-colors focus:outline-none shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Define Global Schema</span>
+</button>
+</div>
+</div>
+<!-- 2. Split 2-Column Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Left Card: Ingestion & Validation (7 Cols) -->
+<div class="lg:col-span-7 bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between pb-4 border-b border-[#464554] mb-5">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-[#8083ff]/20 flex items-center justify-center text-[#8083ff]">
+<span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-[#dfe2f1] leading-none">Global Dataset Ingestion &amp; Validation</h2>
+<span class="font-label-sm text-label-sm text-[#c7c4d7]">Automated Vector Encoding &amp; Schema Alignment</span>
+</div>
+</div>
+<span class="px-2 py-0.5 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#c7c4d7]">v4.2 Parser</span>
+</div>
+<!-- Drag & Drop Zone -->
+<div class="relative group cursor-pointer bg-[#0a0e18] border-2 border-dashed border-[#464554] hover:border-[#8083ff] rounded-lg p-8 text-center transition-all flex flex-col items-center justify-center gap-2" id="drop-zone">
+<div class="w-12 h-12 rounded-full bg-[#171b26] border border-[#464554] group-hover:border-[#8083ff] flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[#8083ff] text-[26px]">upload_file</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="font-label-lg text-label-lg text-[#dfe2f1] font-medium">Drag and drop global dataset here, or <span class="text-[#8083ff] underline underline-offset-2">browse files</span></span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7] mt-0.5">Supports CSV, JSON, XLSX up to 500MB • Auto-converts to Vector Schema v4.2</span>
+</div>
+<input aria-label="Upload dataset" class="absolute inset-0 opacity-0 cursor-pointer" type="file">
+</div>
+<!-- Staged Validation Container -->
+<div class="bg-[#171b26] border border-[#464554] rounded-lg p-4 mt-4 flex flex-col gap-3">
+<div class="flex items-center justify-between flex-wrap gap-2">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded bg-[#1c1f2a] border border-[#464554] flex items-center justify-center text-[#8083ff]">
+<span class="material-symbols-outlined text-[20px]">table_chart</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#dfe2f1] font-mono font-medium">Q4_Global_Spend_Matrix.csv</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">14.8 MB • Delimiter: Comma • UTF-8</span>
+</div>
+</div>
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#03b5d3]/15 border border-[#03b5d3]/30 text-[#03b5d3]">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span class="font-label-sm text-label-sm font-semibold tracking-wide uppercase">Validation Success</span>
+</div>
+</div>
+<div class="w-full bg-[#0a0e18] border border-[#464554] rounded p-2.5 flex items-center justify-between text-xs">
+<div class="flex items-center gap-2 text-[#c7c4d7]">
+<span class="material-symbols-outlined text-[16px] text-[#03b5d3]">task_alt</span>
+<span class="">14,200 rows verified</span>
+<span class="text-[#464554]">•</span>
+<span class="text-[#dfe2f1]">0 syntax errors</span>
+<span class="text-[#464554]">•</span>
+<span class="">24 standard telemetry dimensions matched</span>
+</div>
+<span class="text-[#03b5d3] font-mono font-semibold">100% READY</span>
+</div>
+<button class="w-full bg-[#8083ff] text-[#0d0096] font-label-lg text-label-lg font-semibold px-5 py-2.5 rounded-lg flex items-center justify-center gap-2 hover:bg-[#999bff] transition-colors focus:outline-none mt-1" type="button">
+<span class="material-symbols-outlined text-[18px]">publish</span>
+<span class="">Ingest Global Dataset</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Right Card: Squad Telemetry Health & Ingestion Stats (5 Cols) -->
+<div class="lg:col-span-5 bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 flex flex-col justify-between shadow-sm">
+<div>
+<div class="flex items-center justify-between pb-4 border-b border-[#464554] mb-4">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-[#dfe2f1] leading-none">Squad Telemetry Health</h2>
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#c7c4d7] mt-1 m-0">Real-time pipeline ingestion integrity for Growth Squad Alpha.</p>
+</div>
+<span class="px-2 py-0.5 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#03b5d3] font-mono">NOMINAL</span>
+</div>
+<div class="flex flex-col gap-3">
+<!-- Metric 1: Total Rows -->
+<div class="bg-[#171b26] border border-[#464554] rounded-lg p-3.5 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#c7c4d7] uppercase tracking-wider">Total Rows Ingested</span>
+<span class="material-symbols-outlined text-[18px] text-[#03b5d3]">insights</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-[#dfe2f1] leading-none">1.2M</span>
+<span class="font-body-sm text-body-sm text-[#03b5d3] font-medium">+180k rows synced today</span>
+</div>
+<div class="w-full bg-[#0a0e18] rounded-full h-1.5 overflow-hidden">
+<div class="bg-[#03b5d3] h-1.5 rounded-full" style="width: 78%"></div>
+</div>
+<span class="font-label-sm text-label-sm text-[#c7c4d7]">Across 3 ad network connectors (Meta, Google, TikTok)</span>
+</div>
+<!-- Metric 2: Schema Errors -->
+<div class="bg-[#171b26] border border-[#464554] rounded-lg p-3.5 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#c7c4d7] uppercase tracking-wider">Schema Errors</span>
+<span class="px-2 py-0.5 rounded bg-[#ffb4ab]/15 border border-[#ffb4ab]/40 text-[#ffb4ab] font-label-sm text-label-sm font-semibold">ATTENTION REQUIRED</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-lg text-headline-lg font-bold text-[#ffb4ab] leading-none">3 Flagged</span>
+<span class="font-body-sm text-body-sm text-[#ffb4ab]">Unparsed payload</span>
+</div>
+<p class="font-body-sm text-body-sm text-[#c7c4d7] m-0">Missing UTC timestamp &amp; channel ID in TikTok batch ingest.</p>
+</div>
+<!-- Metric 3: Active Contributors -->
+<div class="bg-[#171b26] border border-[#464554] rounded-lg p-3.5 flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#c7c4d7] uppercase tracking-wider">Active Contributors</span>
+<span class="font-label-md text-label-md text-[#dfe2f1] font-semibold">4 / 5 Active</span>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div class="flex items-center -space-x-2 overflow-hidden">
+<div class="w-7 h-7 rounded-full bg-[#8083ff] text-[#0d0096] flex items-center justify-center font-label-sm text-label-sm font-bold border border-[#171b26]" title="Elena Rostova">ER</div>
+<div class="w-7 h-7 rounded-full bg-[#03b5d3] text-[#00424e] flex items-center justify-center font-label-sm text-label-sm font-bold border border-[#171b26]" title="Alex Rivera">AR</div>
+<div class="w-7 h-7 rounded-full bg-[#a078ff] text-[#340080] flex items-center justify-center font-label-sm text-label-sm font-bold border border-[#171b26]" title="Maya Lin">ML</div>
+<div class="w-7 h-7 rounded-full bg-[#313540] text-[#dfe2f1] flex items-center justify-center font-label-sm text-label-sm font-bold border border-[#171b26]" title="Marcus Vance">MV</div>
+</div>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">Elena, Alex, Maya, Marcus</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer system tag -->
+<div class="mt-4 pt-3 border-t border-[#464554] flex items-center justify-between text-xs text-[#c7c4d7]">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[15px] text-[#03b5d3]">memory</span>
+<span class="">Schema Engine v4.18</span>
+</div>
+<span class="text-[#03b5d3] font-medium">Auto-parsing active</span>
+</div>
+</div>
+</div>
+<!-- 3. Bottom Section: Squad Imported Datasets History -->
+<div class="w-full bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 flex flex-col shadow-sm">
+<!-- Header of the Table Card -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 border-b border-[#464554]">
+<div class="flex items-center gap-3">
+<h2 class="font-headline-sm text-headline-sm text-[#dfe2f1] m-0">Squad Import History &amp; Allocation</h2>
+<span class="px-2.5 py-0.5 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#dfe2f1] font-semibold">12 Total Datasets</span>
+</div>
+<!-- Search & Filters -->
+<div class="flex items-center gap-2.5 flex-wrap">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#c7c4d7] text-[18px]">search</span>
+<input class="bg-[#171b26] border border-[#464554] text-[#dfe2f1] text-xs rounded-lg pl-8 pr-3 py-2 w-64 focus:outline-none focus:border-[#8083ff] placeholder-[#c7c4d7]/60" placeholder="Filter datasets or squads..." type="text">
+</div>
+<select class="bg-[#171b26] border border-[#464554] text-[#dfe2f1] text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-[#8083ff]">
+<option>All Squads</option>
+<option>Squad Alpha</option>
+<option>Squad Beta</option>
+</select>
+<select class="bg-[#171b26] border border-[#464554] text-[#dfe2f1] text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-[#8083ff]">
+<option>All Statuses</option>
+<option>Ready</option>
+<option>Ingesting</option>
+<option>Schema Error</option>
+</select>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse mt-1">
+<thead>
+<tr class="border-b border-[#464554]">
+<th class="py-3.5 px-3 font-label-sm text-label-sm text-[#c7c4d7] tracking-wider uppercase font-semibold">DATASET NAME</th>
+<th class="py-3.5 px-3 font-label-sm text-label-sm text-[#c7c4d7] tracking-wider uppercase font-semibold">UPLOADED BY</th>
+<th class="py-3.5 px-3 font-label-sm text-label-sm text-[#c7c4d7] tracking-wider uppercase font-semibold">SQUAD</th>
+<th class="py-3.5 px-3 font-label-sm text-label-sm text-[#c7c4d7] tracking-wider uppercase font-semibold">RECORDS</th>
+<th class="py-3.5 px-3 font-label-sm text-label-sm text-[#c7c4d7] tracking-wider uppercase font-semibold text-center">STATUS</th>
+<th class="py-3.5 px-3 font-label-sm text-label-sm text-[#c7c4d7] tracking-wider uppercase font-semibold text-center">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#464554]">
+<!-- Row 1 -->
+<tr class="hover:bg-[#171b26]/50 transition-colors">
+<td class="py-4 px-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#8083ff] text-[20px]">description</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-medium text-[#dfe2f1]">Q3_SneakerX_Performance.csv</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">8.2 MB • Updated 2 hours ago</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-3">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#dfe2f1] font-medium">Alex Rivera</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">Growth Lead • Employee</span>
+</div>
+</td>
+<td class="py-4 px-3">
+<span class="px-2 py-1 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#dfe2f1] font-mono">Alpha</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-body-md text-body-md text-[#dfe2f1] font-mono">48,250 rows</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded bg-[#03b5d3]/10 border border-[#03b5d3]/30 text-[#03b5d3] font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#03b5d3]"></span>
+Ready
+</span>
+</td>
+<td class="py-4 px-3 text-center">
+<button class="border border-[#464554] text-[#dfe2f1] hover:bg-[#262a35] px-3 py-1.5 rounded text-xs font-medium transition-colors" type="button">
+                Assign to Model
+              </button>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-[#171b26]/50 transition-colors">
+<td class="py-4 px-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#ffb4ab] text-[20px]">data_object</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-medium text-[#dfe2f1]">TikTok_Q3_Conversions.json</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">3.4 MB • Updated 4 hours ago</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-3">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#dfe2f1] font-medium">Maya Lin</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">Creative Specialist • Employee</span>
+</div>
+</td>
+<td class="py-4 px-3">
+<span class="px-2 py-1 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#dfe2f1] font-mono">Alpha</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-body-md text-body-md text-[#dfe2f1] font-mono">19,400 rows</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded bg-[#ffb4ab]/10 border border-[#ffb4ab]/30 text-[#ffb4ab] font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#ffb4ab]"></span>
+Schema Error
+</span>
+</td>
+<td class="py-4 px-3 text-center">
+<button class="border border-[#ffb4ab]/40 text-[#ffb4ab] hover:bg-[#ffb4ab]/10 px-3 py-1.5 rounded text-xs font-medium transition-colors" type="button">
+                Review Error
+              </button>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-[#171b26]/50 transition-colors">
+<td class="py-4 px-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#a078ff] text-[20px]">table_chart</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-medium text-[#dfe2f1]">Google_Search_Metrics.xlsx</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">12.1 MB • Ingest started 1m ago</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-3">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#dfe2f1] font-medium">Elena Rostova</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">Senior Copywriter • Employee</span>
+</div>
+</td>
+<td class="py-4 px-3">
+<span class="px-2 py-1 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#dfe2f1] font-mono">Alpha</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-body-md text-body-md text-[#dfe2f1] font-mono">84,100 rows</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded bg-[#a078ff]/10 border border-[#a078ff]/30 text-[#a078ff] font-label-sm text-label-sm font-semibold">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a078ff] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#a078ff]"></span>
+</span>
+Ingesting&nbsp;</span></td>
+<td class="py-4 px-3 text-center">
+<button class="border border-[#464554] text-[#c7c4d7] hover:text-white hover:bg-[#262a35] px-3 py-1.5 rounded text-xs font-medium transition-colors" type="button">
+                Cancel
+              </button>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-[#171b26]/50 transition-colors">
+<td class="py-4 px-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#8083ff] text-[20px]">description</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-medium text-[#dfe2f1]">Meta_Retargeting_Audience_Pool.csv</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">24.5 MB • Updated yesterday</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-3">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-[#dfe2f1] font-medium">Alex Rivera</span>
+<span class="font-body-sm text-body-sm text-[#c7c4d7]">Growth Lead • Employee</span>
+</div>
+</td>
+<td class="py-4 px-3">
+<span class="px-2 py-1 rounded bg-[#171b26] border border-[#464554] font-label-sm text-label-sm text-[#dfe2f1] font-mono">Alpha</span>
+</td>
+<td class="py-4 px-3">
+<span class="font-body-md text-body-md text-[#dfe2f1] font-mono">152,000 rows</span>
+</td>
+<td class="py-4 px-3 text-center">
+<span class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded bg-[#03b5d3]/10 border border-[#03b5d3]/30 text-[#03b5d3] font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-[#03b5d3]"></span>
+Ready
+</span>
+</td>
+<td class="py-4 px-3 text-center">
+<button class="border border-[#464554] text-[#dfe2f1] hover:bg-[#262a35] px-3 py-1.5 rounded text-xs font-medium transition-colors" type="button">
+                Assign to Model
+              </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination Footer -->
+<div class="pt-4 mt-2 border-t border-[#464554] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#c7c4d7]">
+<div class="">
+        Showing <span class="font-semibold text-[#dfe2f1]">1</span> to <span class="font-semibold text-[#dfe2f1]">4</span> of <span class="font-semibold text-[#dfe2f1]">12</span> datasets
+      </div>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1.5 rounded border border-[#464554] bg-[#171b26] text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] disabled:opacity-50" type="button">
+          Previous
+        </button>
+<button class="px-2.5 py-1.5 rounded border border-[#8083ff] bg-[#8083ff] text-[#0d0096] font-semibold" type="button">
+          1
+        </button>
+<button class="px-2.5 py-1.5 rounded border border-[#464554] bg-[#171b26] text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]" type="button">
+          2
+        </button>
+<button class="px-2.5 py-1.5 rounded border border-[#464554] bg-[#171b26] text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]" type="button">
+          3
+        </button>
+<button class="px-2.5 py-1.5 rounded border border-[#464554] bg-[#171b26] text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]" type="button">
+          Next
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    // 1. Sidebar alignment for Leader Workspace
+    const aside = document.querySelector('aside');
+    if (aside) {
+      // Rebuild the navigation links to match the Leader requirements
+      const navContainer = aside.querySelector('nav');
+      if (navContainer) {
+        navContainer.innerHTML = `
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">dashboard</span>
+            <span class="font-label-lg text-label-lg">Overview</span>
+          </a>
+          <a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <div class="flex items-center gap-space-sm">
+              <span class="material-symbols-outlined text-[18px]">approval</span>
+              <span class="font-label-lg text-label-lg">Approvals</span>
+            </div>
+            <span class="px-1.5 py-0.2 rounded-full bg-[#8083ff]/20 text-[#8083ff] border border-[#8083ff]/30 text-[10px] font-bold">3</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">assignment_turned_in</span>
+            <span class="font-label-lg text-label-lg">My Proposals</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">campaign</span>
+            <span class="font-label-lg text-label-lg">Campaigns</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">psychology</span>
+            <span class="font-label-lg text-label-lg">Strategy Studio</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">auto_awesome</span>
+            <span class="font-label-lg text-label-lg">Content Gen</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px] text-[#8083ff]">publish</span>
+            <span class="font-label-lg text-label-lg text-[#dfe2f1]">Campaign Import</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">analytics</span>
+            <span class="font-label-lg text-label-lg">Performance & Insights</span>
+          </a>
+          <a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-[#c7c4d7] hover:bg-[#1f2433] transition-colors" href="#">
+            <span class="material-symbols-outlined text-[18px]">settings</span>
+            <span class="font-label-lg text-label-lg">Account Settings</span>
+          </a>
+        `;
+      }
+
+      // Update the sidebar footer for Leader context
+      const sidebarFooter = aside.querySelector('.p-space-md');
+      if (sidebarFooter) {
+        sidebarFooter.innerHTML = `
+          <div class="bg-[#1c1f2a] border border-[#464554] p-3 rounded-lg flex flex-col gap-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded bg-[#8083ff]/20 text-[#8083ff] font-bold text-[11px] flex items-center justify-center border border-[#8083ff]/30">AC</div>
+                <div class="flex flex-col">
+                  <span class="font-label-sm text-[11px] text-[#dfe2f1] font-semibold leading-tight">Acme Corp Enterprise</span>
+                  <span class="font-label-sm text-[9px] text-[#c7c4d7] leading-none">acme-corp-prod-01</span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined text-[#03b5d3] text-[16px]">verified</span>
+            </div>
+            <div class="h-px bg-[#464554] w-full"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-full bg-[#8083ff] text-[#0d0096] flex items-center justify-center font-bold text-[11px]">DK</div>
+                <div class="flex flex-col">
+                  <span class="font-label-md text-label-md text-[#dfe2f1] font-medium leading-none">David Kross</span>
+                  <span class="font-label-sm text-[10px] text-[#c7c4d7] mt-0.5">Growth Squad Lead</span>
+                </div>
+              </div>
+              <span class="px-1.5 py-0.5 rounded bg-[#8083ff]/20 text-[#8083ff] border border-[#8083ff]/40 font-label-sm text-[10px] font-bold uppercase tracking-wider">LEADER</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // 2. Headerbar alignment for Leader Workspace
+    const header = document.querySelector('header');
+    if (header) {
+      // Breadcrumb update
+      const breadcrumb = header.querySelector('.font-label-md');
+      if (breadcrumb) {
+        breadcrumb.innerHTML = `
+          <span class="text-[#c7c4d7]">Leader Workspace</span>
+          <span class="material-symbols-outlined text-[#908fa0] text-[14px]">chevron_right</span>
+          <span class="text-[#dfe2f1] font-semibold">Campaign Import & Allocation</span>
+        `;
+      }
+
+      // Notification badge update to '5'
+      const notifBadge = header.querySelector('header button span.rounded-full');
+      if (notifBadge) {
+        notifBadge.textContent = '5';
+      }
+
+      // Profile avatar update to David Kross
+      const profileSection = header.querySelectorAll('.flex.items-center.gap-space-sm')[1];
+      if (profileSection) {
+        profileSection.innerHTML = `
+          <div class="flex flex-col text-right">
+            <span class="font-label-md text-label-md text-[#dfe2f1] font-semibold">David Kross</span>
+            <span class="font-label-sm text-label-sm text-[#c7c4d7]">Growth Squad Lead • <span class="text-[#8083ff] font-bold">LEADER</span></span>
+          </div>
+          <div class="w-8 h-8 rounded-full bg-[#8083ff] text-[#0d0096] font-bold flex items-center justify-center text-xs">DK</div>
+        `;
+      }
+    }
+
+    // 3. Drag and Drop Interactive Feedback
+    const dropZone = document.getElementById('drop-zone');
+    if (dropZone) {
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.add('border-[#8083ff]', 'bg-[#171b26]');
+        });
+      });
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove('border-[#8083ff]', 'bg-[#171b26]');
+        });
+      });
+    }
+  })();
+</script></main><footer class="w-full bg-surface-container-low border-t border-outline-variant px-gutter py-space-md shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm"><div class="flex items-center gap-space-md"><span class="font-label-sm text-label-sm text-on-surface-variant">© 2025 CastraVision SME AI ENGINE. All rights reserved.</span></div><div class="flex items-center gap-space-md font-label-sm text-label-sm text-on-surface-variant"><span class="hover:text-on-surface cursor-pointer">Licensed to Acme Corp (Enterprise Tier) Operational Telemetry</span><span class="">|</span><span class="hover:text-on-surface cursor-pointer">Cluster Region: us-east-1</span><span class="">|</span><span class="hover:text-on-surface cursor-pointer">AI Core v4.18</span></div></div></footer></div>
+
+
+</body></html>

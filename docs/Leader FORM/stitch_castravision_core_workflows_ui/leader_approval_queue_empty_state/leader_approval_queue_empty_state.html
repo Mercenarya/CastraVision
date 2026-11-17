@@ -1,0 +1,377 @@
+<!DOCTYPE html><html class="dark" lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"surface-dim":"#0f131d","surface-bright":"#353944","error-container":"#93000a","surface-container-high":"#262a35","outline":"#908fa0","inverse-surface":"#dfe2f1","surface-container-highest":"#313540","tertiary":"#d0bcff","surface-container":"#1c1f2a","primary-container":"#8083ff","on-error-container":"#ffdad6","on-background":"#dfe2f1","surface":"#0f131d","primary-fixed":"#e1e0ff","on-secondary-fixed-variant":"#004e5c","on-primary-container":"#0d0096","error":"#ffb4ab","surface-tint":"#c0c1ff","inverse-on-surface":"#2c303b","tertiary-fixed-dim":"#d0bcff","surface-container-lowest":"#0a0e18","on-secondary-fixed":"#001f26","on-surface":"#dfe2f1","secondary":"#4cd7f6","inverse-primary":"#494bd6","primary":"#c0c1ff","on-primary":"#1000a9","on-tertiary-fixed":"#23005c","on-tertiary-fixed-variant":"#5516be","secondary-fixed":"#acedff","on-primary-fixed":"#07006c","on-surface-variant":"#c7c4d7","on-secondary":"#003640","tertiary-container":"#a078ff","on-tertiary":"#3c0091","outline-variant":"#464554","background":"#0f131d","surface-variant":"#313540","tertiary-fixed":"#e9ddff","on-secondary-container":"#00424e","on-tertiary-container":"#340080","surface-container-low":"#171b26","primary-fixed-dim":"#c0c1ff","secondary-container":"#03b5d3","on-primary-fixed-variant":"#2f2ebe","secondary-fixed-dim":"#4cd7f6","on-error":"#690005"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"space-lg":"1.5rem","space-xl":"2rem","gutter-mobile":"0.75rem","space-xs":"0.25rem","margin-mobile":"1rem","space-sm":"0.5rem","space-md":"1rem","gutter":"1.5rem","margin":"2rem"},fontFamily:{"headline-lg":["Plus Jakarta Sans"],"headline-xl-mobile":["Plus Jakarta Sans"],"label-md":["Inter"],"body-sm":["Inter"],"headline-xl":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-lg":["Inter"],"label-lg":["Inter"],"body-md":["Inter"],"headline-sm":["Plus Jakarta Sans"],"label-sm":["Inter"],"headline-lg-mobile":["Plus Jakarta Sans"]},fontSize:{"headline-lg":["28px",{lineHeight:"36px",letterSpacing:"-0.02em",fontWeight:"600"}],"headline-xl-mobile":["28px",{lineHeight:"36px",letterSpacing:"-0.01em",fontWeight:"700"}],"label-md":["12px",{lineHeight:"16px",letterSpacing:"0.02em",fontWeight:"500"}],"body-sm":["12px",{lineHeight:"16px",fontWeight:"400"}],"headline-xl":["36px",{lineHeight:"44px",letterSpacing:"-0.02em",fontWeight:"700"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-lg":["16px",{lineHeight:"24px",fontWeight:"400"}],"label-lg":["14px",{lineHeight:"20px",letterSpacing:"0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",fontWeight:"400"}],"headline-sm":["16px",{lineHeight:"24px",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.04em",fontWeight:"600"}],"headline-lg-mobile":["22px",{lineHeight:"30px",letterSpacing:"-0.01em",fontWeight:"600"}]}}}}</script></head><body class="bg-surface-container-lowest font-body-md text-on-surface antialiased"><aside class="fixed left-0 top-0 h-screen w-[260px] bg-[#171b26] border-r border-[#464554] z-50 flex flex-col justify-between select-none">
+  <div class="flex flex-col flex-1 min-h-0">
+    <div class="h-16 px-space-md border-b border-[#464554] flex items-center justify-between shrink-0">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-primary-container flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-on-primary-container text-[20px]">view_in_ar</span>
+        </div>
+        <div class="flex flex-col">
+          <span class="font-headline-sm text-headline-sm text-[#dfe2f1] leading-tight tracking-tight font-bold">CastraVision</span>
+          <span class="font-label-sm text-[10px] text-[#c7c4d7] tracking-wider leading-none uppercase">SME AI ENGINE</span>
+        </div>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto px-space-sm py-4 flex flex-col gap-1">
+      <div class="px-3 pb-2 flex items-center justify-between">
+        <span class="font-label-sm text-[10px] uppercase tracking-wider text-[#908fa0] font-semibold">WORKSPACE NAVIGATION</span>
+        <span class="px-1.5 py-0.5 rounded font-label-sm text-[10px] uppercase font-bold tracking-wider bg-[#262a35] border border-[#464554] text-[#c0c1ff]">LEADER</span>
+      </div>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">dashboard</span>
+          <span class="font-label-md text-label-md">Overview</span>
+        </div>
+      </a>
+      <a aria-current="page" class="flex items-center justify-between px-3 py-2 rounded-lg bg-[#262a35] text-[#dfe2f1] border-l-[3px] border-[#8083ff] font-semibold transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px] text-[#c0c1ff]">verified</span>
+          <span class="font-label-md text-label-md">Approvals</span>
+        </div>
+        <span class="h-5 px-2 rounded-full bg-[#313540] text-[#dfe2f1] font-label-sm text-[11px] flex items-center justify-center font-bold">0</span>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">description</span>
+          <span class="font-label-md text-label-md">My Proposals</span>
+        </div>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">campaign</span>
+          <span class="font-label-md text-label-md">Campaigns</span>
+        </div>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">insights</span>
+          <span class="font-label-md text-label-md">Strategy Studio</span>
+        </div>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+          <span class="font-label-md text-label-md">Content Gen</span>
+        </div>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">publish</span>
+          <span class="font-label-md text-label-md">Campaign Import</span>
+        </div>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">monitoring</span>
+          <span class="font-label-md text-label-md">Performance &amp; Insights</span>
+        </div>
+      </a>
+      <a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:bg-[#262a35] hover:text-[#dfe2f1] transition-colors" href="#">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-[20px]">settings</span>
+          <span class="font-label-md text-label-md">Account Settings</span>
+        </div>
+      </a>
+    </nav>
+  </div>
+  <div class="p-space-sm border-t border-[#464554] bg-[#171b26] shrink-0">
+    <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#0a0e18] border border-[#464554] hover:border-outline transition-colors cursor-pointer">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-8 h-8 rounded-lg bg-[#262a35] flex items-center justify-center shrink-0 border border-[#464554] text-[#4cd7f6] font-bold text-xs font-mono">
+          AC
+        </div>
+        <div class="flex flex-col min-w-0">
+          <span class="font-label-sm text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</span>
+          <span class="font-mono text-[10px] text-[#908fa0] leading-none truncate mt-0.5">acme-corp-prod-01</span>
+        </div>
+      </div>
+      <span class="px-1.5 py-0.5 rounded font-label-sm text-[9px] uppercase font-bold tracking-wider bg-[#262a35] text-[#c0c1ff] shrink-0 border border-[#464554]">LEADER</span>
+    </div>
+  </div>
+</aside><div class="pl-[260px] min-h-screen flex flex-col"><header class="fixed top-0 left-[260px] right-0 h-16 bg-[#171b26] border-b border-[#464554] z-40 px-space-md flex items-center justify-between gap-space-md">
+  <div class="flex items-center gap-space-sm min-w-0">
+    <nav class="flex items-center gap-1.5 font-label-md text-label-md text-[#c7c4d7] truncate">
+      <span class="hover:text-[#dfe2f1] transition-colors cursor-pointer">Leader Workspace</span>
+      <span class="text-[#908fa0] text-xs">›</span>
+      <span class="hover:text-[#dfe2f1] transition-colors cursor-pointer">Approvals</span>
+      <span class="text-[#908fa0] text-xs">›</span>
+      <span class="text-[#dfe2f1] font-semibold truncate">Approval Queue</span>
+    </nav>
+  </div>
+  <div class="flex items-center gap-space-md shrink-0">
+    <div class="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#0a0e18] border border-[#464554]">
+      <span class="w-2 h-2 rounded-full bg-[#28A745] shrink-0"></span>
+      <span class="font-label-sm text-label-sm text-[#c7c4d7] whitespace-nowrap">All systems nominal</span>
+    </div>
+    <button aria-label="Notifications" class="relative p-2 rounded-lg hover:bg-[#262a35] text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors" type="button">
+      <span class="material-symbols-outlined text-[20px]">notifications</span>
+      <span class="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-error text-on-error font-label-sm text-[10px] font-bold flex items-center justify-center leading-none">5</span>
+    </button>
+    <div class="h-6 w-px bg-[#464554]"></div>
+    <div class="flex items-center gap-3 pl-1 cursor-pointer group">
+      <div class="w-8 h-8 rounded-full bg-[#8083ff] text-[#0d0096] flex items-center justify-center shrink-0 font-bold text-xs">
+        DK
+      </div>
+      <div class="hidden md:flex flex-col text-left">
+        <div class="flex items-center gap-1.5">
+          <span class="font-label-sm text-[13px] text-[#dfe2f1] leading-tight font-semibold">David Kross</span>
+          <span class="px-1 py-0.2 rounded font-label-sm text-[9px] uppercase font-bold tracking-wider bg-[#262a35] text-[#c0c1ff] border border-[#464554]">LEADER</span>
+        </div>
+        <span class="font-mono text-[11px] text-[#908fa0] leading-none mt-0.5">d.kross@acmecorp.com</span>
+      </div>
+    </div>
+  </div>
+</header><main class="flex-1 pt-16 bg-surface-container-lowest w-full px-space-md py-space-md"><div class="flex flex-col w-full gap-space-lg">
+<!-- Breadcrumb & Pipeline Classification Banner -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-xs">
+<div class="flex flex-col gap-1 min-w-0">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-high text-secondary font-label-sm text-label-sm uppercase tracking-wider font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          FR04 HUMAN-IN-THE-LOOP GOVERNANCE • STAGE-GATE APPROVAL PIPELINE
+        </span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-1">Proposal Approval Queue</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+        Review, edit, authorize, or reject AI-generated campaign content and budget allocation proposals before downstream ad network dispatch.
+      </p>
+</div>
+<!-- Quick Action / Global Pipeline State Badge -->
+<div class="flex items-center gap-space-sm shrink-0 self-start md:self-auto">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-secondary font-label-md text-label-md">
+<span class="material-symbols-outlined text-secondary text-[18px]">verified</span>
+<span class="font-semibold text-on-surface">Queue Cleared</span>
+</div>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-bright hover:bg-surface-container-highest text-on-surface font-label-md text-label-md transition-colors active:scale-95" id="refresh-queue-btn" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span class="">Refresh Queue</span>
+</button>
+</div>
+</div>
+<!-- KPI / State Summary Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<!-- Card 1: Pending Review (Empty State Metric) -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container rounded-xl min-h-[128px]">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Pending Review</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary font-label-sm text-[11px] font-semibold">All Caught Up</span>
+</div>
+<div class="flex flex-col mt-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">0 Proposals</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Queue cleared · Zero pending</span>
+</div>
+</div>
+<!-- Card 2: Approved this Month -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container rounded-xl min-h-[128px]">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Approved this Month</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary/10 text-secondary font-label-sm text-[11px] font-semibold">Campaigns Live</span>
+</div>
+<div class="flex flex-col mt-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">6 Approved</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">100% stage-gate verified</span>
+</div>
+</div>
+<!-- Card 3: Rejected with Notes -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container rounded-xl min-h-[128px]">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Rejected with Notes</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-[11px] font-semibold">Archived</span>
+</div>
+<div class="flex flex-col mt-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">2 Rejected</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Revision guidance logged</span>
+</div>
+</div>
+<!-- Card 4: Last Authorization -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container rounded-xl min-h-[128px]">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">Last Authorization</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-[11px] font-bold">PRP-8402</span>
+</div>
+<div class="flex flex-col mt-2">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Just now</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Authorized by David Kross</span>
+</div>
+</div>
+</div>
+<!-- Search, Filter & View Controls -->
+<div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md bg-surface-container-low p-space-sm rounded-xl">
+<!-- Left Filter Stack -->
+<div class="flex flex-wrap items-center gap-space-sm flex-1">
+<!-- Search Input -->
+<div class="relative flex-1 min-w-[240px] max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none">search</span>
+<input class="w-full h-10 pl-9 pr-4 rounded-lg bg-surface-container text-on-surface font-body-sm text-body-sm placeholder:text-outline focus:outline-none focus:bg-surface-container-high transition-colors" placeholder="Search by proposal name, ID, or author..." type="text">
+</div>
+<!-- Filter Dropdowns -->
+<div class="flex items-center gap-2">
+<button class="h-10 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors" type="button">
+<span class="text-on-surface-variant font-normal">Type:</span>
+<span class="">All Types</span>
+<span class="material-symbols-outlined text-outline text-[16px]">expand_more</span>
+</button>
+<button class="h-10 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors" type="button">
+<span class="text-on-surface-variant font-normal">Status:</span>
+<span class="">Pending (0)</span>
+<span class="material-symbols-outlined text-outline text-[16px]">expand_more</span>
+</button>
+<button class="h-10 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md flex items-center gap-2 transition-colors" type="button">
+<span class="text-on-surface-variant font-normal">Date Range:</span>
+<span class="">Past 30 Days</span>
+<span class="material-symbols-outlined text-outline text-[16px]">calendar_today</span>
+</button>
+</div>
+</div>
+<!-- Quick Status Filter Pills -->
+<div class="flex items-center gap-1.5 self-start lg:self-auto shrink-0 bg-surface-container-lowest p-1 rounded-lg">
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+        All (8)
+      </button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm bg-surface-container-high text-primary font-semibold" type="button">
+        Pending (0)
+      </button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+        Approved (6)
+      </button>
+<button class="px-2.5 py-1 rounded font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+        Rejected (2)
+      </button>
+</div>
+</div>
+<!-- Primary Stage: High-Impact Empty State Container -->
+<div class="relative flex flex-col items-center justify-center p-space-xl lg:py-24 bg-surface-container rounded-2xl overflow-hidden text-center">
+<!-- Subtle Architectural Tech Grid Watermark Background -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
+<svg height="100%" width="100%" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="40" id="grid-pattern" patternUnits="userSpaceOnUse" width="40">
+<path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="1"></path>
+</pattern>
+</defs>
+<rect fill="url(#grid-pattern)" height="100%" width="100%"></rect>
+</svg>
+</div>
+<div class="relative z-10 flex flex-col items-center max-w-2xl mx-auto">
+<!-- Graphic Focal Point: Clean Precision Icon Nest -->
+<div class="relative mb-6">
+<div class="w-20 h-20 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/20 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-[32px]">task_alt</span>
+</div>
+</div>
+<!-- Micro indicator pip -->
+<span class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-surface-container flex items-center justify-center">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+</span>
+</div>
+<!-- Typography Stack -->
+<span class="font-label-md text-label-md uppercase tracking-wider text-secondary font-semibold mb-2">Stage-Gate Synchronized</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">No proposals awaiting review</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+        All incoming AI-generated content drafts and budget reallocation proposals have been reviewed and processed. New proposals submitted by automated strategy agents or campaign creators will appear here automatically.
+      </p>
+<!-- Action Button Group -->
+<div class="flex flex-wrap items-center justify-center gap-space-sm mt-8">
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary-container/90 font-label-lg text-label-lg font-semibold transition-all shadow-sm" type="button">
+<span class="">View Approved History (6)</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-high hover:bg-surface-bright text-on-surface font-label-lg text-label-lg transition-colors" id="trigger-refresh" type="button">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span class="">Refresh Pipeline Now</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface font-label-lg text-label-lg transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">history_toggle_off</span>
+<span class="">View Past Rejected (2)</span>
+</button>
+</div>
+<!-- Metadata Telemetry Pill -->
+<div class="mt-8 flex items-center gap-4 text-outline font-label-sm text-label-sm">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+          Dispatcher: Active
+        </span>
+<span class="">•</span>
+<span class="">Auto-Sync Frequency: 60s</span>
+<span class="">•</span>
+<span class="">Latency: 14ms</span>
+</div>
+</div>
+</div>
+<!-- Bottom Context & Governance Invariant Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Pipeline Next Activity Module -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container rounded-xl">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-[22px]">smart_toy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Upcoming Pipeline Activity</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[10px] uppercase font-bold bg-surface-container-high text-outline">Scheduled</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5 leading-normal">
+            Next scheduled generation: <span class="text-on-surface font-medium">Q4 Retargeting Campaign Variants</span> by Gemini Marketing LLM scheduled for tomorrow at <span class="text-secondary font-mono">09:00 UTC</span>.
+          </p>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Automation Engine v2.4</span>
+<button class="font-label-md text-label-md text-primary hover:text-primary-fixed flex items-center gap-1 transition-colors" type="button">
+<span class="">Configure agent triggers</span>
+<span class="material-symbols-outlined text-[16px]">sync_alt</span>
+</button>
+</div>
+</div>
+<!-- Human-In-The-Loop Governance Reminder -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container rounded-xl">
+<div class="flex items-start gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0 text-secondary">
+<span class="material-symbols-outlined text-[22px]">gavel</span>
+</div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-2">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">FR04 Governance Invariant</span>
+<span class="px-1.5 py-0.2 rounded font-label-sm text-[10px] uppercase font-bold bg-surface-container-high text-secondary">Enforced</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1.5 leading-normal">As a Workspace Leader, your manual approval is strictly required before any AI-generated marketing copy, creative tags, or budget changes can be staged or deployed to live ad accounts.</p>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-outline">Jurisdiction: <span class="text-on-surface">Acme Corp Enterprise</span></span>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-secondary">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+          Zero-Bypass Policy
+        </span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  // Simple interactive feedback for queue refresh
+  const refreshBtns = [document.getElementById('refresh-queue-btn'), document.getElementById('trigger-refresh')];
+  refreshBtns.forEach(btn => {
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.classList.add('animate-spin');
+        setTimeout(() => {
+          icon.classList.remove('animate-spin');
+        }, 800);
+      }
+    });
+  });
+</script></main></div>
+
+
+
+
+
+
+
+
+
+</body></html>

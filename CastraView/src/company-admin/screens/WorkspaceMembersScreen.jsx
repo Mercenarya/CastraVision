@@ -225,7 +225,7 @@ export default function WorkspaceMembersScreen({
             <IconShield size={18} />
           </div>
           <div>
-            <strong style={{ color: '#ffffff' }}>Policy Notice:</strong> The last Workspace Admin cannot be removed or demoted from this tenant.
+            <strong style={{ color: '#ffffff' }}>Policy Notice:</strong> The last Marketing Manager cannot be removed or demoted from this tenant.
           </div>
         </div>
         <div className="ca-policy-enforced-pill">
@@ -281,7 +281,7 @@ export default function WorkspaceMembersScreen({
           </div>
 
           {/* Segmented bar */}
-          <div className="ca-segmented-progress-bar" title={`Admins: ${adminPct}%, Managers: ${managerPct}%, Members: ${memberPct}%`}>
+          <div className="ca-segmented-progress-bar" title={`Marketing Managers: ${adminPct}%, Leaders: ${managerPct}%, Employees: ${memberPct}%`}>
             <div
               className="ca-prog-seg-admin"
               style={{ width: `${adminPct}%` }}
@@ -300,15 +300,15 @@ export default function WorkspaceMembersScreen({
           <div className="ca-distribution-legend">
             <span className="ca-dist-legend-item">
               <span className="ca-legend-dot" style={{ background: '#8b5cf6' }} />
-              <strong>Admins ({adminCount})</strong> — Full control & compliance authority
+              <strong>Marketing Managers ({adminCount})</strong> — Full control & compliance authority
             </span>
             <span className="ca-dist-legend-item">
               <span className="ca-legend-dot" style={{ background: '#06b6d4' }} />
-              <strong>Managers ({managerCount})</strong> — Campaign execution & review
+              <strong>Leaders ({managerCount})</strong> — Campaign execution & review
             </span>
             <span className="ca-dist-legend-item">
               <span className="ca-legend-dot" style={{ background: '#4f46e5' }} />
-              <strong>Members ({memberCount})</strong> — Standard read & edit scope
+              <strong>Employees ({memberCount})</strong> — Standard read & edit scope
             </span>
           </div>
 
@@ -377,9 +377,9 @@ export default function WorkspaceMembersScreen({
             }}
           >
             <option value="All Roles">Role: All Roles</option>
-            <option value="Admin">Role: Admin</option>
-            <option value="Manager">Role: Manager</option>
-            <option value="Member">Role: Member</option>
+            <option value="Admin">Role: Marketing Manager</option>
+            <option value="Manager">Role: Leader</option>
+            <option value="Member">Role: Employee</option>
           </select>
 
           {/* Status Filter Dropdown */}
@@ -444,7 +444,7 @@ export default function WorkspaceMembersScreen({
               <div className="ca-suggestions-content">
                 <span className="ca-suggestions-heading">Search Suggestions</span>
                 <span className="ca-suggestions-body">
-                  Search by exact domain syntax (@acmecorp.com), user full name, or assigned role keywords like &ldquo;Admin&rdquo;, &ldquo;Manager&rdquo;, or &ldquo;Member&rdquo;.
+                  Search by exact domain syntax (@acmecorp.com), user full name, or assigned role keywords like &ldquo;Marketing Manager&rdquo;, &ldquo;Leader&rdquo;, or &ldquo;Employee&rdquo;.
                 </span>
               </div>
             </div>
@@ -698,8 +698,8 @@ export default function WorkspaceMembersScreen({
                     <div className="ca-radio-indicator" />
                     <div className="ca-role-card-text" style={{ width: '100%' }}>
                       <div className="ca-role-card-title-row">
-                        <span className="ca-role-card-name">Admin</span>
-                        <span className="ca-role-tier-badge ca-role-tier-admin">Admin Tier</span>
+                        <span className="ca-role-card-name">Marketing Manager</span>
+                        <span className="ca-role-tier-badge ca-role-tier-admin">Marketing Manager Tier</span>
                         {roleChangeTarget.role === 'Admin' && (
                           <span style={{ fontSize: 11, color: 'var(--ca-text-muted)', marginLeft: 'auto' }}>
                             (Current Role)
@@ -726,7 +726,7 @@ export default function WorkspaceMembersScreen({
                     <div className="ca-radio-indicator" />
                     <div className="ca-role-card-text" style={{ width: '100%' }}>
                       <div className="ca-role-card-title-row">
-                        <span className="ca-role-card-name">Manager</span>
+                        <span className="ca-role-card-name">Leader</span>
                         <span className="ca-role-tier-badge ca-role-tier-reviewer">Reviewer Tier</span>
                         {roleChangeTarget.role === 'Manager' && (
                           <span style={{ fontSize: 11, color: 'var(--ca-text-muted)', marginLeft: 'auto' }}>
@@ -754,7 +754,7 @@ export default function WorkspaceMembersScreen({
                     <div className="ca-radio-indicator" />
                     <div className="ca-role-card-text" style={{ width: '100%' }}>
                       <div className="ca-role-card-title-row">
-                        <span className="ca-role-card-name">Member</span>
+                        <span className="ca-role-card-name">Employee</span>
                         <span className="ca-role-tier-badge ca-role-tier-standard">Standard Tier</span>
                         {roleChangeTarget.role === 'Member' && (
                           <span style={{ fontSize: 11, color: 'var(--ca-text-muted)', marginLeft: 'auto' }}>
@@ -893,7 +893,7 @@ export default function WorkspaceMembersScreen({
                   Are you sure you want to remove {removeTarget.name} from {workspace.name}?
                 </h4>
                 <p style={{ color: 'var(--ca-text-secondary)', fontSize: 13, margin: 0, lineHeight: 1.5 }}>
-                  This action will immediately revoke all access to this Workspace, campaign proposals, and creative assets. {removeTarget.name} can only regain access if invited again by a Workspace Admin.
+                  This action will immediately revoke all access to this Workspace, campaign proposals, and creative assets. {removeTarget.name} can only regain access if invited again by a Marketing Manager.
                 </p>
               </div>
 
@@ -976,7 +976,7 @@ export default function WorkspaceMembersScreen({
                   <IconLock size={18} />
                 </div>
                 <div>
-                  <h2 id="ca-last-admin-title" className="ca-modal-title">Action Restricted: Last Workspace Admin</h2>
+                  <h2 id="ca-last-admin-title" className="ca-modal-title">Action Restricted: Last Marketing Manager</h2>
                   <div className="ca-protocol-sub-pill">
                     PROTOCOL ENFORCEMENT • SYSTEM RULE 0X489F
                   </div>
@@ -1004,7 +1004,7 @@ export default function WorkspaceMembersScreen({
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <span className="ca-member-preview-name">{lastAdminTarget.name}</span>
                       <span className="ca-role-tier-badge ca-role-tier-reviewer" style={{ fontSize: 9 }}>
-                        Primary Admin
+                        Primary Marketing Manager
                       </span>
                       <span className="ca-role-tier-badge ca-role-tier-admin" style={{ fontSize: 9 }}>
                         You
@@ -1015,7 +1015,7 @@ export default function WorkspaceMembersScreen({
                 </div>
                 <div className="ca-role-dot-pill ca-role-admin">
                   <IconLock size={11} style={{ marginRight: 2 }} />
-                  Admin
+                  Marketing Manager
                 </div>
               </div>
 
@@ -1023,10 +1023,10 @@ export default function WorkspaceMembersScreen({
               <div className="ca-guard-explanation-card">
                 <div className="ca-guard-explanation-title">
                   <IconShieldAlert size={18} style={{ color: '#ef4444' }} />
-                  <span>Cannot Remove or Demote the Final Workspace Admin</span>
+                  <span>Cannot Remove or Demote the Final Marketing Manager</span>
                 </div>
                 <p className="ca-guard-explanation-body">
-                  According to <strong>CastraVision Security Policy FR06</strong>, every enterprise workspace must retain at least one active Workspace Admin to prevent orphaned enterprise accounts, broken automated pipeline webhooks, and unmanaged access control.
+                  According to <strong>CastraVision Security Policy FR06</strong>, every enterprise workspace must retain at least one active Marketing Manager to prevent orphaned enterprise accounts, broken automated pipeline webhooks, and unmanaged access control.
                 </p>
               </div>
 
@@ -1034,7 +1034,7 @@ export default function WorkspaceMembersScreen({
               <div className="ca-guard-resolution-box">
                 <strong style={{ color: '#ffffff' }}>ℹ Resolution Required</strong>
                 <span>
-                  To remove or demote this account, first promote another active member to the <strong>Admin</strong> role, or assign co-administrative privileges via your Okta/SAML directory.
+                  To remove or demote this account, first promote another active member to the <strong>Marketing Manager</strong> role, or assign co-administrative privileges via your Okta/SAML directory.
                 </span>
               </div>
 

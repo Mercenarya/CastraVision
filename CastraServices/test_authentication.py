@@ -11,7 +11,8 @@ from .authentication import (
     _verified_subject,
     authenticate_request,
 )
-from .supabase_client import WorkspaceMembership
+from .identity import verified_identity
+from .supabase_client import MembershipNotFound, WorkspaceMembership
 
 
 class BearerTokenTests(SimpleTestCase):
@@ -43,11 +44,11 @@ class ActiveWorkspaceTests(SimpleTestCase):
         self.workspace_id = UUID("22222222-2222-2222-2222-222222222222")
 
     @patch("CastraServices.authentication.user_client")
-    @patch("CastraServices.authentication._verified_subject")
+    @patch("CastraServices.identity.verified_identity")
     def test_verifies_the_explicit_active_workspace(
         self, verified_subject, user_client
     ):
-        verified_subject.return_value = self.user_id
+        verified_subject.return_value = ("signed-token", {"id": str(self.user_id)})
         user_client.return_value.workspace_membership.return_value = (
             WorkspaceMembership(workspace_id=self.workspace_id, role="admin")
         )
@@ -64,9 +65,13 @@ class ActiveWorkspaceTests(SimpleTestCase):
             self.user_id, self.workspace_id
         )
 
-    @patch("CastraServices.authentication._verified_subject")
-    def test_requires_an_active_workspace_header(self, verified_subject):
-        verified_subject.return_value = self.user_id
+    @patch("CastraServices.authentication.user_client")
+    @patch("CastraServices.identity.verified_identity")
+    def test_requires_a_membership_when_no_workspace_header(self, verified_subject, user_client):
+        verified_subject.return_value = ("signed-token", {"id": str(self.user_id)})
+        user_client.return_value.single_workspace_membership.side_effect = MembershipNotFound(
+            "missing"
+        )
         request = self.factory.get(
             "/api/test", HTTP_AUTHORIZATION="Bearer signed-token"
         )
@@ -130,15 +135,16 @@ class JWTVerificationTests(SimpleTestCase):
         SUPABASE_URL="https://example.supabase.co",
         SUPABASE_PUBLISHABLE_KEY="publishable-test-key",
     )
-    @patch("CastraServices.authentication.httpx.get")
-    @patch("CastraServices.authentication.jwt.get_unverified_header")
-    def test_verifies_hs256_token_through_supabase_auth(self, get_header, get):
-        get_header.return_value = {"alg": "HS256"}
+    @patch("CastraServices.identity.httpx.get")
+    def test_verifies_opaque_token_through_supabase_auth(self, get):
         expected = UUID("11111111-1111-1111-1111-111111111111")
         get.return_value.status_code = 200
-        get.return_value.json.return_value = {"id": str(expected)}
+        get.return_value.json.return_value = {
+            "id": str(expected), "email_confirmed_at": "2026-01-01"
+        }
 
-        self.assertEqual(_verified_subject("legacy-signed-token"), expected)
+        request = RequestFactory().get('/api/test', HTTP_AUTHORIZATION='Bearer legacy-signed-token')
+        self.assertEqual(verified_identity(request)[1]['id'], str(expected))
         get.assert_called_once_with(
             "https://example.supabase.co/auth/v1/user",
             headers={
@@ -153,12 +159,12 @@ class JWTVerificationTests(SimpleTestCase):
         SUPABASE_URL="https://example.supabase.co",
         SUPABASE_PUBLISHABLE_KEY="publishable-test-key",
     )
-    @patch("CastraServices.authentication.httpx.get")
-    @patch("CastraServices.authentication.jwt.get_unverified_header")
-    def test_rejects_hs256_token_rejected_by_supabase(self, get_header, get):
-        get_header.return_value = {"alg": "HS256"}
+    @patch("CastraServices.identity.httpx.get")
+    def test_rejects_token_rejected_by_supabase(self, get):
         get.return_value.status_code = 401
 
         with self.assertRaises(AuthenticationError) as caught:
-            _verified_subject("rejected-token")
+            verified_identity(
+                RequestFactory().get('/api/test', HTTP_AUTHORIZATION='Bearer rejected-token')
+            )
         self.assertEqual(caught.exception.code, "INVALID_TOKEN")

@@ -5,21 +5,19 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   ApprovalQueuePage,
   AdminDashboardPage,
-  AdminWorkspaceDashboard,
   MembersPage,
   PerformanceDashboardPage,
 } from './ActorPages'
+import { PlatformOverviewScreen } from '../system-admin/screens/PlatformOverviewScreen'
 
 describe('role-specific actor pages', () => {
   it('shows Admin multi-workspace aggregates without employee PII', () => {
-    render(<AdminWorkspaceDashboard workspaces={[{
-      workspaceId: 'workspace-1', workspaceName: 'GreenStep Việt Nam',
+    render(<PlatformOverviewScreen companies={[{
+      id: 'workspace-1', name: 'GreenStep Việt Nam', status: 'active',
       createdAt: '2026-10-01T00:00:00Z', memberCount: 4,
-      adminCount: 1, managerCount: 1, standardMemberCount: 2,
-    }]} activeWorkspaceId="workspace-1" onSelectWorkspace={vi.fn()} onCreateWorkspace={vi.fn()} />)
+    }]} metrics={{ totalRegistered: 1, activeTenants: 1, inactiveTenants: 0, aggregateHeadcount: 4 }} onNavigate={vi.fn()} onSelectCompany={vi.fn()} />)
 
-    expect(screen.getAllByText('GreenStep Việt Nam')).toHaveLength(2)
-    expect(screen.getByText('4 thành viên')).toBeVisible()
+    expect(screen.getByText('GreenStep Việt Nam')).toBeVisible()
     expect(screen.queryByText(/@/)).not.toBeInTheDocument()
   })
 
