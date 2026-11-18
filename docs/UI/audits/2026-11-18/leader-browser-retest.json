@@ -1,0 +1,28 @@
+{
+  "target": "http://127.0.0.1:59300",
+  "authentication": "Real local Supabase password sign-in through the visible form; no role or session injection",
+  "scope": "Disposable CastraVision-leader-test; hosted unchanged",
+  "observed": [
+    {"case": "Leader identity and Team", "result": "PASS", "evidence": "Leader QA Business and assigned QA Content Team; no David Kross fixture"},
+    {"case": "Campaign create and reload", "result": "PASS", "evidence": "Browser QA Campaign appeared in the table, then appeared again after full browser reload"},
+    {"case": "Content draft, edit and submit", "result": "PASS", "evidence": "Browser Content Persistence: draft v1, saved headline revision v2, pending v3"},
+    {"case": "Leader self-approval", "result": "PASS", "evidence": "Approve disabled for the Leader's own pending content"},
+    {"case": "Marketing Manager review", "result": "PASS", "evidence": "Independent Marketing Manager login opened that same proposal and approved it as v4; revised headline retained"},
+    {"case": "Employee submission", "result": "PASS", "evidence": "Independent Employee login saved Employee Browser Submission as draft, then submitted it; no Approve action exposed"},
+    {"case": "Leader requests Employee revision", "result": "PASS", "evidence": "Empty reason failed native form validity; a nonempty reason persisted revision_requested"},
+    {"case": "Account profile", "result": "PASS", "evidence": "Saved Leader Browser Verified; header retained it after full reload"},
+    {"case": "Notification read", "result": "PASS", "evidence": "Actual unread badge decreased 4 to 3 and stayed 3 after full reload"},
+    {"case": "Browser console", "result": "PASS", "evidence": "No console error messages during this retest"},
+    {"case": "CSV export bytes", "result": "PASS", "evidence": "Observed actual export Blob after real queue fetch: 765 bytes, seven-column header, both browser-created proposals and approved/revision_requested states present. Browser download directory is not exposed by the tool; disk-save completion not claimed."},
+    {"case": "Strategy to Content", "result": "PASS", "evidence": "Created Browser RAG Strategy through Strategy Studio, persisted deterministic-fallback draft, submitted it, independently signed in as Marketing Manager and approved; Leader then loaded that approved strategy via Content Gen and persisted the derived template draft. No injected strategy state."},
+    {"case": "Performance metrics", "result": "PASS", "evidence": "Selected HTTP Persistent Campaign: spend USD 150, revenue USD 450, weighted ROAS 3.00 and CPA USD 37.50; per-channel metrics matched the two actual imported records."},
+    {"case": "Apply Recommendation", "result": "PASS", "evidence": "Created pending budget proposal from rule-based observed ROAS: Meta 700 to 630, Google Ads 300 to 370. Budget envelope USD 1000; >20% warning and Leader approval block shown."},
+    {"case": "Budget edit", "result": "PASS", "evidence": "Saved proposed allocations 620/380 as a real revision, retained fixed USD 1000 total, no NaN or runtime error."},
+    {"case": "Pause Variant", "result": "PASS", "evidence": "Selected actual approved Employee HTTP content, supplied reason, created pending request. UI explicitly states internal governance only, no provider pause claimed."},
+    {"case": "Browser import and reload", "result": "PASS", "evidence": "Uploaded browser-qa.csv through the file input, previewed and committed. Exact history showed one stored row and the same batch after full reload."},
+    {"case": "Search and refresh", "result": "PASS", "evidence": "Search Browser RAG Strategy returned only strategy and its derived content; Sync Squad Data caused four new real workflow API requests."},
+    {"case": "Campaign pagination", "result": "PASS", "evidence": "Final isolated browser session searched Paging QA: first page 10, second page 2, 12 unique persisted campaigns."},
+    {"case": "My Proposals ownership", "result": "PASS", "evidence": "Leader saw owned drafts/requests; exact Employee HTTP content and MM authorized self-review submissions excluded."},
+    {"case": "Employee consumer regression", "result": "PASS", "evidence": "Independent Employee sign-in: My Submissions loaded real owned records, no approval/export action, Leader draft hidden; Feedback Inbox showed actual notification with entity link. No console errors."}
+  ]
+}

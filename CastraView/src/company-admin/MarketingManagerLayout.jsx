@@ -12,7 +12,7 @@ import PersonnelPage from '../pages/membership/PersonnelPage'
 import { membershipService } from '../services/membership'
 import MembershipNotifications from '../pages/membership/MembershipNotifications'
 import RoleManagementScreen from './screens/RoleManagementScreen'
-import ApprovalQueueScreen from './screens/ApprovalQueueScreen'
+import WorkflowInbox from '../leader/WorkflowInbox'
 import AuditLogScreen from './screens/AuditLogScreen'
 import AuditLogDetailsScreen from './screens/AuditLogDetailsScreen'
 import {
@@ -48,7 +48,7 @@ export default function MarketingManagerLayout({
   }))
 
   const [members] = useState(INITIAL_MEMBERS)
-  const [proposals, setProposals] = useState(INITIAL_PROPOSALS)
+  const [proposals] = useState(INITIAL_PROPOSALS)
   const [auditLogs] = useState(INITIAL_AUDIT_LOGS)
   const [selectedAuditRecord, setSelectedAuditRecord] = useState(null)
   const [inviteModalOpen, setInviteModalOpen] = useState(false)
@@ -225,14 +225,7 @@ export default function MarketingManagerLayout({
 
           {/* Screen 7: Proposal Approval Queue (FR04 Gated) */}
           {page === 'approvals' && (
-            <ApprovalQueueScreen
-              user={user}
-              workspaceRole={activeWorkspaceRole}
-              onNavigate={handleNavigate}
-              notify={notify}
-              proposals={proposals}
-              setProposals={setProposals}
-            />
+            <WorkflowInbox />
           )}
 
           {/* Screen 2 & 3: Audit Log and Details */}

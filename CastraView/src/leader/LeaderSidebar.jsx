@@ -22,6 +22,7 @@ export default function LeaderSidebar({
   onClose,
   companyName = 'Acme Corp Enterprise',
   companyCode = 'acme-corp-prod-01',
+  approvalCount,
 }) {
   // Map internal/subpage navigation keys to active sidebar item
   const resolveActiveKey = (key) => {
@@ -43,7 +44,7 @@ export default function LeaderSidebar({
 
   return (
     <RoleSidebar
-      navItems={LEADER_NAV_ITEMS}
+      navItems={LEADER_NAV_ITEMS.map(item => item.key === 'approvals' ? { ...item, badge: approvalCount || undefined } : item)}
       activeKey={resolveActiveKey(activeKey)}
       onNavigate={onNavigate}
       sectionTitle="WORKSPACE NAVIGATION"
@@ -64,4 +65,5 @@ LeaderSidebar.propTypes = {
   onClose: PropTypes.func,
   companyName: PropTypes.string,
   companyCode: PropTypes.string,
+  approvalCount: PropTypes.number,
 }

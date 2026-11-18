@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import io
+import json
 import math
 from datetime import date, datetime
 from itertools import islice
-from uuid import uuid4
+from uuid import NAMESPACE_URL, UUID, uuid5
 from zipfile import BadZipFile
 
 from django.http import JsonResponse
@@ -262,27 +264,44 @@ def _public_rows(rows):
 
 def _persist(request, rows, *, filename: str, source: str):
     context = request_auth(request)
-    batch_id = uuid4()
-    payload = _database_rows(
-        rows,
-        workspace_id=context.workspace_id,
-        user_id=context.user_id,
-        batch_id=batch_id,
-        filename=filename,
-        source=source,
+    try:
+        campaign_id = str(UUID(request.POST.get("campaign_id", "")))
+    except (ValueError, TypeError):
+        return None, error_response("VALIDATION_ERROR", "Hãy chọn chiến dịch trước khi lưu.", 400)
+    payload = [
+        {
+            "channel": row["db_channel"],
+            "record_date": row["period"],
+            **{
+                key: row[key]
+                for key in ("spend", "clicks", "impressions", "conversions", "revenue")
+            },
+        }
+        for row in rows
+    ]
+    digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+    batch_id = uuid5(
+        NAMESPACE_URL, f"{context.workspace_id}/{context.user_id}/{campaign_id}/{filename}/{digest}"
     )
     try:
-        user_client(context.access_token).request(
-            "POST",
-            "campaign_performance",
-            json=payload,
-            prefer="return=minimal",
+        user_client(context.access_token).rpc(
+            "leader_workflow",
+            {
+                "p_workspace_id": str(context.workspace_id),
+                "p_command": "import",
+                "p_data": {
+                    "campaignId": campaign_id,
+                    "batchId": str(batch_id),
+                    "filename": filename[:255],
+                    "rows": payload,
+                },
+            },
         )
-    except SupabaseAPIError:
+    except SupabaseAPIError as exc:
         return None, error_response(
-            "IMPORT_PERSIST_FAILED",
+            exc.code,
             "Dữ liệu hợp lệ nhưng không thể lưu vào Supabase.",
-            502,
+            exc.status,
         )
     return str(batch_id), None
 

@@ -13,6 +13,7 @@ values
   ('15000000-0000-0000-0000-000000000004', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'other-admin@example.test', '', '{}', '{}', now(), now()),
   ('15000000-0000-0000-0000-000000000005', '00000000-0000-0000-0000-000000000000', 'authenticated', 'authenticated', 'target-member@example.test', '', '{}', '{}', now(), now());
 
+update auth.users set email_confirmed_at=now() where id::text like '15000000-%';
 insert into public.workspaces (id, name, owner_id)
 values
   ('25000000-0000-0000-0000-000000000001', 'Audit Workspace', '15000000-0000-0000-0000-000000000001'),

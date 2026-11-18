@@ -1,0 +1,19 @@
+{
+  "target": "http://127.0.0.1:59321",
+  "checks": [
+    "PASS: real Auth password login, Django JWT verification and assigned Team context",
+    "PASS: concurrent create persisted exactly one campaign",
+    "PASS: cross-workspace and Employee campaign creation rejected",
+    "PASS: Employee submission, concurrent Leader approval, immutable revision and recipient notification",
+    "PASS: CSV commit, deterministic duplicate prevention and weighted real metrics",
+    "PASS: server 20% threshold, escalation, Marketing Manager resolution and authoritative baseline update",
+    "PASS: XLSX preview is read-only, commit persists, exact batch history and ROAS",
+    "PASS: Pause Variant creates a pending governance request without ad dispatch",
+    "PASS: strategy generation persisted as draft; provider=deterministic-fallback",
+    "PASS: approved strategy-to-content FK and draft status match persisted entities",
+    "PASS: Marketing Manager strategy self-approval exception is preserved and logged",
+    "PASS: exactly 20 percent is within Leader authority for another author",
+    "PASS: conflicting concurrent approve/reject produces one winner and one 409",
+    "PASS: server search/status filters and pagination return 10+2 unique campaigns"
+  ]
+}

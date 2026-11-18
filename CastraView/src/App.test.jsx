@@ -81,11 +81,14 @@ describe('ImportScreen', () => {
       source: 'sandbox', import_id: 12, filename: 'sandbox.json', row_count: 9,
       success_count: 9, failed_count: 0, errors: [], preview: [],
     }
-    api.mockResolvedValue({ ...response, error_count: 0 })
+    api.mockImplementation(path => Promise.resolve(path === 'leader/campaigns/'
+      ? { items: [{ id: 'qa-campaign', name: 'QA Campaign', currency: 'USD' }], total: 1 }
+      : { ...response, error_count: 0 }))
     const onImported = vi.fn().mockResolvedValue(undefined)
     const notify = vi.fn()
     const user = userEvent.setup()
     const { container } = render(<ImportScreen imports={[]} onImported={onImported} notify={notify} />)
+    await user.selectOptions(await screen.findByRole('combobox', { name: 'Chiến dịch' }), 'qa-campaign')
 
     await user.upload(container.querySelector('input[type=file]'), new File(['channel,period\nMeta,2026-09'], 'campaign.csv', { type: 'text/csv' }))
     const commit = await screen.findByRole('button', { name: /Import Data/ })

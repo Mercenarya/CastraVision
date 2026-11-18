@@ -3,6 +3,7 @@ from django.urls import path
 from . import (
     auth_api,
     campaign_api,
+    leader_workflow_api,
     membership_api,
     membership_notifications_api,
     views,
@@ -12,6 +13,7 @@ from . import (
 app_name = "castra_services"
 
 urlpatterns = [
+    path("leader/<str:command>/", leader_workflow_api.workflow),
     path("onboarding/state/", membership_api.onboarding_state),
     path("onboarding/companies/", membership_api.companies),
     path("onboarding/requests/", membership_api.requests),

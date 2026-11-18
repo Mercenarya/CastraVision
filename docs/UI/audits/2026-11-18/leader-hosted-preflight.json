@@ -1,0 +1,36 @@
+{
+  "target": "https://oviqgptccjjdaaqxabwv.supabase.co",
+  "readOnly": true,
+  "probes": {
+    "campaign_performance": {
+      "status": 400,
+      "code": "42703",
+      "count": null
+    },
+    "workspace_teams": {
+      "status": 206,
+      "code": null,
+      "count": "*/1"
+    },
+    "workspace_team_members": {
+      "status": 206,
+      "code": null,
+      "count": "*/1"
+    },
+    "approvals": {
+      "status": 200,
+      "code": null,
+      "count": "*/0"
+    },
+    "notifications": {
+      "status": 200,
+      "code": null,
+      "count": "*/0"
+    },
+    "campaigns": {
+      "status": 404,
+      "code": "PGRST205",
+      "count": null
+    }
+  }
+}

@@ -2,6 +2,7 @@
 export function createApiClient({ getSession, getWorkspaceId, fetchImpl = fetch, baseUrl = '', onUnauthorized }) {
   return async function api(path, options = {}) {
     const { data, error } = await getSession()
+    if (options.signal?.aborted) throw options.signal.reason || new DOMException('Request cancelled', 'AbortError')
     const session = data?.session
     if (error || !session?.access_token) {
       throw Object.assign(new Error('Phiên Supabase đã hết hạn. Vui lòng đăng nhập lại.'), { code: 'AUTH_REQUIRED', status: 401 })

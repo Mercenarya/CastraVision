@@ -133,6 +133,12 @@ class SprintOneAccountFlowTests(TestCase):
         self.addCleanup(transport.stop)
 
     def supabase_request(self, method, resource, **kwargs):
+        if resource == "rpc/leader_workflow":
+            body = kwargs["json"]
+            self.assertEqual(body["p_workspace_id"], str(UUID(int=2)))
+            self.assertEqual(body["p_command"], "import")
+            self.campaigns.extend(body["p_data"]["rows"])
+            return {"batchId": body["p_data"]["batchId"], "rowCount": len(body["p_data"]["rows"])}
         if resource == "workspaces":
             return [{"id": str(UUID(int=2)), "name": "Studio"}]
         if resource == "business_profiles":
@@ -225,6 +231,7 @@ class SprintOneAccountFlowTests(TestCase):
             {
                 "file": SimpleUploadedFile("metrics.csv", data, content_type="text/csv"),
                 "mode": "commit",
+                "campaign_id": str(UUID(int=3)),
             },
         )
         self.assertEqual(committed.status_code, 201)

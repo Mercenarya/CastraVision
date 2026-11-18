@@ -22,6 +22,7 @@ const PAGE_TITLES = {
   'team-tasks': 'Team Tasks',
   profile: 'Account Settings',
   notifications: 'Notifications',
+  proposal: 'Proposal Review',
 }
 
 /**
@@ -40,15 +41,17 @@ export default function LeaderLayout({
   page = 'overview',
   setPage,
   logout,
+  notificationCount,
+  approvalCount,
   children,
 }) {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const userName = user?.full_name || 'David Kross'
-  const userEmail = user?.email || 'd.kross@acmecorp.com'
-  const companyName = profile?.business_name || 'Acme Corp Enterprise'
-  const companyCode = 'acme-corp-prod-01'
+  const userName = user?.full_name || user?.email || 'Tài khoản'
+  const userEmail = user?.email || ''
+  const companyName = profile?.business_name || 'Workspace'
+  const companyCode = profile?.workspace_id || ''
 
   const userInitials = userName
     ? userName
@@ -85,6 +88,7 @@ export default function LeaderLayout({
         onNavigate={setPage}
         companyName={companyName}
         companyCode={companyCode}
+        approvalCount={approvalCount}
       />
 
       {/* Mobile Drawer Backdrop & Sidebar */}
@@ -107,6 +111,7 @@ export default function LeaderLayout({
               onClose={() => setMobileMenuOpen(false)}
               companyName={companyName}
               companyCode={companyCode}
+              approvalCount={approvalCount}
             />
           </div>
         </div>
@@ -174,7 +179,7 @@ export default function LeaderLayout({
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]" />
               </span>
               <span className="text-[12px] font-medium text-[#c7c4d7]">
-                All systems nominal
+                Leader Workspace
               </span>
             </div>
 
@@ -184,7 +189,7 @@ export default function LeaderLayout({
             <button
               type="button"
               className="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none"
-              aria-label="5 Notifications"
+              aria-label={`${notificationCount ?? '—'} thông báo chưa đọc`}
               onClick={() => setPage?.('notifications')}
             >
               <svg
@@ -200,7 +205,7 @@ export default function LeaderLayout({
                 <path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
               <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
-                5
+                {notificationCount ?? '—'}
               </span>
             </button>
 
@@ -306,5 +311,7 @@ LeaderLayout.propTypes = {
   page: PropTypes.string,
   setPage: PropTypes.func,
   logout: PropTypes.func,
+  notificationCount: PropTypes.number,
+  approvalCount: PropTypes.number,
   children: PropTypes.node,
 }

@@ -9,13 +9,11 @@ import EmailLinkSentPage from './pages/onboarding/EmailLinkSentPage'
 import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
 import MarketingManagerLayout from './company-admin/MarketingManagerLayout'
 import LeaderLayout from './leader/LeaderLayout'
+import LeaderWorkspace from './leader/LeaderWorkspace'
+import WorkflowCampaignSelect from './leader/components/WorkflowCampaignSelect'
+import WorkflowStudio from './leader/WorkflowStudio'
+import WorkflowInbox from './leader/WorkflowInbox'
 import MemberLayout from './member/MemberLayout'
-import LeaderDashboard from './leader/screens/LeaderDashboard'
-import LeaderApprovalQueue from './leader/screens/LeaderApprovalQueue'
-import LeaderContentReview from './leader/screens/LeaderContentReview'
-import LeaderBudgetReview from './leader/screens/LeaderBudgetReview'
-import LeaderCampaigns from './leader/screens/LeaderCampaigns'
-import LeaderPerformance from './leader/screens/LeaderPerformance'
 import MemberDashboard from './member/screens/MemberDashboard'
 import {
   BudgetOptimizationPage,
@@ -246,6 +244,7 @@ function ProfileScreen({ profile, onboarding, saveProfile, busy, error, cancel }
 }
 
 export function ImportScreen({ imports, onImported, notify }) {
+  const [campaignId, setCampaignId] = useState('')
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -274,6 +273,7 @@ export function ImportScreen({ imports, onImported, notify }) {
       const body = new FormData()
       body.append('file', file)
       body.append('mode', 'commit')
+      body.append('campaign_id', campaignId)
       const data = await api('campaign-imports/upload/', { method: 'POST', body })
       await onImported()
       notify(`${data.row_count} records imported successfully.`)
@@ -302,6 +302,7 @@ export function ImportScreen({ imports, onImported, notify }) {
           title="Campaign Data Import"
           subtitle="Upload historical campaign performance data to enrich AI strategy blueprints."
         />
+        <WorkflowCampaignSelect value={campaignId} onChange={setCampaignId} />
         <div
           className={`upload-zone card ${file ? 'has-file' : ''}`}
           onDragOver={(e) => e.preventDefault()}
@@ -348,7 +349,7 @@ export function ImportScreen({ imports, onImported, notify }) {
               <button
                 className="button primary"
                 type="button"
-                disabled={busy || !preview || preview.error_count > 0 || preview.row_count === 0}
+                disabled={busy || !campaignId || !preview || preview.error_count > 0 || preview.row_count === 0}
                 onClick={commit}
               >
                 Import Data →
@@ -427,7 +428,7 @@ export function ImportScreen({ imports, onImported, notify }) {
   )
 }
 
-function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
+export function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
   const initial = () => ({
     campaign_goal: profile?.primary_goal || '',
     target_audience: profile?.target_customers || '',
@@ -805,12 +806,11 @@ function WorkspaceApp() {
   const [profile, setProfile] = useState(null)
   const [page, setPage] = useState(() => window.location.hash === '#personnel-requests' ? 'members' : 'overview')
   const [imports, setImports] = useState([])
-  const [latestRows, setLatestRows] = useState([])
-  const [strategy, setStrategy] = useState(null)
+  const [, setLatestRows] = useState([])
+  const [strategy] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
-  const [selectedProposal, setSelectedProposal] = useState(null)
   const [dataReady, setDataReady] = useState(false)
   const actorRole = resolveActorRole(user, membership, { platformRole: auth.platformRole })
   const userId = user?.id
@@ -828,7 +828,7 @@ function WorkspaceApp() {
   }, [membership?.role])
 
   useEffect(() => {
-    if (!userId || !workspaceId || auth.platformRole) return undefined
+    if (!userId || !workspaceId || auth.platformRole || actorRole === 'leader') return undefined
     let active = true
     Promise.all([api('business-profile/'), api('campaign-imports/')]).then(([business, history]) => {
       if (!active) return
@@ -840,7 +840,7 @@ function WorkspaceApp() {
       if (!business.profile && workspaceRole === 'admin') setPage('profile')
     }).catch(cause => { if (active) setBackendError(cause.message) })
     return () => { active = false }
-  }, [userId, workspaceId, workspaceRole, auth.platformRole])
+  }, [userId, workspaceId, workspaceRole, auth.platformRole, actorRole])
 
   async function handleLogin(email, password, isSignup = false) {
     setBusy(true)
@@ -914,6 +914,10 @@ function WorkspaceApp() {
       <button className="button subtle" onClick={logout}>Đăng xuất</button>
     </div>
   }
+  // LeaderWorkspace loads its own scoped context and data. The legacy profile
+  // and import history are unused here and must not block its first render.
+  if (actorRole === 'leader') return <LeaderWorkspace logout={logout} />
+
   if (!auth.platformRole && !dataReady) {
     return <div className="loading-screen"><Brand /><p role="status">{backendError || 'Đang tải dữ liệu Workspace…'}</p>
       {backendError && <button className="button primary" onClick={() => refreshData().catch(cause => setBackendError(cause.message))}>Thử lại</button>}
@@ -955,21 +959,10 @@ function WorkspaceApp() {
           <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
         )}
         {page === 'strategy' && (
-          <StrategyScreen
-            profile={profile}
-            latestRows={latestRows}
-            result={strategy}
-            setResult={setStrategy}
-            notify={setToast}
-          />
+          <WorkflowStudio kind="strategy" />
         )}
         {page === 'content' && (
-          <ContentScreen
-            result={strategy}
-            profile={profile}
-            setPage={setPage}
-            notify={setToast}
-          />
+          <WorkflowStudio kind="content" />
         )}
         {page === 'profile' && (
           <ProfileScreen
@@ -986,111 +979,6 @@ function WorkspaceApp() {
   }
 
   // ─── 3. LEADER: Vào giao diện leader ──────────────────────────────────────
-  if (actorRole === 'leader') {
-    return (
-      <Shell
-        user={user}
-        role="leader"
-        profile={profile}
-        page={page}
-        setPage={setPage}
-        logout={logout}
-      >
-        {backendError && <Notice>{backendError}</Notice>}
-        {page === 'overview' && (
-          <LeaderDashboard imports={imports} setPage={setPage} notify={setToast} />
-        )}
-        {(page === 'approvals' || page === 'content-reviews' || page === 'my-proposals' || page === 'submissions') && (
-          <LeaderApprovalQueue
-            setPage={setPage}
-            onSelectContentReview={(p) => {
-              setSelectedProposal(p)
-              setPage('content-review-detail')
-            }}
-            onSelectBudgetReview={(p) => {
-              setSelectedProposal(p)
-              setPage('budget-review-detail')
-            }}
-            notify={setToast}
-          />
-        )}
-        {page === 'content-review-detail' && (
-          <LeaderContentReview
-            proposal={selectedProposal}
-            onBack={() => setPage('approvals')}
-            onComplete={() => setPage('approvals')}
-            setPage={setPage}
-            notify={setToast}
-          />
-        )}
-        {(page === 'budget-review-detail' || page === 'budget') && (
-          <LeaderBudgetReview
-            proposal={selectedProposal}
-            onBack={() => setPage('approvals')}
-            onComplete={() => setPage('approvals')}
-            setPage={setPage}
-            notify={setToast}
-          />
-        )}
-        {(page === 'assigned-campaigns' || page === 'campaigns') && (
-          <LeaderCampaigns setPage={setPage} notify={setToast} />
-        )}
-        {(page === 'performance' || page === 'reports' || page === 'insights' || page === 'team-tasks') && (
-          <LeaderPerformance setPage={setPage} notify={setToast} />
-        )}
-        {page === 'notifications' && (
-          <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-            <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-              <Heading
-                eyebrow="COMMUNICATION &amp; ALERTS"
-                title="Notifications &amp; Alerts"
-                subtitle="Real-time approval requests, status updates, and AI Engine compute notifications."
-              />
-              <div className="card p-6">
-                <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
-                  All systems are operating normally. No pending urgent notifications.
-                </p>
-                <button className="button primary mt-4" onClick={() => setPage('overview')}>
-                  ← Return to Overview
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        {page === 'import' && (
-          <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
-        )}
-        {page === 'strategy' && (
-          <StrategyScreen
-            profile={profile}
-            latestRows={latestRows}
-            result={strategy}
-            setResult={setStrategy}
-            notify={setToast}
-          />
-        )}
-        {page === 'content' && (
-          <ContentScreen
-            result={strategy}
-            profile={profile}
-            setPage={setPage}
-            notify={setToast}
-          />
-        )}
-        {page === 'profile' && (
-          <ProfileScreen
-            profile={profile}
-            onboarding={!profile}
-            saveProfile={saveProfile}
-            busy={busy}
-            error={error}
-            cancel={() => setPage('overview')}
-          />
-        )}
-        <Toast message={toast} clear={() => setToast('')} />
-      </Shell>
-    )
-  }
 
   // ─── 4. MEMBER: Vào giao diện member ──────────────────────────────────────
   return (
@@ -1136,25 +1024,7 @@ function WorkspaceApp() {
           </div>
         </div>
       )}
-      {(page === 'submissions' || page === 'reports') && (
-        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-            <Heading
-              eyebrow="APPROVAL STATUS"
-              title="My Submissions"
-              subtitle="History of content drafts and proposals submitted for Leader review."
-            />
-            <div className="card p-6">
-              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
-                Check status and feedback on your submitted deliverables.
-              </p>
-              <button className="button primary mt-4" onClick={() => setPage('overview')}>
-                ← Back to Dashboard
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {(page === 'submissions' || page === 'reports') && <WorkflowInbox mine />}
       {page === 'assigned-campaigns' && (
         <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
           <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
@@ -1174,46 +1044,17 @@ function WorkspaceApp() {
           </div>
         </div>
       )}
-      {page === 'notifications' && (
-        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-            <Heading
-              eyebrow="FEEDBACK INBOX"
-              title="Notifications &amp; Feedback"
-              subtitle="Leader feedback, revision requests, and proposal status notifications."
-            />
-            <div className="card p-6">
-              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
-                No new unread feedback from your squad leader.
-              </p>
-              <button className="button primary mt-4" onClick={() => setPage('overview')}>
-                ← Back to Dashboard
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {page === 'notifications' && <WorkflowInbox mine mode="notifications" />}
       {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
       {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
       {page === 'import' && (
         <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
       )}
       {page === 'strategy' && (
-        <StrategyScreen
-          profile={profile}
-          latestRows={latestRows}
-          result={strategy}
-          setResult={setStrategy}
-          notify={setToast}
-        />
+        <WorkflowStudio kind="strategy" />
       )}
       {page === 'content' && (
-        <ContentScreen
-          result={strategy}
-          profile={profile}
-          setPage={setPage}
-          notify={setToast}
-        />
+        <WorkflowStudio kind="content" />
       )}
       {page === 'profile' && (
         <ProfileScreen
@@ -1238,7 +1079,6 @@ function WorkspaceEntry() {
     return <CompanyJoinPage auth={auth} onBack={() => { window.history.replaceState({}, '', '/'); setJoinUser(null) }} />
   }
   return <>
-    {auth.user && !auth.platformRole && auth.memberships.length > 0 && <div className="flex justify-end border-b border-border bg-background p-2 text-foreground"><button className="rounded-lg border border-border px-3 py-2 text-sm hover:bg-muted" onClick={() => setJoinUser(auth.user.id)}>Lời mời và yêu cầu gia nhập công ty</button></div>}
     {auth.user && auth.memberships.length > 1 && <div className="flex items-center gap-3 border-b border-border bg-background p-2 text-foreground">
       <label htmlFor="active-workspace">Không gian làm việc</label>
       <select id="active-workspace" className="rounded border border-border bg-background p-1" value={auth.workspaceId || ''} onChange={event => auth.selectWorkspace(event.target.value)}>

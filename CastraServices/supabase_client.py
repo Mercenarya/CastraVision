@@ -78,6 +78,15 @@ class SupabaseDataClient:
                     "INVITATION_EXPIRED": 410,
                     "INVITATION_REVOKED": 410,
                     "RATE_LIMITED": 429,
+                    "NOT_FOUND": 404,
+                    "REQUEST_CONFLICT": 409,
+                    "STALE_VERSION": 409,
+                    "INVALID_TRANSITION": 409,
+                    "SELF_APPROVAL_FORBIDDEN": 403,
+                    "BUDGET_ESCALATION_REQUIRED": 403,
+                    "BUDGET_ENVELOPE_MISMATCH": 400,
+                    "REASON_REQUIRED": 400,
+                    "STALE_BASELINE": 409,
                 }
                 try:
                     safe_code = response.json().get("message")
@@ -93,7 +102,9 @@ class SupabaseDataClient:
             raise SupabaseAPIError("Supabase Data API request failed.") from exc
 
     def rpc(self, name, params=None):
-        if not name.startswith("membership_") or not name.replace("_", "").isalnum():
+        if name != "leader_workflow" and (
+            not name.startswith("membership_") or not name.replace("_", "").isalnum()
+        ):
             raise SupabaseAPIError("Unsupported product RPC.")
         return self.request("POST", "rpc/" + name, json=params or {})
 

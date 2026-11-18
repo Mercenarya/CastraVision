@@ -135,14 +135,17 @@ class SupabaseSessionFlowTests(TestCase):
                 {
                     "file": SimpleUploadedFile("fixture.csv", content, "text/csv"),
                     "mode": mode,
+                    "campaign_id": str(UUID(int=3)),
                 },
                 **self.headers,
             )
             self.assertEqual(response.status_code, status)
-        self.assertEqual(self.writes[-1][0], "campaign_performance")
-        row = self.writes[-1][1]["json"][0]
-        self.assertEqual(row["created_by"], USER)
-        self.assertEqual(row["workspace_id"], WS)
+        self.assertEqual(self.writes[-1][0], "leader_workflow")
+        body = self.writes[-1][1]["json"]
+        self.assertEqual(body["p_workspace_id"], WS)
+        self.assertEqual(body["p_command"], "import")
+        self.assertEqual(body["p_data"]["campaignId"], str(UUID(int=3)))
+        self.assertNotIn("created_by", body["p_data"]["rows"][0])
 
     def test_legacy_password_endpoints_do_not_create_parallel_accounts(self):
         for path in ("auth/register/", "auth/login/"):

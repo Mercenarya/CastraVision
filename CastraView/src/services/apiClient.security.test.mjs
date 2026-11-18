@@ -2,6 +2,22 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { createApiClient } from './apiClient.js'
 
+test('cancelled query is not dispatched after waiting for the session', async () => {
+  let finishSession
+  let requests = 0
+  const controller = new AbortController()
+  const api = createApiClient({
+    getSession: () => new Promise(resolve => { finishSession = resolve }),
+    getWorkspaceId: () => 'workspace-a',
+    fetchImpl: async () => { requests += 1 },
+  })
+  const pending = api('leader/campaigns/', { signal: controller.signal })
+  controller.abort()
+  finishSession({ data: { session: { access_token: 'fixture-token', user: { id: 'u' } } } })
+  await assert.rejects(pending, error => error.name === 'AbortError')
+  assert.equal(requests, 0)
+})
+
 test('JWT and active Workspace are sent; cookies and caller header overrides are excluded', async () => {
   const calls = []
   let token = 'first'
