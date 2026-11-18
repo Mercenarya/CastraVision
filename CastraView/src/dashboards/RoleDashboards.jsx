@@ -6,6 +6,7 @@
 import { canAccessFR04ApprovalQueue } from '../auth/permissions'
 import LeaderLayout from '../leader/LeaderLayout'
 import MemberLayout from '../member/MemberLayout'
+import { useLanguage } from '../hooks/useLanguage'
 
 const SIZES = {
   Micro: '1–10 employees',
@@ -176,29 +177,30 @@ export function Shell({ user, profile, page, setPage, logout, children }) {
 }
 
 export function LeaderDashboard({ user, profile, imports = [], strategy, setPage }) {
+  const { t } = useLanguage()
   const companyName = profile?.business_name || 'Acme Corp'
   const leaderName = user?.full_name || (user?.email ? user.email.split('@')[0] : 'Leader')
 
   return (
     <>
       <Heading
-        eyebrow="LEADER DASHBOARD"
-        title={`Welcome back, ${leaderName}`}
-        subtitle="Supervise campaign workflows, review proposals awaiting stage-gate sign-off, and track team performance."
+        eyebrow={t('leaderDashboard.eyebrow')}
+        title={t('leaderDashboard.welcome', { name: leaderName })}
+        subtitle={t('leaderDashboard.subtitle')}
       />
 
       <div className="overview-hero card">
         <div>
-          <span className="mini-label">CAMPAIGN SUPERVISION &amp; STAGE-GATE GOVERNANCE</span>
-          <h2>Oversee team marketing execution and sign-off proposals.</h2>
-          <p>As Leader, you are authorized for FR04 Proposal Approval. Review team-generated strategies, supervise imported campaign data, and approve execution gates.</p>
+          <span className="mini-label">{t('leaderDashboard.heroLabel')}</span>
+          <h2>{t('leaderDashboard.heroTitle')}</h2>
+          <p>{t('leaderDashboard.heroDesc')}</p>
         </div>
         <button
           className="button primary"
           style={{ whiteSpace: 'nowrap', zIndex: 1 }}
           onClick={() => setPage('approvals')}
         >
-          Open Approval Queue →
+          {t('leaderDashboard.openApprovalQueue')}
         </button>
       </div>
 
@@ -206,60 +208,60 @@ export function LeaderDashboard({ user, profile, imports = [], strategy, setPage
         <button className="overview-card card" onClick={() => setPage('approvals')}>
           <span className="overview-number">01 / FR04</span>
           <span className="overview-icon cyan">✓</span>
-          <strong>Proposal Approval Queue</strong>
+          <strong>{t('navigation.approvals')}</strong>
           <p>Review, edit, authorize, or reject AI proposals before campaigns go live.</p>
-          <span className="card-link">Review Queue →</span>
+          <span className="card-link">{t('leaderDashboard.reviewQueue')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('strategy')}>
           <span className="overview-number">02 / FR01</span>
           <span className="overview-icon violet">◈</span>
-          <strong>AI Strategy Oversight</strong>
+          <strong>{t('navigation.strategyReference')}</strong>
           <p>{strategy ? `Active channel: ${strategy.strategy?.recommended_channel || 'Meta'}` : 'Review and guide multi-channel marketing recommendations.'}</p>
-          <span className="card-link">{strategy ? 'View Strategy' : 'Inspect Strategy'} →</span>
+          <span className="card-link">{strategy ? t('leaderDashboard.viewStrategy') : t('leaderDashboard.inspectStrategy')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('budget')}>
           <span className="overview-number">03 / FR05</span>
           <span className="overview-icon cyan">↗</span>
-          <strong>Budget &amp; ROAS Optimization</strong>
+          <strong>{t('navigation.budgetRoas')}</strong>
           <p>Monitor multi-channel ad spend allocation, conversion forecasts, and ROAS projections.</p>
-          <span className="card-link">Analyze Budget →</span>
+          <span className="card-link">{t('leaderDashboard.analyzeBudget')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('import')}>
           <span className="overview-number">04 / FR08</span>
           <span className="overview-icon violet">⇥</span>
-          <strong>Campaign Data Records</strong>
+          <strong>{t('navigation.campaignImport')}</strong>
           <p>{imports.length ? `${imports[0].row_count} records imported` : 'Supervise historical datasets across Meta, Google Ads, and TikTok.'}</p>
-          <span className="card-link">{imports.length ? 'View Data Records' : 'Open Data Hub'} →</span>
+          <span className="card-link">{imports.length ? t('leaderDashboard.viewDataRecords') : t('leaderDashboard.openDataHub')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('reports')}>
           <span className="overview-number">05 / FR07</span>
           <span className="overview-icon cyan">▤</span>
-          <strong>Campaign Reports</strong>
+          <strong>{t('navigation.reports')}</strong>
           <p>Download and export cross-channel performance analytics and team summaries.</p>
-          <span className="card-link">View Reports →</span>
+          <span className="card-link">{t('leaderDashboard.viewReports')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('profile')}>
           <span className="overview-number">06 / FR12</span>
           <span className="overview-icon violet">▣</span>
-          <strong>Company Profile</strong>
+          <strong>{t('navigation.settings')}</strong>
           <p>{companyName} · {profile?.industry || 'Enterprise SaaS'}</p>
-          <span className="card-link">View Profile →</span>
+          <span className="card-link">{t('leaderDashboard.viewProfile')}</span>
         </button>
       </div>
 
       <div className="overview-note card">
         <span>ⓘ</span>
         <div>
-          <strong>Leader Governance &amp; Responsibilities</strong>
-          <p>You have full authority over proposal stage-gates (FR04) and campaign optimization. Platform management and user RBAC are reserved for the Marketing Manager.</p>
+          <strong>{t('leaderDashboard.governanceTitle')}</strong>
+          <p>{t('leaderDashboard.governanceDesc')}</p>
         </div>
         <button className="button subtle" onClick={() => setPage('approvals')}>
-          Check Pending Approvals →
+          {t('leaderDashboard.checkPendingApprovals')}
         </button>
       </div>
     </>
@@ -267,29 +269,30 @@ export function LeaderDashboard({ user, profile, imports = [], strategy, setPage
 }
 
 export function EmployeeDashboard({ user, profile, imports = [], strategy, setPage }) {
+  const { t } = useLanguage()
   const companyName = profile?.business_name || 'Acme Corp'
   const employeeName = user?.full_name || (user?.email ? user.email.split('@')[0] : 'Employee')
 
   return (
     <>
       <Heading
-        eyebrow="EMPLOYEE DASHBOARD"
-        title={`Welcome back, ${employeeName}`}
-        subtitle="Create multi-channel marketing content, ingest campaign data, and generate AI-driven strategies."
+        eyebrow={t('employeeDashboard.eyebrow')}
+        title={t('employeeDashboard.welcome', { name: employeeName })}
+        subtitle={t('employeeDashboard.subtitle')}
       />
 
       <div className="overview-hero card">
         <div>
-          <span className="mini-label">CAMPAIGN EXECUTION &amp; CREATIVE WORKSPACE</span>
-          <h2>Execute marketing workflows with AI assistance.</h2>
-          <p>Generate targeted multi-channel ad copy, import performance datasets, and draft actionable campaign strategies for {companyName}.</p>
+          <span className="mini-label">{t('employeeDashboard.heroLabel')}</span>
+          <h2>{t('employeeDashboard.heroTitle')}</h2>
+          <p>{t('employeeDashboard.heroDesc', { companyName })}</p>
         </div>
         <button
           className="button primary"
           style={{ whiteSpace: 'nowrap', zIndex: 1 }}
           onClick={() => setPage('content')}
         >
-          Launch Content Studio →
+          {t('employeeDashboard.launchContentStudio')}
         </button>
       </div>
 
@@ -297,60 +300,60 @@ export function EmployeeDashboard({ user, profile, imports = [], strategy, setPa
         <button className="overview-card card" onClick={() => setPage('strategy')}>
           <span className="overview-number">01 / FR01</span>
           <span className="overview-icon violet">◈</span>
-          <strong>Generate AI Strategy</strong>
+          <strong>{t('employeeDashboard.generateStrategy')}</strong>
           <p>{strategy ? `Recommended Channel: ${strategy.strategy?.recommended_channel || 'Meta'}` : 'Synthesize business profile & historical performance data.'}</p>
-          <span className="card-link">{strategy ? 'View Strategy' : 'Generate Strategy'} →</span>
+          <span className="card-link">{strategy ? t('employeeDashboard.viewStrategy') : t('employeeDashboard.generateStrategy')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('content')}>
           <span className="overview-number">02 / FR03</span>
           <span className="overview-icon cyan">✦</span>
-          <strong>Content Studio</strong>
+          <strong>{t('navigation.contentStudio')}</strong>
           <p>Create and refine channel-specific ad copy, headlines, hooks, and creative assets.</p>
-          <span className="card-link">Open Content Studio →</span>
+          <span className="card-link">{t('employeeDashboard.openContentStudio')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('import')}>
           <span className="overview-number">03 / FR08</span>
           <span className="overview-icon violet">⇥</span>
-          <strong>Campaign Data Import</strong>
+          <strong>{t('navigation.campaignImport')}</strong>
           <p>{imports.length ? `${imports[0].row_count} records normalized` : 'Upload CSV / XLSX campaign datasets to train AI models.'}</p>
-          <span className="card-link">{imports.length ? 'View Ingested Data' : 'Start Data Import'} →</span>
+          <span className="card-link">{imports.length ? t('employeeDashboard.viewIngestedData') : t('employeeDashboard.startDataImport')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('profile')}>
           <span className="overview-number">04 / FR12</span>
           <span className="overview-icon cyan">▣</span>
-          <strong>Business Profile &amp; Audience</strong>
+          <strong>{t('settings.tabs.business')}</strong>
           <p>{profile?.industry || 'Enterprise'} · {SIZES[profile?.business_size] || profile?.business_size || 'Active Workspace'}</p>
-          <span className="card-link">View Workspace Profile →</span>
+          <span className="card-link">{t('employeeDashboard.viewWorkspaceProfile')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('budget')}>
           <span className="overview-number">05 / FR05</span>
           <span className="overview-icon violet">↗</span>
-          <strong>Budget &amp; ROAS</strong>
+          <strong>{t('navigation.budgetRoas')}</strong>
           <p>Inspect recommended budget distribution across Meta, Google Ads, and TikTok.</p>
-          <span className="card-link">View Projections →</span>
+          <span className="card-link">{t('employeeDashboard.viewProjections')}</span>
         </button>
 
         <button className="overview-card card" onClick={() => setPage('insights')}>
           <span className="overview-number">06 / FR06</span>
           <span className="overview-icon cyan">◎</span>
-          <strong>Competitor Insights</strong>
+          <strong>{t('navigation.competitorInsights')}</strong>
           <p>Analyze competitor trends and industry marketing benchmark data.</p>
-          <span className="card-link">Explore Insights →</span>
+          <span className="card-link">{t('employeeDashboard.exploreInsights')}</span>
         </button>
       </div>
 
       <div className="overview-note card">
         <span>ⓘ</span>
         <div>
-          <strong>Operational Scope Notice</strong>
-          <p>Employees have full access to strategy generation, data import, and Content Studio. Stage-gate proposal approvals are managed by your team Leader and Marketing Manager.</p>
+          <strong>{t('employeeDashboard.scopeNoticeTitle')}</strong>
+          <p>{t('employeeDashboard.scopeNoticeDesc')}</p>
         </div>
         <button className="button subtle" onClick={() => setPage('strategy')}>
-          Create New Strategy →
+          {t('employeeDashboard.createNewStrategy')}
         </button>
       </div>
     </>

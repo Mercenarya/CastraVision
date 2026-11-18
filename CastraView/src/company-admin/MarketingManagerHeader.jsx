@@ -4,6 +4,8 @@
  */
 
 import { useState, useRef, useEffect } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
+import { LanguageDropdownSubmenu } from '@/components/LanguageDropdownSubmenu'
 import {
   IconSearch,
   IconSignOut,
@@ -20,6 +22,7 @@ export default function MarketingManagerHeader({
   onOpenMobileMenu,
   onNavigate,
 }) {
+  const { t } = useLanguage()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef(null)
 
@@ -136,7 +139,7 @@ export default function MarketingManagerHeader({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]" />
           </span>
-          <span className="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+          <span className="text-[12px] font-medium text-[#c7c4d7]">{t('header.allSystemsNominal')}</span>
         </div>
 
         <div className="hidden sm:block h-5 w-px bg-[#464554]" />
@@ -145,7 +148,7 @@ export default function MarketingManagerHeader({
         <button
           type="button"
           className="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none cursor-pointer"
-          aria-label="Notifications"
+          aria-label={t('navigation.notifications')}
           title="3 unread notifications"
         >
           <svg
@@ -187,7 +190,7 @@ export default function MarketingManagerHeader({
               <div className="flex items-center gap-1.5 leading-none">
                 <span className="text-[13px] font-semibold text-[#dfe2f1]">{displayName}</span>
                 <span className="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
-                  MANAGER
+                  {t('roles.managerBadge')}
                 </span>
               </div>
               <span className="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">
@@ -206,10 +209,10 @@ export default function MarketingManagerHeader({
                 </div>
                 <div className="mt-1.5 flex items-center gap-1.5">
                   <span className="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase">
-                    MANAGER
+                    {t('roles.managerBadge')}
                   </span>
                   <span className="px-1.5 py-0.5 rounded bg-[#03b5d3]/15 text-[#4cd7f6] text-[9px] font-mono">
-                    Tenant Isolation
+                    {t('header.tenantIsolation')}
                   </span>
                 </div>
               </div>
@@ -222,8 +225,10 @@ export default function MarketingManagerHeader({
                 }}
               >
                 <IconUser size={15} />
-                <span>Account Profile &amp; Settings</span>
+                <span>{t('navigation.accountProfileSettings')}</span>
               </button>
+              <div className="my-1 border-t border-[#464554]/60" />
+              <LanguageDropdownSubmenu />
               <div className="my-1 border-t border-[#464554]/60" />
               {onSignOut && (
                 <button
@@ -235,7 +240,7 @@ export default function MarketingManagerHeader({
                   }}
                 >
                   <IconSignOut size={15} />
-                  <span>Sign Out</span>
+                  <span>{t('header.signOut')}</span>
                 </button>
               )}
             </div>

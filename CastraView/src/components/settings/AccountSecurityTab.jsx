@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useLanguage } from '@/hooks/useLanguage'
 import {
   User,
   KeyRound,
@@ -25,6 +26,8 @@ export function AccountSecurityTab({
   notify,
   onUserUpdate,
 }) {
+  const { t } = useLanguage()
+
   // ─── 1. Personal Information State ──────────────────────────────────────────
   const initialFullName =
     user?.user_metadata?.full_name ||
@@ -304,10 +307,10 @@ export function AccountSecurityTab({
             </div>
             <div>
               <h2 className="text-base font-semibold text-[#dfe2f1]">
-                Thông tin cá nhân
+                {t('settings.accountSecurity.personalInfoTitle')}
               </h2>
               <p className="text-xs text-[#c7c4d7]">
-                Cập nhật thông tin hồ sơ của bạn trên toàn hệ thống CastraVision.
+                {t('settings.accountSecurity.personalInfoSubtitle')}
               </p>
             </div>
           </div>
@@ -459,7 +462,7 @@ export function AccountSecurityTab({
                 onClick={handleResetPersonal}
                 className="px-4 py-2 rounded-lg border border-[#464554] text-[#dfe2f1] hover:bg-[#262a35] text-sm font-medium transition-colors"
               >
-                Hủy
+                {t('common.cancel')}
               </button>
               <button
                 type="submit"
@@ -467,7 +470,7 @@ export function AccountSecurityTab({
                 className="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white text-sm font-semibold flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
               >
                 <Save className="w-4 h-4" />
-                <span>{savingPersonal ? 'Đang lưu…' : 'Lưu thay đổi'}</span>
+                <span>{savingPersonal ? t('common.saving') : t('common.save')}</span>
               </button>
             </div>
           </form>
@@ -484,10 +487,10 @@ export function AccountSecurityTab({
             </div>
             <div>
               <h2 className="text-base font-semibold text-[#dfe2f1]">
-                Đổi mật khẩu
+                {t('settings.accountSecurity.passwordTitle')}
               </h2>
               <p className="text-xs text-[#c7c4d7]">
-                Quản lý mật khẩu và thông tin xác thực bảo mật.
+                {t('settings.accountSecurity.passwordSubtitle')}
               </p>
             </div>
           </div>
@@ -667,7 +670,7 @@ export function AccountSecurityTab({
               >
                 <ShieldCheck className="w-4 h-4" />
                 <span>
-                  {updatingPassword ? 'Đang cập nhật…' : 'Cập nhật mật khẩu'}
+                  {updatingPassword ? t('common.saving') : t('settings.accountSecurity.updatePassword')}
                 </span>
               </button>
             </div>

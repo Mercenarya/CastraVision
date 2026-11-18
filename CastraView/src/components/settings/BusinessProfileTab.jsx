@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
+import { useLanguage } from '@/hooks/useLanguage'
 import {
   Building2,
   Save,
@@ -51,6 +52,8 @@ export function BusinessProfileTab({
   notify,
   onProfileUpdated,
 }) {
+  const { t } = useLanguage()
+
   // Authoritative edit permission: strictly Marketing Manager with admin membership
   const canEdit = useMemo(() => {
     if (actorRole !== 'manager') return false
@@ -212,23 +215,23 @@ export function BusinessProfileTab({
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base font-semibold text-[#dfe2f1]">
-                Hồ sơ doanh nghiệp (Business Profile)
+                {t('settings.businessProfile.title')}
               </h2>
               {canEdit ? (
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#8083ff]/15 text-[#8083ff] border border-[#8083ff]/30">
-                  MANAGER (TOÀN QUYỀN)
+                  {t('settings.businessProfile.editBadge')}
                 </span>
               ) : (
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase bg-[#4cd7f6]/15 text-[#4cd7f6] border border-[#4cd7f6]/30 flex items-center gap-1">
                   <Eye className="w-3 h-3" />
-                  CHẾ ĐỘ CHỈ XEM (READ ONLY)
+                  {t('settings.businessProfile.readOnlyBadge')}
                 </span>
               )}
             </div>
             <p className="text-xs text-[#c7c4d7] mt-0.5">
               {canEdit
-                ? 'Cấu hình thông tin nhận diện thương hiệu, khách hàng mục tiêu và ngân sách tiếp thị.'
-                : 'Xem thông tin nhận diện thương hiệu và ngân sách tiếp thị của không gian làm việc.'}
+                ? t('settings.businessProfile.subtitle', 'Cấu hình thông tin nhận diện thương hiệu, khách hàng mục tiêu và ngân sách tiếp thị.')
+                : t('settings.businessProfile.readOnlySubtitle', 'Xem thông tin nhận diện thương hiệu và ngân sách tiếp thị của không gian làm việc.')}
             </p>
           </div>
         </div>
@@ -243,7 +246,7 @@ export function BusinessProfileTab({
               className="px-4 py-2 rounded-lg border border-[#464554] hover:bg-[#353944] text-[#dfe2f1] text-xs font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Hoàn tác</span>
+              <span>{t('common.reset')}</span>
             </button>
             <button
               type="button"
@@ -252,7 +255,7 @@ export function BusinessProfileTab({
               className="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
             >
               {isSaving ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
-              <span>{isSaving ? 'Đang lưu…' : isExistingProfile ? 'Lưu hồ sơ ✓' : 'Khởi tạo hồ sơ ✓'}</span>
+              <span>{isSaving ? t('common.saving') : t('common.save')}</span>
             </button>
           </div>
         ) : (

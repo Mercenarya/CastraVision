@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useLanguage } from '@/hooks/useLanguage'
+import { LanguageDropdownSubmenu } from '@/components/LanguageDropdownSubmenu'
 import EmployeeSidebar from './EmployeeSidebar'
 
 const MEMBER_PAGE_TITLES = {
@@ -33,6 +35,7 @@ export default function MemberLayout({
   logout,
   children,
 }) {
+  const { t } = useLanguage()
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -137,7 +140,7 @@ export default function MemberLayout({
                 className="hover:text-[#dfe2f1] cursor-pointer transition-colors whitespace-nowrap"
                 onClick={() => setPage?.('overview')}
               >
-                Member Workspace
+                {t('header.memberWorkspace')}
               </span>
               <svg
                 className="w-3.5 h-3.5 text-[#464554] flex-shrink-0"
@@ -151,7 +154,7 @@ export default function MemberLayout({
                 <polyline points="9 18 15 12 9 6" />
               </svg>
               <span className="text-[#dfe2f1] font-semibold truncate">
-                {MEMBER_PAGE_TITLES[page] || 'My Dashboard'}
+                {MEMBER_PAGE_TITLES[page] || t('navigation.dashboard')}
               </span>
             </div>
           </div>
@@ -165,7 +168,7 @@ export default function MemberLayout({
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]" />
               </span>
               <span className="text-[12px] font-medium text-[#c7c4d7]">
-                All systems nominal
+                {t('header.allSystemsNominal')}
               </span>
             </div>
 
@@ -175,7 +178,7 @@ export default function MemberLayout({
             <button
               type="button"
               className="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none"
-              aria-label="2 Notifications"
+              aria-label={t('navigation.notifications')}
               onClick={() => setPage?.('notifications')}
             >
               <svg
@@ -218,7 +221,7 @@ export default function MemberLayout({
                       {userName}
                     </span>
                     <span className="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
-                      MEMBER
+                      {t('roles.memberBadge')}
                     </span>
                   </div>
                   <span className="text-[11px] text-[#c7c4d7]/70 font-mono mt-1 truncate max-w-[140px]">
@@ -248,7 +251,7 @@ export default function MemberLayout({
                       setPage?.('profile')
                     }}
                   >
-                    My Profile &amp; Settings
+                    {t('navigation.myProfileSettings')}
                   </button>
                   <button
                     type="button"
@@ -258,8 +261,10 @@ export default function MemberLayout({
                       setPage?.('tasks')
                     }}
                   >
-                    My Tasks
+                    {t('navigation.myTasks')}
                   </button>
+                  <div className="my-1 border-t border-[#464554]/60" />
+                  <LanguageDropdownSubmenu />
                   <div className="my-1 border-t border-[#464554]/60" />
                   <button
                     type="button"
@@ -269,7 +274,7 @@ export default function MemberLayout({
                       logout?.()
                     }}
                   >
-                    <span>Sign Out</span>
+                    <span>{t('header.signOut')}</span>
                     <span className="text-xs">→</span>
                   </button>
                 </div>

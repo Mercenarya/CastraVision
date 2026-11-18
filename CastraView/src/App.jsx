@@ -27,6 +27,8 @@ import SettingsPage from './pages/SettingsPage'
 import ChannelPicker from './components/ChannelPicker'
 import { supabase } from './lib/supabase'
 import { getBusinessProfile, saveBusinessProfile as persistBusinessProfile } from './services/businessProfileService'
+import { LanguageProvider } from './contexts/LanguageContext'
+import { useLanguage } from './hooks/useLanguage'
 import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
@@ -74,6 +76,7 @@ function Notice({ kind = 'error', children }) { return <div className={`notice $
 function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Dismiss notification">×</button></div> }
 
 function AuthScreen({ mode, setMode, onLogin, busy, error }) {
+  const { t, language, setLanguage } = useLanguage()
   const signup = mode === 'signup'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -85,7 +88,7 @@ function AuthScreen({ mode, setMode, onLogin, busy, error }) {
     event.preventDefault()
     setLocalError('')
     if (signup && password !== confirm) {
-      setLocalError('Passwords do not match.')
+      setLocalError(t('auth.passwordMismatch'))
       return
     }
     await onLogin(email, password, signup)
@@ -94,39 +97,63 @@ function AuthScreen({ mode, setMode, onLogin, busy, error }) {
 
   return (
     <div className="auth-page">
-      <header className="auth-top"><Brand /></header>
+      <header className="auth-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', maxWidth: '1200px', margin: '0 auto', padding: '16px 24px' }}>
+        <Brand />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
+            type="button"
+            onClick={() => setLanguage(language === 'en' ? 'vi' : 'en')}
+            style={{
+              background: '#171b26',
+              border: '1px solid #464554',
+              color: '#dfe2f1',
+              padding: '6px 12px',
+              borderRadius: '8px',
+              fontSize: '12px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+          >
+            <span>🌐</span>
+            <span>{language === 'en' ? 'Tiếng Việt' : 'English'}</span>
+          </button>
+        </div>
+      </header>
       <main className="auth-main">
         <div className="auth-card">
           <div className="auth-heading">
             <Brand />
-            <span className="auth-pill">● SECURE AUTHENTICATION &amp; RBAC</span>
-            <h1>{signup ? 'Create an Account' : 'Welcome Back'}</h1>
+            <span className="auth-pill">{t('auth.pill')}</span>
+            <h1>{signup ? t('auth.signUpTitle') : t('auth.signInTitle')}</h1>
             <p>
               {signup
-                ? 'Register your account to access CastraVision workspaces.'
-                : 'Sign in with your credentials to access your workspace.'}
+                ? t('auth.signUpSubtitle')
+                : t('auth.signInSubtitle')}
             </p>
           </div>
           <form className="auth-form" onSubmit={submit}>
             <label>
-              Email Address
+              {t('auth.emailLabel')}
               <input
                 type="email"
                 autoComplete="email"
-                placeholder="name@company.com"
+                placeholder={t('auth.emailPlaceholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </label>
             <label>
-              Password
+              {t('auth.passwordLabel')}
               <div className="password-field">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   autoComplete={signup ? 'new-password' : 'current-password'}
                   minLength={6}
-                  placeholder="Enter your password"
+                  placeholder={t('auth.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
@@ -134,20 +161,20 @@ function AuthScreen({ mode, setMode, onLogin, busy, error }) {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  aria-label={showPassword ? t('common.hide') : t('common.show')}
                 >
-                  {showPassword ? 'Hide' : 'Show'}
+                  {showPassword ? t('common.hide') : t('common.show')}
                 </button>
               </div>
             </label>
             {signup && (
               <label>
-                Confirm Password
+                {t('auth.confirmPasswordLabel')}
                 <input
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
                   minLength={6}
-                  placeholder="Re-enter your password"
+                  placeholder={t('auth.confirmPasswordPlaceholder')}
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
                   required
@@ -156,12 +183,12 @@ function AuthScreen({ mode, setMode, onLogin, busy, error }) {
             )}
             {displayError && <Notice>{displayError}</Notice>}
             <button className="button primary full" disabled={busy}>
-              {busy ? 'Authenticating…' : signup ? 'Create Account →' : 'Sign In →'}
+              {busy ? t('auth.authenticating') : signup ? t('auth.signUpButton') : t('auth.signInButton')}
             </button>
           </form>
 
           <div className="auth-switch">
-            <span>{signup ? 'Already have an account?' : "Don't have an account?"}</span>{' '}
+            <span>{signup ? t('auth.hasAccount') : t('auth.noAccount')}</span>{' '}
             <button
               type="button"
               onClick={() => {
@@ -169,14 +196,14 @@ function AuthScreen({ mode, setMode, onLogin, busy, error }) {
                 setMode(signup ? 'login' : 'signup')
               }}
             >
-              {signup ? 'Sign In' : 'Sign Up'}
+              {signup ? t('auth.switchSignIn') : t('auth.switchSignUp')}
             </button>
           </div>
         </div>
       </main>
       <footer className="auth-footer">
-        <span>© 2026 CastraVision</span>
-        <span>Enterprise AI Marketing Platform</span>
+        <span>{t('auth.footerCopyright')}</span>
+        <span>{t('auth.footerSubtitle')}</span>
       </footer>
     </div>
   )
@@ -219,6 +246,7 @@ function Shell({ user, role, profile, page, setPage, logout, children }) {
 
 
 function ImportScreen({ imports, onImported, notify }) {
+  const { t } = useLanguage()
   const [file, setFile] = useState(null)
   const [preview, setPreview] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -271,9 +299,9 @@ function ImportScreen({ imports, onImported, notify }) {
     <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
       <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
         <Heading
-          eyebrow="DATA INGESTION HUB"
-          title="Campaign Data Import"
-          subtitle="Upload historical campaign performance data to enrich AI strategy blueprints."
+          eyebrow={t('campaignImport.eyebrow')}
+          title={t('campaignImport.title')}
+          subtitle={t('campaignImport.subtitle')}
         />
         <div
           className={`upload-zone card ${file ? 'has-file' : ''}`}
@@ -284,16 +312,16 @@ function ImportScreen({ imports, onImported, notify }) {
           }}
         >
           <div className="upload-icon">⇧</div>
-          <h2>Drag &amp; drop file here</h2>
-          <p>or browse from your device</p>
+          <h2>{t('campaignImport.dragDropTitle')}</h2>
+          <p>{t('campaignImport.dragDropSubtitle')}</p>
           <span className="upload-separator">OR</span>
           <button className="button primary" type="button" onClick={() => input.current?.click()} disabled={busy}>
-            ⇧ Select CSV / Excel File
+            {t('campaignImport.selectFileButton')}
           </button>
           <input className="sr-only" ref={input} type="file" accept=".csv,.xlsx" onChange={(e) => stage(e.target.files[0])} />
-          <small>Max 5 MB · CSV UTF-8 or XLSX</small>
+          <small>{t('campaignImport.maxSize')}</small>
           <button type="button" className="inline-link" onClick={downloadSample}>
-            ↓ Download Sample CSV
+            {t('campaignImport.downloadSample')}
           </button>
         </div>
         {file && (
@@ -401,6 +429,7 @@ function ImportScreen({ imports, onImported, notify }) {
 }
 
 function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
+  const { t } = useLanguage()
   const initial = () => ({
     campaign_goal: profile?.primary_goal || '',
     target_audience: profile?.target_customers || '',
@@ -460,42 +489,42 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
     <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
       <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
         <Heading
-          eyebrow="STRATEGY ENGINE"
-          title="Strategy Studio"
-          subtitle="Set campaign goals and target audience to generate data-driven marketing blueprints."
+          eyebrow={t('strategyStudio.eyebrow')}
+          title={t('strategyStudio.title')}
+          subtitle={t('strategyStudio.subtitle')}
         >
           {latestRows.length > 0 && (
-            <span className="data-chip">✓ {latestRows.length} historical records utilized</span>
+            <span className="data-chip">{t('strategyStudio.historicalRecordsUtilized', { count: latestRows.length })}</span>
           )}
         </Heading>
         <div className="strategy-grid">
           <form className="card strategy-form" onSubmit={generate}>
             <div className="section-head">
-              <h2><i /> Campaign Setup</h2>
-              <span className="step-badge">FR01 · Strategy Studio</span>
+              <h2><i /> {t('strategyStudio.campaignSetup')}</h2>
+              <span className="step-badge">{t('strategyStudio.badge')}</span>
             </div>
             <label>
-              Campaign Objective
+              {t('strategyStudio.campaignObjective')}
               <input
                 value={draft.campaign_goal}
                 onChange={(e) => setDraft({ ...draft, campaign_goal: e.target.value })}
                 minLength={3}
                 required
-                placeholder="e.g., Q4 Multi-channel Sales Growth"
+                placeholder={t('strategyStudio.campaignObjectivePlaceholder')}
               />
             </label>
             <label>
-              Target Audience
+              {t('strategyStudio.targetAudience')}
               <input
                 value={draft.target_audience}
                 onChange={(e) => setDraft({ ...draft, target_audience: e.target.value })}
                 minLength={3}
                 required
-                placeholder="e.g., Active millennials aged 22–35"
+                placeholder={t('strategyStudio.targetAudiencePlaceholder')}
               />
             </label>
             <label>
-              Monthly Budget ({profile?.currency || 'USD'})
+              {t('strategyStudio.monthlyBudget')} ({profile?.currency || 'USD'})
               <input
                 type="number"
                 min="1"
@@ -505,15 +534,15 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
                 placeholder="30000"
               />
             </label>
-            <div className="field-title">Planned Channels</div>
+            <div className="field-title">{t('strategyStudio.plannedChannels')}</div>
             <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
             {error && <Notice>{error}</Notice>}
             <div className="form-actions">
               <button type="button" className="button coral" onClick={() => setDraft(initial())}>
-                ↻ Reset
+                {t('strategyStudio.resetButton')}
               </button>
               <button className="button primary" disabled={busy || !draft.preferred_channels.length}>
-                {busy ? 'Analyzing…' : 'ϟ Generate Strategy'}
+                {busy ? t('strategyStudio.analyzing') : t('strategyStudio.generateButton')}
               </button>
             </div>
           </form>
@@ -521,27 +550,27 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
           <div className="card result-card">
             <div className="section-head">
               <div>
-                <h2>AI Strategy Recommendations</h2>
-                <p>Based on your business profile and historical data</p>
+                <h2>{t('strategyStudio.recommendationsTitle')}</h2>
+                <p>{t('strategyStudio.recommendationsSubtitle')}</p>
               </div>
-              {result && <span className="active-badge">{result.strategy.confidence}% confidence</span>}
+              {result && <span className="active-badge">{result.strategy.confidence}% {t('common.confidence')}</span>}
             </div>
             {!result ? (
               <div className="result-empty">
                 <span>◈</span>
-                <h3>No Strategy Generated Yet</h3>
-                <p>Complete the setup form and click “Generate Strategy” to view channels, messaging, and budget allocation.</p>
+                <h3>{t('strategyStudio.noStrategyTitle')}</h3>
+                <p>{t('strategyStudio.noStrategyDesc')}</p>
               </div>
             ) : (
               <>
                 <div className="insight-box">
-                  <span className="mini-label">STRATEGIC FOCUS</span>
+                  <span className="mini-label">{t('strategyStudio.strategicFocus')}</span>
                   <p>{result.strategy.rationale}</p>
                 </div>
                 <div className="insight-box">
                   <div className="allocation-head">
-                    <span className="mini-label">RECOMMENDED ALLOCATION</span>
-                    <span>{money(100)} total</span>
+                    <span className="mini-label">{t('strategyStudio.recommendedAllocation')}</span>
+                    <span>{money(100)} {t('common.total')}</span>
                   </div>
                   <div className="stacked-bar">
                     {result.strategy.budget_allocation.map((item, index) => (
@@ -559,12 +588,12 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
                   </div>
                 </div>
                 <div className="insight-box">
-                  <span className="mini-label">MESSAGING &amp; SEGMENT</span>
+                  <span className="mini-label">{t('strategyStudio.messagingSegment')}</span>
                   <p>“{result.strategy.message}”</p>
                   <small>{result.strategy.segment}</small>
                 </div>
                 <div className="insight-box">
-                  <span className="mini-label">RECOMMENDED ACTIONS</span>
+                  <span className="mini-label">{t('strategyStudio.recommendedActions')}</span>
                   <ol>
                     {result.strategy.actions.map((action, index) => (
                       <li key={index}>{action}</li>
@@ -576,7 +605,7 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
                     {result.provider === 'openai' ? 'OpenAI Engine' : 'Rule-based Fallback'} · {result.context_sources.length} reference sources
                   </span>
                   <button className="button subtle" type="button" onClick={generate} disabled={busy}>
-                    ↻ Re-analyze
+                    {t('strategyStudio.reanalyzeButton')}
                   </button>
                 </div>
                 {result.warning && <Notice kind="warning">{result.warning}</Notice>}
@@ -590,6 +619,7 @@ function StrategyScreen({ profile, latestRows, result, setResult, notify }) {
 }
 
 function ContentScreen({ result, profile, setPage, notify }) {
+  const { t } = useLanguage()
   const [channels, setChannels] = useState(CHANNELS)
   const [tone, setTone] = useState('Dynamic & Bold')
   const [version, setVersion] = useState(0)
@@ -625,7 +655,7 @@ function ContentScreen({ result, profile, setPage, notify }) {
   async function copy(value) {
     try {
       await navigator.clipboard.writeText(value)
-      notify('Content copied to clipboard.')
+      notify(t('common.copied'))
     } catch {
       notify('Unable to copy on this browser.')
     }
@@ -634,21 +664,21 @@ function ContentScreen({ result, profile, setPage, notify }) {
     <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
       <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
         <Heading
-          eyebrow="CAMPAIGN ORCHESTRATION › CONTENT STUDIO"
-          title="Content Studio"
-          subtitle="Draft multi-channel creative assets aligned with your campaign strategy."
+          eyebrow={t('contentStudio.eyebrow')}
+          title={t('contentStudio.title')}
+          subtitle={t('contentStudio.subtitle')}
         />
         <div className="content-notice">
           <span>ⓘ</span>
-          <p>Template-assisted creative workspace. Review and refine creative copy prior to final submission.</p>
+          <p>{t('contentStudio.notice')}</p>
         </div>
         {!result ? (
           <div className="card content-empty">
             <span>✦</span>
-            <h2>Generate a Strategy First</h2>
-            <p>Content Studio utilizes audience segments and core messaging from your active strategy proposal.</p>
+            <h2>{t('contentStudio.generateFirstTitle')}</h2>
+            <p>{t('contentStudio.generateFirstDesc')}</p>
             <button className="button primary" onClick={() => setPage('strategy')}>
-              Go to Strategy Studio →
+              {t('contentStudio.goToStrategy')}
             </button>
           </div>
         ) : (
@@ -1566,7 +1596,7 @@ function WorkspaceApp() {
   )
 }
 
-function App() {
+function AppContent() {
   // ─── Development Preview Route (/dashboard-preview) ───────────────────────
   const isPreviewPath =
     typeof window !== 'undefined' &&
@@ -1595,6 +1625,14 @@ function App() {
   }
 
   return <WorkspaceApp />
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  )
 }
 
 export default App;

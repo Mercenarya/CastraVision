@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Building2, ShieldCheck, Bell } from 'lucide-react'
+import { useLanguage } from '@/hooks/useLanguage'
 import SettingsHeader from '@/components/settings/SettingsHeader'
 import BusinessProfileTab from '@/components/settings/BusinessProfileTab'
 import AccountSecurityTab from '@/components/settings/AccountSecurityTab'
@@ -26,6 +27,8 @@ export function SettingsPage({
   onUserUpdate,
   onProfileUpdated,
 }) {
+  const { t } = useLanguage()
+
   // Normalize role key
   const normalizedRole = useMemo(() => {
     if (!actorRole) return 'member'
@@ -45,12 +48,12 @@ export function SettingsPage({
       return [
         {
           id: 'security',
-          label: 'Tài khoản & Bảo mật',
+          label: t('settings.tabs.security'),
           icon: ShieldCheck,
         },
         {
           id: 'notifications',
-          label: 'Tùy chọn thông báo',
+          label: t('settings.tabs.notifications'),
           icon: Bell,
         },
       ]
@@ -61,21 +64,21 @@ export function SettingsPage({
     return [
       {
         id: 'business',
-        label: normalizedRole === 'manager' ? 'Hồ sơ doanh nghiệp' : 'Hồ sơ doanh nghiệp (Chỉ xem)',
+        label: normalizedRole === 'manager' ? t('settings.tabs.business') : t('settings.tabs.businessReadOnly'),
         icon: Building2,
       },
       {
         id: 'security',
-        label: 'Tài khoản & Bảo mật',
+        label: t('settings.tabs.security'),
         icon: ShieldCheck,
       },
       {
         id: 'notifications',
-        label: 'Tùy chọn thông báo',
+        label: t('settings.tabs.notifications'),
         icon: Bell,
       },
     ]
-  }, [normalizedRole])
+  }, [normalizedRole, t])
 
   // Default active tab: 'business' for Manager, 'security' for other roles
   const defaultTab = normalizedRole === 'manager' ? 'business' : 'security'
@@ -89,8 +92,8 @@ export function SettingsPage({
     <div className="w-full space-y-6">
       {/* Shared Header with Breadcrumb and Tab Pills */}
       <SettingsHeader
-        title="Cài đặt"
-        subtitle="Quản lý thông tin tài khoản, bảo mật cá nhân và cấu hình nhận thông báo."
+        title={t('settings.title')}
+        subtitle={t('settings.subtitle')}
         tabs={availableTabs}
         activeTab={activeTab}
         onTabChange={setSelectedTab}

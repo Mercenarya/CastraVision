@@ -3,6 +3,7 @@
  * Matches the approved Figma design system across all screens.
  */
 
+import { useLanguage } from '@/hooks/useLanguage'
 import {
   IconOverview,
   IconMembers,
@@ -18,20 +19,6 @@ import {
   IconSparkles,
 } from './ui/Icons'
 
-const NAV_ITEMS = [
-  { key: 'overview', label: 'Overview / Dashboard', Icon: IconOverview },
-  { key: 'members', label: 'Workspace Members', Icon: IconMembers },
-  { key: 'roles', label: 'Role Management', Icon: IconRoles },
-  { key: 'approvals', label: 'Approvals', Icon: IconApprovals, hasBadge: true },
-  { key: 'audit', label: 'Audit Log', Icon: IconAudit },
-  { key: 'budget', label: 'Budget & ROAS', Icon: IconTrendingUp, hasAiBadge: true },
-  { key: 'reports', label: 'Reports', Icon: IconBarChart, hasAiBadge: true },
-  { key: 'insights', label: 'Competitor Insights', Icon: IconSparkles, hasAiBadge: true },
-  { key: 'import', label: 'Campaign Import', Icon: IconImport },
-  { key: 'content', label: 'Content Studio', Icon: IconContent },
-  { key: 'profile', label: 'Settings', Icon: IconSettings },
-]
-
 export default function MarketingManagerSidebar({
   activeKey = 'overview',
   onNavigate,
@@ -43,6 +30,21 @@ export default function MarketingManagerSidebar({
   isDrawer = false,
   onClose,
 }) {
+  const { t } = useLanguage()
+
+  const NAV_ITEMS = [
+    { key: 'overview', label: t('navigation.overviewDashboard'), Icon: IconOverview },
+    { key: 'members', label: t('navigation.workspaceMembers'), Icon: IconMembers },
+    { key: 'roles', label: t('navigation.roleManagement'), Icon: IconRoles },
+    { key: 'approvals', label: t('navigation.approvals'), Icon: IconApprovals, hasBadge: true },
+    { key: 'audit', label: t('navigation.auditLog'), Icon: IconAudit },
+    { key: 'budget', label: t('navigation.budgetRoas'), Icon: IconTrendingUp, hasAiBadge: true },
+    { key: 'reports', label: t('navigation.reports'), Icon: IconBarChart, hasAiBadge: true },
+    { key: 'insights', label: t('navigation.competitorInsights'), Icon: IconSparkles, hasAiBadge: true },
+    { key: 'import', label: t('navigation.campaignImport'), Icon: IconImport },
+    { key: 'content', label: t('navigation.contentStudio'), Icon: IconContent },
+    { key: 'profile', label: t('navigation.settings'), Icon: IconSettings },
+  ]
   return (
     <aside
       className={`w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none ${
@@ -107,10 +109,10 @@ export default function MarketingManagerSidebar({
         <div>
           <div className="px-3 mb-2 flex items-center justify-between">
             <span className="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">
-              Workspace Navigation
+              {t('navigation.workspaceNavigation')}
             </span>
             <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#a078ff] font-mono font-semibold">
-              MANAGER
+              {t('roles.managerBadge')}
             </span>
           </div>
           <nav className="space-y-1">

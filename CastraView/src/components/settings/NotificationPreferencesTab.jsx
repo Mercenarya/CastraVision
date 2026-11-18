@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
+import { useLanguage } from '@/hooks/useLanguage'
 import {
   Megaphone,
   CheckSquare,
@@ -29,6 +30,7 @@ const DEFAULT_PREFERENCES = {
  * Shared tab for real-time notification alerts, persisted locally by user ID.
  */
 export function NotificationPreferencesTab({ user, notify }) {
+  const { t } = useLanguage()
   const userId = user?.id
 
   // Storage key format strictly scoped by user ID
@@ -138,7 +140,7 @@ export function NotificationPreferencesTab({ user, notify }) {
         <div>
           <div className="flex items-center gap-2">
             <h2 className="text-base font-semibold text-[#dfe2f1]">
-              Tùy chọn thông báo
+              {t('settings.notificationPreferences.title')}
             </h2>
             {hasUnsavedChanges && (
               <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#ffb4ab]/15 text-[#ffb4ab] border border-[#ffb4ab]/30">
@@ -147,7 +149,7 @@ export function NotificationPreferencesTab({ user, notify }) {
             )}
           </div>
           <p className="text-xs text-[#c7c4d7] mt-0.5">
-            Tùy chỉnh thông báo thời gian thực và báo cáo định kỳ trên trình duyệt này.
+            {t('settings.notificationPreferences.subtitle')}
           </p>
         </div>
 
@@ -159,7 +161,7 @@ export function NotificationPreferencesTab({ user, notify }) {
             className="px-4 py-2 rounded-lg border border-[#464554] hover:bg-[#353944] text-[#ffb4ab] text-xs font-semibold flex items-center gap-1.5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Đặt lại mặc định</span>
+            <span>{t('common.reset')}</span>
           </button>
           <button
             type="button"
@@ -168,7 +170,7 @@ export function NotificationPreferencesTab({ user, notify }) {
             className="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
           >
             <Save className="w-3.5 h-3.5" />
-            <span>Lưu tùy chọn</span>
+            <span>{t('settings.notificationPreferences.savePreferences')}</span>
           </button>
         </div>
       </div>
