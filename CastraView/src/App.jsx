@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useLayoutEffect } from 'react'
 
 import { resolveActorRole } from './auth/permissions'
 import AccountEntryPage from './pages/onboarding/AccountEntryPage'
@@ -23,11 +23,14 @@ import DashboardPreviewPage from './preview/DashboardPreviewPage'
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/AuthContext'
 import { api } from './services/api'
+import { LanguageProvider } from './contexts/LanguageContext'
+import SettingsPage from './pages/SettingsPage'
+import LiveManagerReports from './pages/LiveManagerReports'
+import LiveManagerCompetitors from './pages/LiveManagerCompetitors'
+import LiveManagerBudget from './pages/LiveManagerBudget'
 import './App.css'
 
 const CHANNELS = ['Meta', 'Google Ads', 'TikTok']
-const SIZES = { Micro: '1–10 employees', Small: '11–50 employees', Medium: '51–250 employees', Large: 'Over 250 employees' }
-const EMPTY_PROFILE = { business_name: '', industry: '', business_size: '', target_customers: '', primary_goal: '', product_service: '', preferred_channels: [], monthly_budget: '', currency: 'USD' }
 
 function Brand() { return <div className="brand"><span className="brand-icon" aria-hidden="true">✣</span><span>CastraVision</span></div> }
 function Heading({ eyebrow, title, subtitle, children }) {
@@ -95,153 +98,6 @@ function Shell({ user, role, profile, page, setPage, logout, children }) {
 }
 
 function ChannelPicker({ channels, toggle }) { return <div className="channel-grid">{CHANNELS.map((channel) => <button type="button" key={channel} className={`channel-card ${channels.includes(channel) ? 'selected' : ''}`} onClick={() => toggle(channel)}><span className="channel-glyph">{channel === 'Meta' ? '∞' : channel === 'TikTok' ? '♪' : 'G'}</span><strong>{channel}</strong><span className="check-box">{channels.includes(channel) ? '✓' : ''}</span></button>)}</div> }
-
-function ProfileScreen({ profile, onboarding, saveProfile, busy, error, cancel }) {
-  const [draft, setDraft] = useState(profile || EMPTY_PROFILE)
-  const [step, setStep] = useState(1)
-  const set = (key, value) => setDraft((current) => ({ ...current, [key]: value }))
-  const toggle = (channel) => setDraft((current) => ({
-    ...current,
-    preferred_channels: current.preferred_channels.includes(channel)
-      ? current.preferred_channels.filter((item) => item !== channel)
-      : [...current.preferred_channels, channel],
-  }))
-  return (
-    <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-      <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-        <Heading
-          eyebrow={onboarding ? 'NEW ACCOUNT SETUP' : 'BUSINESS SETTINGS'}
-          title={onboarding ? 'Business Setup' : 'Business Profile & Settings'}
-          subtitle="Provide information about your business to personalize AI marketing strategies."
-        />
-        <div className="stepper">
-          <div className={step === 1 ? 'current' : 'done'}><b>1</b> Company Information</div>
-          <div className={step === 2 ? 'current' : ''}><b>2</b> Goals &amp; Channels</div>
-          <div className="step-track"><span style={{ width: step === 1 ? '50%' : '100%' }} /></div>
-        </div>
-        <form
-          className="card profile-card"
-          onSubmit={(event) => {
-            event.preventDefault()
-            if (step === 1) setStep(2)
-            else saveProfile(draft)
-          }}
-        >
-          {step === 1 ? (
-            <div className="form-grid">
-              <label className="wide">
-                Company Name *
-                <input
-                  value={draft.business_name}
-                  onChange={(e) => set('business_name', e.target.value)}
-                  minLength={2}
-                  maxLength={120}
-                  required
-                  placeholder="e.g., Acme Corporation"
-                />
-              </label>
-              <label>
-                Industry *
-                <input
-                  value={draft.industry}
-                  onChange={(e) => set('industry', e.target.value)}
-                  minLength={2}
-                  maxLength={120}
-                  required
-                  placeholder="e.g., Fashion &amp; Apparel"
-                />
-              </label>
-              <label>
-                Company Size *
-                <select
-                  value={draft.business_size}
-                  onChange={(e) => set('business_size', e.target.value)}
-                  required
-                >
-                  <option value="">Select company size</option>
-                  {Object.entries(SIZES).map(([value, label]) => (
-                    <option value={value} key={value}>{label}</option>
-                  ))}
-                </select>
-              </label>
-              <label className="wide">
-                Target Audience *
-                <textarea
-                  value={draft.target_customers}
-                  onChange={(e) => set('target_customers', e.target.value)}
-                  minLength={3}
-                  maxLength={500}
-                  required
-                  placeholder="Demographics, age groups, pain points, interests, and regional focus..."
-                />
-              </label>
-            </div>
-          ) : (
-            <div className="form-grid">
-              <label className="wide">
-                Core Product / Service
-                <input
-                  value={draft.product_service}
-                  onChange={(e) => set('product_service', e.target.value)}
-                  maxLength={500}
-                  placeholder="Products or services to promote"
-                />
-              </label>
-              <label className="wide">
-                Primary Objective
-                <input
-                  value={draft.primary_goal}
-                  onChange={(e) => set('primary_goal', e.target.value)}
-                  maxLength={300}
-                  placeholder="e.g., Maximize multi-channel ROAS and qualified leads"
-                />
-              </label>
-              <label>
-                Monthly Budget
-                <input
-                  type="number"
-                  min="0"
-                  max="1000000000"
-                  value={draft.monthly_budget}
-                  onChange={(e) => set('monthly_budget', e.target.value)}
-                  placeholder="30000"
-                />
-              </label>
-              <label>
-                Currency
-                <select value={draft.currency} onChange={(e) => set('currency', e.target.value)}>
-                  <option>USD</option>
-                  <option>VND</option>
-                </select>
-              </label>
-              <div className="wide">
-                <div className="field-title">Priority Channels</div>
-                <ChannelPicker channels={draft.preferred_channels} toggle={toggle} />
-              </div>
-            </div>
-          )}
-          {error && <Notice>{error}</Notice>}
-          <div className="form-actions">
-            <button
-              type="button"
-              className="button coral"
-              onClick={step === 2 ? () => setStep(1) : cancel}
-            >
-              {step === 2 ? '← Back' : 'Cancel'}
-            </button>
-            <button className="button primary" disabled={busy}>
-              {busy ? 'Saving…' : step === 1 ? 'Continue →' : 'Save Profile ✓'}
-            </button>
-          </div>
-        </form>
-        <div className="under-card">
-          <span>◈ Profile settings can be adjusted anytime in Account Settings.</span>
-          <span>Linked directly to your workspace account</span>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 export function ImportScreen({ imports, onImported, notify }) {
   const [campaignId, setCampaignId] = useState('')
@@ -816,6 +672,11 @@ function WorkspaceApp() {
   const userId = user?.id
   const workspaceId = membership?.workspaceId
   const workspaceRole = membership?.role
+  const currentWorkspace = useRef(workspaceId)
+  useLayoutEffect(() => {
+    currentWorkspace.current = workspaceId
+    return () => { currentWorkspace.current = null }
+  }, [workspaceId])
 
   const refreshData = useCallback(async () => {
     const [business, history] = await Promise.all([api('business-profile/'), api('campaign-imports/')])
@@ -857,15 +718,19 @@ function WorkspaceApp() {
   }
 
   async function saveProfile(draft) {
+    const savingWorkspace = workspaceId
     setBusy(true)
     setError('')
     try {
       const data = await api('business-profile/', { method: 'PUT', body: JSON.stringify(draft) })
+      if (currentWorkspace.current !== savingWorkspace) throw new Error('Doanh nghiệp đã thay đổi trong khi lưu. Hãy tải lại hồ sơ hiện tại.')
       setProfile(data.profile)
       setPage('overview')
       setToast('Business profile saved successfully.')
+      return data.profile
     } catch (cause) {
       setError(cause.message)
+      throw cause
     } finally {
       setBusy(false)
     }
@@ -947,6 +812,7 @@ function WorkspaceApp() {
   if (actorRole === 'manager') {
     return (
       <MarketingManagerLayout
+        key={membership?.workspaceId}
         user={user}
         membership={membership}
         profile={profile}
@@ -965,15 +831,21 @@ function WorkspaceApp() {
           <WorkflowStudio kind="content" />
         )}
         {page === 'profile' && (
-          <ProfileScreen
+          <SettingsPage
+            user={user}
+            actorRole="manager"
+            membership={membership}
             profile={profile}
-            onboarding={!profile}
             saveProfile={saveProfile}
             busy={busy}
             error={error}
-            cancel={() => setPage('overview')}
+            notify={setToast}
+            onProfileUpdated={setProfile}
           />
         )}
+        {(page === 'budget' || page === 'budget-review') && <LiveManagerBudget key={membership?.workspaceId} />}
+        {page === 'reports' && <LiveManagerReports key={membership?.workspaceId} workspaceId={membership?.workspaceId} />}
+        {page === 'insights' && <LiveManagerCompetitors key={membership?.workspaceId} workspaceId={membership?.workspaceId} />}
       </MarketingManagerLayout>
     )
   }
@@ -1057,13 +929,12 @@ function WorkspaceApp() {
         <WorkflowStudio kind="content" />
       )}
       {page === 'profile' && (
-        <ProfileScreen
+        <SettingsPage
+          user={user}
+          actorRole="member"
+          membership={membership}
           profile={profile}
-          onboarding={!profile}
-          saveProfile={saveProfile}
-          busy={busy}
-          error={error}
-          cancel={() => setPage('overview')}
+          notify={setToast}
         />
       )}
       <Toast message={toast} clear={() => setToast('')} />
@@ -1074,9 +945,9 @@ function WorkspaceApp() {
 function WorkspaceEntry() {
   const auth = useAuth()
   const [joinUser, setJoinUser] = useState(null)
-  const invitationCallback = new URLSearchParams(window.location.search).has('invitationId')
+  const [invitationCallback, setInvitationCallback] = useState(() => new URLSearchParams(window.location.search).has('invitationId'))
   if (auth.user && !auth.platformRole && !auth.passwordSetupRequired && auth.memberships.length > 0 && (joinUser === auth.user.id || invitationCallback)) {
-    return <CompanyJoinPage auth={auth} onBack={() => { window.history.replaceState({}, '', '/'); setJoinUser(null) }} />
+    return <CompanyJoinPage auth={auth} onBack={() => { window.history.replaceState({}, '', '/'); setInvitationCallback(false); setJoinUser(null) }} />
   }
   return <>
     {auth.user && auth.memberships.length > 1 && <div className="flex items-center gap-3 border-b border-border bg-background p-2 text-foreground">
@@ -1090,7 +961,7 @@ function WorkspaceEntry() {
   </>
 }
 
-function App() {
+function AppContent() {
   // ─── Development Preview Route (/dashboard-preview) ───────────────────────
   const isPreviewPath =
     typeof window !== 'undefined' &&
@@ -1121,4 +992,6 @@ function App() {
   return <AuthProvider>{window.location.pathname === '/auth/complete' ? <AuthCompletePage><WorkspaceEntry /></AuthCompletePage> : <WorkspaceEntry />}</AuthProvider>
 }
 
-export default App;
+export default function App() {
+  return <LanguageProvider><AppContent /></LanguageProvider>
+}

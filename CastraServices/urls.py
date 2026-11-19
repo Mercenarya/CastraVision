@@ -4,6 +4,7 @@ from . import (
     auth_api,
     campaign_api,
     leader_workflow_api,
+    manager_tools_api,
     membership_api,
     membership_notifications_api,
     views,
@@ -13,6 +14,9 @@ from . import (
 app_name = "castra_services"
 
 urlpatterns = [
+    path("manager/reports/", manager_tools_api.reports),
+    path("manager/reports/<uuid:report_id>/", manager_tools_api.reports),
+    path("manager/competitors/", manager_tools_api.competitors),
     path("leader/<str:command>/", leader_workflow_api.workflow),
     path("onboarding/state/", membership_api.onboarding_state),
     path("onboarding/companies/", membership_api.companies),

@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
+import { LanguageDropdownSubmenu } from '@/components/LanguageDropdownSubmenu'
 
 /**
  * SystemAdminHeader
@@ -14,6 +16,7 @@ export function SystemAdminHeader({
   onSearchChange,
   onOpenMobileMenu,
 }) {
+  const { t } = useLanguage()
   const [showProfileMenu, setShowProfileMenu] = useState(false)
 
   // Construct breadcrumb items based on current route
@@ -43,6 +46,7 @@ export function SystemAdminHeader({
           },
           { label: 'Overview', clickable: false, active: true },
         ]
+      case 'create-company':
       case 'sa-create-company':
         return [
           { label: 'Platform Governance', clickable: false },
@@ -52,6 +56,11 @@ export function SystemAdminHeader({
             onClick: () => onNavigate('sa-company-mgmt'),
           },
           { label: 'Create Company Account', clickable: false, active: true },
+        ]
+      case 'profile':
+        return [
+          { label: 'Platform Governance', clickable: false },
+          { label: 'Settings', clickable: false, active: true },
         ]
       default:
         return [
@@ -135,7 +144,7 @@ export function SystemAdminHeader({
           <input
             type="text"
             className="sa-search-input"
-            placeholder="Search registered tenants..."
+            placeholder={t('header.searchTenants')}
             value={searchTerm}
             onChange={(e) => {
               if (onSearchChange) onSearchChange(e.target.value)
@@ -147,8 +156,8 @@ export function SystemAdminHeader({
         <button
           type="button"
           className="sa-icon-btn"
-          title="Telemetry alerts"
-          aria-label="Platform alerts"
+          title={t('header.telemetryAlerts')}
+          aria-label={t('header.telemetryAlerts')}
         >
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -167,7 +176,7 @@ export function SystemAdminHeader({
             <div className="sa-header-avatar">{userInitials}</div>
             <div className="sa-header-user-info">
               <span className="sa-header-user-name">{displayName}</span>
-              <span className="sa-header-user-role">Root Platform Role</span>
+              <span className="sa-header-user-role">{t('header.rootPlatformRole')}</span>
             </div>
             <svg
               width="14"
@@ -192,13 +201,30 @@ export function SystemAdminHeader({
                 <div className="sa-dropdown-name">{displayName}</div>
                 <div className="sa-dropdown-email">{user?.email || 'admin@castravision.internal'}</div>
                 <span className="sa-badge-purple" style={{ marginTop: '6px', display: 'inline-block' }}>
-                  PLATFORM SYSTEM ADMIN
+                  {t('header.platformSystemAdmin')}
                 </span>
               </div>
               <div className="sa-profile-dropdown-divider" />
               <div className="sa-profile-dropdown-item privacy-info">
-                🛡 Tenant isolation active: No employee PII accessible.
+                {t('header.tenantIsolationNotice')}
               </div>
+              <div className="sa-profile-dropdown-divider" />
+              <button
+                type="button"
+                className="sa-profile-dropdown-item"
+                onClick={() => {
+                  setShowProfileMenu(false)
+                  if (onNavigate) onNavigate('profile')
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                {t('navigation.accountSettings')}
+              </button>
+              <div className="sa-profile-dropdown-divider" />
+              <LanguageDropdownSubmenu variant="system-admin" />
               <div className="sa-profile-dropdown-divider" />
               <button
                 type="button"
@@ -213,7 +239,7 @@ export function SystemAdminHeader({
                   <polyline points="16 17 21 12 16 7" />
                   <line x1="21" y1="12" x2="9" y2="12" />
                 </svg>
-                Sign Out
+                {t('header.signOut')}
               </button>
             </div>
           )}

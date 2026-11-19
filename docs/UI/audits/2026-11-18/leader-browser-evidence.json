@@ -1,0 +1,521 @@
+{
+  "date": "2026-11-18",
+  "role": "Leader",
+  "origin": "http://localhost:5173",
+  "nav": [
+    {
+      "name": "Overview",
+      "headings": [
+        "Campaign & Team Performance Overview",
+        "Assigned Campaign Performance",
+        "Pending Content Reviews",
+        "Assigned Campaigns Overview"
+      ]
+    },
+    {
+      "name": "Approvals",
+      "headings": [
+        "Proposal Approval Queue"
+      ]
+    },
+    {
+      "name": "My Proposals",
+      "headings": [
+        "Proposal Approval Queue"
+      ]
+    },
+    {
+      "name": "Campaigns",
+      "headings": [
+        "Campaign Management",
+        "All Squad Campaigns"
+      ]
+    },
+    {
+      "name": "Strategy Studio",
+      "headings": [
+        "Strategy Studio",
+        "Campaign Setup",
+        "AI Strategy Recommendations"
+      ]
+    },
+    {
+      "name": "Content Gen",
+      "headings": [
+        "Content Studio",
+        "Generate a Strategy First"
+      ]
+    },
+    {
+      "name": "Campaign Import",
+      "headings": [
+        "Campaign Data Import",
+        "Drag & drop file here"
+      ]
+    },
+    {
+      "name": "Performance & Insights",
+      "headings": [
+        "Squad Performance & AI Insights",
+        "Cross-Channel Performance",
+        "AI Insights & Recommendations",
+        "Team Output & Quality"
+      ]
+    },
+    {
+      "name": "Account Settings",
+      "headings": [
+        "Business Profile & Settings"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "id": "AUTH-01",
+      "result": "PASS",
+      "evidence": "Signed in through the actual email/password form; Leader dashboard loaded from hosted membership."
+    },
+    {
+      "id": "OV-01",
+      "result": "MOCK",
+      "evidence": "Sync Squad Data remounts dashboard; requests=0"
+    },
+    {
+      "id": "OV-02",
+      "result": "UI_ONLY",
+      "evidence": "Changed chart interval on fixture chart; no HTTP request."
+    },
+    {
+      "id": "OV-03",
+      "result": "FAIL",
+      "evidence": "Adjust compute limit produced no dialog/route/request."
+    },
+    {
+      "id": "OV-04",
+      "result": "FAIL",
+      "evidence": "Dashboard Approve routes to the approval queue instead of recording a decision; no API request. Returning to Overview still shows four reviews."
+    },
+    {
+      "id": "CMP-01",
+      "result": "FAIL",
+      "evidence": {
+        "createdInTable": false,
+        "rowCount": 8,
+        "requests": 0,
+        "toast": "ogle Discovery & YouTube Action Ads\n#CMP-8770\nGoogle Ads\nYouTube\n• Mid-Funnel Video Action\n\t\nActive\t\nα\nGrowth Squad Alpha\n\t\n$9,800\n/ $12,000\n\t4.4x\t\nDetails\n✓\nNew campaign draft created: \"LEADER-AUDIT-CAMPAIGN-20261118\"\n×"
+      }
+    },
+    {
+      "id": "CMP-02",
+      "result": "UI_ONLY",
+      "evidence": {
+        "filteredRows": 1
+      }
+    },
+    {
+      "id": "CMP-03",
+      "result": "UI_ONLY",
+      "evidence": {
+        "draftRows": 2
+      }
+    },
+    {
+      "id": "CMP-04",
+      "result": "MOCK",
+      "evidence": {
+        "detailOpened": true,
+        "requestCount": 0
+      }
+    },
+    {
+      "id": "PERF-01",
+      "result": "FAIL",
+      "evidence": {
+        "paused": true,
+        "restoredAfterNavigation": true,
+        "requests": 0
+      }
+    },
+    {
+      "id": "PERF-02",
+      "result": "MOCK",
+      "evidence": {
+        "tableUnchanged": true,
+        "still42500": true,
+        "requests": 0
+      }
+    },
+    {
+      "id": "PERF-03",
+      "result": "UI_ONLY",
+      "evidence": {
+        "filteredRows": 1
+      }
+    },
+    {
+      "id": "PERF-04",
+      "result": "MOCK",
+      "evidence": {
+        "csvExists": true,
+        "csvPreview": "Member,Role,Submissions,ApprovalRate,AvgReviewTime,Status\n\"Elena Rostova\",\"Specialist\",18,94%,\"1.4 hrs\",\"Active • High Performance\"\n\"Alex Mercer\",\"Copywriter\",14,89%,\"2.1 hrs\",\"Active • Standard\"\n\"Maya Lin\",\"Creative Lead\",22,96%,\"1.1 hrs\",\"Top Performer\"\n\"Liam Patel\",\"Media Buyer\",11,84%,\"2.8 hrs\",\"Active • Standard\"",
+        "requests": 0
+      }
+    },
+    {
+      "id": "PERF-05",
+      "result": "FAIL",
+      "evidence": {
+        "afterHeading": [
+          "Proposal Review — Dynamic Budget Reallocation",
+          "1.\nBudget Context & Campaign Objectives",
+          "2.\nProposed Channel Allocations & Reallocation Breakdown"
+        ],
+        "requests": 0
+      }
+    },
+    {
+      "id": "CMP-05",
+      "result": "MOCK",
+      "evidence": {
+        "csv": "ID,Name,Status,Squad,Spent,Budget,ROAS\n\"CMP-8821\",\"Summer Streetwear Gen Z Launch 2025\",\"Active\",\"Growth Squad Alpha\",$38400,$45000,\"4.6x\"\n\"CMP-8819\",\"Men's Athletic Footwear Performance Max\",\"Active\",\"Growth Squad Alpha\",$28900,$35000,\"4.2x\"\n\"CMP-8815\",\"Autumn Activewear Retargeting Pool\",\"Draft\",\"Content Studio Beta\",$0,$15000,\"—\"\n\"CMP-8811\",\"Q3 ",
+        "requests": 0
+      }
+    },
+    {
+      "id": "APR-01",
+      "result": "FAIL",
+      "evidence": {
+        "beforePending": true,
+        "afterApproved": true,
+        "requests": 0,
+        "restoredPending": true
+      }
+    },
+    {
+      "id": "APR-02",
+      "result": "FAIL",
+      "evidence": {
+        "heading": "Proposal Approval Queue",
+        "rows": 6,
+        "containsOtherAuthors": true
+      }
+    },
+    {
+      "id": "APR-03",
+      "result": "UI_ONLY",
+      "evidence": {
+        "missingReasonBlocked": true
+      }
+    },
+    {
+      "id": "APR-04",
+      "result": "MOCK",
+      "evidence": {
+        "csv": "ID,Title,Type,Channel,Author,Campaign,Priority,Status,BudgetImpact\n\"PRP-8402\",\"Revise TikTok Hook Copy for Gen Z UGC #3\",\"Content Proposals\",\"TikTok Video\",\"Maya Lin\",\"Summer Streetwear Launch 2025\",\"HIGH\",\"Pending\",\"$0 (Creative Draft)\"\n\"PRP-8403\",\"Dynamic Budget Reallocation — Q4 ROAS Optimization\",\"Budget Optimization\",\"Multi-Channel (Google / M",
+        "networkDelta": 0
+      }
+    },
+    {
+      "id": "CONTENT-01",
+      "result": "FAIL",
+      "evidence": {
+        "savedOnScreen": true,
+        "retainedOnReopen": false,
+        "requests": 0
+      }
+    },
+    {
+      "id": "CONTENT-02",
+      "result": "MOCK",
+      "evidence": {
+        "auditTrailStatic": true,
+        "containsActualEdit": false,
+        "requests": 0
+      }
+    },
+    {
+      "id": "CONTENT-03",
+      "result": "FAIL",
+      "evidence": {
+        "stillPending": true,
+        "requests": 0
+      }
+    },
+    {
+      "id": "CONTENT-04",
+      "result": "FAIL",
+      "evidence": {
+        "emptyRevisionAccepted": true,
+        "stillPending": true,
+        "requests": 0
+      }
+    },
+    {
+      "id": "CONTENT-05",
+      "result": "FAIL",
+      "evidence": {
+        "stillPending": true,
+        "requests": 0,
+        "tail": "sals\n\t\nLP\nLiam Patel\nCreative Visual Designer\n\tFall Sneaker Preview\t$0 (Disapproved)\tHIGH\tREJECTED\t\nReview →\n✓\nProposal PRP-8402 escalated to Marketing Manager (NORMAL)\n×"
+      }
+    },
+    {
+      "id": "BUDGET-01",
+      "result": "FAIL",
+      "evidence": {
+        "showsNaN": true,
+        "approvalLocked": [
+          "🔒 Approve Locked",
+          "✓\nDirect Leader Approval"
+        ],
+        "requests": 0
+      }
+    },
+    {
+      "id": "BUDGET-02",
+      "result": "FAIL",
+      "evidence": {
+        "errors": [
+          "Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleString')"
+        ],
+        "validationText": "00.00\n(-44.4%)\n\t\nTotal Budget: $45,000 / $45,000\nCancel\nSave Recalculated Values\nGOVERNANCE AUTHORITY MATRIX\nLeader Reallocation Limit\n±20.0% Max\nRequested Max Variance\n+44.4%\nRequired Signoff Level\nTier 2: Manager Signoff\nLEADER AUTHORIZATION DECISION\n\nBecause Google allocation exceeds the 20% limit, this proposal must be escalated to the Marketing Manager.\n\n⇪\nEscalate to Marketing Manager\n✓\nDirect Leader Approval\n✕\nReject Allocation\n✓\nProposal PRP-8402 escalated to Marketing Manager (NORMAL)\n×",
+        "requests": 0
+      }
+    },
+    {
+      "id": "IMP-01",
+      "result": "PASS",
+      "evidence": {
+        "invalidRowError": true,
+        "commitDisabled": true
+      }
+    },
+    {
+      "id": "IMP-02",
+      "result": "PASS",
+      "evidence": {
+        "previewRows": 2,
+        "validRows": true
+      }
+    },
+    {
+      "id": "IMP-03",
+      "result": "FAIL",
+      "evidence": {
+        "historyVisible": false,
+        "fileVisible": true,
+        "network": [
+          {
+            "path": "/api/campaign-imports/upload/",
+            "status": 200,
+            "start": 262147,
+            "duration": 2146
+          },
+          {
+            "path": "/api/campaign-imports/upload/",
+            "status": 200,
+            "start": 284141,
+            "duration": 970
+          },
+          {
+            "path": "/api/campaign-imports/upload/",
+            "status": 502,
+            "start": 294707,
+            "duration": 2455
+          }
+        ]
+      }
+    },
+    {
+      "id": "STR-01",
+      "result": "FAIL",
+      "evidence": {
+        "http": 503,
+        "message": true
+      }
+    },
+    {
+      "id": "GEN-01",
+      "result": "BLOCKED",
+      "evidence": {
+        "noStrategy": true,
+        "showsGenerateFirst": true
+      }
+    },
+    {
+      "id": "PROFILE-01",
+      "result": "FAIL",
+      "evidence": {
+        "denied403": true,
+        "permissionMessage": true,
+        "screenIsBusinessNotPersonal": "Business Profile & Settings"
+      }
+    },
+    {
+      "id": "NOTIF-01",
+      "result": "MOCK",
+      "evidence": {
+        "badge5": true,
+        "text": "Import\nPerformance & Insights\nAccount Settings\nDN\n\nDoanh nghiep Demo Marketing\n\nacme-corp-prod-01\n\nLeader Workspace\nNotifications\nAll systems nominal\n5\nDK\nDavid Kross\nLEADER\nleader.demo.1118153645@castravision.example\nCOMMUNICATION & ALERTS\nNotifications & Alerts\n\nReal-time approval requests, status updates, and AI Engine compute notifications.\n\nAll systems are operating normally. No pending urgent notifications.\n\n← Return to Overview\n✓\nProposal PRP-8402 escalated to Marketing Manager (NORMAL)\n×",
+        "network": [
+          {
+            "path": "/api/business-profile/",
+            "status": 403,
+            "start": 355084,
+            "duration": 1028
+          }
+        ]
+      }
+    },
+    {
+      "id": "APR-05",
+      "result": "FAIL",
+      "evidence": {
+        "refreshRequests": 0,
+        "toast": " Proposals\n\t\nLP\nLiam Patel\nCreative Visual Designer\n\tFall Sneaker Preview\t$0 (Disapproved)\tHIGH\tREJECTED\t\nReview →\n✓\nPipeline refreshed with latest proposals.\n×"
+      }
+    },
+    {
+      "id": "APR-06",
+      "result": "UI_ONLY",
+      "evidence": {
+        "pendingRows": 3
+      }
+    },
+    {
+      "id": "APR-07",
+      "result": "UI_ONLY",
+      "evidence": {
+        "emptyState": true,
+        "tableRows": 0
+      }
+    },
+    {
+      "id": "OV-05",
+      "result": "MOCK",
+      "evidence": {
+        "nameDisplayed": "David Kross",
+        "actualAccount": "Leader Demo",
+        "squadDisplayed": "Growth Squad Alpha",
+        "actualAssignedTeam": "Nhom Demo Marketing",
+        "identifierDisplayed": "acme-corp-prod-01"
+      }
+    },
+    {
+      "id": "OV-06",
+      "result": "FAIL",
+      "evidence": {
+        "requests": 0,
+        "resultHeading": "Proposal Review — Dynamic Budget Reallocation"
+      }
+    },
+    {
+      "id": "BUDGET-03",
+      "result": "FAIL",
+      "evidence": {
+        "requests": 0,
+        "stillPending": true
+      }
+    },
+    {
+      "id": "BUDGET-04",
+      "result": "FAIL",
+      "evidence": {
+        "requests": 0,
+        "stillPending": true
+      }
+    },
+    {
+      "id": "AUTH-02",
+      "result": "PASS",
+      "evidence": "Full browser reload restored the Supabase session and correct Leader membership without registering again."
+    },
+    {
+      "id": "AUTH-03",
+      "result": "PASS",
+      "evidence": "Sign Out was clicked in account menu; actual login page returned."
+    }
+  ],
+  "network": [
+    {
+      "path": "/auth/v1/token",
+      "status": 200,
+      "start": 28257,
+      "duration": 2323
+    },
+    {
+      "path": "/api/auth/session/",
+      "status": 200,
+      "start": 30587,
+      "duration": 2857
+    },
+    {
+      "path": "/api/auth/session/",
+      "status": 200,
+      "start": 30587,
+      "duration": 6166
+    },
+    {
+      "path": "/api/business-profile/",
+      "status": 200,
+      "start": 33457,
+      "duration": 3560
+    },
+    {
+      "path": "/api/campaign-imports/",
+      "status": 200,
+      "start": 33457,
+      "duration": 3290
+    },
+    {
+      "path": "/api/business-profile/",
+      "status": 200,
+      "start": 33457,
+      "duration": 5518
+    },
+    {
+      "path": "/api/campaign-imports/",
+      "status": 200,
+      "start": 33458,
+      "duration": 5308
+    },
+    {
+      "path": "/api/campaign-imports/upload/",
+      "status": 200,
+      "start": 262147,
+      "duration": 2146
+    },
+    {
+      "path": "/api/campaign-imports/upload/",
+      "status": 200,
+      "start": 284141,
+      "duration": 970
+    },
+    {
+      "path": "/api/campaign-imports/upload/",
+      "status": 502,
+      "start": 294707,
+      "duration": 2455
+    },
+    {
+      "path": "/api/strategies/generate/",
+      "status": 503,
+      "start": 308786,
+      "duration": 985
+    },
+    {
+      "path": "/api/business-profile/",
+      "status": 403,
+      "start": 355084,
+      "duration": 1028
+    }
+  ],
+  "errors": [
+    "Uncaught TypeError: Cannot read properties of undefined (reading 'toLocaleString')"
+  ],
+  "caveats": [
+    "Browser network proof uses actual PerformanceResourceTiming entries. A window.fetch wrapper cannot see fetch captured earlier by the API client; use the recorded network timeline rather than wrapper counts alone.",
+    "Functional results classify an HTTP-less mutation that vanishes on remount as a failed business workflow, even if its toast succeeds.",
+    "Content Gen is blocked in normal navigation by actual strategy generation failure; no mocked strategy was injected."
+  ]
+}

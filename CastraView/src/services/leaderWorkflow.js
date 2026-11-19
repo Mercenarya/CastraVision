@@ -17,7 +17,9 @@ const MESSAGES = {
 
 export async function workflow(command, data = {}, { signal } = {}) {
   try {
-    return await api(`leader/${command}/`, { method: 'POST', body: JSON.stringify(data), signal })
+    const result = await api(`leader/${command}/`, { method: 'POST', body: JSON.stringify(data), signal })
+    if (['submit', 'decide', 'revise'].includes(command)) window.dispatchEvent(new Event('castra:workflow-changed'))
+    return result
   } catch (cause) {
     if (MESSAGES[cause.code]) cause.message = MESSAGES[cause.code]
     throw cause

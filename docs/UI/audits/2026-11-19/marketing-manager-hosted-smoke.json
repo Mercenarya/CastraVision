@@ -1,0 +1,57 @@
+{
+  "project": "oviqgptccjjdaaqxabwv",
+  "readOnly": true,
+  "checks": [
+    {
+      "case": "anonymous manager/reports/",
+      "pass": true
+    },
+    {
+      "case": "anonymous manager/competitors/",
+      "pass": true
+    },
+    {
+      "case": "Marketing Manager real JWT capability",
+      "pass": true
+    },
+    {
+      "case": "Marketing Manager manager/reports/",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "case": "Marketing Manager manager/competitors/",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "case": "Leader real JWT capability",
+      "pass": true
+    },
+    {
+      "case": "Leader manager/reports/",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "case": "Leader manager/competitors/",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "case": "Employee real JWT capability",
+      "pass": true
+    },
+    {
+      "case": "Employee manager/reports/",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "case": "Employee manager/competitors/",
+      "pass": true,
+      "http": 403
+    }
+  ],
+  "passed": true
+}

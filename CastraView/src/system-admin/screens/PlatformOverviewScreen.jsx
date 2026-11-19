@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
 import {
   MetricCard,
   StatusBadge,
@@ -17,6 +18,7 @@ export function PlatformOverviewScreen({
   onSelectCompany,
   onRefresh,
 }) {
+  const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [isRefreshing, setIsRefreshing] = useState(false)
@@ -66,9 +68,9 @@ export function PlatformOverviewScreen({
             <span className="sa-telemetry-cyan-dot" />
             INFRASTRUCTURE TELEMETRY // ROOT CONSOLE
           </div>
-          <h1 className="sa-page-title">Platform Overview</h1>
+          <h1 className="sa-page-title">{t('systemAdminScreen.overviewTitle')}</h1>
           <p className="sa-page-desc">
-            High-level overview of registered enterprise & SME tenant organizations across CastraVision platform.
+            {t('systemAdminScreen.overviewSubtitle')}
           </p>
         </div>
         <div className="sa-page-actions">
@@ -91,7 +93,7 @@ export function PlatformOverviewScreen({
               <polyline points="1 20 1 14 7 14" />
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
-            Refresh Telemetry
+            {t('systemAdminScreen.refreshTelemetry')}
           </button>
           <button
             type="button"
@@ -110,7 +112,7 @@ export function PlatformOverviewScreen({
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            + Register Company
+            {t('systemAdminScreen.registerCompany')}
           </button>
         </div>
       </div>
@@ -185,9 +187,9 @@ export function PlatformOverviewScreen({
               </svg>
             </div>
             <div>
-              <h2 className="sa-table-title">Registered Companies Directory</h2>
+              <h2 className="sa-table-title">{t('systemAdminScreen.directoryTitle')}</h2>
               <div className="sa-table-header-subtitle">
-                Global root listing for tenant identification and billing metadata
+                {t('systemAdminScreen.directorySubtitle')}
               </div>
             </div>
           </div>
@@ -207,7 +209,7 @@ export function PlatformOverviewScreen({
               </svg>
               <input
                 type="text"
-                placeholder="Filter by company name or domain..."
+                placeholder={t('systemAdminScreen.filterPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => {
                   setSearchTerm(e.target.value)
@@ -285,7 +287,7 @@ export function PlatformOverviewScreen({
                           onNavigate('sa-company-overview')
                         }}
                       >
-                        View Overview
+                        {t('systemAdminScreen.viewOverview')}
                       </button>
                     </td>
                   </tr>

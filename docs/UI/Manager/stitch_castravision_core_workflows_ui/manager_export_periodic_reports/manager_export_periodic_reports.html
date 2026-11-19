@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Export Periodic Reports — CastraVision Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.preconnect.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#c0c1ff",
+          "on-surface": "#dfe2f1",
+          "surface-container-low": "#171b26",
+          "secondary": "#4cd7f6",
+          "surface-bright": "#353944",
+          "on-surface-variant": "#c7c4d7",
+          "surface-container-lowest": "#0a0e18",
+          "primary-container": "#8083ff",
+          "secondary-container": "#03b5d3",
+          "surface-container": "#1c1f2a",
+          "surface-container-highest": "#313540",
+          "background": "#0f131d",
+          "surface": "#0f131d",
+          "error": "#ffb4ab",
+          "outline": "#908fa0",
+          "outline-variant": "#464554",
+          "surface-container-high": "#262a35",
+          "tertiary-container": "#a078ff"
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f131d;
+    color: #dfe2f1;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #171b26;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 4px;
+  }
+</style>
+<meta content="web_dashboard" name="shell-type"/>
+</head>
+<body class="h-full flex overflow-hidden bg-[#0f131d]">
+<!-- ASIDE: Unified Left Sidebar Navigation (Fixed Width 260px) -->
+<aside class="w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none">
+<!-- Top Logo Area -->
+<div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+<span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+</div>
+</div>
+<!-- Navigation Scroll Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+<div>
+<div class="px-3 mb-2 flex items-center justify-between">
+<span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#a078ff] font-mono font-semibold">MANAGER</span>
+</div>
+<nav class="space-y-1">
+<!-- 1. Overview / Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="14" y="14"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+</svg>
+<span class="truncate">Overview / Dashboard</span>
+</a>
+<!-- 2. Workspace Member -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+<circle cx="9" cy="7" r="4"></circle>
+<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg>
+<span class="truncate">Workspace Member</span>
+</a>
+<!-- 3. Role Management -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+<span class="truncate">Role Management</span>
+</a>
+<!-- 4. Approvals -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<div class="flex items-center gap-3 min-w-0">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+<polyline points="22 4 12 14.01 9 11.01"></polyline>
+</svg>
+<span class="truncate">Approvals</span>
+</div>
+<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] font-mono font-bold leading-none">3</span>
+</a>
+<!-- 5. Audit Log -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+<polyline points="14 2 14 8 20 8"></polyline>
+<line x1="16" x2="8" y1="13" y2="13"></line>
+<line x1="16" x2="8" y1="17" y2="17"></line>
+<polyline points="10 9 9 9 8 9"></polyline>
+</svg>
+<span class="truncate">Audit Log</span>
+</a>
+<!-- 6. Budget & ROAS -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+<polyline points="17 6 23 6 23 12"></polyline>
+</svg>
+<span class="truncate">Budget &amp; ROAS</span>
+</a>
+<!-- 7. Report (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150" href="#">
+<svg class="w-4 h-4 text-[#8083ff] flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<line x1="18" x2="18" y1="20" y2="10"></line>
+<line x1="12" x2="12" y1="20" y2="4"></line>
+<line x1="6" x2="6" y1="20" y2="14"></line>
+</svg>
+<span class="truncate">Report</span>
+</a>
+<!-- 8. Competitor Insights -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"></path>
+</svg>
+<span class="truncate">Competitor Insights</span>
+</a>
+<!-- 9. Campaign Import -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" x2="12" y1="3" y2="15"></line>
+</svg>
+<span class="truncate">Campaign Import</span>
+</a>
+<!-- 10. Content Studio -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+</svg>
+<span class="truncate">Content Studio</span>
+</a>
+<!-- 11. Settings -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+<span class="truncate">Settings</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Bottom Footer Area (Inside Sidebar) -->
+<div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+<div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+          AC
+        </div>
+<div class="min-w-0">
+<p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+<p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+</div>
+</div>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#a078ff]/15 border border-[#a078ff]/40 text-[#a078ff] font-mono font-bold uppercase leading-none">MANAGER</span>
+</div>
+</div>
+</aside>
+<!-- MAIN WRAPPER (Top Header + Cohesive Manager Main Canvas) -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+<!-- HEADER: Top Bar (64px) -->
+<header class="h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-20">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+<span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Workspace</span>
+<svg class="w-3.5 h-3.5 text-[#464554]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+<span class="text-[#dfe2f1] font-semibold">Periodic Reports</span>
+</div>
+<!-- Right Side Utility Widgets -->
+<div class="flex items-center gap-5">
+<!-- System Status -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+<span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+</div>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- Notification Bell -->
+<button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+<span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+          3
+        </span>
+</button>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- User Profile Widget -->
+<div class="flex items-center gap-3 pl-1">
+<div class="relative">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#8083ff] to-[#a078ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+            SJ
+          </div>
+<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#03b5d3] rounded-full ring-2 ring-[#171b26]"></div>
+</div>
+<div class="flex flex-col text-left">
+<div class="flex items-center gap-1.5 leading-none">
+<span class="text-[13px] font-semibold text-[#dfe2f1]">Sarah Jenkins</span>
+<span class="px-1.5 py-0.5 rounded bg-[#a078ff]/15 border border-[#a078ff]/40 text-[9px] font-mono font-bold text-[#a078ff] uppercase leading-none">MANAGER</span>
+</div>
+<span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">s.jenkins@acmecorp.com</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 bg-[#0f131d] overflow-y-auto custom-scrollbar p-8"><div class="flex flex-col w-full max-w-7xl mx-auto space-y-6">
+<!-- PAGE HEADER & ACTION CONTROLS -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-3">
+<h1 class="text-2xl font-bold text-[#dfe2f1] tracking-tight">Export Periodic Reports</h1>
+<div class="flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#0a0e18] border border-[#464554]">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+<span class="text-xs font-mono text-[#4cd7f6] font-medium">Reporting Engine Ready</span>
+</div>
+</div>
+<p class="text-sm text-[#c7c4d7] mt-1">
+        Generate and export clear marketing performance reports for your business.
+      </p>
+</div>
+<!-- Quick Actions -->
+<div class="flex items-center gap-2.5 flex-wrap">
+<div class="relative">
+<select class="appearance-none bg-[#1c1f2a] border border-[#464554] rounded-lg px-3.5 py-2 pr-9 text-xs text-[#dfe2f1] focus:outline-none focus:border-[#8083ff] cursor-pointer">
+<option>Last 30 Days (Aug 1 - Aug 30, 2025)</option>
+<option>Last 7 Days (Aug 24 - Aug 30, 2025)</option>
+<option>Month to Date (Aug 2025)</option>
+<option>Q2 Comprehensive (Apr - Jun 2025)</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-[#908fa0] pointer-events-none text-[18px]">expand_more</span>
+</div>
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#262a35] hover:bg-[#353944] text-[#dfe2f1] border border-[#464554] text-xs font-semibold transition-colors" id="btn-refresh">
+<span class="material-symbols-outlined text-[16px] text-[#4cd7f6]">sync</span>
+<span>Refresh Data</span>
+</button>
+</div>
+</div>
+<!-- MAIN 2-COLUMN SPLIT (CONFIGURATION & LIVE SUMMARY PREVIEW) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- LEFT COLUMN: REPORT CONFIGURATION (7 Cols) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col gap-6 shadow-sm">
+<!-- Section Header -->
+<div class="flex items-center justify-between border-b border-[#464554] pb-4">
+<div>
+<h2 class="text-base font-bold text-[#dfe2f1] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#8083ff] text-[20px]">tune</span>
+              Configure Your Report
+            </h2>
+<p class="text-xs text-[#c7c4d7] mt-0.5">Select timeframe, active campaigns, and marketing metrics.</p>
+</div>
+<span class="text-xs font-mono px-2 py-0.5 rounded bg-[#262a35] text-[#c7c4d7] border border-[#464554]">Config ID: REP-8804</span>
+</div>
+<!-- SECTION A: Timeframe Picker -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-sm font-semibold text-[#dfe2f1] flex items-center gap-1.5">
+<span>1. Reporting Period</span>
+</span>
+<span class="text-xs font-mono text-[#4cd7f6]">30 Calendar Days Selected</span>
+</div>
+<!-- Segmented Filter Pills -->
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5 bg-[#0a0e18] p-1 rounded-lg border border-[#464554]">
+<button class="py-1.5 px-2 rounded text-xs text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors text-center">Last 7 Days</button>
+<button class="py-1.5 px-2 rounded text-xs bg-[#8083ff] text-[#0d0096] font-bold text-center transition-colors">Last 30 Days</button>
+<button class="py-1.5 px-2 rounded text-xs text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors text-center">Month to Date</button>
+<button class="py-1.5 px-2 rounded text-xs text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors text-center">Last Month</button>
+<button class="py-1.5 px-2 rounded text-xs text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors text-center">Custom Range</button>
+</div>
+<!-- Date Bound Inputs -->
+<div class="grid grid-cols-2 gap-3 mt-1">
+<div class="flex flex-col bg-[#0a0e18] border border-[#464554] rounded-lg px-3 py-2">
+<span class="text-[10px] text-[#908fa0] font-mono uppercase">Start Boundary</span>
+<div class="flex items-center justify-between mt-0.5">
+<span class="text-xs text-[#dfe2f1] font-mono font-medium">2025-08-01</span>
+<span class="material-symbols-outlined text-[16px] text-[#908fa0]">calendar_today</span>
+</div>
+</div>
+<div class="flex flex-col bg-[#0a0e18] border border-[#464554] rounded-lg px-3 py-2">
+<span class="text-[10px] text-[#908fa0] font-mono uppercase">End Boundary</span>
+<div class="flex items-center justify-between mt-0.5">
+<span class="text-xs text-[#dfe2f1] font-mono font-medium">2025-08-30</span>
+<span class="material-symbols-outlined text-[16px] text-[#908fa0]">calendar_today</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION B: Campaign Selection -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-sm font-semibold text-[#dfe2f1]">2. Campaigns to Include</span>
+<div class="flex items-center gap-3">
+<button class="text-xs text-[#c0c1ff] hover:underline font-mono" onclick="selectAllCampaigns(true)">[Select All]</button>
+<button class="text-xs text-[#c7c4d7] hover:underline font-mono" onclick="selectAllCampaigns(false)">[Clear Selection]</button>
+<span class="text-xs font-mono px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] border border-[#464554]" id="campaign-count-badge">3 of 4 selected</span>
+</div>
+</div>
+<div class="space-y-2" id="campaign-list">
+<!-- Campaign Item 1 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<input checked="" class="campaign-checkbox h-4 w-4 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<div class="flex flex-col min-w-0">
+<span class="text-xs text-[#dfe2f1] font-semibold truncate">Summer Streetwear Launch 2025</span>
+<span class="text-[11px] text-[#c7c4d7] flex items-center gap-2">
+<span class="text-[#4cd7f6] font-mono">Meta Ads (Advantage+)</span>
+<span>•</span>
+<span class="font-mono text-[#908fa0]">ID: CMP-7712</span>
+</span>
+</div>
+</div>
+<span class="flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#03b5d3]/15 text-[#4cd7f6] border border-[#03b5d3]/30 uppercase">Active</span>
+</label>
+<!-- Campaign Item 2 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<input checked="" class="campaign-checkbox h-4 w-4 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<div class="flex flex-col min-w-0">
+<span class="text-xs text-[#dfe2f1] font-semibold truncate">Performance Max – Men's Athletic Shoes</span>
+<span class="text-[11px] text-[#c7c4d7] flex items-center gap-2">
+<span class="text-[#c0c1ff] font-mono">Google Search Ads</span>
+<span>•</span>
+<span class="font-mono text-[#908fa0]">ID: CMP-9041</span>
+</span>
+</div>
+</div>
+<span class="flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#03b5d3]/15 text-[#4cd7f6] border border-[#03b5d3]/30 uppercase">Active</span>
+</label>
+<!-- Campaign Item 3 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<input checked="" class="campaign-checkbox h-4 w-4 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<div class="flex flex-col min-w-0">
+<span class="text-xs text-[#dfe2f1] font-semibold truncate">Spark Ads Gen-Z Trend UGC</span>
+<span class="text-[11px] text-[#c7c4d7] flex items-center gap-2">
+<span class="text-[#d0bcff] font-mono">TikTok Video Ads</span>
+<span>•</span>
+<span class="font-mono text-[#908fa0]">ID: CMP-3349</span>
+</span>
+</div>
+</div>
+<span class="flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#03b5d3]/15 text-[#4cd7f6] border border-[#03b5d3]/30 uppercase">Active</span>
+</label>
+<!-- Campaign Item 4 -->
+<label class="flex items-center justify-between p-3 rounded-lg bg-[#0a0e18]/60 border border-[#464554]/60 hover:border-[#908fa0] cursor-pointer transition-colors">
+<div class="flex items-center gap-3 min-w-0">
+<input class="campaign-checkbox h-4 w-4 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<div class="flex flex-col min-w-0">
+<span class="text-xs text-[#c7c4d7] font-medium truncate">Cart Abandonment Win-Back</span>
+<span class="text-[11px] text-[#908fa0] flex items-center gap-2">
+<span class="font-mono">Email Marketing (Klaviyo)</span>
+<span>•</span>
+<span class="font-mono text-[#908fa0]">ID: CMP-1102</span>
+</span>
+</div>
+</div>
+<span class="flex-shrink-0 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-[#1c1f2a] text-[#908fa0] border border-[#464554] uppercase">Paused</span>
+</label>
+</div>
+</div>
+<!-- SECTION C: Performance Metrics Selection -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-sm font-semibold text-[#dfe2f1]">3. Included Metrics</span>
+<div class="flex items-center gap-2">
+<span class="text-xs font-mono text-[#c0c1ff]">Preset: Marketing Core</span>
+<span class="text-xs font-mono px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] border border-[#464554]">8 of 8 enabled</span>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Total Spend</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Impressions</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Clicks</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Conversions</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Conversion Rate</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Cost Per Acquisition (CPA)</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1] font-semibold text-[#4cd7f6]">Return on Ad Spend (ROAS)</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] cursor-pointer transition-colors">
+<input checked="" class="h-3.5 w-3.5 rounded bg-[#1c1f2a] border-[#464554] text-[#8083ff] focus:ring-0 cursor-pointer" type="checkbox"/>
+<span class="text-xs text-[#dfe2f1]">Total Revenue</span>
+</label>
+</div>
+</div>
+<!-- SECTION D: Export Format & Actions -->
+<div class="border-t border-[#464554] pt-5">
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm font-semibold text-[#dfe2f1]">4. Export Format &amp; Actions</span>
+<span class="text-xs text-[#908fa0] font-mono">Format: PDF Deck &amp; CSV Spreadsheet</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- PDF Export Button (Primary #8083ff) -->
+<button class="flex flex-col items-start p-4 rounded-lg bg-[#8083ff] hover:bg-[#6c70f0] text-[#0d0096] transition-colors text-left group shadow-sm" onclick="triggerExport('PDF')">
+<div class="flex items-center justify-between w-full mb-1.5">
+<span class="flex items-center gap-2 text-sm font-bold">
+<span class="material-symbols-outlined text-[22px]">picture_as_pdf</span>
+                  Export PDF
+                </span>
+<span class="material-symbols-outlined text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+<span class="text-xs opacity-90 leading-tight">
+                Executive summary report with visual KPI cards and trend charts.
+              </span>
+</button>
+<!-- CSV Export Button (Secondary outline) -->
+<button class="flex flex-col items-start p-4 rounded-lg bg-[#0a0e18] border border-[#464554] hover:border-[#4cd7f6] hover:bg-[#262a35] transition-colors text-left group" onclick="triggerExport('CSV')">
+<div class="flex items-center justify-between w-full mb-1.5">
+<span class="flex items-center gap-2 text-sm font-bold text-[#dfe2f1]">
+<span class="material-symbols-outlined text-[22px] text-[#4cd7f6]">table_view</span>
+                  Export CSV
+                </span>
+<span class="material-symbols-outlined text-[20px] text-[#dfe2f1] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+<span class="text-xs text-[#c7c4d7] leading-tight">
+                Complete marketing data rows ready for Excel or Google Sheets.
+              </span>
+</button>
+</div>
+<div class="flex items-center gap-2 mt-4 text-[#908fa0] text-[11px]">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+<span>Reports are generated directly from certified live campaign data connections.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: REPORT SUMMARY PREVIEW (5 Cols) -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col gap-5 shadow-sm">
+<!-- Live Preview Header -->
+<div class="flex items-center justify-between border-b border-[#464554] pb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#4cd7f6] text-[20px]">visibility</span>
+<h2 class="text-base font-bold text-[#dfe2f1]">Report Summary Preview</h2>
+</div>
+<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-[#0a0e18] text-[#a078ff] border border-[#a078ff]/30 font-semibold tracking-wide">PREVIEW ESTIMATE (SAMPLE DATA)</span>
+</div>
+<!-- Scope & Metadata Box -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-3.5 space-y-2">
+<div class="flex items-center justify-between">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Entity</span>
+<span class="text-xs text-[#dfe2f1] font-semibold">Acme Corp Enterprise</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Period</span>
+<span class="text-xs text-[#dfe2f1] font-mono">Aug 01, 2025 – Aug 30, 2025</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Campaign Scope &amp; Metrics</span>
+<span class="text-xs text-[#4cd7f6] font-mono font-medium">3 Campaigns Selected • 8 Metrics</span>
+</div>
+</div>
+<!-- Mini KPI Performance Grid (2x2) -->
+<div class="grid grid-cols-2 gap-3">
+<!-- KPI 1 -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-3">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Total Spend</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="text-lg text-[#dfe2f1] font-mono font-bold">$118,500</span>
+<span class="text-xs text-[#c0c1ff] font-mono">+6.2%</span>
+</div>
+<span class="text-[11px] text-[#908fa0] block mt-0.5">Budget utilization 98.4%</span>
+</div>
+<!-- KPI 2 -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-3">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Target ROAS</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="text-lg text-[#4cd7f6] font-mono font-bold">4.12x</span>
+<span class="text-xs text-[#4cd7f6] font-mono">Target Met</span>
+</div>
+<span class="text-[11px] text-[#908fa0] block mt-0.5">Target benchmark: ≥4.00x</span>
+</div>
+<!-- KPI 3 -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-3">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Conversions</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="text-lg text-[#dfe2f1] font-mono font-bold">14,820</span>
+<span class="text-xs text-[#c0c1ff] font-mono">+12.4%</span>
+</div>
+<span class="text-[11px] text-[#908fa0] block mt-0.5">Conversion rate: 3.42%</span>
+</div>
+<!-- KPI 4 -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-3">
+<span class="text-[11px] text-[#908fa0] uppercase font-mono">Average CPA</span>
+<div class="flex items-baseline justify-between mt-1">
+<span class="text-lg text-[#dfe2f1] font-mono font-bold">$7.99</span>
+<span class="text-xs text-[#4cd7f6] font-mono">-8.5%</span>
+</div>
+<span class="text-[11px] text-[#908fa0] block mt-0.5">Cost efficiency improved</span>
+</div>
+</div>
+<!-- Trajectory Chart Visualization (SVG) -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-4 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-[#dfe2f1]">Weekly Spend &amp; Performance Trajectory</span>
+<div class="flex items-center gap-3 font-mono text-[10px]">
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#4cd7f6]"></span> Meta</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#8083ff]"></span> Google</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-[#a078ff]"></span> TikTok</span>
+</div>
+</div>
+<!-- Custom Inline SVG Chart -->
+<div class="w-full h-36 relative">
+<svg class="w-full h-full" fill="none" viewbox="0 0 340 110">
+<!-- Grid Lines -->
+<line stroke="#464554" stroke-dasharray="3 3" stroke-width="0.5" x1="0" x2="340" y1="20" y2="20"></line>
+<line stroke="#464554" stroke-dasharray="3 3" stroke-width="0.5" x1="0" x2="340" y1="55" y2="55"></line>
+<line stroke="#464554" stroke-width="0.5" x1="0" x2="340" y1="90" y2="90"></line>
+<!-- Stacked Volume Bars (Week 1 to 4) -->
+<!-- W1 -->
+<rect fill="#03b5d3" height="30" rx="1" width="12" x="35" y="60"></rect>
+<rect fill="#8083ff" height="24" rx="1" width="12" x="49" y="66"></rect>
+<rect fill="#a078ff" height="14" rx="1" width="12" x="63" y="76"></rect>
+<!-- W2 -->
+<rect fill="#03b5d3" height="42" rx="1" width="12" x="115" y="48"></rect>
+<rect fill="#8083ff" height="35" rx="1" width="12" x="129" y="55"></rect>
+<rect fill="#a078ff" height="18" rx="1" width="12" x="143" y="72"></rect>
+<!-- W3 -->
+<rect fill="#03b5d3" height="52" rx="1" width="12" x="195" y="38"></rect>
+<rect fill="#8083ff" height="46" rx="1" width="12" x="209" y="44"></rect>
+<rect fill="#a078ff" height="22" rx="1" width="12" x="223" y="68"></rect>
+<!-- W4 -->
+<rect fill="#03b5d3" height="60" rx="1" width="12" x="275" y="30"></rect>
+<rect fill="#8083ff" height="52" rx="1" width="12" x="289" y="38"></rect>
+<rect fill="#a078ff" height="26" rx="1" width="12" x="303" y="64"></rect>
+<!-- Trajectory Line ROAS Trend Curve -->
+<path d="M 55 58 Q 135 44, 215 32 T 295 18" fill="none" stroke="#4cd7f6" stroke-width="2"></path>
+<circle cx="55" cy="58" fill="#0f131d" r="3" stroke="#4cd7f6" stroke-width="2"></circle>
+<circle cx="135" cy="45" fill="#0f131d" r="3" stroke="#4cd7f6" stroke-width="2"></circle>
+<circle cx="215" cy="32" fill="#0f131d" r="3" stroke="#4cd7f6" stroke-width="2"></circle>
+<circle cx="295" cy="18" fill="#0f131d" r="3" stroke="#4cd7f6" stroke-width="2"></circle>
+</svg>
+<div class="flex justify-between px-6 pt-1 font-mono text-[10px] text-[#908fa0]">
+<span>Week 1 (Aug 1-7)</span>
+<span>Week 2 (Aug 8-14)</span>
+<span>Week 3 (Aug 15-21)</span>
+<span>Week 4 (Aug 22-30)</span>
+</div>
+</div>
+</div>
+<!-- Channel Share Breakdown Bars -->
+<div class="flex flex-col gap-2.5">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-[#dfe2f1]">Marketing Channel Share</span>
+<span class="text-[11px] text-[#908fa0] font-mono">100% Allocated</span>
+</div>
+<!-- Multi-segmented Progress Bar -->
+<div class="w-full h-3 rounded-full bg-[#0a0e18] overflow-hidden flex border border-[#464554]">
+<div class="bg-[#03b5d3] h-full" style="width: 44%;" title="Meta Ads: 44%"></div>
+<div class="bg-[#8083ff] h-full" style="width: 38%;" title="Google Ads: 38%"></div>
+<div class="bg-[#a078ff] h-full" style="width: 18%;" title="TikTok Ads: 18%"></div>
+</div>
+<div class="grid grid-cols-3 gap-2 font-mono text-[11px] pt-1">
+<div class="flex flex-col">
+<span class="text-[#4cd7f6] font-semibold">Meta Ads</span>
+<span class="text-[#dfe2f1]">44% ($52,140)</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[#c0c1ff] font-semibold">Google Ads</span>
+<span class="text-[#dfe2f1]">38% ($45,030)</span>
+</div>
+<div class="flex flex-col">
+<span class="text-[#d0bcff] font-semibold">TikTok Ads</span>
+<span class="text-[#dfe2f1]">18% ($21,330)</span>
+</div>
+</div>
+</div>
+<!-- Executive AI Takeaway Box -->
+<div class="bg-[#0a0e18] border border-[#464554] rounded-lg p-3.5 flex items-start gap-3">
+<div class="p-1.5 rounded bg-[#8083ff]/20 text-[#8083ff] mt-0.5">
+<span class="material-symbols-outlined text-[18px]">smart_toy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="text-xs font-mono text-[#8083ff] font-bold">EXECUTIVE SUMMARY HIGHLIGHT</span>
+<p class="text-xs text-[#c7c4d7] mt-1 leading-relaxed">
+              Target ROAS reached <strong class="text-[#4cd7f6] font-semibold">4.12x</strong>, driven by Meta Advantage+ creative efficiency. TikTok CPA stabilized after midweek budget adjustments. Ready for business review.
+            </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- BOTTOM SECTION: FULL WIDTH CARD (RECENT REPORTS) -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col gap-4 shadow-sm">
+<!-- Table Controls Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div>
+<h3 class="text-base font-bold text-[#dfe2f1] flex items-center gap-2">
+<span class="material-symbols-outlined text-[#908fa0] text-[20px]">history_edu</span>
+          Recent Reports
+        </h3>
+<p class="text-xs text-[#c7c4d7] mt-0.5">Previously generated reports available for download.</p>
+</div>
+<div class="flex items-center gap-2.5">
+<!-- Search -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#908fa0] text-[16px]">search</span>
+<input class="bg-[#0a0e18] border border-[#464554] rounded-lg pl-8 pr-3 py-1.5 text-xs text-[#dfe2f1] placeholder-[#908fa0] focus:outline-none focus:border-[#8083ff] w-44 sm:w-56" placeholder="Search reports..." type="text"/>
+</div>
+<!-- Filter -->
+<select class="bg-[#0a0e18] border border-[#464554] rounded-lg px-3 py-1.5 text-xs text-[#dfe2f1] focus:outline-none focus:border-[#8083ff] cursor-pointer">
+<option>All Formats</option>
+<option>PDF Documents</option>
+<option>CSV Spreadsheets</option>
+</select>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-[#464554] bg-[#0a0e18]/50 text-[11px] text-[#c7c4d7] font-mono uppercase tracking-wider">
+<th class="py-3 px-4">Report Name</th>
+<th class="py-3 px-4">Reporting Period</th>
+<th class="py-3 px-4">Generated Date</th>
+<th class="py-3 px-4">Format</th>
+<th class="py-3 px-4">Status</th>
+<th class="py-3 px-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#464554]/50 text-xs text-[#dfe2f1]">
+<!-- Row 1: Ready -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4 font-mono font-medium flex items-center gap-2 text-[#dfe2f1]">
+<span class="material-symbols-outlined text-[18px] text-[#ffb4ab]">description</span>
+<span>Monthly_Performance_Summary_Aug2025.pdf</span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">Aug 01 – Aug 30, 2025</td>
+<td class="py-3.5 px-4 font-mono text-[#908fa0]">Today, 09:15</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#93000a]/50 text-[#ffdad6] border border-[#ffb4ab]/30 uppercase">PDF • 3.4 MB</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#03b5d3]/15 text-[#4cd7f6] border border-[#03b5d3]/30 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4cd7f6]"></span>
+                Ready
+              </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="inline-flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] text-[#c0c1ff] text-xs font-mono flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">download</span> Download PDF
+                </button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Ready -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4 font-mono font-medium flex items-center gap-2 text-[#dfe2f1]">
+<span class="material-symbols-outlined text-[18px] text-[#4cd7f6]">grid_on</span>
+<span>Channel_Performance_Metrics_Q2.csv</span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">Apr 01 – Jun 30, 2025</td>
+<td class="py-3.5 px-4 font-mono text-[#908fa0]">Aug 16, 2025, 14:20</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#03b5d3]/20 text-[#4cd7f6] border border-[#03b5d3]/40 uppercase">CSV • 18.2 MB</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#03b5d3]/15 text-[#4cd7f6] border border-[#03b5d3]/30 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4cd7f6]"></span>
+                Ready
+              </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="inline-flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#8083ff] text-[#c0c1ff] text-xs font-mono flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">download</span> Download CSV
+                </button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Processing (disabled, no fake download) -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4 font-mono font-medium flex items-center gap-2 text-[#dfe2f1]">
+<span class="material-symbols-outlined text-[18px] text-[#a078ff]">pending_actions</span>
+<span>Mid_Q3_Budget_Variance_Report.pdf</span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">Aug 01 – Aug 24, 2025</td>
+<td class="py-3.5 px-4 font-mono text-[#908fa0]">Today, 11:05</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#262a35] text-[#c7c4d7] border border-[#464554] uppercase">PDF • Compiling</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#a078ff]/15 text-[#a078ff] border border-[#a078ff]/30 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-[#a078ff] animate-pulse"></span>
+                Processing
+              </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="inline-flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-[#171b26] border border-[#464554]/50 text-[#908fa0] text-xs font-mono flex items-center gap-1 cursor-not-allowed opacity-60" disabled="">
+<span class="material-symbols-outlined text-[14px] animate-spin">progress_activity</span> Generating...
+                </button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Failed (Retry ghost button) -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4 font-mono font-medium flex items-center gap-2 text-[#c7c4d7]">
+<span class="material-symbols-outlined text-[18px] text-[#ffb4ab]">error_outline</span>
+<span>TikTok_Cohort_Analysis_Detailed.csv</span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#908fa0]">Jun 01 – Jun 30, 2025</td>
+<td class="py-3.5 px-4 font-mono text-[#908fa0]">Jul 01, 2025, 18:40</td>
+<td class="py-3.5 px-4">
+<span class="px-2 py-0.5 rounded font-mono text-[10px] font-semibold bg-[#1c1f2a] text-[#908fa0] border border-[#464554] uppercase">CSV</span>
+</td>
+<td class="py-3.5 px-4">
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded font-mono text-[10px] font-bold bg-[#ffb4ab]/15 text-[#ffb4ab] border border-[#ffb4ab]/30 uppercase">
+<span class="w-1.5 h-1.5 rounded-full bg-[#ffb4ab]"></span>
+                Failed
+              </span>
+</td>
+<td class="py-3.5 px-4 text-right">
+<div class="inline-flex items-center gap-2">
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] hover:border-[#ffb4ab] text-[#ffb4ab] hover:bg-[#262a35] text-xs font-mono flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]">refresh</span> Retry
+                </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Pagination Footer -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t border-[#464554] font-mono text-xs text-[#c7c4d7]">
+<span>Showing 1 to 4 of 18 reports • Page 1 of 5</span>
+<div class="flex items-center gap-1">
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] text-[#908fa0] hover:text-[#dfe2f1] disabled:opacity-40" disabled="">
+          Prev
+        </button>
+<button class="px-2.5 py-1 rounded bg-[#8083ff] text-[#0d0096] font-bold">1</button>
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] hover:bg-[#262a35] text-[#dfe2f1]">2</button>
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] hover:bg-[#262a35] text-[#dfe2f1]">3</button>
+<button class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] hover:bg-[#262a35] text-[#dfe2f1]">Next</button>
+</div>
+</div>
+</div>
+<!-- FLOATING SYSTEM AUDIT NOTIFICATION TOAST -->
+<div class="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-lg bg-[#262a35] border border-[#464554] shadow-2xl transition-all duration-300" id="toast-export-success">
+<div class="w-6 h-6 rounded-full bg-[#03b5d3]/20 text-[#4cd7f6] flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col min-w-0 pr-2">
+<span class="text-xs font-semibold text-[#dfe2f1]">Monthly Executive Report ready for download</span>
+<span class="text-[11px] text-[#c7c4d7]">Monthly_Performance_Summary_Aug2025.pdf is ready</span>
+</div>
+<button class="p-1 rounded text-[#908fa0] hover:text-[#dfe2f1]" onclick="document.getElementById('toast-export-success').classList.add('hidden')">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+</div>
+<script>
+  // Dynamic Campaign Selector Logic
+  function selectAllCampaigns(state) {
+    const checkboxes = document.querySelectorAll('.campaign-checkbox');
+    checkboxes.forEach(cb => cb.checked = state);
+    updateCampaignCounter();
+  }
+
+  function updateCampaignCounter() {
+    const checkboxes = document.querySelectorAll('.campaign-checkbox');
+    const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+    const badge = document.getElementById('campaign-count-badge');
+    if (badge) {
+      badge.textContent = `${checked} of ${checkboxes.length} selected`;
+      if (checked === 0) {
+        badge.className = "text-xs font-mono px-2 py-0.5 rounded bg-[#93000a]/40 text-[#ffb4ab] border border-[#ffb4ab]/30";
+      } else {
+        badge.className = "text-xs font-mono px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] border border-[#464554]";
+      }
+    }
+  }
+
+  document.querySelectorAll('.campaign-checkbox').forEach(cb => {
+    cb.addEventListener('change', updateCampaignCounter);
+  });
+
+  // Export Trigger Micro-interaction
+  function triggerExport(format) {
+    const toast = document.getElementById('toast-export-success');
+    if (!toast) return;
+
+    toast.classList.remove('hidden');
+    const label = toast.querySelector('span.text-xs');
+    const desc = toast.querySelector('span.text-\\[11px\\]');
+
+    if (format === 'PDF') {
+      label.textContent = "Compiling Executive PDF Report...";
+      desc.textContent = "Generating performance summary charts and KPI cards...";
+    } else {
+      label.textContent = "Preparing CSV Report...";
+      desc.textContent = "Exporting marketing campaign data rows...";
+    }
+
+    setTimeout(() => {
+      label.textContent = `${format} Report Ready for Download`;
+      desc.textContent = `Marketing_Report_${Date.now().toString().slice(-4)}.${format.toLowerCase()} is ready.`;
+    }, 1200);
+  }
+
+  // Refresh animation simulation
+  const refreshBtn = document.getElementById('btn-refresh');
+  if (refreshBtn) {
+    refreshBtn.addEventListener('click', function() {
+      const icon = this.querySelector('span.material-symbols-outlined');
+      if (icon) {
+        icon.classList.add('animate-spin');
+        setTimeout(() => icon.classList.remove('animate-spin'), 700);
+      }
+    });
+  }
+</script></main>
+</div>
+</body></html>

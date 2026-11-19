@@ -1,0 +1,700 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Settings — CastraVision Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#c0c1ff",
+          "on-surface": "#dfe2f1",
+          "surface-container-low": "#171b26",
+          "secondary": "#4cd7f6",
+          "surface-bright": "#353944",
+          "on-surface-variant": "#c7c4d7",
+          "surface-container-lowest": "#0a0e18",
+          "primary-container": "#8083ff",
+          "secondary-container": "#03b5d3",
+          "surface-container": "#1c1f2a",
+          "surface-container-highest": "#313540",
+          "background": "#0f131d",
+          "surface": "#0f131d",
+          "error": "#ffb4ab",
+          "outline": "#908fa0",
+          "outline-variant": "#464554",
+          "surface-container-high": "#262a35",
+          "tertiary-container": "#a078ff"
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f131d;
+    color: #dfe2f1;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #171b26;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 4px;
+  }
+</style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="h-full flex overflow-hidden bg-[#0f131d]">
+<!-- ASIDE: Unified Left Sidebar Navigation (Fixed Width 260px) -->
+<aside class="w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none">
+<!-- Top Logo Area -->
+<div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#8083ff] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+<span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+</div>
+</div>
+<!-- Navigation Scroll Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+<div>
+<div class="px-3 mb-2 flex items-center justify-between">
+<span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">MANAGER</span>
+</div>
+<nav class="space-y-1">
+<!-- 1. Overview / Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="14" y="14"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+</svg>
+<span class="truncate">Overview / Dashboard</span>
+</a>
+<!-- 2. Workspace Member -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+<circle cx="9" cy="7" r="4"></circle>
+<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg>
+<span class="truncate">Workspace Member</span>
+</a>
+<!-- 3. Role Management -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+<span class="truncate">Role Management</span>
+</a>
+<!-- 4. Approvals -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<div class="flex items-center gap-3 min-w-0">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+<polyline points="22 4 12 14.01 9 11.01"></polyline>
+</svg>
+<span class="truncate">Approvals</span>
+</div>
+<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] font-mono font-bold leading-none">3</span>
+</a>
+<!-- 5. Audit Log -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+<polyline points="14 2 14 8 20 8"></polyline>
+<line x1="16" x2="8" y1="13" y2="13"></line>
+<line x1="16" x2="8" y1="17" y2="17"></line>
+<polyline points="10 9 9 9 8 9"></polyline>
+</svg>
+<span class="truncate">Audit Log</span>
+</a>
+<!-- 6. Budget & ROAS -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+<polyline points="17 6 23 6 23 12"></polyline>
+</svg>
+<span class="truncate">Budget &amp; ROAS</span>
+</a>
+<!-- 7. Report -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<line x1="18" x2="18" y1="20" y2="10"></line>
+<line x1="12" x2="12" y1="20" y2="4"></line>
+<line x1="6" x2="6" y1="20" y2="14"></line>
+</svg>
+<span class="truncate">Report</span>
+</a>
+<!-- 8. Competitor Insights (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"></path>
+</svg>
+<span class="truncate">Competitor Insights</span>
+</a>
+<!-- 9. Campaign Import -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" x2="12" y1="3" y2="15"></line>
+</svg>
+<span class="truncate">Campaign Import</span>
+</a>
+<!-- 10. Content Studio -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+</svg>
+<span class="truncate">Content Studio</span>
+</a>
+<!-- 11. Settings (ACTIVE ITEM) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150" href="#">
+<svg class="w-4 h-4 text-[#8083ff] flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+<span class="truncate">Settings</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Bottom Footer Area (Inside Sidebar) -->
+<div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+<div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+          AC
+        </div>
+<div class="min-w-0">
+<p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+<p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+</div>
+</div>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] font-mono font-bold uppercase leading-none">MANAGER</span>
+</div>
+</div>
+</aside>
+<!-- MAIN WRAPPER (Top Header + Canvas) -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+<!-- HEADER: Top Bar (64px) -->
+<header class="h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-20">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+<span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Workspace</span>
+<svg class="w-3.5 h-3.5 text-[#464554]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+<span class="text-[#dfe2f1] font-semibold">Settings</span>
+</div>
+<!-- Right Side Utility Widgets -->
+<div class="flex items-center gap-5">
+<!-- System Status -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+<span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+</div>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- Notification Bell with badge 3 -->
+<button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+<span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+3
+</span>
+</button>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- User Profile Widget: Sarah Jenkins (Manager) -->
+<div class="flex items-center gap-3 pl-1"><div class="relative"><div class="w-8 h-8 rounded-full bg-[#8083ff] text-[#0d0096] flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">DK</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#03b5d3] rounded-full ring-2 ring-[#171b26]"></div></div><div class="flex flex-col text-left"><div class="flex items-center gap-1.5 leading-none"><span class="text-[13px] font-semibold text-[#dfe2f1]">David Kross</span><span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">LEADER</span></div><span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">d.kross@acmecorp.com</span></div></div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 bg-[#0f131d] overflow-y-auto custom-scrollbar p-8"><div class="flex flex-col w-full">
+<!-- Toast Notification Overlay -->
+<div class="fixed top-6 right-8 z-50 transform translate-y-[-120%] opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 px-4 py-3 rounded-lg bg-surface-container-high text-on-surface shadow-xl" id="toast-notification">
+<div class="w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary" id="toast-icon-wrapper">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface leading-tight" id="toast-title">Changes Saved</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant" id="toast-desc">Profile records have been committed safely.</span>
+</div>
+</div>
+<!-- Header Banner Section (Clean Dashboard Head) -->
+<div class="flex flex-col md:flex-row md:items-end justify-between pb-6 gap-4"><div class="flex flex-col gap-1"><h1 class="text-headline-xl font-headline-xl text-on-surface tracking-tight">Settings</h1><p class="text-body-md font-body-md text-on-surface-variant max-w-2xl">Manage your account, preferences, and personal security.</p></div></div>
+<!-- Tab Controller -->
+<div class="flex items-center gap-2 pb-6"><button class="px-5 py-2.5 rounded-t-lg font-headline-sm text-headline-sm flex items-center gap-2.5 bg-[#262a35] text-[#dfe2f1] border-b-2 border-[#8083ff] transition-all" id="tab-btn-security" onclick="switchSettingsTab('security')" type="button"><span class="material-symbols-outlined text-[18px] text-primary-container">shield_lock</span><span>Account &amp; Security</span></button><button class="px-5 py-2.5 rounded-t-lg font-headline-sm text-headline-sm flex items-center gap-2.5 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-surface-container transition-all border-b-2 border-transparent" id="tab-btn-notifications" onclick="switchSettingsTab('notifications')" type="button"><span class="material-symbols-outlined text-[18px]">notifications_active</span><span>Notification Preferences</span></button></div>
+<!-- TAB 1 CONTENT: Account & Security -->
+<div class="flex flex-col gap-6" id="view-security">
+<!-- Two Column Grid for Main Profile & Password Cards -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- CARD 1: Personal Information (7 Cols Desktop) -->
+<div class="lg:col-span-7 bg-surface-container rounded-xl flex flex-col shadow-sm"><div class="px-6 py-4 flex items-center justify-between bg-surface-container-low rounded-t-xl border-b border-[#464554]"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container"><span class="material-symbols-outlined text-[18px]">person</span></div><div><h2 class="font-headline-md text-headline-md text-on-surface leading-snug">Personal Information</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Update your personal profile details across CastraVision.</p></div></div></div><div class="p-6 flex flex-col gap-6"><div class="p-4 rounded-lg bg-surface-container-low flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border border-[#464554]/60"><div class="flex items-center gap-4"><div class="w-14 h-14 rounded-full bg-surface-container-high text-on-surface font-headline-md text-headline-md flex items-center justify-center ring-2 ring-primary-container/20 shadow-md font-bold">DK</div><div class="flex flex-col"><div class="flex items-center gap-2"><span class="font-headline-md text-headline-md text-on-surface font-bold" id="display-profile-name">David Kross</span><span class="px-2 py-0.5 rounded bg-[#4cd7f6]/10 text-secondary border border-[#4cd7f6]/30 text-[10px] font-mono font-semibold uppercase leading-none">Leader</span></div><span class="font-body-sm text-body-sm text-secondary text-label-sm font-mono mt-0.5">d.kross@acmecorp.com</span></div></div></div><form class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="profile-form" onsubmit="event.preventDefault(); handleProfileSave();"><div class="flex flex-col gap-1.5 sm:col-span-1"><label class="font-label-md text-label-md text-on-surface-variant" for="input-fullname">Full Name</label><div class="relative"><input class="w-full h-11 px-3.5 bg-surface-container-lowest text-on-surface rounded-lg font-body-md text-body-md border border-[#464554] focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" id="input-fullname" type="text" value="David Kross"><span class="absolute right-3 top-3 material-symbols-outlined text-[16px] text-outline">badge</span></div></div><div class="flex flex-col gap-1.5 sm:col-span-1"><label class="font-label-md text-label-md text-on-surface-variant" for="input-jobtitle">Job Title</label><div class="relative"><input class="w-full h-11 px-3.5 bg-surface-container-lowest text-on-surface rounded-lg font-body-md text-body-md border border-[#464554] focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" id="input-jobtitle" type="text" value="Growth Marketing Lead"><span class="absolute right-3 top-3 material-symbols-outlined text-[16px] text-outline">work</span></div></div><div class="flex flex-col gap-1.5 sm:col-span-1"><label class="font-label-md text-label-md text-outline" for="input-email">Email Address</label><div class="relative"><input class="w-full h-11 pl-3.5 pr-10 bg-surface-container-low text-outline rounded-lg font-body-md text-body-md border border-[#464554]/50 cursor-not-allowed select-none focus:outline-none" disabled="" id="input-email" readonly="" type="email" value="d.kross@acmecorp.com"><span class="material-symbols-outlined absolute right-3 top-3 text-[18px] text-outline">lock</span></div></div><div class="flex flex-col gap-1.5 sm:col-span-1"><label class="font-label-md text-label-md text-outline" for="input-role">Current Role</label><div class="relative"><input class="w-full h-11 pl-3.5 pr-10 bg-surface-container-low text-outline rounded-lg font-body-md text-body-md border border-[#464554]/50 cursor-not-allowed select-none focus:outline-none" disabled="" id="input-role" readonly="" type="text" value="Leader / Workspace Lead"><span class="material-symbols-outlined absolute right-3 top-3 text-[18px] text-outline">lock</span></div></div><div class="sm:col-span-2 pt-3 flex items-center justify-end gap-3 border-t border-[#464554]/40"><button class="px-4 py-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-bright font-headline-sm text-headline-sm transition-all" onclick="resetProfileValues()" type="button">Cancel</button><button class="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white font-headline-sm text-headline-sm flex items-center gap-1.5 shadow-sm transition-all" type="submit"><span class="material-symbols-outlined text-[16px]">save</span>Save Changes</button></div></form></div></div>
+<!-- CARD 2: Authentication & Password (5 Cols Desktop) -->
+<div class="lg:col-span-5 bg-surface-container rounded-xl flex flex-col shadow-sm"><div class="px-6 py-4 flex items-center justify-between bg-surface-container-low rounded-t-xl border-b border-[#464554]"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container"><span class="material-symbols-outlined text-[18px]">key</span></div><div><h2 class="font-headline-md text-headline-md text-on-surface leading-snug">Change Password</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Manage your password and security credentials.</p></div></div><span class="material-symbols-outlined text-outline-variant text-[20px]">lock_reset</span></div><div class="p-6 flex flex-col gap-4"><form class="flex flex-col gap-4" id="password-form" onsubmit="event.preventDefault(); handlePasswordUpdate();"><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant" for="pwd-current">Current Password</label><div class="relative"><input class="w-full h-11 pl-3.5 pr-10 bg-surface-container-lowest text-on-surface placeholder:text-outline/70 rounded-lg font-body-md text-body-md border border-[#464554] focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" id="pwd-current" placeholder="Enter current password" type="password" value=""><button class="absolute right-3 top-3 text-outline hover:text-on-surface transition-colors" onclick="toggleInputType('pwd-current', this)" type="button"><span class="material-symbols-outlined text-[18px]">visibility</span></button></div></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant" for="pwd-new">New Password</label><div class="relative"><input class="w-full h-11 pl-3.5 pr-10 bg-surface-container-lowest text-on-surface placeholder:text-outline/70 rounded-lg font-body-md text-body-md border border-[#464554] focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" id="pwd-new" oninput="validatePasswordRules(this.value)" placeholder="Enter new password" type="password" value=""><button class="absolute right-3 top-3 text-outline hover:text-on-surface transition-colors" onclick="toggleInputType('pwd-new', this)" type="button"><span class="material-symbols-outlined text-[18px]">visibility</span></button></div></div><div class="flex flex-col gap-1.5"><label class="font-label-md text-label-md text-on-surface-variant" for="pwd-confirm">Confirm New Password</label><div class="relative"><input class="w-full h-11 pl-3.5 pr-10 bg-surface-container-lowest text-on-surface placeholder:text-outline/70 rounded-lg font-body-md text-body-md border border-[#464554] focus:outline-none focus:ring-1 focus:ring-primary-container transition-all" id="pwd-confirm" placeholder="Confirm new password" type="password" value=""><button class="absolute right-3 top-3 text-outline hover:text-on-surface transition-colors" onclick="toggleInputType('pwd-confirm', this)" type="button"><span class="material-symbols-outlined text-[18px]">visibility</span></button></div></div><div class="p-3.5 rounded-lg bg-surface-container-low border border-[#464554]/50 flex flex-col gap-2"><span class="font-label-sm text-label-sm text-on-surface uppercase tracking-wider font-semibold">Password Requirements</span><ul class="space-y-1.5"><li class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant" id="rule-len"><span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span><span>At least 8 characters</span></li><li class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant" id="rule-upper"><span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span><span>At least one uppercase letter</span></li><li class="flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant" id="rule-spec"><span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span><span>At least one number or special character</span></li></ul></div><div class="pt-2 flex justify-end"><button class="px-5 py-2.5 rounded-lg bg-[#8083ff] hover:bg-primary text-white font-headline-sm text-headline-sm font-semibold flex items-center gap-2 shadow-sm transition-all" type="submit"><span class="material-symbols-outlined text-[18px]">security_update_good</span>Update Password</button></div></form></div></div>
+</div>
+<!-- Notification Preferences Preview Strip (Tab Affordance) -->
+
+</div>
+<!-- TAB 2 CONTENT: Notification Preferences -->
+<div class="hidden flex flex-col gap-6" id="view-notifications"><div class="bg-surface-container rounded-xl flex flex-col shadow-sm border border-[#464554]/50"><div class="px-6 py-4 flex items-center justify-between bg-surface-container-low rounded-t-xl border-b border-[#464554]"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-lg bg-surface-container-high flex items-center justify-center text-primary-container"><span class="material-symbols-outlined text-[18px]">tune</span></div><div><h2 class="font-headline-md text-headline-md text-on-surface leading-snug">Notification Preferences</h2><p class="font-body-sm text-body-sm text-on-surface-variant">Configure real-time event triggers and operational summaries</p></div></div><button class="font-body-sm text-body-sm text-error hover:underline px-3 py-1 rounded bg-[#ffb4ab]/10 border border-[#ffb4ab]/20 transition-colors" onclick="resetAllAlertToggles()" type="button">Reset to Defaults</button></div><div class="p-6 space-y-6"><div class="space-y-3"><h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">campaign</span>Campaign Notifications</h3><div class="divide-y divide-surface-container-highest rounded-lg bg-surface-container-low p-4 border border-[#464554]/40"><div class="py-3 first:pt-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Campaign Performance Updates</p><p class="font-body-sm text-[12px] text-on-surface-variant">Periodic performance summaries for running campaigns</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div><div class="py-3 last:pb-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Campaign Status Changes</p><p class="font-body-sm text-[12px] text-on-surface-variant">Instant alert when campaigns launch, pause, or conclude</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div></div></div><div class="space-y-3"><h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">rule</span>Approval Notifications</h3><div class="divide-y divide-surface-container-highest rounded-lg bg-surface-container-low p-4 border border-[#464554]/40"><div class="py-3 first:pt-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Content Pending Approval</p><p class="font-body-sm text-[12px] text-on-surface-variant">New creative items awaiting Leader review</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div><div class="py-3 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Content Revision Requests</p><p class="font-body-sm text-[12px] text-on-surface-variant">Updates and comments requested on submissions</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div><div class="py-3 last:pb-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Content Approval Results</p><p class="font-body-sm text-[12px] text-on-surface-variant">Approved and rejected status dispatch confirmations</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div></div></div><div class="space-y-3"><h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">trending_up</span>Budget Notifications</h3><div class="divide-y divide-surface-container-highest rounded-lg bg-surface-container-low p-4 border border-[#464554]/40"><div class="py-3 first:pt-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Budget Deviation Alerts</p><p class="font-body-sm text-[12px] text-on-surface-variant">Real-time triggers when ad spend exceeds planned threshold</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div><div class="py-3 last:pb-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Budget Usage Updates</p><p class="font-body-sm text-[12px] text-on-surface-variant">Weekly balance and ROAS pacing summary</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div></div></div><div class="space-y-3"><h3 class="font-headline-sm text-headline-sm text-primary flex items-center gap-2"><span class="material-symbols-outlined text-[18px]">forum</span>General Notifications</h3><div class="divide-y divide-surface-container-highest rounded-lg bg-surface-container-low p-4 border border-[#464554]/40"><div class="py-3 first:pt-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Workspace Announcements</p><p class="font-body-sm text-[12px] text-on-surface-variant">Broadcast notes and administrative bulletins</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-5 inline-block h-5 w-5 transform rounded-full bg-on-primary-container shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div><div class="py-3 last:pb-0 flex items-center justify-between gap-4"><div><p class="font-headline-sm text-[13px] text-on-surface">Product Updates</p><p class="font-body-sm text-[12px] text-on-surface-variant">Release announcements and engine enhancements</p></div><button class="toggle-switch relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full bg-surface-container-high transition-colors duration-200 ease-in-out focus:outline-none" onclick="toggleAlertSwitch(this)" type="button"><span class="translate-x-0.5 inline-block h-5 w-5 transform rounded-full bg-outline shadow transition duration-200 ease-in-out mt-0.5 ml-0.5"></span></button></div></div></div></div><div class="px-6 py-4 bg-surface-container-low rounded-b-xl border-t border-[#464554] flex items-center justify-end gap-3"><button class="px-4 py-2 rounded-lg bg-[#93000a]/20 hover:bg-[#93000a]/30 text-error border border-error/30 font-headline-sm text-headline-sm transition-all" onclick="resetAllAlertToggles()" type="button">Reset to Defaults</button><button class="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white font-headline-sm text-headline-sm flex items-center gap-1.5 shadow-sm transition-all" onclick="triggerToast('Preferences Saved', 'All notification preference changes have been updated successfully.');" type="button"><span class="material-symbols-outlined text-[16px]">done</span>Save Preferences</button></div></div></div>
+<script>
+    // Tab Controller for the exact 2 Leader tabs
+    function switchSettingsTab(tabName) {
+      const secTabBtn = document.getElementById('tab-btn-security');
+      const notifTabBtn = document.getElementById('tab-btn-notifications');
+      const secView = document.getElementById('view-security');
+      const notifView = document.getElementById('view-notifications');
+
+      if (tabName === 'security') {
+        secTabBtn.className = 'px-5 py-2.5 rounded-lg font-headline-sm text-headline-sm flex items-center gap-2.5 bg-surface-container-high text-on-surface transition-all';
+        notifTabBtn.className = 'px-5 py-2.5 rounded-lg font-headline-sm text-headline-sm flex items-center gap-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all';
+        secView.classList.remove('hidden');
+        notifView.classList.add('hidden');
+      } else {
+        notifTabBtn.className = 'px-5 py-2.5 rounded-lg font-headline-sm text-headline-sm flex items-center gap-2.5 bg-surface-container-high text-on-surface transition-all';
+        secTabBtn.className = 'px-5 py-2.5 rounded-lg font-headline-sm text-headline-sm flex items-center gap-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all';
+        secView.classList.add('hidden');
+        notifView.classList.remove('hidden');
+      }
+    }
+
+    // Toggle Input Masking
+    function toggleInputType(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.innerText = 'visibility_off';
+      } else {
+        input.type = 'password';
+        icon.innerText = 'visibility';
+      }
+    }
+
+    // Dynamic Password Rules Validator
+    function validatePasswordRules(val) {
+      const ruleLen = document.getElementById('rule-len');
+      const ruleUpper = document.getElementById('rule-upper');
+      const ruleSpec = document.getElementById('rule-spec');
+
+      const isLen = val.length >= 8;
+      const isUpper = /[A-Z]/.test(val);
+      const isSpec = /[0-9!@#$%^&*(),.?":{}|<>]/.test(val);
+
+      updateRuleUI(ruleLen, isLen);
+      updateRuleUI(ruleUpper, isUpper);
+      updateRuleUI(ruleSpec, isSpec);
+    }
+
+    function updateRuleUI(el, isValid) {
+      const icon = el.querySelector('.material-symbols-outlined');
+      if (isValid) {
+        icon.innerText = 'check_circle';
+        icon.className = 'material-symbols-outlined text-[16px] text-[#28a745]';
+        el.className = 'flex items-center gap-2 font-body-sm text-body-sm text-[#28a745]';
+      } else {
+        icon.innerText = 'radio_button_unchecked';
+        icon.className = 'material-symbols-outlined text-[16px] text-outline';
+        el.className = 'flex items-center gap-2 font-body-sm text-body-sm text-on-surface-variant';
+      }
+    }
+
+    // Reset Personal Information Form
+    function resetProfileValues() {
+      document.getElementById('input-fullname').value = 'David Kross';
+      document.getElementById('input-jobtitle').value = 'Growth Marketing Lead';
+      triggerToast('Cancelled', 'Form values reset to current state.');
+    }
+
+    // Save Personal Information
+    function handleProfileSave() {
+      const name = document.getElementById('input-fullname').value.trim();
+      const title = document.getElementById('input-jobtitle').value.trim();
+      if (!name) return;
+
+      document.getElementById('display-profile-name').innerText = name;
+      document.getElementById('display-profile-role').innerText = title + ' • Leader Scope';
+
+      triggerToast('Profile Saved', 'Personal Information updated successfully.');
+    }
+
+    // Password Update Handler
+    function handlePasswordUpdate() {
+      const current = document.getElementById('pwd-current').value;
+      const newPwd = document.getElementById('pwd-new').value;
+      const confirmPwd = document.getElementById('pwd-confirm').value;
+
+      if (!current) {
+        triggerToast('Error', 'Please enter your current password.', true);
+        return;
+      }
+      if (newPwd.length < 8 || !/[A-Z]/.test(newPwd) || !/[0-9!@#$%^&*(),.?":{}|<>]/.test(newPwd)) {
+        triggerToast('Complexity Warning', 'Please satisfy all 3 password rules.', true);
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        triggerToast('Mismatch', 'New password and confirmation do not match.', true);
+        return;
+      }
+
+      document.getElementById('pwd-current').value = '';
+      document.getElementById('pwd-new').value = '';
+      document.getElementById('pwd-confirm').value = '';
+      validatePasswordRules('');
+
+      triggerToast('Password Updated', 'Your security authentication key has been regenerated.');
+    }
+
+    // Toggle switch for Notifications
+    function toggleAlertSwitch(btn) {
+      const thumb = btn.querySelector('span');
+      const isOn = thumb.classList.contains('translate-x-5');
+      if (isOn) {
+        thumb.classList.remove('translate-x-5', 'bg-on-primary-container');
+        thumb.classList.add('translate-x-0.5', 'bg-outline');
+        btn.classList.remove('bg-primary-container');
+        btn.classList.add('bg-surface-container-high');
+      } else {
+        thumb.classList.remove('translate-x-0.5', 'bg-outline');
+        thumb.classList.add('translate-x-5', 'bg-on-primary-container');
+        btn.classList.remove('bg-surface-container-high');
+        btn.classList.add('bg-primary-container');
+      }
+    }
+
+    // Reset All Alert Toggles
+    function resetAllAlertToggles() {
+      const switches = document.querySelectorAll('.toggle-switch');
+      switches.forEach((btn, idx) => {
+        const thumb = btn.querySelector('span');
+        if (idx === switches.length - 1) {
+          // Keep last one off
+          thumb.classList.remove('translate-x-5', 'bg-on-primary-container');
+          thumb.classList.add('translate-x-0.5', 'bg-outline');
+          btn.classList.remove('bg-primary-container');
+          btn.classList.add('bg-surface-container-high');
+        } else {
+          thumb.classList.remove('translate-x-0.5', 'bg-outline');
+          thumb.classList.add('translate-x-5', 'bg-on-primary-container');
+          btn.classList.remove('bg-surface-container-high');
+          btn.classList.add('bg-primary-container');
+        }
+      });
+      triggerToast('Alerts Reset', 'Notification rules returned to default parameters.');
+    }
+
+    // Toast Trigger
+    let toastTimeout;
+    function triggerToast(title, desc, isError = false) {
+      const toast = document.getElementById('toast-notification');
+      const iconWrap = document.getElementById('toast-icon-wrapper');
+      const titleEl = document.getElementById('toast-title');
+      const descEl = document.getElementById('toast-desc');
+
+      titleEl.innerText = title;
+      descEl.innerText = desc;
+
+      if (isError) {
+        iconWrap.className = 'w-6 h-6 rounded-full bg-error-container flex items-center justify-center text-error';
+        iconWrap.querySelector('span').innerText = 'priority_high';
+      } else {
+        iconWrap.className = 'w-6 h-6 rounded-full bg-[#28a745] flex items-center justify-center text-white';
+        iconWrap.querySelector('span').innerText = 'check';
+      }
+
+      toast.classList.remove('translate-y-[-120%]', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-[-120%]', 'opacity-0');
+      }, 3500);
+    }
+  </script>
+</div></main>
+</div>
+<script>
+  // Tab Management
+  let currentTab = 'workspace';
+
+  function switchTab(tabKey) {
+    currentTab = tabKey;
+    const allTabs = ['workspace', 'security', 'notifications'];
+
+    allTabs.forEach(key => {
+      const btn = document.getElementById('tab-nav-' + key);
+      const panel = document.getElementById('panel-' + key);
+      if (btn) {
+        if (key === tabKey) {
+          btn.className = 'main-tab-nav px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-[#dfe2f1] bg-[#262a35] transition-colors';
+        } else {
+          btn.className = 'main-tab-nav px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 transition-colors';
+        }
+      }
+      if (panel) {
+        if (key === tabKey) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  // Workspace Profile Form Functions
+  function updateCharCount(textarea) {
+    const count = textarea.value.length;
+    document.getElementById('desc-char-count').innerText = count + ' / 500 characters';
+  }
+
+  function toggleTag(btn) {
+    const isSelected = btn.classList.contains('bg-[#8083ff]');
+    if (isSelected) {
+      btn.classList.remove('bg-[#8083ff]', 'text-[#0d0096]');
+      btn.classList.add('bg-[#262a35]', 'border', 'border-[#464554]', 'text-[#dfe2f1]');
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.innerText = 'add_circle_outline';
+        icon.classList.add('text-[#908fa0]');
+      }
+    } else {
+      btn.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]', 'text-[#dfe2f1]');
+      btn.classList.add('bg-[#8083ff]', 'text-[#0d0096]');
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.innerText = 'check_circle';
+        icon.classList.remove('text-[#908fa0]');
+      }
+    }
+  }
+
+  function saveWorkspaceChanges() {
+    const alertBox = document.getElementById('save-alert');
+    alertBox.classList.remove('hidden');
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetWorkspaceForm() {
+    document.getElementById('input-biz-name').value = 'Acme Corp Enterprise';
+    document.getElementById('select-biz-industry').value = 'E-commerce & Retail Apparel';
+    document.getElementById('select-biz-size').value = '51–200 Employees';
+    document.getElementById('input-biz-target').value = 'Activewear & Athleisure Consumers';
+    document.getElementById('input-products').value = 'Urban streetwear, gym apparel, and eco-friendly lifestyle accessories';
+    document.getElementById('textarea-desc').value = 'Acme Corp designs and distributes sustainable athleisure for urban professionals and fitness enthusiasts across North America.';
+    document.getElementById('input-goals').value = 'Accelerate DTC customer acquisition while maintaining high ROAS';
+    document.getElementById('input-budget').value = '125,000 / month';
+    updateCharCount(document.getElementById('textarea-desc'));
+
+    // Reset tags
+    const tags = document.querySelectorAll('#channel-tags-container .channel-tag');
+    tags.forEach((tag, idx) => {
+      tag.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]', 'text-[#dfe2f1]');
+      tag.classList.add('bg-[#8083ff]', 'text-[#0d0096]');
+      const icon = tag.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.innerText = 'check_circle';
+        icon.classList.remove('text-[#908fa0]');
+      }
+    });
+
+    const alertBox = document.getElementById('save-alert');
+    alertBox.classList.add('hidden');
+  }
+
+  // Profile Edit Functions
+  function enableProfileEdit() {
+    document.getElementById('profile-fullname').removeAttribute('disabled');
+    document.getElementById('profile-jobtitle').removeAttribute('disabled');
+    document.getElementById('profile-fullname').focus();
+    document.getElementById('profile-view-actions').classList.add('hidden');
+    document.getElementById('profile-edit-actions').classList.remove('hidden');
+    document.getElementById('profile-edit-actions').classList.add('flex');
+  }
+
+  function cancelProfileEdit() {
+    document.getElementById('profile-fullname').setAttribute('disabled', 'true');
+    document.getElementById('profile-jobtitle').setAttribute('disabled', 'true');
+    document.getElementById('profile-fullname').value = document.getElementById('display-profile-name').innerText;
+    document.getElementById('profile-jobtitle').value = document.getElementById('display-profile-title').innerText;
+    document.getElementById('profile-edit-actions').classList.add('hidden');
+    document.getElementById('profile-edit-actions').classList.remove('flex');
+    document.getElementById('profile-view-actions').classList.remove('hidden');
+  }
+
+  function saveProfileEdit() {
+    const newName = document.getElementById('profile-fullname').value.trim() || 'Sarah Jenkins';
+    const newTitle = document.getElementById('profile-jobtitle').value.trim() || 'Senior Marketing Director';
+    document.getElementById('display-profile-name').innerText = newName;
+    document.getElementById('display-profile-title').innerText = newTitle;
+
+    document.getElementById('profile-fullname').setAttribute('disabled', 'true');
+    document.getElementById('profile-jobtitle').setAttribute('disabled', 'true');
+    document.getElementById('profile-edit-actions').classList.add('hidden');
+    document.getElementById('profile-edit-actions').classList.remove('flex');
+    document.getElementById('profile-view-actions').classList.remove('hidden');
+
+    const alertBox = document.getElementById('security-alert');
+    document.getElementById('security-alert-text').innerText = 'Personal information updated successfully';
+    alertBox.classList.remove('hidden');
+  }
+
+  // Password Visibility Toggle
+  function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.innerText = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.innerText = 'visibility';
+    }
+  }
+
+  // Password Validation & Checking
+  function setRequirementState(elementId, isValid) {
+    const el = document.getElementById(elementId);
+    const icon = el.querySelector('.material-symbols-outlined');
+    if (isValid) {
+      icon.innerText = 'check_circle';
+      icon.className = 'material-symbols-outlined text-[16px] text-[#28a745]';
+      el.className = 'flex items-center gap-1.5 text-[#28a745]';
+    } else {
+      icon.innerText = 'radio_button_unchecked';
+      icon.className = 'material-symbols-outlined text-[16px] text-[#908fa0]';
+      el.className = 'flex items-center gap-1.5 text-[#c7c4d7]';
+    }
+  }
+
+  function checkPasswordLive() {
+    const newPass = document.getElementById('pwd-new').value;
+    const confirmPass = document.getElementById('pwd-confirm').value;
+
+    const hasLen = newPass.length >= 8;
+    const hasUpper = /[A-Z]/.test(newPass);
+    const hasNum = /[0-9]/.test(newPass);
+    const hasSpec = /[^A-Za-z0-9]/.test(newPass);
+
+    setRequirementState('req-len', hasLen);
+    setRequirementState('req-upper', hasUpper);
+    setRequirementState('req-num', hasNum);
+    setRequirementState('req-spec', hasSpec);
+
+    const mismatchMsg = document.getElementById('pwd-mismatch-msg');
+    if (confirmPass.length > 0 && newPass !== confirmPass) {
+      mismatchMsg.classList.remove('hidden');
+    } else {
+      mismatchMsg.classList.add('hidden');
+    }
+  }
+
+  function clearPasswordForm() {
+    document.getElementById('pwd-curr').value = '';
+    document.getElementById('pwd-new').value = '';
+    document.getElementById('pwd-confirm').value = '';
+    checkPasswordLive();
+  }
+
+  function savePassword() {
+    const curr = document.getElementById('pwd-curr').value;
+    const newPass = document.getElementById('pwd-new').value;
+    const confirmPass = document.getElementById('pwd-confirm').value;
+
+    if (!curr) {
+      alert('Please enter your current password.');
+      return;
+    }
+    if (newPass.length < 8 || !/[A-Z]/.test(newPass) || !/[0-9]/.test(newPass) || !/[^A-Za-z0-9]/.test(newPass)) {
+      alert('Please satisfy all password complexity requirements.');
+      return;
+    }
+    if (newPass !== confirmPass) {
+      alert('New password and confirm password do not match.');
+      return;
+    }
+
+    clearPasswordForm();
+    const alertBox = document.getElementById('security-alert');
+    document.getElementById('security-alert-text').innerText = 'Password changed successfully.';
+    alertBox.classList.remove('hidden');
+  }
+
+  // Toggle Switches (Notifications)
+  function toggleSwitch(btn) {
+    const thumb = btn.querySelector('div');
+    const isChecked = thumb.classList.contains('translate-x-5');
+    if (isChecked) {
+      thumb.classList.remove('translate-x-5', 'bg-[#0d0096]');
+      thumb.classList.add('translate-x-0', 'bg-[#908fa0]');
+      btn.classList.remove('bg-[#8083ff]');
+      btn.classList.add('bg-[#262a35]', 'border', 'border-[#464554]');
+    } else {
+      thumb.classList.remove('translate-x-0', 'bg-[#908fa0]');
+      thumb.classList.add('translate-x-5', 'bg-[#0d0096]');
+      btn.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]');
+      btn.classList.add('bg-[#8083ff]');
+    }
+  }
+
+  function saveNotificationPreferences() {
+    const alertBox = document.getElementById('notif-alert');
+    alertBox.classList.remove('hidden');
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetNotificationPreferences() {
+    // Set all default active except the first announcement item
+    const switches = document.querySelectorAll('#panel-notifications button[onclick="toggleSwitch(this)"]');
+    switches.forEach((btn, idx) => {
+      const thumb = btn.querySelector('div');
+      if (idx === switches.length - 2) {
+        // System updates default OFF
+        thumb.classList.remove('translate-x-5', 'bg-[#0d0096]');
+        thumb.classList.add('translate-x-0', 'bg-[#908fa0]');
+        btn.classList.remove('bg-[#8083ff]');
+        btn.classList.add('bg-[#262a35]', 'border', 'border-[#464554]');
+      } else {
+        thumb.classList.remove('translate-x-0', 'bg-[#908fa0]');
+        thumb.classList.add('translate-x-5', 'bg-[#0d0096]');
+        btn.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]');
+        btn.classList.add('bg-[#8083ff]');
+      }
+    });
+    const alertBox = document.getElementById('notif-alert');
+    alertBox.classList.add('hidden');
+  }
+</script>
+
+
+</body></html>

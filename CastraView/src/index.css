@@ -108,7 +108,8 @@ button {
   flex-direction: column;
   background-color: #171b26;
   border-right: 1px solid #464554;
-  z-index: 20;
+  z-index: 30;
+  flex-shrink: 0;
 }
 
 .std-sidebar-brand {

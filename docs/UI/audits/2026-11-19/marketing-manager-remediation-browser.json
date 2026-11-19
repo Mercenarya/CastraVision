@@ -1,0 +1,122 @@
+{
+  "observations": [
+    {
+      "profilePersisted": true,
+      "loadingLoopStopped": true,
+      "loadingVisible": false
+    },
+    {
+      "csvCreated": true,
+      "containsRealCampaign": true,
+      "errors": []
+    },
+    {
+      "pdfCreated": true,
+      "pdfMagic": true,
+      "errors": []
+    },
+    {
+      "budgetActuallySaved": true,
+      "status": "pending",
+      "payloadSource": "rule_based",
+      "notAutoApplied": true,
+      "alerts": [],
+      "headings": [
+        "Ngân sách & ROAS",
+        "Đề xuất trong doanh nghiệp",
+        "Proposal Review",
+        "Đề xuất theo ROAS [MM-LOCAL] Chiến dịch tiếng Việt",
+        "Monthly Spend Envelope: 300.000 ₫"
+      ]
+    },
+    {
+      "dialogClosed": true,
+      "existingJwtDeniedAfterRemoval": false,
+      "candidateNoLongerListed": true
+    },
+    {
+      "uiJoinApproved": true,
+      "teamAssigned": true
+    },
+    {
+      "removedInUI": false,
+      "oldJwtNowDenied": true
+    },
+    {
+      "competitorSaved": true,
+      "noInventedAnalysis": true
+    },
+    {
+      "revokedInvitationCannotGrant": true
+    },
+    {
+      "uiRejectPersisted": true,
+      "noMembershipGranted": true
+    },
+    {
+      "expiredInvitationDenied": true
+    },
+    {
+      "dashboardMatchesPersonnel": false,
+      "total": 5,
+      "pending": 1,
+      "auditProjectedFields": [
+        "id",
+        "actor_id",
+        "action",
+        "entity_type",
+        "entity_id",
+        "created_at"
+      ],
+      "noRawPayload": true
+    },
+    {
+      "auditCsvGenerated": true,
+      "filterRespected": true,
+      "containsSensitivePayload": false
+    },
+    {
+      "dashboardActualCountFive": true,
+      "pendingActualOne": true
+    },
+    {
+      "roleSpoofRejected": true,
+      "twoReviewersRaceStatuses": [
+        200,
+        409
+      ],
+      "oneDecisionOnly": true
+    },
+    {
+      "searchReturnsRealProposal": true,
+      "selectionOpensReview": true,
+      "underlyingDashboardHidden": true
+    },
+    {
+      "noResultsCorrect": false,
+      "staleResultsGone": true
+    },
+    {
+      "noResultsCorrect": true,
+      "staleResultsGone": true
+    }
+  ],
+  "password": {
+    "wrongCurrentRejected": true,
+    "oldRejected": true,
+    "newAccepted": true
+  },
+  "invitation": {
+    "existingUserEmailAccepted": true,
+    "freshUserEmailAndPasswordAccepted": true,
+    "role": "member",
+    "teamCount": 1,
+    "resendDelivered": true,
+    "wrongRecipientDenied": true,
+    "acceptRetryIdempotent": true
+  },
+  "limits": [
+    "Browser Blob content verified; OS Downloads folder not verified.",
+    "Two earlier false probes came from reading before navigation finished / stale dynamic-import cache; corrected observations are retained."
+  ]
+}

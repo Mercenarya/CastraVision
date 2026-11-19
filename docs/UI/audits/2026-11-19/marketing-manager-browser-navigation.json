@@ -1,0 +1,634 @@
+[
+  {
+    "label": "Role Management",
+    "headings": [
+      "Role Management & Permissions",
+      "Marketing Manager",
+      "Leader",
+      "Employee",
+      "RBAC Permission Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Audit Log",
+      "Export Permissions Spec",
+      "3 Members",
+      "4 Members",
+      "7 Members",
+      "All Actions (14)",
+      "Membership",
+      "Proposals (FR04)",
+      "Operations"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Audit Log",
+    "headings": [
+      "Workspace Audit Log"
+    ],
+    "loading": [],
+    "buttons": [
+      "Default",
+      "Filtered",
+      "Empty",
+      "Error (504)",
+      "Proposal Edited",
+      "Role Changed",
+      "Proposal Approved",
+      "Manager",
+      "Export Audit Log (CSV)",
+      "↻",
+      "All (142)",
+      "Approvals (FR04) [48]",
+      "Membership [32]",
+      "Role Changes [14]",
+      "Data Imports [12]",
+      "‹ Previous",
+      "1",
+      "2",
+      "Next ›"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Budget & ROAS",
+    "headings": [
+      "Performance-Based Budget Allocation",
+      "Channel Budget Distribution & Recommendation",
+      "AI Reallocation Directives",
+      "Channel Reallocation Details & Variance Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Analysis",
+      "Review Recommendation",
+      "View Detailed Model Rationale",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Review Recommendation",
+      "Reset Allocation",
+      "Save Draft Allocation",
+      "Review Recommendation"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Reports",
+    "headings": [
+      "Export Periodic Reports",
+      "Configure Your Report",
+      "Report Summary Preview",
+      "Recent Reports"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Data",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Custom Range",
+      "Select All",
+      "Clear",
+      "Return on Ad Spend (ROAS)",
+      "Cost Per Acquisition (CPA)",
+      "Click-Through Rate (CTR)",
+      "Total Spend & Budget",
+      "Conversion Volume",
+      "Impressions & Reach",
+      "Average CPC",
+      "Blended CAC",
+      "Export PDF (Unavailable)",
+      "Export CSV",
+      "Demo Record",
+      "Download Sample",
+      "Generating... (Mock)",
+      "Retry (Simulated)",
+      "Prev",
+      "1",
+      "2"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Competitor Insights",
+    "headings": [
+      "Competitor Analysis & Market Trends",
+      "Monitored vs. Discovered Competitors",
+      "AeroAthletics Co.",
+      "StrataSport Gear",
+      "VeloMotion Urban",
+      "Market Activity & Share Trends",
+      "Recommended Opportunities",
+      "Counter Weekend Promo Campaign",
+      "Protect Branded Search Terms"
+    ],
+    "loading": [],
+    "buttons": [
+      "Last 30 Days (Aug 1 - Aug 30, 2025)",
+      "Refresh Data",
+      "Add Competitor",
+      "Manage Targets",
+      "View Overview",
+      "View Overview",
+      "View Overview",
+      "Review in Content Studio",
+      "Adjust Budget in ROAS"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Workspace Members",
+    "headings": [
+      "Thành viên & yêu cầu gia nhập",
+      "Nhóm làm việc"
+    ],
+    "loading": [],
+    "buttons": [
+      "Làm mới",
+      "Mời nhân sự",
+      "Thành viên",
+      "Chờ duyệt",
+      "Lời mời",
+      "Phân công",
+      "Thu hồi",
+      "Phân công",
+      "Thu hồi",
+      "Trước",
+      "Sau",
+      "Lưu cấu hình",
+      "Tạo nhóm"
+    ],
+    "apiPaths": [
+      "/api/workspace/personnel/",
+      "/api/workspace/teams/",
+      "/api/workspace/recruitment/"
+    ]
+  },
+  {
+    "label": "Role Management",
+    "headings": [
+      "Role Management & Permissions",
+      "Marketing Manager",
+      "Leader",
+      "Employee",
+      "RBAC Permission Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Audit Log",
+      "Export Permissions Spec",
+      "3 Members",
+      "4 Members",
+      "7 Members",
+      "All Actions (14)",
+      "Membership",
+      "Proposals (FR04)",
+      "Operations"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Workspace Members",
+    "headings": [
+      "Thành viên & yêu cầu gia nhập",
+      "Nhóm làm việc"
+    ],
+    "loading": [],
+    "buttons": [
+      "Làm mới",
+      "Mời nhân sự",
+      "Thành viên",
+      "Chờ duyệt",
+      "Lời mời",
+      "Phân công",
+      "Thu hồi",
+      "Phân công",
+      "Thu hồi",
+      "Trước",
+      "Sau",
+      "Lưu cấu hình",
+      "Tạo nhóm"
+    ],
+    "apiPaths": [
+      "/api/workspace/personnel/",
+      "/api/workspace/teams/",
+      "/api/workspace/recruitment/"
+    ]
+  },
+  {
+    "label": "Approvals",
+    "headings": [
+      "Đề xuất trong doanh nghiệp"
+    ],
+    "loading": [
+      "Đang tải dữ liệu…"
+    ],
+    "buttons": [],
+    "apiPaths": []
+  },
+  {
+    "label": "Reports",
+    "headings": [
+      "Export Periodic Reports",
+      "Configure Your Report",
+      "Report Summary Preview",
+      "Recent Reports"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Data",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Custom Range",
+      "Select All",
+      "Clear",
+      "Return on Ad Spend (ROAS)",
+      "Cost Per Acquisition (CPA)",
+      "Click-Through Rate (CTR)",
+      "Total Spend & Budget",
+      "Conversion Volume",
+      "Impressions & Reach",
+      "Average CPC",
+      "Blended CAC",
+      "Export PDF (Unavailable)",
+      "Export CSV",
+      "Demo Record",
+      "Download Sample",
+      "Generating... (Mock)",
+      "Retry (Simulated)",
+      "Prev",
+      "1",
+      "2"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Competitor Insights",
+    "headings": [
+      "Competitor Analysis & Market Trends",
+      "Monitored vs. Discovered Competitors",
+      "AeroAthletics Co.",
+      "StrataSport Gear",
+      "VeloMotion Urban",
+      "Market Activity & Share Trends",
+      "Recommended Opportunities",
+      "Counter Weekend Promo Campaign",
+      "Protect Branded Search Terms"
+    ],
+    "loading": [],
+    "buttons": [
+      "Last 30 Days (Aug 1 - Aug 30, 2025)",
+      "Refresh Data",
+      "Add Competitor",
+      "Manage Targets",
+      "View Overview",
+      "View Overview",
+      "View Overview",
+      "Review in Content Studio",
+      "Adjust Budget in ROAS"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Budget & ROAS",
+    "headings": [
+      "Performance-Based Budget Allocation",
+      "Channel Budget Distribution & Recommendation",
+      "AI Reallocation Directives",
+      "Channel Reallocation Details & Variance Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Analysis",
+      "Review Recommendation",
+      "View Detailed Model Rationale",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Review Recommendation",
+      "Reset Allocation",
+      "Save Draft Allocation",
+      "Review Recommendation"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Reports",
+    "headings": [
+      "Export Periodic Reports",
+      "Configure Your Report",
+      "Report Summary Preview",
+      "Recent Reports"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Data",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Custom Range",
+      "Select All",
+      "Clear",
+      "Return on Ad Spend (ROAS)",
+      "Cost Per Acquisition (CPA)",
+      "Click-Through Rate (CTR)",
+      "Total Spend & Budget",
+      "Conversion Volume",
+      "Impressions & Reach",
+      "Average CPC",
+      "Blended CAC",
+      "Export PDF (Unavailable)",
+      "Export CSV",
+      "Demo Record",
+      "Download Sample",
+      "Generating... (Mock)",
+      "Retry (Simulated)",
+      "Prev",
+      "1",
+      "2"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Budget & ROAS",
+    "headings": [
+      "Performance-Based Budget Allocation",
+      "Channel Budget Distribution & Recommendation",
+      "AI Reallocation Directives",
+      "Channel Reallocation Details & Variance Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Analysis",
+      "Review Recommendation",
+      "View Detailed Model Rationale",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Review Recommendation",
+      "Reset Allocation",
+      "Save Draft Allocation",
+      "Review Recommendation",
+      "Review Recommendation →"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Settings",
+    "headings": [
+      "Settings",
+      "Company Business Profile"
+    ],
+    "loading": [],
+    "buttons": [
+      "Business Profile",
+      "Account & Security",
+      "Notification Preferences",
+      "Reset",
+      "Save"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Budget & ROAS",
+    "headings": [
+      "Performance-Based Budget Allocation",
+      "Channel Budget Distribution & Recommendation",
+      "AI Reallocation Directives",
+      "Channel Reallocation Details & Variance Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Analysis",
+      "Review Recommendation",
+      "View Detailed Model Rationale",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Review Recommendation",
+      "Reset Allocation",
+      "Save Draft Allocation",
+      "Review Recommendation"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Campaign Import",
+    "headings": [
+      "Campaign Data Import",
+      "Drag & drop file here",
+      "Recent Ingestions"
+    ],
+    "loading": [],
+    "buttons": [
+      "⇧ Select CSV / Excel File",
+      "↓ Download Sample CSV"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Settings",
+    "headings": [
+      "Settings",
+      "Company Business Profile",
+      "1. Thông tin doanh nghiệp",
+      "2. Mục tiêu & Ngân sách tiếp thị"
+    ],
+    "loading": [],
+    "buttons": [
+      "Business Profile",
+      "Account & Security",
+      "Notification Preferences",
+      "Reset",
+      "Save",
+      "∞Meta✓",
+      "GGoogle Ads✓",
+      "♪TikTok✓",
+      "Hủy thay đổi",
+      "Lưu hồ sơ ✓"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Reports",
+    "headings": [
+      "Export Periodic Reports",
+      "Configure Your Report",
+      "Report Summary Preview",
+      "Recent Reports"
+    ],
+    "loading": [],
+    "buttons": [
+      "Refresh Data",
+      "7 Days",
+      "14 Days",
+      "30 Days",
+      "This Quarter",
+      "Custom Range",
+      "Select All",
+      "Clear",
+      "Return on Ad Spend (ROAS)",
+      "Cost Per Acquisition (CPA)",
+      "Click-Through Rate (CTR)",
+      "Total Spend & Budget",
+      "Conversion Volume",
+      "Impressions & Reach",
+      "Average CPC",
+      "Blended CAC",
+      "Export PDF (Unavailable)",
+      "Export CSV",
+      "Demo Record",
+      "Download Sample",
+      "Generating... (Mock)",
+      "Retry (Simulated)",
+      "Prev",
+      "1",
+      "2"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Settings",
+    "headings": [
+      "Settings",
+      "Company Business Profile",
+      "1. Thông tin doanh nghiệp",
+      "2. Mục tiêu & Ngân sách tiếp thị"
+    ],
+    "loading": [],
+    "buttons": [
+      "Business Profile",
+      "Account & Security",
+      "Notification Preferences",
+      "Reset",
+      "Save",
+      "∞Meta✓",
+      "GGoogle Ads✓",
+      "♪TikTok✓",
+      "Hủy thay đổi",
+      "Lưu hồ sơ ✓"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Settings",
+    "headings": [
+      "Settings",
+      "Company Business Profile"
+    ],
+    "loading": [],
+    "buttons": [
+      "Business Profile",
+      "Account & Security",
+      "Notification Preferences",
+      "Reset",
+      "Save"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Overview / Dashboard",
+    "headings": [
+      "Marketing Manager Dashboard",
+      "Workspace Scope & Operational Health",
+      "Pending Approvals (FR04)",
+      "Audit Trail (FR11)"
+    ],
+    "loading": [],
+    "buttons": [
+      "+ Invite Member",
+      "Manage Roles",
+      "Workspace Settings",
+      "Manage →",
+      "Queue →",
+      "Log →",
+      "Manage Members",
+      "Role Matrix",
+      "Workspace Settings",
+      "View Queue",
+      "Review",
+      "Review",
+      "Review",
+      "View All 6 Proposals in Approval Queue",
+      "View Log",
+      "View Full Audit Log (142 Events)"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Content Studio",
+    "headings": [
+      "Content Gen"
+    ],
+    "loading": [],
+    "buttons": [
+      "Đề xuất của tôi",
+      "Tạo template từ chiến lược",
+      "Sao chép nội dung",
+      "Lưu bản nháp"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Role Management",
+    "headings": [
+      "Role Management & Permissions",
+      "Marketing Manager",
+      "Leader",
+      "Employee",
+      "RBAC Permission Matrix"
+    ],
+    "loading": [],
+    "buttons": [
+      "Audit Log",
+      "Export Permissions Spec",
+      "3 Members",
+      "4 Members",
+      "7 Members",
+      "All Actions (14)",
+      "Membership",
+      "Proposals (FR04)",
+      "Operations"
+    ],
+    "apiPaths": []
+  },
+  {
+    "label": "Audit Log",
+    "headings": [
+      "Workspace Audit Log"
+    ],
+    "loading": [],
+    "buttons": [
+      "Default",
+      "Filtered",
+      "Empty",
+      "Error (504)",
+      "Proposal Edited",
+      "Role Changed",
+      "Proposal Approved",
+      "Manager",
+      "Export Audit Log (CSV)",
+      "↻",
+      "All (142)",
+      "Approvals (FR04) [48]",
+      "Membership [32]",
+      "Role Changes [14]",
+      "Data Imports [12]",
+      "‹ Previous",
+      "1",
+      "2",
+      "Next ›"
+    ],
+    "apiPaths": []
+  }
+]

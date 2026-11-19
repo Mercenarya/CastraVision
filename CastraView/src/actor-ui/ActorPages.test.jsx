@@ -9,13 +9,14 @@ import {
   PerformanceDashboardPage,
 } from './ActorPages'
 import { PlatformOverviewScreen } from '../system-admin/screens/PlatformOverviewScreen'
+import { LanguageProvider } from '../contexts/LanguageContext'
 
 describe('role-specific actor pages', () => {
   it('shows Admin multi-workspace aggregates without employee PII', () => {
     render(<PlatformOverviewScreen companies={[{
       id: 'workspace-1', name: 'GreenStep Việt Nam', status: 'active',
       createdAt: '2026-10-01T00:00:00Z', memberCount: 4,
-    }]} metrics={{ totalRegistered: 1, activeTenants: 1, inactiveTenants: 0, aggregateHeadcount: 4 }} onNavigate={vi.fn()} onSelectCompany={vi.fn()} />)
+    }]} metrics={{ totalRegistered: 1, activeTenants: 1, inactiveTenants: 0, aggregateHeadcount: 4 }} onNavigate={vi.fn()} onSelectCompany={vi.fn()} />, { wrapper: LanguageProvider })
 
     expect(screen.getByText('GreenStep Việt Nam')).toBeVisible()
     expect(screen.queryByText(/@/)).not.toBeInTheDocument()

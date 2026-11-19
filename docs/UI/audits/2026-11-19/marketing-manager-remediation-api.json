@@ -1,0 +1,135 @@
+{
+  "checks": [
+    {
+      "name": "local MM JWT and Django context",
+      "pass": true
+    },
+    {
+      "name": "campaign saved through user JWT",
+      "pass": true
+    },
+    {
+      "name": "observed CSV import persisted",
+      "pass": true
+    },
+    {
+      "name": "csv report creates actual persisted artifact",
+      "pass": true
+    },
+    {
+      "name": "csv file format valid",
+      "pass": true
+    },
+    {
+      "name": "csv history download is same stored bytes",
+      "pass": true
+    },
+    {
+      "name": "csv retry is idempotent",
+      "pass": true
+    },
+    {
+      "name": "csv download denied to leader",
+      "pass": true
+    },
+    {
+      "name": "csv download denied to employee",
+      "pass": true
+    },
+    {
+      "name": "csv download denied to other",
+      "pass": true
+    },
+    {
+      "name": "csv direct RLS hides artifact from Employee",
+      "pass": true
+    },
+    {
+      "name": "pdf report creates actual persisted artifact",
+      "pass": true
+    },
+    {
+      "name": "pdf file format valid",
+      "pass": true
+    },
+    {
+      "name": "pdf history download is same stored bytes",
+      "pass": true
+    },
+    {
+      "name": "pdf retry is idempotent",
+      "pass": true
+    },
+    {
+      "name": "pdf download denied to leader",
+      "pass": true
+    },
+    {
+      "name": "pdf download denied to employee",
+      "pass": true
+    },
+    {
+      "name": "pdf download denied to other",
+      "pass": true
+    },
+    {
+      "name": "pdf direct RLS hides artifact from Employee",
+      "pass": true
+    },
+    {
+      "name": "competitor persists without fake analysis",
+      "pass": true
+    },
+    {
+      "name": "duplicate competitor rejected",
+      "pass": true
+    },
+    {
+      "name": "competitor reload reads saved registry",
+      "pass": true
+    },
+    {
+      "name": "enable local recruitment",
+      "pass": true
+    },
+    {
+      "name": "candidate sends real join request",
+      "pass": true
+    },
+    {
+      "name": "candidate cross-workspace review denied",
+      "pass": true
+    },
+    {
+      "name": "candidate review saved",
+      "pass": true
+    },
+    {
+      "name": "candidate membership matches decision",
+      "pass": true
+    },
+    {
+      "name": "rejected sends real join request",
+      "pass": true
+    },
+    {
+      "name": "rejected cross-workspace review denied",
+      "pass": true
+    },
+    {
+      "name": "rejected review saved",
+      "pass": true
+    },
+    {
+      "name": "rejected membership matches decision",
+      "pass": true
+    },
+    {
+      "name": "protect last MM",
+      "pass": true
+    }
+  ],
+  "workspace": "942465bc-a2a9-4e14-88cc-ab93bc7a01d6",
+  "team": "0e5f6776-388d-465c-af51-b3984442f6a9",
+  "campaign": "cc5ab04f-0b4b-4cad-8e3a-ca70d79505df"
+}

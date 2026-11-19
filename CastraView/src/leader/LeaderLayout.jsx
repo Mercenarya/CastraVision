@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { useLanguage } from '@/hooks/useLanguage'
+import { LanguageDropdownSubmenu } from '@/components/LanguageDropdownSubmenu'
 import LeaderSidebar from './LeaderSidebar'
 
 const PAGE_TITLES = {
@@ -45,6 +47,7 @@ export default function LeaderLayout({
   approvalCount,
   children,
 }) {
+  const { t } = useLanguage()
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -118,14 +121,14 @@ export default function LeaderLayout({
       )}
 
       {/* Main Wrapper */}
-      <div className="std-main-wrap flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+      <div className="std-main-wrap flex-1 flex flex-col min-w-0 bg-[#0f131d]">
         {/* HEADER: Top Bar (Fixed Height 64px) */}
-        <header className="h-16 bg-[#171b26] border-b border-[#464554] px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
+        <header className="sticky top-0 h-16 bg-[#171b26] border-b border-[#464554] px-4 sm:px-6 flex items-center justify-between flex-shrink-0 z-20">
           {/* Left Side: Mobile Hamburger & Breadcrumb navigation */}
           <div className="flex items-center gap-3 min-w-0">
             <button
               type="button"
-              className="std-hamburger-btn"
+              className="std-hamburger-btn md:hidden"
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open navigation menu"
               aria-expanded={mobileMenuOpen}
@@ -151,7 +154,7 @@ export default function LeaderLayout({
                 className="hover:text-[#dfe2f1] cursor-pointer transition-colors whitespace-nowrap"
                 onClick={() => setPage?.('overview')}
               >
-                Leader Workspace
+                {t('header.leaderWorkspace')}
               </span>
               <svg
                 className="w-3.5 h-3.5 text-[#464554] flex-shrink-0"
@@ -165,7 +168,7 @@ export default function LeaderLayout({
                 <polyline points="9 18 15 12 9 6" />
               </svg>
               <span className="text-[#dfe2f1] font-semibold truncate">
-                {PAGE_TITLES[page] || 'Overview'}
+                {PAGE_TITLES[page] || t('navigation.overview')}
               </span>
             </div>
           </div>
@@ -232,7 +235,7 @@ export default function LeaderLayout({
                       {userName}
                     </span>
                     <span className="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">
-                      LEADER
+                      {t('roles.leaderBadge')}
                     </span>
                   </div>
                   <span className="text-[11px] text-[#c7c4d7]/70 font-mono mt-1 truncate max-w-[140px]">
@@ -262,7 +265,7 @@ export default function LeaderLayout({
                       setPage?.('profile')
                     }}
                   >
-                    Account Settings
+                    {t('navigation.accountSettings')}
                   </button>
                   <button
                     type="button"
@@ -272,8 +275,10 @@ export default function LeaderLayout({
                       setPage?.('notifications')
                     }}
                   >
-                    Notifications
+                    {t('navigation.notifications')}
                   </button>
+                  <div className="my-1 border-t border-[#464554]/60" />
+                  <LanguageDropdownSubmenu />
                   <div className="my-1 border-t border-[#464554]/60" />
                   <button
                     type="button"
@@ -283,7 +288,7 @@ export default function LeaderLayout({
                       logout?.()
                     }}
                   >
-                    <span>Sign Out</span>
+                    <span>{t('header.signOut')}</span>
                     <span className="text-xs">→</span>
                   </button>
                 </div>
@@ -293,7 +298,7 @@ export default function LeaderLayout({
         </header>
 
         {/* Content Viewport */}
-        <div className="std-content flex-1 bg-[#0f131d] overflow-auto">
+        <div className="std-content flex-1 bg-[#0f131d]">
           {children}
         </div>
       </div>

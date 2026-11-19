@@ -1,4 +1,21 @@
 import PropTypes from 'prop-types'
+import { useLanguage } from '@/hooks/useLanguage'
+
+const KEY_TO_I18N = {
+  overview: 'navigation.overview',
+  approvals: 'navigation.approvals',
+  'my-proposals': 'navigation.myProposals',
+  campaigns: 'navigation.campaigns',
+  strategy: 'navigation.strategyStudio',
+  content: 'navigation.contentGen',
+  import: 'navigation.campaignImport',
+  performance: 'navigation.performanceInsights',
+  profile: 'navigation.settings',
+  tasks: 'navigation.myTasks',
+  'assigned-campaigns': 'navigation.assignedCampaigns',
+  submissions: 'navigation.mySubmissions',
+  notifications: 'navigation.notifications',
+}
 
 /**
  * RoleSidebar — Master Layout Sidebar Component for CastraVision
@@ -15,7 +32,7 @@ export default function RoleSidebar({
   navItems = [],
   activeKey = 'overview',
   onNavigate,
-  sectionTitle = 'WORKSPACE NAVIGATION',
+  sectionTitle,
   roleBadge = 'LEADER',
   tenantName = 'Acme Corp Enterprise',
   tenantCode = 'acme-corp-prod-01',
@@ -23,6 +40,9 @@ export default function RoleSidebar({
   isDrawer = false,
   onClose,
 }) {
+  const { t } = useLanguage()
+  const displaySectionTitle = sectionTitle || t('navigation.workspaceNavigation')
+  const displayRoleBadge = roleBadge === 'LEADER' ? t('roles.leaderBadge') : roleBadge === 'MEMBER' ? t('roles.memberBadge') : roleBadge
   const tenantInitials = tenantName
     ? tenantName
         .split(' ')
@@ -35,8 +55,8 @@ export default function RoleSidebar({
 
   return (
     <aside
-      className={`std-sidebar w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none ${
-        isDrawer ? 'std-sidebar-drawer' : ''
+      className={`std-sidebar w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col z-30 select-none ${
+        isDrawer ? 'std-sidebar-drawer' : 'hidden md:flex sticky top-0 h-screen'
       }`}
       aria-label={roleAriaLabel}
     >
@@ -80,17 +100,18 @@ export default function RoleSidebar({
         <div>
           <div className="px-3 mb-2 flex items-center justify-between">
             <span className="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">
-              {sectionTitle}
+              {displaySectionTitle}
             </span>
             <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium uppercase">
-              {roleBadge}
+              {displayRoleBadge}
             </span>
           </div>
 
-          <nav className="space-y-1" aria-label={sectionTitle}>
+          <nav className="space-y-1" aria-label={displaySectionTitle}>
             {navItems.map((item) => {
               const isActive = activeKey === item.key
               const Icon = item.icon
+              const translatedLabel = KEY_TO_I18N[item.key] ? t(KEY_TO_I18N[item.key]) : item.label
               return (
                 <button
                   key={item.key}
@@ -116,7 +137,7 @@ export default function RoleSidebar({
                     >
                       <Icon className="w-4 h-4" />
                     </span>
-                    <span className="truncate">{item.label}</span>
+                    <span className="truncate">{translatedLabel}</span>
                   </div>
                   {item.badge !== undefined && (
                     <span className="px-2 py-0.5 text-[11px] font-bold rounded-full bg-[#8083ff] text-[#0d0096] flex-shrink-0">

@@ -1,0 +1,662 @@
+<!DOCTYPE html><html class="h-full" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Settings — CastraVision Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#c0c1ff",
+          "on-surface": "#dfe2f1",
+          "surface-container-low": "#171b26",
+          "secondary": "#4cd7f6",
+          "surface-bright": "#353944",
+          "on-surface-variant": "#c7c4d7",
+          "surface-container-lowest": "#0a0e18",
+          "primary-container": "#8083ff",
+          "secondary-container": "#03b5d3",
+          "surface-container": "#1c1f2a",
+          "surface-container-highest": "#313540",
+          "background": "#0f131d",
+          "surface": "#0f131d",
+          "error": "#ffb4ab",
+          "outline": "#908fa0",
+          "outline-variant": "#464554",
+          "surface-container-high": "#262a35",
+          "tertiary-container": "#a078ff"
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f131d;
+    color: #dfe2f1;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #171b26;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 4px;
+  }
+</style>
+<meta content="web_dashboard" name="shell-type">
+</head>
+<body class="h-full flex overflow-hidden bg-[#0f131d]">
+<!-- ASIDE: Unified Left Sidebar Navigation (Fixed Width 260px) -->
+<aside class="w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none">
+<!-- Top Logo Area -->
+<div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+<div class="w-8 h-8 rounded-lg bg-[#8083ff] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+<span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+</div>
+</div>
+<!-- Navigation Scroll Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+<div>
+<div class="px-3 mb-2 flex items-center justify-between">
+<span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#8083ff] font-mono font-medium">Admin<br></span>
+</div>
+<nav class="space-y-1">
+<!-- 1. Overview / Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="14" y="14"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+</svg>
+<span class="truncate">Overview / Dashboard</span>
+</a>
+<!-- 2. Workspace Member -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+<circle cx="9" cy="7" r="4"></circle>
+<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg>
+<span class="truncate">Workspace Member</span>
+</a>
+<!-- 3. Role Management -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+<span class="truncate">Role Management</span>
+</a>
+<!-- 4. Approvals -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<div class="flex items-center gap-3 min-w-0">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+<polyline points="22 4 12 14.01 9 11.01"></polyline>
+</svg>
+<span class="truncate">Approvals</span>
+</div>
+<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] font-mono font-bold leading-none">3</span>
+</a>
+<!-- 5. Audit Log -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+<polyline points="14 2 14 8 20 8"></polyline>
+<line x1="16" x2="8" y1="13" y2="13"></line>
+<line x1="16" x2="8" y1="17" y2="17"></line>
+<polyline points="10 9 9 9 8 9"></polyline>
+</svg>
+<span class="truncate">Audit Log</span>
+</a>
+<!-- 6. Budget & ROAS -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+<polyline points="17 6 23 6 23 12"></polyline>
+</svg>
+<span class="truncate">Budget &amp; ROAS</span>
+</a>
+<!-- 7. Report -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<line x1="18" x2="18" y1="20" y2="10"></line>
+<line x1="12" x2="12" y1="20" y2="4"></line>
+<line x1="6" x2="6" y1="20" y2="14"></line>
+</svg>
+<span class="truncate">Report</span>
+</a>
+<!-- 8. Competitor Insights (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"></path>
+</svg>
+<span class="truncate">Competitor Insights</span>
+</a>
+<!-- 9. Campaign Import -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" x2="12" y1="3" y2="15"></line>
+</svg>
+<span class="truncate">Campaign Import</span>
+</a>
+<!-- 10. Content Studio -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+</svg>
+<span class="truncate">Content Studio</span>
+</a>
+<!-- 11. Settings (ACTIVE ITEM) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150" href="#">
+<svg class="w-4 h-4 text-[#8083ff] flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+<span class="truncate">Settings</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Bottom Footer Area (Inside Sidebar) -->
+<div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+<div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+          AC
+        </div>
+<div class="min-w-0">
+<p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+<p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+</div>
+</div>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] font-mono font-bold uppercase leading-none">Admin</span>
+</div>
+</div>
+</aside>
+<!-- MAIN WRAPPER (Top Header + Canvas) -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+<!-- HEADER: Top Bar (64px) -->
+<header class="h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-20">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+<span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Workspace</span>
+<svg class="w-3.5 h-3.5 text-[#464554]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+<span class="text-[#dfe2f1] font-semibold">Settings</span>
+</div>
+<!-- Right Side Utility Widgets -->
+<div class="flex items-center gap-5">
+<!-- System Status -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+<span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+</div>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- Notification Bell with badge 3 -->
+<button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+<span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+3
+</span>
+</button>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- User Profile Widget: Sarah Jenkins (Manager) -->
+<div class="flex items-center gap-3 pl-1"><div class="relative"><div class="w-8 h-8 rounded-full bg-[#8083ff] text-[#0d0096] flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">LT</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#03b5d3] rounded-full ring-2 ring-[#171b26]"></div></div><div class="flex flex-col text-left"><div class="flex items-center gap-1.5 leading-none"><span class="text-[13px] font-semibold text-[#dfe2f1]">Liam Tanaka</span><span class="px-1.5 py-0.5 rounded bg-[#8083ff]/15 border border-[#8083ff]/30 text-[9px] font-mono font-bold text-[#8083ff] uppercase leading-none">SYS ADMIN</span></div><span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">l.tanaka@castravision.internal</span></div></div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 bg-[#0f131d] overflow-y-auto custom-scrollbar p-8"><div class="flex flex-col w-full space-y-6">
+<!-- System Alert Banner (Notification feedback anchor) -->
+<div class="hidden transition-all duration-300 p-4 rounded-lg bg-surface-container border border-primary-container/40 flex items-center justify-between text-on-surface" id="admin-status-toast">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-body-md text-body-md text-on-surface font-medium" id="toast-message">Administrator profile settings successfully synchronized.</span>
+</div>
+<button class="text-outline hover:text-on-surface" onclick="document.getElementById('admin-status-toast').classList.add('hidden')">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+<!-- Header / Breadcrumb Overview Block -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2"><div><h1 class="font-headline-lg text-headline-lg text-on-surface font-semibold tracking-tight">Settings</h1><p class="font-body-md text-body-md text-on-surface-variant mt-0.5">Manage your personal account credentials, security, and alert notifications.</p></div></div>
+<!-- Dual Tab Navigation Strip -->
+<div class="flex items-center gap-2 border-b border-outline-variant/60 pb-3"><button class="px-4 py-2 rounded-t-lg font-label-lg text-label-lg flex items-center gap-2 bg-[#262a35] text-[#dfe2f1] border-b-2 border-[#8083ff] font-semibold transition-all" id="tab-btn-security" onclick="switchSysAdminTab('security')"><span class="material-symbols-outlined text-base text-[#8083ff]">shield_person</span><span>Account &amp; Security</span></button><button class="px-4 py-2 rounded-t-lg font-label-lg text-label-lg flex items-center gap-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 font-medium transition-all" id="tab-btn-notifications" onclick="switchSysAdminTab('notifications')"><span class="material-symbols-outlined text-base text-[#908fa0]">notifications_active</span><span>Notification Preferences</span></button></div>
+<!-- TAB 1: Account & Security View (Active Default) -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start" id="view-security"><div class="xl:col-span-6 bg-[#1c1f2a] border border-[#464554] rounded-lg flex flex-col"><div class="px-5 py-4 border-b border-[#464554] flex items-center justify-between"><div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-[#4cd7f6] text-xl">badge</span><div><h2 class="font-headline-sm text-headline-sm text-[#dfe2f1] font-semibold">Personal Information</h2><p class="font-body-sm text-body-sm text-[#c7c4d7]">Update your personal profile details across CastraVision.</p></div></div></div><div class="p-6 space-y-6"><div class="flex items-center gap-4 p-4 rounded-lg bg-[#0a0e18] border border-[#464554]/60"><div class="w-14 h-14 rounded-lg bg-[#262a35] border border-[#464554] flex items-center justify-center text-[#dfe2f1] font-mono font-bold text-xl flex-shrink-0 shadow-sm">LT</div><div class="min-w-0 flex-1"><div class="flex items-center gap-2"><h3 class="font-headline-sm text-headline-sm text-[#dfe2f1] font-semibold truncate" id="display-admin-name">Liam Tanaka</h3><span class="px-2 py-0.5 rounded bg-[#4cd7f6]/15 border border-[#4cd7f6]/30 text-[#4cd7f6] font-mono text-[10px] font-bold uppercase">System Admin</span></div><p class="font-body-sm text-body-sm text-[#c7c4d7] truncate mt-0.5" id="display-admin-email-preview">l.tanaka@castravision.internal</p></div></div><form class="space-y-4" id="admin-profile-form" onsubmit="event.preventDefault(); handleProfileSave();"><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="admin-fullname">Full Name</label><input class="w-full h-11 px-3 bg-[#262a35] border border-[#464554] rounded-lg text-[#dfe2f1] font-body-md text-body-md focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] outline-none transition-colors" id="admin-fullname" required="" type="text" value="Liam Tanaka"></div><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="admin-jobtitle">Job Title</label><input class="w-full h-11 px-3 bg-[#262a35] border border-[#464554] rounded-lg text-[#dfe2f1] font-body-md text-body-md focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] outline-none transition-colors" id="admin-jobtitle" required="" type="text" value="Root System Administrator"></div><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="admin-email">Email Address</label><div class="relative"><input class="w-full h-11 pl-3 pr-10 bg-[#171b26] border border-[#464554] text-[#908fa0] rounded-lg font-mono text-body-md cursor-not-allowed select-all focus:outline-none" id="admin-email" readonly="" type="email" value="l.tanaka@castravision.internal"><div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#908fa0]"><span class="material-symbols-outlined text-lg">lock</span></div></div></div><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="admin-role">Current Role</label><div class="relative"><input class="w-full h-11 pl-3 pr-10 bg-[#171b26] border border-[#464554] text-[#908fa0] rounded-lg font-body-md cursor-not-allowed select-all focus:outline-none" id="admin-role" readonly="" type="text" value="System Administrator (Root)"><div class="absolute inset-y-0 right-3 flex items-center pointer-events-none text-[#908fa0]"><span class="material-symbols-outlined text-lg">lock</span></div></div></div></div><div class="flex items-center justify-end gap-3 pt-4 border-t border-[#464554]/60"><button class="px-4 py-2 rounded-lg border border-[#464554] hover:bg-[#353944] text-[#dfe2f1] font-label-md text-label-md transition-colors" onclick="resetPersonalForm()" type="button">Cancel</button><button class="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white font-label-md text-label-md font-semibold flex items-center gap-2 transition-colors" type="submit"><span class="material-symbols-outlined text-base">check</span><span>Save Changes</span></button></div></form></div></div><div class="xl:col-span-6 bg-[#1c1f2a] border border-[#464554] rounded-lg flex flex-col"><div class="px-5 py-4 border-b border-[#464554] flex items-center justify-between"><div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-[#8083ff] text-xl">vpn_key</span><div><h2 class="font-headline-sm text-headline-sm text-[#dfe2f1] font-semibold">Change Password</h2><p class="font-body-sm text-body-sm text-[#c7c4d7]">Manage your password and security credentials.</p></div></div></div><div class="p-6 space-y-6"><form class="space-y-4" id="admin-password-form" onsubmit="event.preventDefault(); handlePasswordUpdate();"><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="pwd-current">Current Password</label><div class="relative"><input autocomplete="current-password" class="w-full h-11 pl-3 pr-10 bg-[#262a35] border border-[#464554] rounded-lg text-[#dfe2f1] font-body-md text-body-md placeholder:text-outline focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] outline-none transition-colors" id="pwd-current" placeholder="Enter current password" required="" type="password" value=""><button class="absolute inset-y-0 right-2 px-2 flex items-center text-[#908fa0] hover:text-[#dfe2f1] focus:outline-none" onclick="togglePassVisibility('pwd-current', this)" type="button"><span class="material-symbols-outlined text-lg">visibility</span></button></div></div><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="pwd-new">New Password</label><div class="relative"><input autocomplete="new-password" class="w-full h-11 pl-3 pr-10 bg-[#262a35] border border-[#464554] rounded-lg text-[#dfe2f1] font-body-md text-body-md placeholder:text-outline focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] outline-none transition-colors" id="pwd-new" oninput="validateAdminPasswordRules()" placeholder="Enter new password" required="" type="password" value=""><button class="absolute inset-y-0 right-2 px-2 flex items-center text-[#908fa0] hover:text-[#dfe2f1] focus:outline-none" onclick="togglePassVisibility('pwd-new', this)" type="button"><span class="material-symbols-outlined text-lg">visibility</span></button></div></div><div class="flex flex-col space-y-1.5"><label class="font-label-md text-label-md text-[#c7c4d7] font-medium" for="pwd-confirm">Confirm New Password</label><div class="relative"><input autocomplete="new-password" class="w-full h-11 pl-3 pr-10 bg-[#262a35] border border-[#464554] rounded-lg text-[#dfe2f1] font-body-md text-body-md placeholder:text-outline focus:border-[#8083ff] focus:ring-1 focus:ring-[#8083ff] outline-none transition-colors" id="pwd-confirm" oninput="validateAdminPasswordRules()" placeholder="Confirm new password" required="" type="password" value=""><button class="absolute inset-y-0 right-2 px-2 flex items-center text-[#908fa0] hover:text-[#dfe2f1] focus:outline-none" onclick="togglePassVisibility('pwd-confirm', this)" type="button"><span class="material-symbols-outlined text-lg">visibility</span></button></div><p class="hidden text-[#ffb4ab] font-body-sm text-body-sm flex items-center gap-1 pt-1" id="pwd-mismatch-warning"><span class="material-symbols-outlined text-sm">error</span> Passwords do not match.</p></div><div class="p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/70 space-y-2"><div class="text-label-sm font-label-sm font-mono text-[#c7c4d7] font-semibold">PASSWORD REQUIREMENTS</div><div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-body-sm font-body-sm"><div class="flex items-center gap-1.5 text-[#908fa0]" id="rule-len"><span class="material-symbols-outlined text-sm">radio_button_unchecked</span><span>At least 8 characters</span></div><div class="flex items-center gap-1.5 text-[#908fa0]" id="rule-upper"><span class="material-symbols-outlined text-sm">radio_button_unchecked</span><span>Uppercase letter</span></div><div class="flex items-center gap-1.5 text-[#908fa0]" id="rule-num"><span class="material-symbols-outlined text-sm">radio_button_unchecked</span><span>At least one number</span></div><div class="flex items-center gap-1.5 text-[#908fa0]" id="rule-sym"><span class="material-symbols-outlined text-sm">radio_button_unchecked</span><span>Special symbol (!@#$%^&amp;*)</span></div></div></div><div class="flex items-center justify-end gap-3 pt-4 border-t border-[#464554]/60"><button class="px-4 py-2 rounded-lg border border-[#464554] hover:bg-[#353944] text-[#dfe2f1] font-label-md text-label-md transition-colors" onclick="clearPasswordInputs()" type="button">Clear</button><button class="px-5 py-2 rounded-lg bg-[#8083ff] hover:bg-[#6c6fe6] text-white font-label-md text-label-md font-semibold flex items-center gap-2 transition-colors" id="btn-update-pwd" type="submit"><span class="material-symbols-outlined text-base">vpn_key</span><span>Update Password</span></button></div></form></div></div></div>
+<!-- TAB 2: Notification Preferences View (Hidden by Default) -->
+<div class="hidden bg-[#1c1f2a] border border-[#464554] rounded-lg flex flex-col" id="view-notifications"><div class="px-6 py-5 border-b border-[#464554] flex flex-col sm:flex-row sm:items-center justify-between gap-4"><div><h2 class="font-headline-sm text-headline-sm text-[#dfe2f1] font-semibold">Notification Preferences</h2><p class="font-body-sm text-body-sm text-[#c7c4d7]">Manage alerts, notifications, and subscription delivery channels.</p></div><div class="flex items-center gap-3"><button class="px-4 py-2 rounded-lg border border-[#464554] hover:bg-[#353944] text-[#ffb4ab] font-label-md text-label-md font-medium transition-colors" onclick="resetSysAdminNotifs()" type="button">Reset to Defaults</button><button class="px-4 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white font-label-md text-label-md font-semibold flex items-center gap-1.5 transition-colors" onclick="saveNotificationPreferences()"><span class="material-symbols-outlined text-base">save</span><span>Save Preferences</span></button></div></div><div class="p-6 space-y-6 divide-y divide-[#464554]/60"><div class="pt-2 first:pt-0 space-y-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#4cd7f6] text-lg">campaign</span><h3 class="font-headline-sm text-sm text-[#dfe2f1] font-semibold">Campaign Notifications</h3></div><div class="space-y-3 pl-6"><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Campaign Performance Updates</p><p class="text-body-sm text-xs text-[#c7c4d7]">Receive daily and weekly telemetry alerts for active campaigns.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Campaign Status Changes</p><p class="text-body-sm text-xs text-[#c7c4d7]">Notify when campaigns are launched, paused, or completed.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div></div></div><div class="pt-6 space-y-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#8083ff] text-lg">verified_user</span><h3 class="font-headline-sm text-sm text-[#dfe2f1] font-semibold">Approval Notifications</h3></div><div class="space-y-3 pl-6"><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Content Pending Approval</p><p class="text-body-sm text-xs text-[#c7c4d7]">Notify when ad creative requires governance review.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Content Revision Requests</p><p class="text-body-sm text-xs text-[#c7c4d7]">Receive feedback when edits are requested on submitted assets.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Content Approval Results</p><p class="text-body-sm text-xs text-[#c7c4d7]">Instant updates once reviews are completed.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div></div></div><div class="pt-6 space-y-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#4cd7f6] text-lg">account_balance_wallet</span><h3 class="font-headline-sm text-sm text-[#dfe2f1] font-semibold">Budget Notifications</h3></div><div class="space-y-3 pl-6"><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Budget Deviation Alerts</p><p class="text-body-sm text-xs text-[#c7c4d7]">Trigger immediate warnings if daily spend deviates by 15%+.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Budget Usage Updates</p><p class="text-body-sm text-xs text-[#c7c4d7]">Milestone alerts when 50%, 80%, and 100% of allocated budget is spent.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div></div></div><div class="pt-6 space-y-4"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[#8083ff] text-lg">notifications</span><h3 class="font-headline-sm text-sm text-[#dfe2f1] font-semibold">General Notifications</h3></div><div class="space-y-3 pl-6"><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Workspace Announcements</p><p class="text-body-sm text-xs text-[#c7c4d7]">Important administrative and policy updates from workspace owners.</p></div><label class="relative inline-flex items-center cursor-pointer"><input checked="" class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div><div class="flex items-center justify-between"><div class="pr-4"><p class="text-body-md text-sm text-[#dfe2f1] font-medium">Product Updates</p><p class="text-body-sm text-xs text-[#c7c4d7]">Quarterly product enhancements and engine capability notices.</p></div><label class="relative inline-flex items-center cursor-pointer"><input class="sr-only peer notif-toggle" type="checkbox"><div class="w-11 h-6 bg-[#262a35] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-[#dfe2f1] after:border-[#464554] after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#8083ff]"></div></label></div></div></div></div></div>
+<!-- Inline Script for Tab Toggling, Form Handling, & Live Password Verification -->
+<script>
+    // Tab switching between Account & Security and Notification Preferences
+    function switchSysAdminTab(tab) {
+      const btnSecurity = document.getElementById('tab-btn-security');
+      const btnNotif = document.getElementById('tab-btn-notifications');
+      const viewSecurity = document.getElementById('view-security');
+      const viewNotif = document.getElementById('view-notifications');
+
+      if (tab === 'security') {
+        btnSecurity.className = 'px-4 py-2 rounded-lg font-label-lg text-label-lg flex items-center gap-2.5 bg-surface-container-high text-on-surface border-l-2 border-primary-container font-semibold transition-all';
+        btnNotif.className = 'px-4 py-2 rounded-lg font-label-lg text-label-lg flex items-center gap-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 font-medium transition-all';
+        viewSecurity.classList.remove('hidden');
+        viewNotif.classList.add('hidden');
+      } else {
+        btnNotif.className = 'px-4 py-2 rounded-lg font-label-lg text-label-lg flex items-center gap-2.5 bg-surface-container-high text-on-surface border-l-2 border-primary-container font-semibold transition-all';
+        btnSecurity.className = 'px-4 py-2 rounded-lg font-label-lg text-label-lg flex items-center gap-2.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high/50 font-medium transition-all';
+        viewNotif.classList.remove('hidden');
+        viewSecurity.classList.add('hidden');
+      }
+    }
+
+    // Password visibility toggler
+    function togglePassVisibility(inputId, btn) {
+      const field = document.getElementById(inputId);
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (field.type === 'password') {
+        field.type = 'text';
+        icon.innerText = 'visibility_off';
+      } else {
+        field.type = 'password';
+        icon.innerText = 'visibility';
+      }
+    }
+
+    // Live password complexity validator
+    function validateAdminPasswordRules() {
+      const pass = document.getElementById('pwd-new').value;
+      const confirmPass = document.getElementById('pwd-confirm').value;
+
+      const hasLength = pass.length >= 12;
+      const hasUpperLower = /[A-Z]/.test(pass) && /[a-z]/.test(pass);
+      const hasNum = /[0-9]/.test(pass);
+      const hasSym = /[^A-Za-z0-9]/.test(pass);
+
+      updateRuleUI('rule-len', hasLength);
+      updateRuleUI('rule-upper', hasUpperLower);
+      updateRuleUI('rule-num', hasNum);
+      updateRuleUI('rule-sym', hasSym);
+
+      // Strength display
+      const meter = document.getElementById('strength-meter');
+      const score = [hasLength, hasUpperLower, hasNum, hasSym].filter(Boolean).length;
+      if (pass.length === 0) {
+        meter.innerText = 'STRENGTH: PENDING';
+        meter.className = 'text-outline';
+      } else if (score <= 2) {
+        meter.innerText = 'STRENGTH: WEAK (UNACCEPTABLE)';
+        meter.className = 'text-error font-bold';
+      } else if (score === 3) {
+        meter.innerText = 'STRENGTH: MODERATE';
+        meter.className = 'text-secondary font-bold';
+      } else {
+        meter.innerText = 'STRENGTH: ROOT COMPLIANT';
+        meter.className = 'text-[#28a745] font-bold';
+      }
+
+      // Password mismatch alert
+      const mismatch = document.getElementById('pwd-mismatch-warning');
+      if (confirmPass.length > 0 && pass !== confirmPass) {
+        mismatch.classList.remove('hidden');
+      } else {
+        mismatch.classList.add('hidden');
+      }
+    }
+
+    function updateRuleUI(elemId, valid) {
+      const row = document.getElementById(elemId);
+      const icon = row.querySelector('.material-symbols-outlined');
+      if (valid) {
+        icon.innerText = 'check_circle';
+        row.className = 'flex items-center gap-1.5 text-[#28a745]';
+      } else {
+        icon.innerText = 'radio_button_unchecked';
+        row.className = 'flex items-center gap-1.5 text-outline';
+      }
+    }
+
+    function clearPasswordInputs() {
+      document.getElementById('pwd-current').value = '';
+      document.getElementById('pwd-new').value = '';
+      document.getElementById('pwd-confirm').value = '';
+      validateAdminPasswordRules();
+    }
+
+    function handleProfileSave() {
+      const name = document.getElementById('admin-fullname').value;
+      const title = document.getElementById('admin-jobtitle').value;
+      document.getElementById('display-admin-name').innerText = name;
+      document.getElementById('display-admin-title').innerText = title;
+      triggerToast('Personal Administrator profile updated successfully.');
+    }
+
+    function resetPersonalForm() {
+      document.getElementById('admin-fullname').value = 'Liam Tanaka';
+      document.getElementById('admin-jobtitle').value = 'Root System Administrator';
+      document.getElementById('display-admin-name').innerText = 'Liam Tanaka';
+      document.getElementById('display-admin-title').innerText = 'Root System Administrator';
+      triggerToast('Personal details restored to current system record.');
+    }
+
+    function handlePasswordUpdate() {
+      const current = document.getElementById('pwd-current').value;
+      const newP = document.getElementById('pwd-new').value;
+      const confirmP = document.getElementById('pwd-confirm').value;
+
+      if (!current) {
+        alert('Please enter your current administrator password.');
+        return;
+      }
+      if (newP.length < 12 || !/[A-Z]/.test(newP) || !/[a-z]/.test(newP) || !/[0-9]/.test(newP) || !/[^A-Za-z0-9]/.test(newP)) {
+        alert('Password does not fulfill Root 12+ char complexity rules.');
+        return;
+      }
+      if (newP !== confirmP) {
+        alert('New passwords do not match.');
+        return;
+      }
+
+      clearPasswordInputs();
+      triggerToast('Administrator root credentials successfully updated. Audit event logged.');
+    }
+
+    function saveNotificationPreferences() {
+      triggerToast('Alert dispatch preferences for Liam Tanaka updated.');
+    }
+
+    function triggerToast(text) {
+      const toast = document.getElementById('admin-status-toast');
+      const msg = document.getElementById('toast-message');
+      msg.innerText = text;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  </script>
+</div></main>
+</div>
+<script>
+  // Tab Management
+  let currentTab = 'workspace';
+
+  function switchTab(tabKey) {
+    currentTab = tabKey;
+    const allTabs = ['workspace', 'security', 'notifications'];
+
+    allTabs.forEach(key => {
+      const btn = document.getElementById('tab-nav-' + key);
+      const panel = document.getElementById('panel-' + key);
+      if (btn) {
+        if (key === tabKey) {
+          btn.className = 'main-tab-nav px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-[#dfe2f1] bg-[#262a35] transition-colors';
+        } else {
+          btn.className = 'main-tab-nav px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 transition-colors';
+        }
+      }
+      if (panel) {
+        if (key === tabKey) {
+          panel.classList.remove('hidden');
+        } else {
+          panel.classList.add('hidden');
+        }
+      }
+    });
+  }
+
+  // Workspace Profile Form Functions
+  function updateCharCount(textarea) {
+    const count = textarea.value.length;
+    document.getElementById('desc-char-count').innerText = count + ' / 500 characters';
+  }
+
+  function toggleTag(btn) {
+    const isSelected = btn.classList.contains('bg-[#8083ff]');
+    if (isSelected) {
+      btn.classList.remove('bg-[#8083ff]', 'text-[#0d0096]');
+      btn.classList.add('bg-[#262a35]', 'border', 'border-[#464554]', 'text-[#dfe2f1]');
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.innerText = 'add_circle_outline';
+        icon.classList.add('text-[#908fa0]');
+      }
+    } else {
+      btn.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]', 'text-[#dfe2f1]');
+      btn.classList.add('bg-[#8083ff]', 'text-[#0d0096]');
+      const icon = btn.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.innerText = 'check_circle';
+        icon.classList.remove('text-[#908fa0]');
+      }
+    }
+  }
+
+  function saveWorkspaceChanges() {
+    const alertBox = document.getElementById('save-alert');
+    alertBox.classList.remove('hidden');
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetWorkspaceForm() {
+    document.getElementById('input-biz-name').value = 'Acme Corp Enterprise';
+    document.getElementById('select-biz-industry').value = 'E-commerce & Retail Apparel';
+    document.getElementById('select-biz-size').value = '51–200 Employees';
+    document.getElementById('input-biz-target').value = 'Activewear & Athleisure Consumers';
+    document.getElementById('input-products').value = 'Urban streetwear, gym apparel, and eco-friendly lifestyle accessories';
+    document.getElementById('textarea-desc').value = 'Acme Corp designs and distributes sustainable athleisure for urban professionals and fitness enthusiasts across North America.';
+    document.getElementById('input-goals').value = 'Accelerate DTC customer acquisition while maintaining high ROAS';
+    document.getElementById('input-budget').value = '125,000 / month';
+    updateCharCount(document.getElementById('textarea-desc'));
+
+    // Reset tags
+    const tags = document.querySelectorAll('#channel-tags-container .channel-tag');
+    tags.forEach((tag, idx) => {
+      tag.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]', 'text-[#dfe2f1]');
+      tag.classList.add('bg-[#8083ff]', 'text-[#0d0096]');
+      const icon = tag.querySelector('.material-symbols-outlined');
+      if (icon) {
+        icon.innerText = 'check_circle';
+        icon.classList.remove('text-[#908fa0]');
+      }
+    });
+
+    const alertBox = document.getElementById('save-alert');
+    alertBox.classList.add('hidden');
+  }
+
+  // Profile Edit Functions
+  function enableProfileEdit() {
+    document.getElementById('profile-fullname').removeAttribute('disabled');
+    document.getElementById('profile-jobtitle').removeAttribute('disabled');
+    document.getElementById('profile-fullname').focus();
+    document.getElementById('profile-view-actions').classList.add('hidden');
+    document.getElementById('profile-edit-actions').classList.remove('hidden');
+    document.getElementById('profile-edit-actions').classList.add('flex');
+  }
+
+  function cancelProfileEdit() {
+    document.getElementById('profile-fullname').setAttribute('disabled', 'true');
+    document.getElementById('profile-jobtitle').setAttribute('disabled', 'true');
+    document.getElementById('profile-fullname').value = document.getElementById('display-profile-name').innerText;
+    document.getElementById('profile-jobtitle').value = document.getElementById('display-profile-title').innerText;
+    document.getElementById('profile-edit-actions').classList.add('hidden');
+    document.getElementById('profile-edit-actions').classList.remove('flex');
+    document.getElementById('profile-view-actions').classList.remove('hidden');
+  }
+
+  function saveProfileEdit() {
+    const newName = document.getElementById('profile-fullname').value.trim() || 'Sarah Jenkins';
+    const newTitle = document.getElementById('profile-jobtitle').value.trim() || 'Senior Marketing Director';
+    document.getElementById('display-profile-name').innerText = newName;
+    document.getElementById('display-profile-title').innerText = newTitle;
+
+    document.getElementById('profile-fullname').setAttribute('disabled', 'true');
+    document.getElementById('profile-jobtitle').setAttribute('disabled', 'true');
+    document.getElementById('profile-edit-actions').classList.add('hidden');
+    document.getElementById('profile-edit-actions').classList.remove('flex');
+    document.getElementById('profile-view-actions').classList.remove('hidden');
+
+    const alertBox = document.getElementById('security-alert');
+    document.getElementById('security-alert-text').innerText = 'Personal information updated successfully';
+    alertBox.classList.remove('hidden');
+  }
+
+  // Password Visibility Toggle
+  function togglePasswordVisibility(inputId, btn) {
+    const input = document.getElementById(inputId);
+    const icon = btn.querySelector('.material-symbols-outlined');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.innerText = 'visibility_off';
+    } else {
+      input.type = 'password';
+      icon.innerText = 'visibility';
+    }
+  }
+
+  // Password Validation & Checking
+  function setRequirementState(elementId, isValid) {
+    const el = document.getElementById(elementId);
+    const icon = el.querySelector('.material-symbols-outlined');
+    if (isValid) {
+      icon.innerText = 'check_circle';
+      icon.className = 'material-symbols-outlined text-[16px] text-[#28a745]';
+      el.className = 'flex items-center gap-1.5 text-[#28a745]';
+    } else {
+      icon.innerText = 'radio_button_unchecked';
+      icon.className = 'material-symbols-outlined text-[16px] text-[#908fa0]';
+      el.className = 'flex items-center gap-1.5 text-[#c7c4d7]';
+    }
+  }
+
+  function checkPasswordLive() {
+    const newPass = document.getElementById('pwd-new').value;
+    const confirmPass = document.getElementById('pwd-confirm').value;
+
+    const hasLen = newPass.length >= 8;
+    const hasUpper = /[A-Z]/.test(newPass);
+    const hasNum = /[0-9]/.test(newPass);
+    const hasSpec = /[^A-Za-z0-9]/.test(newPass);
+
+    setRequirementState('req-len', hasLen);
+    setRequirementState('req-upper', hasUpper);
+    setRequirementState('req-num', hasNum);
+    setRequirementState('req-spec', hasSpec);
+
+    const mismatchMsg = document.getElementById('pwd-mismatch-msg');
+    if (confirmPass.length > 0 && newPass !== confirmPass) {
+      mismatchMsg.classList.remove('hidden');
+    } else {
+      mismatchMsg.classList.add('hidden');
+    }
+  }
+
+  function clearPasswordForm() {
+    document.getElementById('pwd-curr').value = '';
+    document.getElementById('pwd-new').value = '';
+    document.getElementById('pwd-confirm').value = '';
+    checkPasswordLive();
+  }
+
+  function savePassword() {
+    const curr = document.getElementById('pwd-curr').value;
+    const newPass = document.getElementById('pwd-new').value;
+    const confirmPass = document.getElementById('pwd-confirm').value;
+
+    if (!curr) {
+      alert('Please enter your current password.');
+      return;
+    }
+    if (newPass.length < 8 || !/[A-Z]/.test(newPass) || !/[0-9]/.test(newPass) || !/[^A-Za-z0-9]/.test(newPass)) {
+      alert('Please satisfy all password complexity requirements.');
+      return;
+    }
+    if (newPass !== confirmPass) {
+      alert('New password and confirm password do not match.');
+      return;
+    }
+
+    clearPasswordForm();
+    const alertBox = document.getElementById('security-alert');
+    document.getElementById('security-alert-text').innerText = 'Password changed successfully.';
+    alertBox.classList.remove('hidden');
+  }
+
+  // Toggle Switches (Notifications)
+  function toggleSwitch(btn) {
+    const thumb = btn.querySelector('div');
+    const isChecked = thumb.classList.contains('translate-x-5');
+    if (isChecked) {
+      thumb.classList.remove('translate-x-5', 'bg-[#0d0096]');
+      thumb.classList.add('translate-x-0', 'bg-[#908fa0]');
+      btn.classList.remove('bg-[#8083ff]');
+      btn.classList.add('bg-[#262a35]', 'border', 'border-[#464554]');
+    } else {
+      thumb.classList.remove('translate-x-0', 'bg-[#908fa0]');
+      thumb.classList.add('translate-x-5', 'bg-[#0d0096]');
+      btn.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]');
+      btn.classList.add('bg-[#8083ff]');
+    }
+  }
+
+  function saveNotificationPreferences() {
+    const alertBox = document.getElementById('notif-alert');
+    alertBox.classList.remove('hidden');
+    alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetNotificationPreferences() {
+    // Set all default active except the first announcement item
+    const switches = document.querySelectorAll('#panel-notifications button[onclick="toggleSwitch(this)"]');
+    switches.forEach((btn, idx) => {
+      const thumb = btn.querySelector('div');
+      if (idx === switches.length - 2) {
+        // System updates default OFF
+        thumb.classList.remove('translate-x-5', 'bg-[#0d0096]');
+        thumb.classList.add('translate-x-0', 'bg-[#908fa0]');
+        btn.classList.remove('bg-[#8083ff]');
+        btn.classList.add('bg-[#262a35]', 'border', 'border-[#464554]');
+      } else {
+        thumb.classList.remove('translate-x-0', 'bg-[#908fa0]');
+        thumb.classList.add('translate-x-5', 'bg-[#0d0096]');
+        btn.classList.remove('bg-[#262a35]', 'border', 'border-[#464554]');
+        btn.classList.add('bg-[#8083ff]');
+      }
+    });
+    const alertBox = document.getElementById('notif-alert');
+    alertBox.classList.add('hidden');
+  }
+</script>
+
+
+</body></html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Performance-Based Budget Allocation — CastraVision Manager</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "primary": "#c0c1ff",
+          "on-surface": "#dfe2f1",
+          "surface-container-low": "#171b26",
+          "secondary": "#4cd7f6",
+          "surface-bright": "#353944",
+          "on-surface-variant": "#c7c4d7",
+          "surface-container-lowest": "#0a0e18",
+          "primary-container": "#8083ff",
+          "secondary-container": "#03b5d3",
+          "surface-container": "#1c1f2a",
+          "surface-container-highest": "#313540",
+          "background": "#0f131d",
+          "surface": "#0f131d",
+          "error": "#ffb4ab",
+          "outline": "#908fa0",
+          "outline-variant": "#464554",
+          "surface-container-high": "#262a35",
+          "tertiary-container": "#a078ff"
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #0f131d;
+    color: #dfe2f1;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #171b26;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #464554;
+    border-radius: 4px;
+  }
+</style>
+<meta content="web_dashboard" name="shell-type"/>
+</head>
+<body class="h-full flex overflow-hidden bg-[#0f131d]">
+<!-- ASIDE: Unified Left Sidebar Navigation (Fixed Width 260px) -->
+<aside class="w-[260px] flex-shrink-0 bg-[#171b26] border-r border-[#464554] flex flex-col h-full z-30 select-none">
+<!-- Top Logo Area -->
+<div class="h-16 px-5 flex items-center border-b border-[#464554] flex-shrink-0 gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#6366f1] via-[#8083ff] to-[#a5b4fc] flex items-center justify-center shadow-lg shadow-[#8083ff]/20">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="text-[15px] font-bold tracking-tight text-[#dfe2f1] leading-none">CastraVision</span>
+<span class="text-[9px] font-mono tracking-wider text-[#a078ff] font-semibold mt-1">SME AI ENGINE</span>
+</div>
+</div>
+<!-- Navigation Scroll Area -->
+<div class="flex-1 overflow-y-auto custom-scrollbar py-4 px-3 space-y-6">
+<div>
+<div class="px-3 mb-2 flex items-center justify-between">
+<span class="text-[10px] font-mono font-semibold tracking-wider text-[#c7c4d7] uppercase">Workspace Navigation</span>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#262a35] text-[#a078ff] font-mono font-semibold">MANAGER</span>
+</div>
+<nav class="space-y-1">
+<!-- 1. Overview / Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<rect height="7" width="7" x="3" y="3"></rect>
+<rect height="7" width="7" x="14" y="3"></rect>
+<rect height="7" width="7" x="14" y="14"></rect>
+<rect height="7" width="7" x="3" y="14"></rect>
+</svg>
+<span class="truncate">Overview / Dashboard</span>
+</a>
+<!-- 2. Workspace Member -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+<circle cx="9" cy="7" r="4"></circle>
+<path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+</svg>
+<span class="truncate">Workspace Member</span>
+</a>
+<!-- 3. Role Management -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+</svg>
+<span class="truncate">Role Management</span>
+</a>
+<!-- 4. Approvals -->
+<a class="flex items-center justify-between px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<div class="flex items-center gap-3 min-w-0">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+<polyline points="22 4 12 14.01 9 11.01"></polyline>
+</svg>
+<span class="truncate">Approvals</span>
+</div>
+<span class="text-[10px] px-1.5 py-0.5 rounded-full bg-[#8083ff]/15 border border-[#8083ff]/30 text-[#8083ff] font-mono font-bold leading-none">3</span>
+</a>
+<!-- 5. Audit Log -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+<polyline points="14 2 14 8 20 8"></polyline>
+<line x1="16" x2="8" y1="13" y2="13"></line>
+<line x1="16" x2="8" y1="17" y2="17"></line>
+<polyline points="10 9 9 9 8 9"></polyline>
+</svg>
+<span class="truncate">Audit Log</span>
+</a>
+<!-- 6. Budget & ROAS (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-r-lg bg-[#262a35] border-l-[3px] border-[#8083ff] text-[#dfe2f1] font-semibold text-[13px] transition-all duration-150" href="#">
+<svg class="w-4 h-4 text-[#8083ff] flex-shrink-0" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+<polyline points="17 6 23 6 23 12"></polyline>
+</svg>
+<span class="truncate">Budget &amp; ROAS</span>
+</a>
+<!-- 7. Report -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<line x1="18" x2="18" y1="20" y2="10"></line>
+<line x1="12" x2="12" y1="20" y2="4"></line>
+<line x1="6" x2="6" y1="20" y2="14"></line>
+</svg>
+<span class="truncate">Report</span>
+</a>
+<!-- 8. Competitor Insights -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5Z"></path>
+</svg>
+<span class="truncate">Competitor Insights</span>
+</a>
+<!-- 9. Campaign Import -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+<polyline points="17 8 12 3 7 8"></polyline>
+<line x1="12" x2="12" y1="3" y2="15"></line>
+</svg>
+<span class="truncate">Campaign Import</span>
+</a>
+<!-- 10. Content Studio -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+</svg>
+<span class="truncate">Content Studio</span>
+</a>
+<!-- 11. Settings -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35]/60 text-[13px] font-medium transition-all group" href="#">
+<svg class="w-4 h-4 text-[#c7c4d7] group-hover:text-[#dfe2f1] flex-shrink-0 transition-colors" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<circle cx="12" cy="12" r="3"></circle>
+<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+</svg>
+<span class="truncate">Settings</span>
+</a>
+</nav>
+</div>
+</div>
+<!-- Bottom Footer Area (Inside Sidebar) -->
+<div class="p-3 border-t border-[#464554] bg-[#171b26] flex-shrink-0">
+<div class="bg-[#0a0e18] border border-[#464554]/70 rounded-lg p-2.5 flex items-center justify-between">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-7 h-7 rounded bg-[#262a35] border border-[#464554] flex items-center justify-center text-[11px] font-bold text-[#dfe2f1] flex-shrink-0">
+          AC
+        </div>
+<div class="min-w-0">
+<p class="text-[12px] font-semibold text-[#dfe2f1] truncate leading-tight">Acme Corp Enterprise</p>
+<p class="text-[10px] font-mono text-[#c7c4d7]/70 truncate">acme-corp-prod-01</p>
+</div>
+</div>
+<span class="text-[9px] px-1.5 py-0.5 rounded bg-[#a078ff]/15 border border-[#a078ff]/40 text-[#a078ff] font-mono font-bold uppercase leading-none">MANAGER</span>
+</div>
+</div>
+</aside>
+<!-- MAIN WRAPPER (Top Header + Cohesive Manager Main Canvas) -->
+<div class="flex-1 flex flex-col min-w-0 h-full overflow-hidden bg-[#0f131d]">
+<!-- HEADER: Top Bar (64px) -->
+<header class="h-16 bg-[#171b26] border-b border-[#464554] px-6 flex items-center justify-between flex-shrink-0 z-20">
+<!-- Breadcrumb -->
+<div class="flex items-center gap-2 text-[13px] font-medium text-[#c7c4d7]">
+<span class="hover:text-[#dfe2f1] cursor-pointer transition-colors">Workspace</span>
+<svg class="w-3.5 h-3.5 text-[#464554]" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" viewbox="0 0 24 24">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+<span class="text-[#dfe2f1] font-semibold">Budget &amp; ROAS</span>
+</div>
+<!-- Right Side Utility Widgets -->
+<div class="flex items-center gap-5">
+<!-- System Status -->
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#03b5d3] opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-[#03b5d3]"></span>
+</span>
+<span class="text-[12px] font-medium text-[#c7c4d7]">All systems nominal</span>
+</div>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- Notification Bell -->
+<button class="relative p-2 text-[#c7c4d7] hover:text-[#dfe2f1] hover:bg-[#262a35] rounded-lg transition-colors focus:outline-none">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24">
+<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+</svg>
+<span class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
+          3
+        </span>
+</button>
+<div class="h-5 w-px bg-[#464554]"></div>
+<!-- User Profile Widget -->
+<div class="flex items-center gap-3 pl-1">
+<div class="relative">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#8083ff] to-[#a078ff] text-white flex items-center justify-center font-bold text-xs shadow-md shadow-[#8083ff]/10">
+            SJ
+          </div>
+<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#03b5d3] rounded-full ring-2 ring-[#171b26]"></div>
+</div>
+<div class="flex flex-col text-left">
+<div class="flex items-center gap-1.5 leading-none">
+<span class="text-[13px] font-semibold text-[#dfe2f1]">Sarah Jenkins</span>
+<span class="px-1.5 py-0.5 rounded bg-[#a078ff]/15 border border-[#a078ff]/40 text-[9px] font-mono font-bold text-[#a078ff] uppercase leading-none">MANAGER</span>
+</div>
+<span class="text-[11px] text-[#c7c4d7]/70 font-mono mt-1">s.jenkins@acmecorp.com</span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CANVAS -->
+<main class="flex-1 bg-[#0f131d] overflow-y-auto custom-scrollbar p-8">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- PAGE HEADER -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+<div>
+<h1 class="text-2xl font-bold text-[#dfe2f1] tracking-tight">Performance-Based Budget Allocation</h1>
+<p class="text-sm text-[#c7c4d7] mt-1">
+            Optimize marketing spend based on channel performance and AI engine projections.
+          </p>
+</div>
+<div class="flex items-center gap-3">
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#262a35] hover:bg-[#353944] text-[#dfe2f1] border border-[#464554] text-xs font-semibold transition-colors" id="refresh-analysis-btn" type="button">
+<span class="material-symbols-outlined text-[17px] text-[#4cd7f6]">sync</span>
+<span>Refresh Analysis</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#8083ff] hover:bg-[#6c70f0] text-[#0d0096] font-bold text-xs transition-colors shadow-sm" type="button">
+<span>Review Recommendation</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- AI DIRECTIVE SUMMARY BANNER -->
+<div class="bg-[#1c1f2a] border border-[#8083ff]/40 rounded-lg p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-sm">
+<div class="flex items-center gap-3.5">
+<div class="w-9 h-9 rounded-lg bg-[#8083ff]/20 border border-[#8083ff]/40 flex items-center justify-center text-[#8083ff] flex-shrink-0">
+<span class="material-symbols-outlined text-[20px]">auto_graph</span>
+</div>
+<div>
+<span class="text-xs font-bold text-[#dfe2f1] block">Budget Optimization Recommendation</span>
+<p class="text-xs text-[#c7c4d7] mt-0.5">
+              Reallocate underperforming TikTok budget to Meta Ads to increase overall blended return.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="px-2.5 py-1 rounded bg-[#0a0e18] border border-[#464554] text-[#4cd7f6] text-xs font-mono font-medium flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4cd7f6]"></span>
+            Active Recommendation Ready
+          </span>
+</div>
+</div>
+<!-- TOP KPI METRIC CARDS (3 CLEAN CORE METRICS) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Card 1: Total Marketing Budget -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs font-mono text-[#c7c4d7] uppercase tracking-wider">
+<span>Total Marketing Budget</span>
+<span class="material-symbols-outlined text-[20px] text-[#8083ff]">account_balance_wallet</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2.5">
+<span class="text-3xl font-bold text-[#dfe2f1] font-sans">$125,000</span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#03b5d3] border border-[#464554]">
+              +8.5%
+            </span>
+</div>
+<div class="mt-3 pt-2.5 border-t border-[#464554]/60 text-xs text-[#c7c4d7]">
+<span>Compared to previous period ($115,200)</span>
+</div>
+</div>
+<!-- Card 2: Current ROAS -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs font-mono text-[#c7c4d7] uppercase tracking-wider">
+<span>Current ROAS</span>
+<span class="material-symbols-outlined text-[20px] text-[#03b5d3]">trending_up</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2.5">
+<span class="text-3xl font-bold text-[#dfe2f1] font-sans">3.42x</span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#03b5d3] border border-[#464554]">
+              +0.28x
+            </span>
+</div>
+<div class="mt-3 pt-2.5 border-t border-[#464554]/60 text-xs text-[#c7c4d7]">
+<span>Blended return across all active campaigns</span>
+</div>
+</div>
+<!-- Card 3: Projected ROAS -->
+<div class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between">
+<div class="flex items-center justify-between text-xs font-mono text-[#c7c4d7] uppercase tracking-wider">
+<span>Projected ROAS (Projection)</span>
+<span class="material-symbols-outlined text-[20px] text-[#a078ff]">auto_graph</span>
+</div>
+<div class="mt-4 flex items-baseline gap-2.5">
+<span class="text-3xl font-bold text-[#c0c1ff] font-sans">4.65x</span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#8083ff] border border-[#464554]">
+              +1.23x Projected
+            </span>
+</div>
+<div class="mt-3 pt-2.5 border-t border-[#464554]/60 text-xs text-[#c7c4d7]">
+<span>Estimated return after applying recommended reallocations</span>
+</div>
+</div>
+</section>
+<!-- MAIN SPLIT CONTENT GRID (8 COLS LEFT, 4 COLS RIGHT) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- LEFT: CHANNEL BUDGET DISTRIBUTION WITH COMPARATIVE BARS (8 COLS) -->
+<div class="lg:col-span-8 bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 space-y-5">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#464554] gap-3">
+<div>
+<h2 class="text-base font-bold text-[#dfe2f1]">Channel Budget Distribution &amp; Recommendation</h2>
+<p class="text-xs text-[#c7c4d7] mt-0.5">Comparative channel budget shifts based on channel efficiency.</p>
+</div>
+<!-- Timeframe Filter Tabs -->
+<div class="flex items-center bg-[#0a0e18] border border-[#464554] rounded-lg p-1 text-xs">
+<button class="px-2.5 py-1 rounded text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors">7 Days</button>
+<button class="px-2.5 py-1 rounded text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors">14 Days</button>
+<button class="px-2.5 py-1 rounded text-[#c7c4d7] hover:text-[#dfe2f1] transition-colors">30 Days</button>
+<button class="px-2.5 py-1 rounded bg-[#262a35] text-[#dfe2f1] font-semibold border border-[#464554]/60 shadow-sm">This Quarter</button>
+</div>
+</div>
+<!-- Channel Visual Progress Stack -->
+<div class="space-y-4">
+<!-- 1. Meta Ads -->
+<div class="p-4 bg-[#171b26] border border-[#464554] rounded-lg space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#4cd7f6] flex items-center justify-center font-mono text-xs font-bold">M</span>
+<span class="text-sm font-semibold text-[#dfe2f1]">Meta Ads</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">Advantage+ &amp; Retargeting</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs text-[#c7c4d7]">Expected ROAS: <strong class="text-[#dfe2f1]">4.80x</strong></span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#03b5d3] border border-[#464554]">
+                    +$7,500 (+16.7%)
+                  </span>
+</div>
+</div>
+<!-- Visual Bars (Current vs Recommended) -->
+<div class="space-y-1.5 text-xs text-[#c7c4d7]">
+<div class="flex justify-between items-center text-[11px]">
+<span>Current: $45,000 (36.0%)</span>
+<span class="font-medium text-[#4cd7f6]">Recommended: $52,500 (42.0%)</span>
+</div>
+<div class="space-y-1">
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#464554] h-full rounded-full" style="width: 36%"></div>
+</div>
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#03b5d3] h-full rounded-full" style="width: 42%"></div>
+</div>
+</div>
+<p class="text-[11px] text-[#c7c4d7] pt-1">
+High conversion efficiency. +$7,500 (+16.7%) to capture growing customer demand.
+</p>
+</div>
+</div>
+<!-- 2. Google Search Ads -->
+<div class="p-4 bg-[#171b26] border border-[#464554] rounded-lg space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#8083ff] flex items-center justify-center font-mono text-xs font-bold">G</span>
+<span class="text-sm font-semibold text-[#dfe2f1]">Google Search Ads</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">PMax &amp; Exact Match</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs text-[#c7c4d7]">Expected ROAS: <strong class="text-[#dfe2f1]">4.50x</strong></span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#ffb4ab] border border-[#464554]">
+                    -$2,500 (-5.0%)
+                  </span>
+</div>
+</div>
+<!-- Visual Bars (Current vs Recommended) -->
+<div class="space-y-1.5 text-xs text-[#c7c4d7]">
+<div class="flex justify-between items-center text-[11px]">
+<span>Current: $50,000 (40.0%)</span>
+<span class="font-medium text-[#c0c1ff]">Recommended: $47,500 (38.0%)</span>
+</div>
+<div class="space-y-1">
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#464554] h-full rounded-full" style="width: 40%"></div>
+</div>
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#8083ff] h-full rounded-full" style="width: 38%"></div>
+</div>
+</div>
+<p class="text-[11px] text-[#c7c4d7] pt-1">
+Steady search volume. -$2,500 (-5.0%) reallocation to higher-growth channels without reducing core keyword capture.
+</p>
+</div>
+</div>
+<!-- 3. TikTok Video Ads -->
+<div class="p-4 bg-[#171b26] border border-[#464554] rounded-lg space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#ffb4ab] flex items-center justify-center font-mono text-xs font-bold">T</span>
+<span class="text-sm font-semibold text-[#dfe2f1]">TikTok Video Ads</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">Spark Ads &amp; TopView</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs text-[#c7c4d7]">Expected ROAS: <strong class="text-[#dfe2f1]">3.20x</strong></span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#ffb4ab] border border-[#464554]">
+                    -$4,000 (-20.0%)
+                  </span>
+</div>
+</div>
+<!-- Visual Bars (Current vs Recommended) -->
+<div class="space-y-1.5 text-xs text-[#c7c4d7]">
+<div class="flex justify-between items-center text-[11px]">
+<span>Current: $20,000 (16.0%)</span>
+<span class="font-medium text-[#ffb4ab]">Recommended: $16,000 (12.8%)</span>
+</div>
+<div class="space-y-1">
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#464554] h-full rounded-full" style="width: 16%"></div>
+</div>
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#ffb4ab] h-full rounded-full" style="width: 12.8%"></div>
+</div>
+</div>
+<p class="text-[11px] text-[#c7c4d7] pt-1">
+CPA rising above target. -$4,000 (-20.0%) spend reduction to protect ROI until creative refresh is ready.
+</p>
+</div>
+</div>
+<!-- 4. Email Marketing -->
+<div class="p-4 bg-[#171b26] border border-[#464554] rounded-lg space-y-3">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#a078ff] flex items-center justify-center font-mono text-xs font-bold">E</span>
+<span class="text-sm font-semibold text-[#dfe2f1]">Email Marketing</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">Retention &amp; SMS</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-xs text-[#c7c4d7]">Expected ROAS: <strong class="text-[#dfe2f1]">6.10x</strong></span>
+<span class="text-xs font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#ffb4ab] border border-[#464554]">
+                    -$1,000 (-10.0%)
+                  </span>
+</div>
+</div>
+<!-- Visual Bars (Current vs Recommended) -->
+<div class="space-y-1.5 text-xs text-[#c7c4d7]">
+<div class="flex justify-between items-center text-[11px]">
+<span>Current: $10,000 (8.0%)</span>
+<span class="font-medium text-[#a078ff]">Recommended: $9,000 (7.2%)</span>
+</div>
+<div class="space-y-1">
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#464554] h-full rounded-full" style="width: 8%"></div>
+</div>
+<div class="w-full bg-[#0a0e18] h-2 rounded-full overflow-hidden border border-[#464554]/50">
+<div class="bg-[#a078ff] h-full rounded-full" style="width: 7.2%"></div>
+</div>
+</div>
+<p class="text-[11px] text-[#c7c4d7] pt-1">
+Stable retention channel. -$1,000 (-10.0%) to optimize marginal return.
+</p>
+</div>
+</div>
+</div>
+<!-- Bottom Legend -->
+<div class="flex items-center justify-between pt-3 border-t border-[#464554]/60 text-xs text-[#c7c4d7]">
+<div class="flex items-center gap-5">
+<span class="flex items-center gap-1.5">
+<span class="w-3 h-2 rounded-sm bg-[#464554]"></span>
+                Current Budget
+              </span>
+<span class="flex items-center gap-1.5">
+<span class="w-3 h-2 rounded-sm bg-[#03b5d3]"></span>
+                Recommended Budget
+              </span>
+</div>
+<span class="font-mono text-[#03b5d3]">Total Rebalance: $125,000 Zero-Sum</span>
+</div>
+</div>
+<!-- RIGHT: AI REALLOCATION DIRECTIVES (4 COLS) -->
+<div class="lg:col-span-4 bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 space-y-4 flex flex-col justify-between">
+<div class="space-y-4">
+<!-- Header -->
+<div class="flex items-center justify-between pb-3 border-b border-[#464554]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[20px] text-[#8083ff]">psychology</span>
+<h3 class="text-base font-bold text-[#dfe2f1]">AI Reallocation Directives</h3>
+</div>
+<span class="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-[#0a0e18] text-[#8083ff] border border-[#464554]">
+                MARKETING AI
+              </span>
+</div>
+<!-- Clear Plain Language Summary Directives -->
+<div class="space-y-3">
+<!-- Meta Directive -->
+<div class="p-3 bg-[#171b26] border border-[#464554] rounded-lg">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs font-bold text-[#4cd7f6] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#4cd7f6]"></span>
+                  Meta Ads
+                </span>
+<span class="text-[11px] font-mono text-[#03b5d3] font-semibold">+$7,500</span>
+</div>
+<p class="text-xs text-[#c7c4d7] leading-relaxed">
+High conversion efficiency. +$7,500 (+16.7%) to capture growing customer demand.
+</p>
+</div>
+<!-- Google Directive -->
+<div class="p-3 bg-[#171b26] border border-[#464554] rounded-lg">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs font-bold text-[#c0c1ff] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#8083ff]"></span>
+                  Google Search Ads
+                </span>
+<span class="text-[11px] font-mono text-[#ffb4ab] font-semibold">-$2,500</span>
+</div>
+<p class="text-xs text-[#c7c4d7] leading-relaxed">
+Steady search volume. -$2,500 (-5.0%) reallocation to higher-growth channels without reducing core keyword capture.
+</p>
+</div>
+<!-- TikTok Directive -->
+<div class="p-3 bg-[#171b26] border border-[#ffb4ab]/30 bg-[#0a0e18]/60 rounded-lg">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs font-bold text-[#ffb4ab] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#ffb4ab]"></span>
+                  TikTok Video Ads
+                </span>
+<span class="text-[11px] font-mono text-[#ffb4ab] font-semibold">-$4,000</span>
+</div>
+<p class="text-xs text-[#c7c4d7] leading-relaxed">
+CPA rising above target. -$4,000 (-20.0%) spend reduction to protect ROI until creative refresh is ready.
+</p>
+</div>
+<!-- Email Directive -->
+<div class="p-3 bg-[#171b26] border border-[#464554] rounded-lg">
+<div class="flex items-center justify-between mb-1">
+<span class="text-xs font-bold text-[#a078ff] flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#a078ff]"></span>
+                  Email Marketing
+                </span>
+<span class="text-[11px] font-mono text-[#ffb4ab] font-semibold">-$1,000</span>
+</div>
+<p class="text-xs text-[#c7c4d7] leading-relaxed">
+Stable retention channel. -$1,000 (-10.0%) to optimize marginal return.
+</p>
+</div>
+</div>
+</div>
+<!-- Card Call to Action -->
+<div class="pt-3 border-t border-[#464554]">
+<button class="w-full py-2.5 px-3 rounded-lg bg-[#8083ff] hover:bg-[#6c70f0] text-[#0d0096] text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm" type="button">
+<span>Review Recommendation</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- BOTTOM SECTION: CHANNEL REALLOCATION TABLE & VARIANCE MATRIX -->
+<section class="bg-[#1c1f2a] border border-[#464554] rounded-lg p-6 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#464554] gap-3">
+<div>
+<h2 class="text-base font-bold text-[#dfe2f1]">Channel Reallocation Details &amp; Variance Matrix</h2>
+<p class="text-xs text-[#c7c4d7] mt-0.5">Granular comparison of current vs recommended marketing allocations.</p>
+</div>
+<div class="flex items-center gap-2.5">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#262a35] hover:bg-[#353944] text-[#dfe2f1] border border-[#464554] text-xs font-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export CSV</span>
+</button>
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#262a35] hover:bg-[#353944] text-[#dfe2f1] border border-[#464554] text-xs font-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+<span>Filter</span>
+</button>
+</div>
+</div>
+<!-- Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-[#464554] text-[11px] font-mono text-[#c7c4d7] uppercase tracking-wider bg-[#0a0e18]">
+<th class="py-3 px-4">Marketing Channel</th>
+<th class="py-3 px-4">Current Budget</th>
+<th class="py-3 px-4">Recommended Budget</th>
+<th class="py-3 px-4">Budget Change</th>
+<th class="py-3 px-4">Current ROAS</th>
+<th class="py-3 px-4">Projected ROAS</th>
+<th class="py-3 px-4">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#464554]/50 text-sm text-[#dfe2f1]">
+<!-- Row 1: Meta Ads -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#4cd7f6] font-mono text-xs font-bold flex items-center justify-center">M</span>
+<div>
+<span class="font-semibold block leading-tight">Meta Ads</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">Advantage+ &amp; Retargeting</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono">$45,000</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#dfe2f1]">$52,500</td>
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs text-[#03b5d3] px-2 py-0.5 rounded bg-[#0a0e18] border border-[#464554] font-semibold">
+                    +$7,500 (+16.7%)
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">3.85x</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#03b5d3]">4.80x</td>
+<td class="py-3.5 px-4">
+<span class="text-xs px-2 py-0.5 rounded bg-[#0a0e18] text-[#03b5d3] border border-[#464554] font-medium">
+                    Scaling Budget
+                  </span>
+</td>
+</tr>
+<!-- Row 2: Google Search Ads -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#8083ff] font-mono text-xs font-bold flex items-center justify-center">G</span>
+<div>
+<span class="font-semibold block leading-tight">Google Search Ads</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">PMax &amp; Exact Search</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono">$50,000</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#dfe2f1]">$47,500</td>
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs text-[#ffb4ab] px-2 py-0.5 rounded bg-[#0a0e18] border border-[#464554] font-semibold">
+                    -$2,500 (-5.0%)
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">4.12x</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#dfe2f1]">4.50x</td>
+<td class="py-3.5 px-4">
+<span class="text-xs px-2 py-0.5 rounded bg-[#0a0e18] text-[#c7c4d7] border border-[#464554] font-medium">
+                    Optimized
+                  </span>
+</td>
+</tr>
+<!-- Row 3: TikTok Video Ads -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#ffb4ab] font-mono text-xs font-bold flex items-center justify-center">T</span>
+<div>
+<span class="font-semibold block leading-tight">TikTok Video Ads</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">TopView &amp; Spark Ads</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono">$20,000</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#dfe2f1]">$16,000</td>
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs text-[#ffb4ab] px-2 py-0.5 rounded bg-[#0a0e18] border border-[#464554] font-semibold">
+                    -$4,000 (-20.0%)
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">2.10x</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#dfe2f1]">3.20x</td>
+<td class="py-3.5 px-4">
+<span class="text-xs px-2 py-0.5 rounded bg-[#0a0e18] text-[#ffb4ab] border border-[#464554] font-medium">
+                    Spend Reduced
+                  </span>
+</td>
+</tr>
+<!-- Row 4: Email Marketing -->
+<tr class="hover:bg-[#262a35]/40 transition-colors">
+<td class="py-3.5 px-4">
+<div class="flex items-center gap-2.5">
+<span class="w-6 h-6 rounded bg-[#262a35] border border-[#464554] text-[#a078ff] font-mono text-xs font-bold flex items-center justify-center">E</span>
+<div>
+<span class="font-semibold block leading-tight">Email Marketing</span>
+<span class="text-[11px] text-[#c7c4d7] font-mono">Retention &amp; SMS</span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-4 font-mono">$10,000</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#dfe2f1]">$9,000</td>
+<td class="py-3.5 px-4">
+<span class="font-mono text-xs text-[#ffb4ab] px-2 py-0.5 rounded bg-[#0a0e18] border border-[#464554] font-semibold">
+                    -$1,000 (-10.0%)
+                  </span>
+</td>
+<td class="py-3.5 px-4 font-mono text-[#c7c4d7]">5.90x</td>
+<td class="py-3.5 px-4 font-mono font-semibold text-[#03b5d3]">6.10x</td>
+<td class="py-3.5 px-4">
+<span class="text-xs px-2 py-0.5 rounded bg-[#0a0e18] text-[#c7c4d7] border border-[#464554] font-medium">
+                    Stable Return
+                  </span>
+</td>
+</tr>
+</tbody>
+<tfoot class="border-t border-[#464554] bg-[#0a0e18] font-mono text-xs">
+<tr class="text-[#dfe2f1] font-semibold">
+<td class="py-3 px-4 uppercase text-[#c7c4d7]">Total Portfolio</td>
+<td class="py-3 px-4">$125,000</td>
+<td class="py-3 px-4 text-[#8083ff]">$125,000</td>
+<td class="py-3 px-4 text-[#03b5d3]">$0 (Zero-Sum Shift)</td>
+<td class="py-3 px-4 text-[#c7c4d7]">3.42x</td>
+<td class="py-3 px-4 text-[#8083ff]">4.65x</td>
+<td class="py-3 px-4 text-[#03b5d3] font-medium">+1.23x Projected</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<!-- Primary & Secondary Action Buttons Footer -->
+<div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-[#464554] gap-3">
+<button class="px-4 py-2 rounded-lg bg-[#0a0e18] hover:bg-[#262a35] text-[#c7c4d7] hover:text-[#dfe2f1] border border-[#464554] text-xs font-semibold flex items-center gap-1.5 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">restart_alt</span>
+<span>Reset Allocation</span>
+</button>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 rounded-lg bg-[#262a35] hover:bg-[#353944] text-[#dfe2f1] border border-[#464554] text-xs font-semibold transition-colors" type="button">
+              Save Draft Allocation
+            </button>
+<button class="px-4 py-2 rounded-lg bg-[#8083ff] hover:bg-[#6c70f0] text-[#0d0096] font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm" type="button">
+<span>Review Recommendation</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</div>
+</body></html>

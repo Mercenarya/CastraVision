@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-19",
+  "environment": "local frontend/Django with hosted Supabase; demo workspace only",
+  "evidenceType": "summarized observations from actual browser actions and independent user-JWT readback",
+  "diskDownloadNotVerified": true,
+  "observations": [
+    { "feature": "dashboard", "fixtureActorVisible": true, "fixtureProposalVisible": true },
+    { "feature": "dashboard invite", "realFormOpened": true, "cancelledWithoutSending": true },
+    { "feature": "header search", "queryRetained": true, "resultsVisible": false, "searchApiRequests": 0 },
+    { "feature": "create team", "createdThroughDialog": true, "dialogClosed": true, "visibleAfterRemount": true },
+    { "feature": "proposal search", "search": "Bản nháp tạo từ UI", "matchingRows": 1 },
+    { "feature": "UI approve content", "databaseStatus": "approved", "databaseHistoryEntries": 2 },
+    { "feature": "export proposal CSV", "blobBytes": 1885, "containsActualAuditProposal": true },
+    { "feature": "Role Management export", "workspaceMatchesLive": false, "exportedCounts": { "Admin": 3, "Manager": 4, "Member": 7 }, "actualCounts": { "admin": 1, "manager": 1, "member": 1 } },
+    { "feature": "approval badge", "databasePendingAtMeasurement": 4, "sidebarPendingAtMeasurement": 3 },
+    { "feature": "Audit Log", "databaseCountAtMeasurement": 65, "fixtureTotalShown": 142, "csvBlobBytes": 2362, "csvContainsActualAudit": false, "csvContainsFixtureActor": true },
+    { "feature": "budget draft", "savedInUserWorkspaceLocalStorage": true, "restoredOnRemount": true, "originalBrowserValueRestored": true },
+    { "feature": "recommendation submit", "uiSaysSubmitted": true, "databaseProposalCountBefore": 10, "databaseProposalCountAfter": 10 },
+    { "feature": "Reports CSV", "blobBytes": 771, "containsSampleCampaign": true, "containsActualCampaign": false },
+    { "feature": "Reports PDF", "buttonLabel": "Export PDF (Unavailable)", "actualPdfCreated": false },
+    { "feature": "Add Competitor", "dialogCountAfterClick": 0, "drawerOpened": false },
+    { "feature": "CSV upload UI", "browserGeneratedFile": true, "operatingSystemPickerNotVerified": true, "previewRows": 2, "committedRowsReadBackFromDatabase": 2, "uploadCleared": true },
+    { "feature": "Content Studio UI", "uniqueDraftReadBackFromDatabase": true, "databaseStatus": "draft", "proposalReviewOpened": true },
+    { "feature": "Business Profile UI", "repeatedRestRequestsReturn200": true, "loadingLoopObserved": true, "formUnavailableDuringLoop": true, "uiEditNotCompleted": true, "originalBusinessDataRestored": true },
+    { "feature": "personal account", "nameFieldMatchesAuthMetadata": false, "publicProfileRowExists": false, "passwordChangeNotAttempted": true },
+    { "feature": "notification preferences", "savedToBrowser": true, "persistedAcrossRemount": true, "originalBrowserValueRestored": true },
+    { "feature": "language", "changedToVietnamese": true, "englishRestored": true },
+    { "feature": "proposal notifications", "actualAuditNotificationFound": true, "readFlagPersisted": true },
+    { "feature": "employee fixture cleanup", "roleRestoredToMember": true, "teamCountRestored": 1 }
+  ]
+}

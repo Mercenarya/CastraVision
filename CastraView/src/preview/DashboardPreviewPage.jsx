@@ -13,12 +13,11 @@ import LeaderLayout from '../leader/LeaderLayout'
 import MemberLayout from '../member/MemberLayout'
 import MainLeaderDashboard from '../leader/screens/LeaderDashboard'
 import MainEmployeeDashboard from '../member/screens/MemberDashboard'
-import {
-  ApprovalQueuePage,
-  BudgetOptimizationPage,
-  ReportsPage,
-  CompetitorInsightsPage,
-} from '../actor-ui/ActorPages'
+import { ApprovalQueuePage } from '../actor-ui/ActorPages'
+import CompetitorInsightsPage from '../pages/CompetitorInsightsPage'
+import BudgetOptimizationPage from '../pages/BudgetOptimizationPage'
+import RecommendationReviewPage from '../pages/RecommendationReviewPage'
+import ReportsPage from '../pages/ReportsPage'
 
 
 // ─── Development Preview Mock Datasets ──────────────────────────────────────
@@ -34,20 +33,32 @@ const MOCK_PREVIEW_PROFILE = {
   preferred_channels: ['Meta', 'Google Ads', 'TikTok'],
 }
 
+const MOCK_PREVIEW_MEMBERSHIP = {
+  workspaceId: 'ws-preview-001',
+  workspaceName: 'Acme Corp',
+  role: 'admin',
+}
+
 const MOCK_PREVIEW_USERS = {
   marketing_manager: {
+    id: 'preview-mgr-001',
+    company_id: 'preview-comp-001',
     email: 'sarah.jenkins@acmecorp.com',
     full_name: 'Sarah Jenkins',
     role: 'admin',
     workspaceRole: 'admin',
   },
   leader: {
+    id: 'preview-ldr-001',
+    company_id: 'preview-comp-001',
     email: 'marcus.vance@acmecorp.com',
     full_name: 'Marcus Vance',
     role: 'manager',
     workspaceRole: 'manager',
   },
   employee: {
+    id: 'preview-emp-001',
+    company_id: 'preview-comp-001',
     email: 'member@acmecorp.com',
     full_name: 'Alex Mercer',
     role: 'member',
@@ -222,9 +233,24 @@ export default function DashboardPreviewPage({ onExit, role: defaultRole = 'mark
                 notify={handleNotify}
               />
             )}
-            {previewPage === 'budget' && <BudgetOptimizationPage notify={handleNotify} />}
-            {previewPage === 'reports' && <ReportsPage profile={MOCK_PREVIEW_PROFILE} notify={handleNotify} />}
-            {previewPage === 'insights' && <CompetitorInsightsPage notify={handleNotify} />}
+            {previewPage === 'budget' && (
+              <BudgetOptimizationPage
+                user={currentUser}
+                profile={MOCK_PREVIEW_PROFILE}
+                membership={MOCK_PREVIEW_MEMBERSHIP}
+                notify={handleNotify}
+                setPage={setPreviewPage}
+              />
+            )}
+            {previewPage === 'budget-review' && (
+              <RecommendationReviewPage setPage={setPreviewPage} notify={handleNotify} />
+            )}
+            {previewPage === 'reports' && (
+              <ReportsPage profile={MOCK_PREVIEW_PROFILE} notify={handleNotify} />
+            )}
+            {previewPage === 'insights' && (
+              <CompetitorInsightsPage notify={handleNotify} />
+            )}
             {previewPage === 'import' && (
               <div className="card" style={{ padding: 32, margin: '20px 0' }}>
                 <h2>Campaign Data Import Preview</h2>
@@ -355,7 +381,12 @@ export default function DashboardPreviewPage({ onExit, role: defaultRole = 'mark
               <ApprovalQueuePage notify={handleNotify} role="manager" />
             )}
             {(previewPage === 'performance' || previewPage === 'budget') && (
-              <BudgetOptimizationPage notify={handleNotify} />
+              <BudgetOptimizationPage
+                user={currentUser}
+                profile={MOCK_PREVIEW_PROFILE}
+                membership={MOCK_PREVIEW_MEMBERSHIP}
+                notify={handleNotify}
+              />
             )}
             {previewPage === 'reports' && <ReportsPage profile={MOCK_PREVIEW_PROFILE} notify={handleNotify} />}
             {previewPage === 'insights' && <CompetitorInsightsPage notify={handleNotify} />}
@@ -650,7 +681,14 @@ export default function DashboardPreviewPage({ onExit, role: defaultRole = 'mark
                 </button>
               </div>
             )}
-            {previewPage === 'budget' && <BudgetOptimizationPage notify={handleNotify} />}
+            {previewPage === 'budget' && (
+              <BudgetOptimizationPage
+                user={currentUser}
+                profile={MOCK_PREVIEW_PROFILE}
+                membership={MOCK_PREVIEW_MEMBERSHIP}
+                notify={handleNotify}
+              />
+            )}
             {previewPage === 'import' && (
               <div className="card" style={{ padding: 32, margin: '20px 0', background: '#0b1120', border: '1px solid #1e293b', borderRadius: 12 }}>
                 <h2>Campaign Data Import Preview</h2>

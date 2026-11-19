@@ -1,0 +1,93 @@
+{
+  "schemaMissingColumns": [
+    "clicks",
+    "conversions",
+    "created_by",
+    "import_batch_id",
+    "revenue",
+    "source_filename",
+    "source_row"
+  ],
+  "schemaProbe": 400,
+  "apiChecks": [
+    {
+      "path": "auth/session/",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "business-profile/",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "campaign-imports/",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "path": "workspace/personnel/",
+      "status": 403,
+      "expected": 403,
+      "pass": true
+    },
+    {
+      "path": "workspace/teams/",
+      "status": 403,
+      "expected": 403,
+      "pass": true
+    },
+    {
+      "path": "workspace/recruitment/",
+      "status": 403,
+      "expected": 403,
+      "pass": true
+    },
+    {
+      "path": "business-profile/ foreign workspace",
+      "status": 403,
+      "expected": 403,
+      "pass": true
+    }
+  ],
+  "rlsChecks": [
+    {
+      "check": "direct membership write denied",
+      "status": 403,
+      "pass": true
+    },
+    {
+      "check": "Leader cannot read audit log rows",
+      "status": 200,
+      "rows": 0,
+      "pass": true
+    },
+    {
+      "check": "Data API foreign workspace filtered by RLS",
+      "status": 200,
+      "rows": 0,
+      "pass": true
+    },
+    {
+      "check": "Failed import created no rows",
+      "status": 200,
+      "rows": 0,
+      "pass": true
+    }
+  ],
+  "ragProbe": {
+    "database": "sqlite",
+    "knowledgeTableExists": false,
+    "actualSearchException": "OperationalError",
+    "missingTableFailure": true
+  },
+  "actualForeignWorkspaceCheck": {
+    "existingWorkspaceVerified": true,
+    "backendStatus": 403,
+    "dataApiStatus": 200,
+    "visibleRows": 0
+  }
+}

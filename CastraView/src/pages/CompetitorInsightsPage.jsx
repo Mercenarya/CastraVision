@@ -1,102 +1,517 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Activity,
-  AlertTriangle,
   ArrowRight,
-  BarChart3,
-  Check,
+  Calendar,
   ChevronDown,
-  Cloud,
-  Download,
-  Info,
+  Clock,
+  Plus,
   RefreshCw,
-  RotateCw,
-  Settings2,
-  Sparkles,
-  Target,
-  UploadCloud,
-  X,
-  Zap,
+  Search,
 } from 'lucide-react'
-import PageIntro from '@/components/PageIntro'
-import Panel from '@/components/Panel'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
-const competitorRows = [
-  ['Strider Athletics', 'Activewear & Marathon Running Series', '$45k – $60k', '142 ads', 'Meta 55% · Google 35% · TikTok 10%', 'Lightweight Breathability', 'Direct Rival'],
-  ['Apex Footwear Co.', 'Endurance footwear & cross-country trainers', '$25k – $35k', '88 ads', 'Google 60% · Meta 30% · TikTok 10%', 'Durability & Cushioning', 'Trail & Utility'],
-  ['Urban Pace Brand', 'Lifestyle athletic apparel & commuter gear', '$15k – $25k', '46 ads', 'TikTok 50% · Meta 40% · Google 10%', 'Streetwear Lifestyle', 'Fast Growing'],
+const initialCompetitors = [
+  {
+    id: 'aa',
+    initials: 'AA',
+    name: 'AeroAthletics Co.',
+    category: 'Athleisure • Direct Competitor',
+    classification: 'Monitored (Direct)',
+    status: 'Active',
+    statusTone: 'text-[#4cd7f6] bg-[#262a35]',
+    avatarTone: 'text-[#4cd7f6] bg-[#262a35]',
+    shareOfVoice: '32%',
+    sovTone: 'text-[#4cd7f6]',
+    channels: ['Meta Ads', 'TikTok', 'Google PMax'],
+    recentActivity: 'Increased discount promo frequency on Reels',
+    lastPulse: '2 days ago',
+  },
+  {
+    id: 'sg',
+    initials: 'SG',
+    name: 'StrataSport Gear',
+    category: 'Performance Wear • Direct Competitor',
+    classification: 'Monitored (Direct)',
+    status: 'Moderate',
+    statusTone: 'text-[#8083ff] bg-[#262a35]',
+    avatarTone: 'text-[#8083ff] bg-[#262a35]',
+    shareOfVoice: '24%',
+    sovTone: 'text-[#8083ff]',
+    channels: ['Google Search', 'YouTube'],
+    recentActivity: 'Bidding heavily on brand retargeting keywords',
+    lastPulse: '4 days ago',
+  },
+  {
+    id: 'vm',
+    initials: 'VM',
+    name: 'VeloMotion Urban',
+    category: 'Lifestyle Apparel • Market Challenger',
+    classification: 'System Discovered',
+    status: 'Rising',
+    statusTone: 'text-[#03b5d3] bg-[#262a35]',
+    avatarTone: 'text-[#03b5d3] bg-[#262a35]',
+    shareOfVoice: '18%',
+    sovTone: 'text-[#03b5d3]',
+    channels: ['TikTok Spark Ads', 'Creator Collabs'],
+    recentActivity: 'Surging influencer UGC collaborations',
+    lastPulse: 'Yesterday',
+  },
 ]
 
-function CompetitorCard({ row, index }) {
-  const [name, category, spend, ads, allocation, angle, badge] = row
-  return <article className="rounded-lg bg-muted/60 p-4"><div className="flex items-start gap-3"><span className="grid size-10 place-items-center rounded-lg bg-muted text-lg font-bold text-primary">{name[0]}</span><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-2"><strong>{name}</strong><small className={cn('rounded px-2 py-1 text-[10px]', index === 0 ? 'text-info' : 'text-primary')}>{badge}</small></div><small className="block text-xs text-muted-foreground">{category}</small></div><div className="hidden text-right sm:block"><small className="block text-[10px] text-muted-foreground">EST. MONTHLY SPEND</small><b>{spend}</b><small className="ml-6 text-[10px] text-muted-foreground">ACTIVE AD COUNT</small><b className="ml-2 text-primary">{ads}</b></div></div><div className="mt-4 grid items-center gap-3 text-xs sm:grid-cols-[1fr_auto]"><div><div className="flex justify-between text-muted-foreground"><span>Channel Allocation</span><span>{allocation}</span></div><div className="mt-2 flex h-2 overflow-hidden rounded-full"><span className={cn(index === 0 ? 'w-[55%]' : index === 1 ? 'w-[60%]' : 'w-[10%]', 'bg-violet')} /><span className={cn(index === 0 ? 'w-[35%]' : index === 1 ? 'w-[30%]' : 'w-[50%]', 'bg-info')} /><span className={cn(index === 0 ? 'w-[10%]' : index === 1 ? 'w-[10%]' : 'w-[40%]', 'bg-violet')} /></div></div><div className="border-l border-border pl-4 text-muted-foreground">TOP CREATIVE ANGLE<br /><b className="text-foreground">“{angle}”</b></div></div></article>
-}
-CompetitorCard.propTypes = { row: PropTypes.arrayOf(PropTypes.string).isRequired, index: PropTypes.number.isRequired }
-
-function ClassicDashboard({ notify, mode, setMode }) {
-  const [processing, setProcessing] = useState(false)
-  const [competitors] = useState('Strider Athletics, Apex Footwear')
-  const entities = useMemo(() => competitors.split(',').map((item) => item.trim()).filter(Boolean), [competitors])
-  function analyze() {
-    setProcessing(true)
-    window.setTimeout(() => { setProcessing(false); notify?.('Market signals refreshed.') }, 600)
-  }
-  return <>
-    <Header mode={mode} setMode={setMode} title="Competitor Analysis & Market Trends" subtitle="Strategic benchmarks, competitor ad frequency, and category CPM/CPA market trends across enterprise direct-to-consumer cohorts." action={<><select className="w-[225px]" aria-label="Category scope"><option>Retail &amp; E-commerce Activewear</option><option>All categories</option></select><Button variant="secondary" type="button" onClick={analyze}><RefreshCw /> Refresh Signals</Button></>} />
-    <div className="mb-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{[['CATEGORY AVG CTR', '2.15%', 'vs Category', 'Acme Corp: 3.42% (+1.27% advantage)', 'Leading'], ['INDUSTRY BENCHMARK CPA', '$32.40', 'Median', 'Acme Corp: $24.80 ($7.60 lower cost)', 'Cost Efficient'], ['MARKET AD FREQUENCY', '+18.2%', 'QoQ', 'Increased competitor activity in Q4', 'Surging'], ['DOMINANT CATEGORY CHANNEL', 'Search', 'Google Ads', '52% aggregate competitor budget share', 'High Volume']].map(([label, value, suffix, detail, badge]) => <article key={label} className="rounded-xl border border-border bg-card p-4"><div className="flex justify-between gap-2"><span className="text-[11px] font-bold tracking-wider text-muted-foreground">{label}</span><span className="rounded bg-violet/20 px-2 py-1 text-[10px] text-primary">{badge}</span></div><div className="mt-8 flex items-baseline gap-2"><strong className="text-[31px] leading-none">{value}</strong><small className="text-xs text-info">{suffix}</small></div><p className="mt-3 text-xs text-muted-foreground">↗ {detail}</p></article>)}</div>
-    {processing && <div className="mb-4 flex items-center gap-2 text-sm text-info"><Activity className="size-4 animate-pulse" /> Collecting real-time market signals…</div>}
-    <div className="grid gap-6 lg:grid-cols-[minmax(0,2.15fr)_310px]"><div><Panel title="◎  Tracked Competitors & Channel Footprint" meta={`${entities.length || 3} DETECTED`}><div className="grid gap-3 p-4">{competitorRows.map((row, index) => <CompetitorCard key={row[0]} row={row} index={index} />)}</div></Panel><Panel title="14-Day Category Impression Surge Profile" meta="● Google Ads   ● Meta Ads   ● TikTok Ads"><div className="p-5"><div className="relative h-36 border-b border-border"><svg className="h-full w-full" viewBox="0 0 700 130" preserveAspectRatio="none" aria-label="Impression surge trend chart" role="img"><polyline points="0,96 70,88 140,84 210,78 280,62 350,61 420,55 490,52 560,38 630,29 700,22" fill="none" stroke="var(--info)" strokeWidth="3" /><polyline points="0,74 70,70 140,76 210,64 280,56 350,38 420,42 490,29 560,18 630,27 700,14" fill="none" stroke="var(--primary)" strokeWidth="3" /><polyline points="0,112 70,108 140,105 210,101 280,91 350,76 420,47 490,36 560,44 630,31 700,27" fill="none" stroke="var(--violet)" strokeWidth="3" /></svg></div><div className="mt-3 flex justify-between text-[11px] text-muted-foreground"><span>Day -14</span><span>Day -10</span><span>Day -7</span><span>Day -3</span><span>Today (Peak Volume)</span></div></div></Panel></div><div className="grid content-start gap-5"><Panel title="✦  Intelligence & Tactics" meta="Machine synthesized auction responses."><div className="p-4"><div className="rounded-lg bg-muted/60 p-4"><span className="text-xs text-coral">△ Category Trend Alert</span><h3 className="mt-3 font-semibold">Competitor creative volume on TikTok increased by <b className="text-info">42%</b> over the last 14 days, driving up ad auction CPMs by <b className="text-coral">14%</b>.</h3><small className="text-muted-foreground">Observed across 19 direct competitor accounts in North American tier-1 markets.</small></div></div></Panel><Panel title="☼  Recommended Tactical Response" meta="Castra Engine v4"><div className="grid gap-3 p-4">{[['Search Arbitrage Opportunity', 'Capitalize on Google Search queries where competitor bids remain fragmented. Shift $6.4k ad allocation from short-form video into high-intent trail runner keywords.'], ['Creative Positioning Pivot', 'Differentiate messaging on Meta Ads around verified shoe endurance rather than discount discounting.']].map(([title, body], index) => <article key={title} className="rounded-lg bg-muted/60 p-3"><span className="mr-2 inline-grid size-6 place-items-center rounded bg-violet text-xs">{index + 1}</span><strong>{title}</strong><p className="mt-2 text-xs leading-relaxed text-muted-foreground">{body}</p></article>)}<Button type="button" className="w-full" onClick={() => notify?.('Tactical response incorporated into Strategy.')}><Zap /> Incorporate into Strategy (FR02)</Button></div></Panel><Panel title="FEED LOG"><div className="grid gap-2 p-4 text-xs text-muted-foreground"><span>Strider added 8 Meta carousel variants <small className="float-right">18m ago</small></span><span>Apex CPC bid elevated by +6.8% <small className="float-right">1h ago</small></span><span>Urban Pace test landing page detected <small className="float-right">3h ago</small></span></div></Panel></div></div>
-  </>
-}
-ClassicDashboard.propTypes = { notify: PropTypes.func, mode: PropTypes.string.isRequired, setMode: PropTypes.func.isRequired }
-
-function Field({ label, value, onChange, select }) {
-  return <label className="relative flex h-[58px] min-w-0 flex-1 flex-col justify-between rounded-lg bg-background p-2.5"><span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{label}</span>{select ? <select value={value} onChange={(event) => onChange?.(event.target.value)} className="w-full appearance-none bg-transparent pr-5 text-sm outline-none"><option>North America · Retail &amp; Activewear</option><option>Global Direct-to-Consumer</option><option>Europe · Running Footwear</option></select> : <input value={value} readOnly={!onChange} onChange={(event) => onChange?.(event.target.value)} className="w-full truncate bg-transparent text-sm outline-none" />}{select && <ChevronDown className="pointer-events-none absolute right-3 bottom-3 size-3.5 text-muted-foreground" />}</label>
-}
-Field.propTypes = { label: PropTypes.string.isRequired, value: PropTypes.string.isRequired, onChange: PropTypes.func, select: PropTypes.bool }
-
-function ModeButtons({ mode, setMode }) {
-  return <div className="flex flex-wrap gap-1 rounded-lg border border-border bg-card p-1">{[['dashboard', 'Dashboard'], ['workspace', 'Workspace'], ['processing', 'Processing']].map(([value, label]) => <button type="button" key={value} onClick={() => setMode(value)} className={cn('rounded-md px-2.5 py-1.5 text-[11px] font-semibold text-muted-foreground transition-colors', mode === value && 'bg-primary text-primary-foreground')}>{label}</button>)}</div>
-}
-ModeButtons.propTypes = { mode: PropTypes.string.isRequired, setMode: PropTypes.func.isRequired }
-
-function Header({ mode, setMode, title, subtitle, action }) {
-  return <PageIntro code="FR09 // MARKET INTELLIGENCE" title={title} subtitle={subtitle} action={<div className="flex flex-wrap items-center justify-end gap-2"><ModeButtons mode={mode} setMode={setMode} />{action}</div>} />
-}
-Header.propTypes = { mode: PropTypes.string.isRequired, setMode: PropTypes.func.isRequired, title: PropTypes.string.isRequired, subtitle: PropTypes.string.isRequired, action: PropTypes.node }
-
-function MiniCard({ name, domain, ads, angle, allocation, badge }) {
-  return <article className="rounded-lg border border-border bg-background p-4"><div className="flex items-start justify-between gap-3"><div><div className="flex flex-wrap items-center gap-2"><strong>{name}</strong><span className="rounded bg-success px-2 py-0.5 text-[10px] text-white">{badge}</span></div><small className="text-xs text-muted-foreground">Primary Domain: {domain}</small></div><div className="text-right"><small className="block text-[10px] text-muted-foreground">AD VOLUME</small><b className="text-info">{ads} Active</b></div></div><div className="mt-3 rounded bg-muted p-3"><small className="block text-[10px] font-bold tracking-wider text-muted-foreground">DOMINANT CREATIVE ANGLE</small><p className="mt-1 text-sm">“{angle}”</p></div><div className="mt-3 text-xs"><div className="flex justify-between text-muted-foreground"><span>Active Channels</span><span>{allocation}</span></div><div className="mt-2 flex h-2 overflow-hidden rounded-full bg-secondary"><span className="w-[55%] bg-primary" /><span className="w-[35%] bg-info" /><span className="w-[10%] bg-violet" /></div></div><div className="mt-3 flex justify-between border-t border-border pt-2 text-xs text-muted-foreground"><span>Top Performing CTA:</span><b className="rounded bg-muted px-2 py-1 text-foreground">Shop Race Day Edition</b></div></article>
-}
-MiniCard.propTypes = { name: PropTypes.string.isRequired, domain: PropTypes.string.isRequired, ads: PropTypes.string.isRequired, angle: PropTypes.string.isRequired, allocation: PropTypes.string.isRequired, badge: PropTypes.string.isRequired }
-
-function WorkspaceView({ notify, mode, setMode }) {
-  const [competitors, setCompetitors] = useState('Strider Athletics, Apex Footwear Co.')
-  const [keywords, setKeywords] = useState('Lightweight Running Shoes, Carbon-Weave Cushioning, Marathon Gear')
-  const [region, setRegion] = useState('North America · Retail & Activewear')
-  return <><Header mode={mode} setMode={setMode} title="Competitor & Market Insights" subtitle="Analyze direct competitors and category trends to supply strategic context for campaign strategy and ad copy generation." action={<span className="rounded-lg border border-border bg-card px-3 py-2 text-xs text-muted-foreground"><Cloud className="mr-2 inline size-3.5 text-info" /> Synced with Acme Ad-Core</span>} /><Panel title={<><Settings2 className="mr-2 inline size-4 text-info" />Analysis Configuration</>} meta="AUTOMATED QUERY VECTOR"><div className="grid gap-6 p-4 sm:p-6"><div className="flex flex-col gap-4 lg:flex-row"><Field label="Competitor domains or brand names" value={competitors} onChange={setCompetitors} /><Field label="Keywords & target market topics" value={keywords} onChange={setKeywords} /><Field label="Market region / category scope" value={region} onChange={setRegion} select /></div><div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex gap-2"><Button type="button" onClick={() => notify?.('Competitor analysis started.')}><Sparkles /> Analyze</Button><Button type="button" variant="destructive" onClick={() => { setCompetitors(''); setKeywords(''); notify?.('Analysis filters reset.') }}><RotateCw /> Reset</Button></div><span className="text-xs text-muted-foreground"><Info className="mr-2 inline size-3.5 text-info" /> Insights will automatically synchronize as creative context into FR02 Content Generation &amp; Strategy.</span></div></div></Panel><div className="mt-6 grid gap-6 lg:grid-cols-2"><Panel title="◉  Tracked Competitors & Channel Tactics" meta="2 ACTIVE ENTITIES"><div className="grid gap-5 p-4"><MiniCard name="Strider Athletics" domain="striderathletics.com" ads="142" angle="Lightweight Breathability & Marathon Endurance" allocation="Meta (55%) · Google (35%) · TikTok (10%)" badge="Direct Challenger" /><MiniCard name="Apex Footwear Co." domain="apexrunning.io" ads="88" angle="Durability & Trail Cross-Training" allocation="Google (60%) · Meta (30%) · TikTok (10%)" badge="Category Peer" /></div><div className="flex justify-between border-t border-border bg-muted px-4 py-3 text-[11px] text-muted-foreground"><span>Ad Scraping Interval: 6 hrs</span><span className="text-info">Coverage: 98.4% Meta / SERP</span></div></Panel><Panel title="⌁  Market Trends & Category Signals" meta="Q4 LIVE STREAM"><div className="grid gap-5 p-4"><article className="rounded-lg bg-background p-4"><div className="flex justify-between gap-3"><div><h3 className="font-semibold">Short-Form Video Surge in Activewear</h3><small className="text-xs text-muted-foreground">Format velocity index: 8.9 / 10 in North America</small></div><b className="rounded bg-muted px-2 py-1 text-[11px] text-info">+42% YoY</b></div><div className="mt-4 rounded bg-muted p-3 text-sm"><span className="text-xs text-muted-foreground">● Observed Metric Signal</span><p className="mt-2">+42% YoY rise in TikTok/Reels user engagement specifically for marathon footwear review clips and in-stride slow motion tests.</p></div><div className="mt-3 grid grid-cols-2 gap-3 rounded border border-border bg-background p-3 text-xs"><span>Category Benchmark CPA<strong className="mt-1 block text-base">$32.40</strong></span><span className="border-l border-border pl-3 text-info">CastraVision Acme <strong className="mt-1 block text-base text-primary">$24.80</strong></span></div></article><article className="rounded-lg bg-background p-4"><div className="flex justify-between gap-3"><div><h3 className="font-semibold">High Search Intent on Breathable Carbon Soles</h3><small className="text-xs text-muted-foreground">Commercial Search Intent: Strong buyer readiness</small></div><b className="rounded bg-muted px-2 py-1 text-[11px] text-primary">+28% Q4 Spike</b></div><div className="mt-4 rounded bg-muted p-3 text-sm"><span className="text-xs text-muted-foreground">● Observed Metric Signal</span><p className="mt-2">High commercial intent spike (+28% search volume in Q4) targeting specialized energy-return plates and carbon-fiber lattice mesh.</p></div><div className="mt-3 rounded border border-border bg-background p-3 text-sm"><span className="text-xs font-bold uppercase text-info">Recommended angle for ad generation</span><p className="mt-2">Emphasize carbon-fiber spring technology and verified energy-return propulsion in ad headlines and lead body hooks.</p></div></article></div></Panel></div><Panel className="mt-6" title="✣  Incorporate Findings into Marketing Workflows"><div className="flex flex-col gap-2 p-4 sm:flex-row sm:justify-end"><Button type="button" onClick={() => notify?.('Insights sent to Content Generation.')}><ArrowRight /> Send to Content Generation</Button><Button type="button" variant="secondary" onClick={() => notify?.('Insights applied to Strategy.')}><Check /> Apply to Strategy</Button><Button type="button" variant="outline" onClick={() => notify?.('Insights summary export queued.')}><Download /> Export Insights Summary</Button></div></Panel></>
-}
-WorkspaceView.propTypes = { notify: PropTypes.func, mode: PropTypes.string.isRequired, setMode: PropTypes.func.isRequired }
-
-function StatusStep({ number, title, status, detail }) {
-  const complete = status === 'COMPLETE'
-  const halted = status === 'PARTIAL HALT'
-  return <div className={cn('flex items-center justify-between gap-3 rounded-lg bg-background p-3', halted && 'bg-muted', status === 'QUEUED' && 'opacity-60')}><div className="flex min-w-0 items-center gap-3"><span className={cn('grid size-6 shrink-0 place-items-center rounded-full text-xs', complete ? 'bg-info text-background' : halted ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground')}>{complete ? <Check className="size-3.5" /> : halted ? <RotateCw className="size-3" /> : number}</span><div className="min-w-0"><p className="truncate text-sm">{title}</p>{detail && <small className="block truncate text-[11px] text-coral">{detail}</small>}</div></div><span className={cn('rounded px-2 py-0.5 text-[10px] font-bold', complete ? 'text-info' : halted ? 'bg-coral text-background' : 'bg-secondary text-muted-foreground')}>{status}</span></div>
-}
-StatusStep.propTypes = { number: PropTypes.number.isRequired, title: PropTypes.string.isRequired, status: PropTypes.string.isRequired, detail: PropTypes.string }
-
-function ProcessingView({ notify, mode, setMode }) {
-  return <><div className="mb-6 flex flex-col gap-3 rounded-xl bg-muted p-4 sm:flex-row sm:items-center sm:justify-between"><div className="flex items-center gap-4"><span className="grid size-8 shrink-0 place-items-center rounded-lg bg-coral text-background"><AlertTriangle className="size-4" /></span><div><div className="flex flex-wrap items-center gap-2"><strong>Analysis incomplete</strong><span className="rounded bg-coral px-2 py-0.5 text-[10px] font-bold text-background">ERR_TIMEOUT</span></div><p className="text-xs text-muted-foreground">Crawler timeout on Novus Sportswear ad repository. Partial insights recovered.</p></div></div><div className="flex gap-2"><Button size="sm" variant="secondary" type="button" onClick={() => notify?.('Crawler retry queued.')}><RotateCw /> Retry Crawl</Button><Button size="icon" variant="ghost" type="button" aria-label="Dismiss alert"><X /></Button></div></div><Header mode={mode} setMode={setMode} title="Competitor & Market Insights" subtitle="Analyze direct competitors and category trends to supply strategic context for campaign strategy and ad copy generation." action={<span className="rounded bg-info px-2 py-1 text-[10px] font-bold text-background">LIVE ENGINE FEED</span>} /><Panel title={<><Target className="mr-2 inline size-4 text-info" />Target Entities &amp; Market Parameters</>} meta="Active Query Configuration"><div className="grid gap-4 p-4 sm:grid-cols-3"><Field label="Competitor domains or brand names" value="Novus Sportswear, Velocity Run Lab" /><Field label="Keywords & target market topics" value="Recovery Footwear, Post-run Slides" /><Field label="Market region / category scope" value="Global Direct-to-Consumer" /></div><div className="flex flex-col gap-3 border-t border-border p-4 text-xs sm:flex-row sm:items-center sm:justify-between"><span className="text-muted-foreground"><Activity className="mr-2 inline size-3.5 text-info" /> Parallel scraping paused: 1 failed worker node in worker group #04</span><div className="flex gap-2"><Button variant="secondary" type="button">Cancel Execution</Button><Button type="button" disabled><RotateCw className="animate-spin" /> Analyzing...</Button></div></div></Panel><div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,7fr)_minmax(280px,5fr)]"><Panel title={<><span className="block text-[11px] tracking-widest text-info">DIAGNOSTIC PIPELINE</span><span className="block">Real-Time Telemetry &amp; Processing State</span></>} meta="68%"><div className="grid gap-3 p-4"><div className="h-3 overflow-hidden rounded-full bg-background"><div className="h-full w-[68%] bg-primary" /></div><div className="grid gap-2 pt-2"><StatusStep number={1} title="Resolve Competitor Ad Libraries" status="COMPLETE" /><StatusStep number={2} title="Scrape Category Search Queries" status="COMPLETE" /><StatusStep number={3} title="Synthesize Creative Angles & Benchmark CPA" status="PARTIAL HALT" detail="Stalled: Novus library returned HTTP 429 rate cap" /><StatusStep number={4} title="Generate Strategy Context Pack" status="QUEUED" /></div><div className="mt-8 rounded bg-background p-3 font-mono text-xs"><div className="mb-2 flex justify-between text-[10px] text-muted-foreground"><span>ENGINE PROCESS LOGS</span><span className="text-info">stdout: active</span></div><p>&gt; Ingested 240 active ads across Meta &amp; Google Ads APIs...</p><p className="mt-2 text-coral">&gt; [WARN] Node 04: novus-sportswear.com robots timeout</p></div></div></Panel><Panel title={<><span className="block text-[11px] tracking-widest text-muted-foreground">USABLE DATASET</span><span className="block">Recovered Partial Insights</span></>} meta="PARTIAL DATA READY"><div className="grid gap-4 p-4"><article className="rounded-lg bg-background p-4"><div className="flex justify-between"><strong>▥ Velocity Run Lab</strong><span className="rounded bg-muted px-2 py-0.5 text-[10px]">100% Ingested</span></div><div className="mt-4 grid grid-cols-2 gap-2"><div className="rounded bg-card p-3"><small className="block text-[10px] text-muted-foreground">ACTIVE ADS DETECTED</small><b className="block text-2xl">54</b><small className="text-info">Meta / TikTok / YouTube</small></div><div className="rounded bg-card p-3"><small className="block text-[10px] text-muted-foreground">DOMINANT ANGLE</small><b className="mt-2 block text-sm">All-Day Orthopedic Support</b><small className="text-muted-foreground">CPA Est. $32.40</small></div></div></article><article className="rounded-lg bg-background p-4"><div className="flex justify-between text-[11px] font-bold text-muted-foreground"><span>CATEGORY TREND SIGNAL</span><span className="text-info">⌁ +34% MoM</span></div><h3 className="mt-2 font-semibold">Recovery Footwear</h3><p className="text-xs text-muted-foreground">Rising search volume across NA &amp; EU direct queries</p><div className="mt-2 h-8"><svg className="h-full w-full" viewBox="0 0 160 32" preserveAspectRatio="none" aria-label="Recovery footwear trend"><polyline points="0,26 30,20 55,23 82,11 106,14 135,4 160,2" fill="none" stroke="var(--info)" strokeWidth="2" /></svg></div></article><div className="flex gap-2 rounded-lg bg-muted p-3 text-xs text-muted-foreground"><Info className="size-4 shrink-0 text-coral" />Missing: Novus Sportswear ad formats and estimated CPM index. Continuing without it will use category baselines.</div><div className="flex gap-2"><Button className="flex-1" type="button" onClick={() => notify?.('Analysis retry queued.')}><RotateCw /> Retry Analysis</Button><Button className="flex-1" variant="secondary" type="button" onClick={() => notify?.('Partial competitor insights accepted.')}><UploadCloud /> Use Partial Data</Button></div></div></Panel></div><Panel className="mt-6" title="Quick Workflow Navigation" meta="MARKETING SPECIALIST TOOLKIT"><div className="grid gap-3 p-4 md:grid-cols-3">{[['Go to Strategy Creation', 'Translate competitor angles into immediate positioning blueprints'], ['Go to Content Generation', 'Instantly spin draft hooks countering Velocity Run Lab ad hooks'], ['Import Campaign Historical Data', 'Calibrate benchmark CPA targets against your historical ad spend logs']].map(([title, text]) => <button type="button" key={title} onClick={() => notify?.(`${title} selected.`)} className="rounded-lg bg-background p-4 text-left hover:ring-1 hover:ring-ring"><div className="flex justify-between"><span className="grid size-10 place-items-center rounded-lg bg-muted text-info"><BarChart3 className="size-5" /></span><ArrowRight className="size-4 text-muted-foreground" /></div><strong className="mt-4 block">{title}</strong><p className="mt-1 text-xs text-muted-foreground">{text}</p></button>)}</div></Panel></>
-}
-ProcessingView.propTypes = { notify: PropTypes.func, mode: PropTypes.string.isRequired, setMode: PropTypes.func.isRequired }
-
 export default function CompetitorInsightsPage({ notify }) {
-  const [mode, setMode] = useState('dashboard')
-  if (mode === 'workspace') return <WorkspaceView notify={notify} mode={mode} setMode={setMode} />
-  if (mode === 'processing') return <ProcessingView notify={notify} mode={mode} setMode={setMode} />
-  return <ClassicDashboard notify={notify} mode={mode} setMode={setMode} />
+  const [isRefreshing, setIsRefreshing] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedPeriod] = useState('Last 30 Days (Aug 1 - Aug 30, 2025)')
+
+  const handleRefresh = () => {
+    setIsRefreshing(true)
+    setTimeout(() => {
+      setIsRefreshing(false)
+      notify?.('Competitor intelligence signals updated.')
+    }, 600)
+  }
+
+  const handleAddCompetitor = () => {
+    notify?.('Add Competitor drawer opened.')
+  }
+
+  const filteredCompetitors = initialCompetitors.filter((c) =>
+    c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    c.category.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
+  return (
+    <div className="flex flex-col w-full space-y-6">
+      {/* PAGE HEADER */}
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#1c1f2a] border border-[#464554] text-[#4cd7f6] text-[11px] font-semibold tracking-wider uppercase font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#4cd7f6] animate-pulse" />
+              Market Intelligence • Active
+            </span>
+            <span className="text-[12px] text-[#c7c4d7] flex items-center gap-1 font-mono">
+              <Clock className="w-3.5 h-3.5 text-[#908fa0]" />
+              Updated 15 mins ago
+            </span>
+          </div>
+          <h1 className="text-2xl lg:text-3xl font-bold text-[#dfe2f1] tracking-tight">
+            Competitor Analysis &amp; Market Trends
+          </h1>
+          <p className="text-sm text-[#c7c4d7] max-w-3xl">
+            Monitor competitor activity, track market movements, and evaluate actionable marketing opportunities.
+          </p>
+        </div>
+
+        {/* Action Controls */}
+        <div className="flex flex-wrap items-center gap-2.5">
+          <button
+            type="button"
+            onClick={() => notify?.('Date range selector opened.')}
+            className="h-9 px-3 bg-[#1c1f2a] border border-[#464554] text-[#dfe2f1] rounded-lg text-xs font-mono flex items-center gap-2 hover:bg-[#262a35] transition-colors cursor-pointer"
+          >
+            <Calendar className="w-3.5 h-3.5 text-[#4cd7f6]" />
+            <span>{selectedPeriod}</span>
+            <ChevronDown className="w-3.5 h-3.5 text-[#908fa0]" />
+          </button>
+          <button
+            type="button"
+            onClick={handleRefresh}
+            className="h-9 px-3 bg-[#1c1f2a] border border-[#464554] text-[#dfe2f1] hover:bg-[#262a35] rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 text-[#8083ff] ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>Refresh Data</span>
+          </button>
+          <button
+            type="button"
+            onClick={handleAddCompetitor}
+            className="h-9 px-3.5 bg-[#8083ff] hover:bg-[#6f72f0] text-[#0a0e18] text-xs font-bold rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>Add Competitor</span>
+          </button>
+        </div>
+      </div>
+
+      {/* GROUP 1: MARKET OVERVIEW (4 CLEAN KPI CARDS) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Card 1 */}
+        <div className="bg-[#1c1f2a] border border-[#464554] rounded-lg p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#c7c4d7]">
+              Competitors Monitored
+            </span>
+            <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] text-[11px] font-mono font-semibold">
+              6 Active
+            </span>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold font-mono text-[#dfe2f1] tracking-tight">6 Total</div>
+            <p className="text-xs text-[#c7c4d7] mt-1 font-mono">3 Direct • 3 Discovered</p>
+          </div>
+          <div className="w-full bg-[#0a0e18] h-1.5 rounded-full mt-4 overflow-hidden flex">
+            <div className="bg-[#4cd7f6] h-full" style={{ width: '50%' }} />
+            <div className="bg-[#a078ff] h-full" style={{ width: '50%' }} />
+          </div>
+        </div>
+
+        {/* Card 2 */}
+        <div className="bg-[#1c1f2a] border border-[#464554] rounded-lg p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#c7c4d7]">
+              Market Ad Activity
+            </span>
+            <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#8083ff] text-[11px] font-mono font-semibold">
+              +18% Vol
+            </span>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold text-[#dfe2f1] tracking-tight">High</div>
+            <p className="text-xs text-[#c7c4d7] mt-1 font-mono">+18% ad frequency vs prev month</p>
+          </div>
+          <div className="w-full bg-[#0a0e18] h-1.5 rounded-full mt-4 overflow-hidden">
+            <div className="bg-[#8083ff] h-full" style={{ width: '78%' }} />
+          </div>
+        </div>
+
+        {/* Card 3 */}
+        <div className="bg-[#1c1f2a] border border-[#464554] rounded-lg p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#c7c4d7]">
+              Emerging Trends
+            </span>
+            <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#dfe2f1] text-[11px] font-mono font-semibold">
+              New Angles
+            </span>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold font-mono text-[#dfe2f1] tracking-tight">5 Detected</div>
+            <p className="text-xs text-[#c7c4d7] mt-1">Focus: Short-form video &amp; lifestyle angles</p>
+          </div>
+          <div className="w-full bg-[#0a0e18] h-1.5 rounded-full mt-4 overflow-hidden">
+            <div className="bg-[#4cd7f6] h-full" style={{ width: '60%' }} />
+          </div>
+        </div>
+
+        {/* Card 4 */}
+        <div className="bg-[#1c1f2a] border border-[#464554] rounded-lg p-4 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#c7c4d7]">
+              Estimated Opportunities
+            </span>
+            <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] text-[11px] font-mono font-semibold">
+              High Impact
+            </span>
+          </div>
+          <div className="mt-3">
+            <div className="text-2xl font-bold font-mono text-[#4cd7f6] tracking-tight">8 Identified</div>
+            <p className="text-xs text-[#c7c4d7] mt-1 font-mono">Estimated $14.2k conversion potential</p>
+          </div>
+          <div className="w-full bg-[#0a0e18] h-1.5 rounded-full mt-4 overflow-hidden">
+            <div className="bg-[#4cd7f6] h-full" style={{ width: '72%' }} />
+          </div>
+        </div>
+      </div>
+
+      {/* GROUP 2: COMPETITOR COMPARISON (3 CARDS) */}
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <h2 className="text-base font-bold text-[#dfe2f1]">Monitored vs. Discovered Competitors</h2>
+            <span className="text-[11px] font-mono text-[#c7c4d7] px-2 py-0.5 rounded bg-[#1c1f2a] border border-[#464554]">
+              {filteredCompetitors.length} Displayed of {initialCompetitors.length}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="relative min-w-[220px]">
+              <Search className="absolute left-2.5 top-2 text-[#908fa0] w-3.5 h-3.5" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search competitors..."
+                className="h-8 pl-8 pr-3 w-full bg-[#1c1f2a] border border-[#464554] text-[#dfe2f1] placeholder:text-[#908fa0] text-xs font-mono rounded-lg focus:outline-none focus:border-[#8083ff]"
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => notify?.('Manage Competitor Targets dialog opened.')}
+              className="h-8 px-3 rounded bg-[#1c1f2a] border border-[#464554] hover:bg-[#262a35] text-[#dfe2f1] text-xs font-mono transition-colors cursor-pointer"
+            >
+              Manage Targets
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filteredCompetitors.map((comp) => (
+            <div
+              key={comp.id}
+              className="bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between space-y-4 shadow-sm"
+            >
+              <div>
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm ${comp.avatarTone}`}>
+                      {comp.initials}
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-[#dfe2f1] leading-snug">{comp.name}</h3>
+                      <p className="text-xs text-[#c7c4d7]">{comp.category}</p>
+                    </div>
+                  </div>
+                  <span className={`flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-mono font-semibold ${comp.statusTone}`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                    {comp.status}
+                  </span>
+                </div>
+
+                {/* Classification & SOV Box */}
+                <div className="mt-3.5 flex items-center justify-between p-2.5 rounded bg-[#171b26] border border-[#464554]/60">
+                  <div>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#908fa0] block">Classification</span>
+                    <span className="text-xs text-[#dfe2f1] font-semibold mt-0.5 block">{comp.classification}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#908fa0] block">Share of Voice</span>
+                    <span className={`text-xs font-mono font-bold mt-0.5 block ${comp.sovTone}`}>{comp.shareOfVoice}</span>
+                  </div>
+                </div>
+
+                {/* Channels */}
+                <div className="mt-3 space-y-1">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#908fa0] block font-semibold">Channels</span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {comp.channels.map((ch) => (
+                      <span key={ch} className="px-2 py-0.5 rounded bg-[#262a35] text-[#dfe2f1] text-[11px] font-mono">
+                        {ch}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Recent Activity */}
+                <div className="mt-3 space-y-0.5">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#908fa0] block font-semibold">Recent Activity</span>
+                  <p className="text-xs text-[#dfe2f1] leading-relaxed">{comp.recentActivity}</p>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-[#464554]/60 flex items-center justify-between text-xs">
+                <span className="text-[#c7c4d7] font-mono text-[11px]">Last pulse: {comp.lastPulse}</span>
+                <button
+                  type="button"
+                  onClick={() => notify?.(`Opening dossier for ${comp.name}`)}
+                  className="text-xs font-mono font-semibold text-[#8083ff] hover:text-[#c0c1ff] flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  View Overview
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* GROUP 3: INSIGHTS & OPPORTUNITIES (SPLIT 7-COL / 5-COL) */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
+        {/* Left Column (7 cols): Market Activity & Share Trends */}
+        <div className="xl:col-span-7 bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between space-y-4 shadow-sm">
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2">
+              <div>
+                <h2 className="text-base font-bold text-[#dfe2f1]">Market Activity &amp; Share Trends</h2>
+                <p className="text-xs text-[#c7c4d7]">Comparative 30-day competitor impression share trajectory</p>
+              </div>
+
+              {/* Legend */}
+              <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#4cd7f6]" />
+                  <span className="text-[#c7c4d7]">AeroAthletics</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#8083ff]" />
+                  <span className="text-[#c7c4d7]">StrataSport</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#03b5d3]" />
+                  <span className="text-[#c7c4d7]">VeloMotion</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="w-4 h-0.5 bg-[#dfe2f1] border-t border-dashed border-[#dfe2f1]" />
+                  <span className="text-[#dfe2f1] font-semibold">Acme Corp (You)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Time-Series SVG Line Chart */}
+            <div className="relative w-full h-56 pt-2 select-none">
+              <svg className="w-full h-full" fill="none" preserveAspectRatio="none" viewBox="0 0 1000 220">
+                {/* Horizontal Grid Lines */}
+                <line stroke="#313540" strokeDasharray="4 4" strokeWidth="1" x1="50" x2="980" y1="20" y2="20" />
+                <line stroke="#313540" strokeDasharray="4 4" strokeWidth="1" x1="50" x2="980" y1="65" y2="65" />
+                <line stroke="#313540" strokeDasharray="4 4" strokeWidth="1" x1="50" x2="980" y1="110" y2="110" />
+                <line stroke="#313540" strokeDasharray="4 4" strokeWidth="1" x1="50" x2="980" y1="155" y2="155" />
+                <line stroke="#313540" strokeWidth="1" x1="50" x2="980" y1="195" y2="195" />
+
+                {/* Y-Axis Labels */}
+                <text fill="#908fa0" fontFamily="monospace" fontSize="10" textAnchor="end" x="38" y="24">100%</text>
+                <text fill="#908fa0" fontFamily="monospace" fontSize="10" textAnchor="end" x="38" y="69">75%</text>
+                <text fill="#908fa0" fontFamily="monospace" fontSize="10" textAnchor="end" x="38" y="114">50%</text>
+                <text fill="#908fa0" fontFamily="monospace" fontSize="10" textAnchor="end" x="38" y="159">25%</text>
+                <text fill="#908fa0" fontFamily="monospace" fontSize="10" textAnchor="end" x="38" y="199">0%</text>
+
+                {/* Line 1: AeroAthletics (Cyan #4cd7f6) */}
+                <polyline fill="none" points="80,120 260,110 440,105 620,35 800,68 960,60" stroke="#4cd7f6" strokeWidth="2.5" />
+                <circle cx="80" cy="120" fill="#4cd7f6" r="3" />
+                <circle cx="260" cy="110" fill="#4cd7f6" r="3" />
+                <circle cx="440" cy="105" fill="#4cd7f6" r="3" />
+                <circle cx="620" cy="35" fill="#4cd7f6" r="4.5" stroke="#0f131d" strokeWidth="2" />
+                <circle cx="800" cy="68" fill="#4cd7f6" r="3" />
+                <circle cx="960" cy="60" fill="#4cd7f6" r="3" />
+
+                {/* Line 2: StrataSport (Indigo #8083ff) */}
+                <polyline fill="none" points="80,95 260,85 440,100 620,92 800,88 960,95" stroke="#8083ff" strokeWidth="2" />
+                <circle cx="80" cy="95" fill="#8083ff" r="3" />
+                <circle cx="260" cy="85" fill="#8083ff" r="3" />
+                <circle cx="440" cy="100" fill="#8083ff" r="3" />
+                <circle cx="620" cy="92" fill="#8083ff" r="3" />
+                <circle cx="800" cy="88" fill="#8083ff" r="3" />
+                <circle cx="960" cy="95" fill="#8083ff" r="3" />
+
+                {/* Line 3: VeloMotion (Teal #03b5d3) */}
+                <polyline fill="none" points="80,150 260,145 440,132 620,120 800,102 960,85" stroke="#03b5d3" strokeWidth="2" />
+                <circle cx="80" cy="150" fill="#03b5d3" r="3" />
+                <circle cx="260" cy="145" fill="#03b5d3" r="3" />
+                <circle cx="440" cy="132" fill="#03b5d3" r="3" />
+                <circle cx="620" cy="120" fill="#03b5d3" r="3" />
+                <circle cx="800" cy="102" fill="#03b5d3" r="3" />
+                <circle cx="960" cy="85" fill="#03b5d3" r="3" />
+
+                {/* Baseline: Acme Corp (Dashed White) */}
+                <polyline fill="none" points="80,75 260,72 440,74 620,68 800,70 960,67" stroke="#dfe2f1" strokeDasharray="6 4" strokeWidth="2" />
+                <circle cx="80" cy="75" fill="#dfe2f1" r="3" />
+                <circle cx="260" cy="72" fill="#dfe2f1" r="3" />
+                <circle cx="440" cy="74" fill="#dfe2f1" r="3" />
+                <circle cx="620" cy="68" fill="#dfe2f1" r="3" />
+                <circle cx="800" cy="70" fill="#dfe2f1" r="3" />
+                <circle cx="960" cy="67" fill="#dfe2f1" r="3" />
+              </svg>
+
+              {/* X-Axis Labels */}
+              <div className="flex justify-between px-12 pt-2 text-[#c7c4d7] font-mono text-[11px]">
+                <span>Aug 01</span>
+                <span>Aug 07</span>
+                <span>Aug 14</span>
+                <span className="text-[#4cd7f6] font-semibold">Aug 21 (Promo Spike)</span>
+                <span>Aug 28</span>
+                <span>Aug 30</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Plain-language caption below chart */}
+          <div className="pt-3 border-t border-[#464554]/60 flex items-center justify-between text-xs text-[#c7c4d7]">
+            <span>Impression share trend over the last 30 days based on monitored channel signals.</span>
+            <span className="text-[#dfe2f1] font-semibold font-mono">Normalized Index</span>
+          </div>
+        </div>
+
+        {/* Right Column (5 cols): Recommended Opportunities & Activity Feed */}
+        <div className="xl:col-span-5 bg-[#1c1f2a] border border-[#464554] rounded-lg p-5 flex flex-col justify-between space-y-4 shadow-sm">
+          <div className="space-y-3.5">
+            <div className="flex items-center justify-between pb-1 border-b border-[#464554]/60">
+              <div className="flex items-center gap-2">
+                <h2 className="text-base font-bold text-[#dfe2f1]">Recommended Opportunities</h2>
+                <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] text-[11px] font-mono font-semibold">
+                  2 Actionable
+                </span>
+              </div>
+              <span className="text-[11px] text-[#c7c4d7] font-mono">Prioritized for Manager</span>
+            </div>
+
+            {/* Opp 1: High Impact */}
+            <div className="p-3.5 rounded-lg bg-[#171b26] border border-[#464554]/60 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#4cd7f6] text-[10px] font-mono font-semibold tracking-wide uppercase">
+                  High Impact
+                </span>
+                <span className="text-[#4cd7f6] text-[11px] font-mono font-semibold">Est. +14.5% Lift</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-[#dfe2f1]">Counter Weekend Promo Campaign</h3>
+                <p className="text-xs text-[#c7c4d7] mt-1 leading-relaxed">
+                  AeroAthletics is promoting a 20% flash sale on Meta. Opportunity to highlight premium durability value messaging.
+                </p>
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-[#908fa0] font-mono">Channel: Meta Ads</span>
+                <button
+                  type="button"
+                  onClick={() => notify?.('Opened Content Studio to draft response creative.')}
+                  className="h-7 px-3 bg-[#8083ff] hover:bg-[#6f72f0] text-[#0a0e18] text-xs font-semibold rounded flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  Review in Content Studio
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+
+            {/* Opp 2: Medium Impact */}
+            <div className="p-3.5 rounded-lg bg-[#171b26] border border-[#464554]/60 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="px-2 py-0.5 rounded bg-[#262a35] text-[#8083ff] text-[10px] font-mono font-semibold tracking-wide uppercase">
+                  Medium Impact
+                </span>
+                <span className="text-[#8083ff] text-[11px] font-mono font-semibold">Protect Core Search</span>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-[#dfe2f1]">Protect Branded Search Terms</h3>
+                <p className="text-xs text-[#c7c4d7] mt-1 leading-relaxed">
+                  StrataSport increased bid density on shared athletic search terms. Consider reinforcing exact-match search budget.
+                </p>
+              </div>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-[11px] text-[#908fa0] font-mono">Channel: Google Search</span>
+                <button
+                  type="button"
+                  onClick={() => notify?.('Navigating to Budget & ROAS reallocation.')}
+                  className="h-7 px-3 bg-[#262a35] hover:bg-[#353944] text-[#dfe2f1] text-xs font-mono font-semibold rounded flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  Adjust Budget in ROAS
+                </button>
+              </div>
+            </div>
+
+            {/* Recent Notable Activity Summary */}
+            <div className="pt-1 space-y-2">
+              <span className="text-[11px] font-mono font-semibold uppercase tracking-wider text-[#908fa0] block">
+                Recent Notable Activity
+              </span>
+              <div className="space-y-1.5 text-xs">
+                <div className="flex items-start gap-2 text-[#c7c4d7]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#4cd7f6] mt-1.5 shrink-0" />
+                  <span><strong>AeroAthletics:</strong> Launched &apos;Weekend Flash Sale&apos; carousel creative set on Instagram.</span>
+                </div>
+                <div className="flex items-start gap-2 text-[#c7c4d7]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#03b5d3] mt-1.5 shrink-0" />
+                  <span><strong>VeloMotion:</strong> Onboarded 12 fitness creators for short-form video hooks on TikTok.</span>
+                </div>
+                <div className="flex items-start gap-2 text-[#c7c4d7]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#8083ff] mt-1.5 shrink-0" />
+                  <span><strong>StrataSport:</strong> Increased search bid floors on target keywords by ~15%.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
-CompetitorInsightsPage.propTypes = { notify: PropTypes.func }
+
+CompetitorInsightsPage.propTypes = {
+  notify: PropTypes.func,
+}

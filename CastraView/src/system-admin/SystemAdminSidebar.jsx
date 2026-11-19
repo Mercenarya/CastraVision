@@ -1,14 +1,17 @@
 import React from 'react'
+import { useLanguage } from '@/hooks/useLanguage'
 
 /**
  * SystemAdminSidebar
  * Shared sidebar for all System Admin screens with strictly scoped platform navigation.
  */
 export function SystemAdminSidebar({ activeTab, onNavigate, isDrawer = false, onClose }) {
+  const { t } = useLanguage()
+
   const navItems = [
     {
       id: 'sa-dashboard',
-      label: 'Dashboard',
+      label: t('navigation.dashboard'),
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <rect x="3" y="3" width="7" height="7" rx="1" />
@@ -20,7 +23,7 @@ export function SystemAdminSidebar({ activeTab, onNavigate, isDrawer = false, on
     },
     {
       id: 'sa-company-mgmt',
-      label: 'Company Management',
+      label: t('navigation.companyManagement'),
       icon: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M3 21h18" />
@@ -52,13 +55,13 @@ export function SystemAdminSidebar({ activeTab, onNavigate, isDrawer = false, on
             <span className="sa-brand-dot" />
             <span className="sa-brand-title">CastraVision</span>
           </div>
-          <span className="sa-badge-purple">SYS ADMIN</span>
+          <span className="sa-badge-purple">{t('roles.sysAdminBadge')}</span>
           {isDrawer && (
             <button
               type="button"
               className="sa-drawer-close-btn"
               onClick={onClose}
-              aria-label="Đóng menu điều hướng"
+              aria-label={t('common.close')}
             >
               ✕
             </button>
@@ -68,7 +71,7 @@ export function SystemAdminSidebar({ activeTab, onNavigate, isDrawer = false, on
 
       {/* Navigation Section */}
       <div className="sa-nav-section">
-        <div className="sa-nav-section-title">INFRASTRUCTURE CONTROL</div>
+        <div className="sa-nav-section-title">{t('navigation.infrastructureControl')}</div>
         <nav className="sa-nav-list">
           {navItems.map((item) => {
             const isActive =

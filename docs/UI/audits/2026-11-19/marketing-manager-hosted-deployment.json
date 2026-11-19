@@ -1,0 +1,28 @@
+{
+  "project": "oviqgptccjjdaaqxabwv",
+  "migration": "20261118195135",
+  "sha256": "d74a9b3f1b0321b3d81dd4f14e8e974beec0fbeb1145a68a40739dd00b5f0155",
+  "preflight": {
+    "applied": false,
+    "competitors": 0,
+    "competitors_rls": true,
+    "duplicate_groups": 0,
+    "guard_exists": false,
+    "index_exists": false,
+    "probe_exists": false,
+    "reports": 0,
+    "reports_rls": true,
+    "role_helper": true
+  },
+  "postflight": {
+    "anon_blocked": true,
+    "authenticated_allowed": true,
+    "competitors": 0,
+    "guard_restrictive": true,
+    "history_rows": 1,
+    "probe_invoker": true,
+    "reports": 0,
+    "unique_index_valid": true
+  },
+  "backupDirectory": "C:\\Users\\Admin\\Documents\\CastraVision-backups\\mm-tools-20261119-052837"
+}

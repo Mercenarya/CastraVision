@@ -1,0 +1,146 @@
+{
+  "checks": [
+    {
+      "check": "authenticated-role-mm",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "authenticated-role-employee",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "read-workspace/personnel/",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "read-workspace/teams/",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "read-workspace/recruitment/",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "read-membership-notifications/",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "read-business-profile/",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "read-campaign-imports/",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "check": "personnel-filter-real-user",
+      "passed": true
+    },
+    {
+      "check": "create-team-persisted",
+      "passed": true
+    },
+    {
+      "check": "assign-team-persisted",
+      "passed": true
+    },
+    {
+      "check": "change-role-persisted",
+      "passed": true
+    },
+    {
+      "check": "restore-original-role-and-teams",
+      "passed": true
+    },
+    {
+      "check": "recruitment-description-persisted",
+      "passed": true
+    },
+    {
+      "check": "business-profile-save-and-read",
+      "passed": true
+    },
+    {
+      "check": "approve-content-persisted",
+      "passed": true
+    },
+    {
+      "check": "reject-content-persisted",
+      "passed": true
+    },
+    {
+      "check": "request-revision-and-manager-edit",
+      "passed": true
+    },
+    {
+      "check": "manager-save-draft-reload",
+      "passed": true
+    },
+    {
+      "check": "self-content-approval-blocked",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "check": "manager-approve-budget-over20",
+      "passed": true
+    },
+    {
+      "check": "strategy-generation-fallback",
+      "passed": true,
+      "provider": "deterministic-fallback"
+    },
+    {
+      "check": "manager-self-strategy-approval",
+      "passed": true
+    },
+    {
+      "check": "csv-preview",
+      "passed": true
+    },
+    {
+      "check": "csv-import-persisted-and-totals",
+      "passed": true
+    },
+    {
+      "check": "import-history",
+      "passed": true
+    },
+    {
+      "check": "proposal-filter-and-detail-history",
+      "passed": true
+    },
+    {
+      "check": "proposal-notification-real",
+      "passed": true
+    },
+    {
+      "check": "membership-notifications-real",
+      "passed": true
+    },
+    {
+      "check": "refresh-restores-manager-session",
+      "passed": true
+    },
+    {
+      "check": "logout-revokes-refresh",
+      "passed": true,
+      "refreshHttp": 400
+    }
+  ],
+  "fixtures": {
+    "workspaceId": "484517cd-6487-4bc9-9808-390033672e49",
+    "label": "[AUDIT-MM-20261119-565df]",
+    "teamId": "b81094ff-9b88-4aeb-9068-cd3cbac4ced1",
+    "campaignId": "921a0407-eb38-4ab6-9fd6-46fbe102ebe5",
+    "uiPendingProposalId": "4e45c3f6-3fd9-414a-91b9-f1eb8ec774e6"
+  }
+}

@@ -6,8 +6,8 @@ import WorkflowPanel from './components/WorkflowPanel'
 import WorkflowNotifications from './screens/WorkflowNotifications'
 import { useWorkflowQuery } from '../hooks/useLeaderWorkflow'
 
-export default function WorkflowInbox({ mine = false, mode = 'proposals' }) {
-  const [id, setId] = useState(null)
+export default function WorkflowInbox({ mine = false, mode = 'proposals', initialId = null }) {
+  const [id, setId] = useState(initialId)
   const [revision, setRevision] = useState(0)
   const [tab, setTab] = useState(mode)
   const context = useWorkflowQuery('context')
