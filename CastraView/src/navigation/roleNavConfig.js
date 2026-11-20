@@ -20,12 +20,12 @@ import {
  */
 export const EMPLOYEE_NAV_ITEMS = [
   { key: 'overview', label: 'My Dashboard', icon: IconGrid },
-  { key: 'tasks', label: 'My Tasks', icon: IconCheckSquare, badge: 5, badgeColor: 'cyan' },
+  { key: 'tasks', label: 'My Tasks', icon: IconCheckSquare },
   { key: 'content', label: 'Content Studio', icon: IconSparkles },
   { key: 'assigned-campaigns', label: 'Assigned Campaigns', icon: IconMegaphone },
   { key: 'submissions', label: 'My Submissions', icon: IconFolder },
-  { key: 'strategy', label: 'Strategy Reference', icon: IconBookOpen },
-  { key: 'notifications', label: 'Notifications', icon: IconBell, badge: 2, badgeColor: 'gray' },
+  { key: 'strategy', label: 'Strategy Reference', icon: IconBookOpen, translationKey: 'navigation.strategyReference' },
+  { key: 'notifications', label: 'Notifications', icon: IconBell },
   { key: 'profile', label: 'My Profile', icon: IconUser },
 ]
 

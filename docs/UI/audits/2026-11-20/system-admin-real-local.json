@@ -1,0 +1,197 @@
+{
+  "workspace": "369eb4ac-2b2d-4424-9072-e0d7dbdc57b8",
+  "checks": [
+    {
+      "case": "Create disposable system",
+      "pass": true
+    },
+    {
+      "case": "Real password login system",
+      "pass": true
+    },
+    {
+      "case": "Password setup system",
+      "pass": true
+    },
+    {
+      "case": "Create disposable manager",
+      "pass": true
+    },
+    {
+      "case": "Real password login manager",
+      "pass": true
+    },
+    {
+      "case": "Password setup manager",
+      "pass": true
+    },
+    {
+      "case": "Create disposable leader",
+      "pass": true
+    },
+    {
+      "case": "Real password login leader",
+      "pass": true
+    },
+    {
+      "case": "Password setup leader",
+      "pass": true
+    },
+    {
+      "case": "Create disposable employee",
+      "pass": true
+    },
+    {
+      "case": "Real password login employee",
+      "pass": true
+    },
+    {
+      "case": "Password setup employee",
+      "pass": true
+    },
+    {
+      "case": "Anonymous platform API denied",
+      "pass": true
+    },
+    {
+      "case": "manager platform API denied",
+      "pass": true
+    },
+    {
+      "case": "leader platform API denied",
+      "pass": true
+    },
+    {
+      "case": "employee platform API denied",
+      "pass": true
+    },
+    {
+      "case": "Concurrent idempotent create",
+      "pass": true
+    },
+    {
+      "case": "Invitation send to local mailbox",
+      "pass": true
+    },
+    {
+      "case": "Wrong recipient cannot accept",
+      "pass": true
+    },
+    {
+      "case": "MM invitation accept",
+      "pass": true
+    },
+    {
+      "case": "MM accept retry",
+      "pass": true
+    },
+    {
+      "case": "MM membership persisted",
+      "pass": true
+    },
+    {
+      "case": "RPC membership_invite",
+      "pass": true
+    },
+    {
+      "case": "RPC membership_accept_invitation",
+      "pass": true
+    },
+    {
+      "case": "leader role still cannot use platform",
+      "pass": true
+    },
+    {
+      "case": "RPC membership_invite",
+      "pass": true
+    },
+    {
+      "case": "RPC membership_accept_invitation",
+      "pass": true
+    },
+    {
+      "case": "employee role still cannot use platform",
+      "pass": true
+    },
+    {
+      "case": "Create real internal business fixture",
+      "pass": true
+    },
+    {
+      "case": "system active REST scope",
+      "pass": true
+    },
+    {
+      "case": "manager active REST scope",
+      "pass": true
+    },
+    {
+      "case": "leader active REST scope",
+      "pass": true
+    },
+    {
+      "case": "employee active REST scope",
+      "pass": true
+    },
+    {
+      "case": "Update and suspend persisted",
+      "pass": true
+    },
+    {
+      "case": "Stale update rejected",
+      "pass": true
+    },
+    {
+      "case": "manager pre-issued JWT REST suspension",
+      "pass": true
+    },
+    {
+      "case": "manager pre-issued JWT Django suspension",
+      "pass": true
+    },
+    {
+      "case": "manager pre-issued JWT RPC suspension",
+      "pass": true
+    },
+    {
+      "case": "leader pre-issued JWT REST suspension",
+      "pass": true
+    },
+    {
+      "case": "leader pre-issued JWT Django suspension",
+      "pass": true
+    },
+    {
+      "case": "leader pre-issued JWT RPC suspension",
+      "pass": true
+    },
+    {
+      "case": "employee pre-issued JWT REST suspension",
+      "pass": true
+    },
+    {
+      "case": "employee pre-issued JWT Django suspension",
+      "pass": true
+    },
+    {
+      "case": "employee pre-issued JWT RPC suspension",
+      "pass": true
+    },
+    {
+      "case": "Reactivate",
+      "pass": true
+    },
+    {
+      "case": "Business API access restored",
+      "pass": true
+    },
+    {
+      "case": "Safe platform events",
+      "pass": true
+    },
+    {
+      "case": "Read receipt persists",
+      "pass": true
+    }
+  ]
+}

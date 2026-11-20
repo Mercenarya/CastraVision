@@ -1,0 +1,777 @@
+[
+  {
+    "path": "/auth/v1/token",
+    "status": 200,
+    "milliseconds": 83
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 954
+  },
+  {
+    "path": "/api/campaign-imports/",
+    "status": 200,
+    "milliseconds": 1446
+  },
+  {
+    "path": "/api/business-profile/",
+    "status": 200,
+    "milliseconds": 1729
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 999
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 1712
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 1716
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1728
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1700
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1706
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1707
+  },
+  {
+    "path": "/api/employee/summary/",
+    "status": 200,
+    "milliseconds": 1382
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1416
+  },
+  {
+    "path": "/api/employee/task/",
+    "status": 200,
+    "milliseconds": 1694
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 1757
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1758
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "error": "AbortError",
+    "milliseconds": 199
+  },
+  {
+    "path": "/api/employee/update/",
+    "status": 200,
+    "milliseconds": 1731
+  },
+  {
+    "path": "/api/employee/task/",
+    "error": "AbortError",
+    "milliseconds": 1663
+  },
+  {
+    "path": "/api/employee/task/",
+    "status": 200,
+    "milliseconds": 1778
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1785
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1818
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "error": "AbortError",
+    "milliseconds": 49
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 2104
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 2069
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 2134
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2162
+  },
+  {
+    "path": "/api/leader/proposal/",
+    "status": 200,
+    "milliseconds": 1809
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1821
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1827
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1832
+  },
+  {
+    "path": "/api/employee/summary/",
+    "status": 200,
+    "milliseconds": 1380
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1400
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 965
+  },
+  {
+    "path": "/api/leader/proposal/",
+    "status": 200,
+    "milliseconds": 977
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 940
+  },
+  {
+    "path": "/api/leader/campaign/",
+    "status": 200,
+    "milliseconds": 958
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1179
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1823
+  },
+  {
+    "path": "/api/employee/brand-safety-rules/",
+    "status": 200,
+    "milliseconds": 1836
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 1842
+  },
+  {
+    "path": "/api/leader/proposal/",
+    "status": 200,
+    "milliseconds": 1091
+  },
+  {
+    "path": "/api/employee/brand-safety/",
+    "status": 200,
+    "milliseconds": 972
+  },
+  {
+    "path": "/api/employee/brand-safety/",
+    "status": 200,
+    "milliseconds": 972
+  },
+  {
+    "path": "/api/leader/submit/",
+    "status": 200,
+    "milliseconds": 979
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1471
+  },
+  {
+    "path": "/api/leader/proposal/",
+    "status": 200,
+    "milliseconds": 1481
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 1888
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 1907
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1875
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1933
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1805
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1877
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1878
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1882
+  },
+  {
+    "path": "/api/employee/summary/",
+    "status": 200,
+    "milliseconds": 1619
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1672
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1667
+  },
+  {
+    "path": "/api/leader/proposal/",
+    "status": 200,
+    "milliseconds": 926
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 950
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 949
+  },
+  {
+    "path": "/api/leader/read_notification/",
+    "status": 200,
+    "milliseconds": 947
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1417
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 1436
+  },
+  {
+    "path": "/auth/v1/user",
+    "status": 200,
+    "milliseconds": 11
+  },
+  {
+    "path": "/rest/v1/profiles",
+    "status": 200,
+    "milliseconds": 31
+  },
+  {
+    "path": "/auth/v1/user",
+    "status": 200,
+    "milliseconds": 5
+  },
+  {
+    "path": "/rest/v1/profiles",
+    "status": 200,
+    "milliseconds": 4
+  },
+  {
+    "path": "/auth/v1/user",
+    "status": 200,
+    "milliseconds": 6
+  },
+  {
+    "path": "/auth/v1/token",
+    "status": 400,
+    "milliseconds": 60
+  },
+  {
+    "path": "/auth/v1/user",
+    "status": 200,
+    "milliseconds": 4
+  },
+  {
+    "path": "/auth/v1/token",
+    "status": 200,
+    "milliseconds": 64
+  },
+  {
+    "path": "/auth/v1/user",
+    "status": 200,
+    "milliseconds": 126
+  },
+  {
+    "path": "/auth/v1/token",
+    "status": 400,
+    "milliseconds": 68
+  },
+  {
+    "path": "/auth/v1/token",
+    "status": 200,
+    "milliseconds": 74
+  },
+  {
+    "path": "/auth/v1/logout",
+    "status": 204,
+    "milliseconds": 50
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "error": "AbortError",
+    "milliseconds": 1385
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "error": "AbortError",
+    "milliseconds": 1384
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "error": "AbortError",
+    "milliseconds": 1384
+  },
+  {
+    "path": "/auth/v1/token",
+    "status": 200,
+    "milliseconds": 77
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 401,
+    "milliseconds": 648
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 2199
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 1974
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 1900
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 906
+  },
+  {
+    "path": "/api/leader/analytics/",
+    "status": 200,
+    "milliseconds": 1654
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 1727
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1729
+  },
+  {
+    "path": "/api/leader/analytics/",
+    "error": "AbortError",
+    "milliseconds": 20
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "error": "AbortError",
+    "milliseconds": 20
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 2504
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 2483
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 2523
+  },
+  {
+    "path": "/api/employee/candidates/",
+    "status": 200,
+    "milliseconds": 953
+  },
+  {
+    "path": "/api/employee/create/",
+    "status": 200,
+    "milliseconds": 1054
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1491
+  },
+  {
+    "path": "/api/employee/task/",
+    "status": 200,
+    "milliseconds": 1505
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "error": "AbortError",
+    "milliseconds": 5
+  },
+  {
+    "path": "/auth/v1/logout",
+    "status": 204,
+    "milliseconds": 11
+  },
+  {
+    "path": "/auth/v1/token",
+    "status": 200,
+    "milliseconds": 69
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 1022
+  },
+  {
+    "path": "/api/campaign-imports/",
+    "status": 200,
+    "milliseconds": 1563
+  },
+  {
+    "path": "/api/business-profile/",
+    "status": 200,
+    "milliseconds": 1826
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1892
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 1909
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1916
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 2187
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 2188
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2207
+  },
+  {
+    "path": "/api/employee/task/",
+    "status": 200,
+    "milliseconds": 2101
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2033
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2037
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2039
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2010
+  },
+  {
+    "path": "/api/employee/summary/",
+    "status": 200,
+    "milliseconds": 1778
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1786
+  },
+  {
+    "path": "/api/employee/update/",
+    "status": 200,
+    "milliseconds": 1733
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1974
+  },
+  {
+    "path": "/api/employee/task/",
+    "status": 200,
+    "milliseconds": 1980
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 2016
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "error": "AbortError",
+    "milliseconds": 34
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 2423
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 2438
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2454
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 2501
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2153
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2166
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 2196
+  },
+  {
+    "path": "/api/leader/proposal/",
+    "status": 200,
+    "milliseconds": 2115
+  },
+  {
+    "path": "/api/employee/summary/",
+    "error": "AbortError",
+    "milliseconds": 70
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 69
+  },
+  {
+    "path": "/api/auth/session/",
+    "status": 200,
+    "milliseconds": 1975
+  },
+  {
+    "path": "/api/campaign-imports/",
+    "status": 200,
+    "milliseconds": 1625
+  },
+  {
+    "path": "/api/business-profile/",
+    "status": 200,
+    "milliseconds": 1880
+  },
+  {
+    "path": "/api/leader/context/",
+    "status": 200,
+    "milliseconds": 1093
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1992
+  },
+  {
+    "path": "/api/leader/notifications/",
+    "status": 200,
+    "milliseconds": 1998
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 2007
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1819
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1821
+  },
+  {
+    "path": "/api/leader/proposals/",
+    "status": 200,
+    "milliseconds": 1836
+  },
+  {
+    "path": "/api/employee/summary/",
+    "status": 200,
+    "milliseconds": 1587
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 1608
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 71
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 5
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 6
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 7
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 6
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 9
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 8
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 8
+  },
+  {
+    "path": "/api/employee/list/",
+    "error": "AbortError",
+    "milliseconds": 8
+  },
+  {
+    "path": "/api/employee/list/",
+    "status": 200,
+    "milliseconds": 4051
+  },
+  {
+    "path": "/api/leader/campaigns/",
+    "status": 200,
+    "milliseconds": 4237
+  },
+  {
+    "path": "/auth/v1/logout",
+    "status": 204,
+    "milliseconds": 11
+  }
+]

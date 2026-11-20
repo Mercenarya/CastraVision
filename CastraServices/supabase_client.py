@@ -69,6 +69,7 @@ class SupabaseDataClient:
             if response.is_error:
                 safe_codes = {
                     "AUTH_REQUIRED": 401,
+                    "WORKSPACE_INACTIVE": 403,
                     "PERMISSION_DENIED": 403,
                     "PASSWORD_SETUP_REQUIRED": 403,
                     "VALIDATION_ERROR": 400,
@@ -102,8 +103,25 @@ class SupabaseDataClient:
             raise SupabaseAPIError("Supabase Data API request failed.") from exc
 
     def rpc(self, name, params=None):
-        if name != "leader_workflow" and (
-            not name.startswith("membership_") or not name.replace("_", "").isalnum()
+        platform_rpcs = {
+            "platform_directory",
+            "platform_company",
+            "platform_create",
+            "platform_update",
+            "platform_notifications",
+            "platform_workspace_access",
+            "platform_invitation_action",
+            "platform_record_delivery",
+            "platform_my_manager_invitations",
+            "platform_accept_manager_invitation",
+            "platform_my_workspace_states",
+            "platform_issue_manager_invitation",
+        }
+        if (
+            name not in platform_rpcs
+            and name != "leader_workflow"
+            and name != "employee_tasks"
+            and (not name.startswith("membership_") or not name.replace("_", "").isalnum())
         ):
             raise SupabaseAPIError("Unsupported product RPC.")
         return self.request("POST", "rpc/" + name, json=params or {})

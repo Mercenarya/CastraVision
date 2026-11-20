@@ -84,13 +84,13 @@ export function TenantPrivacyNotice({ variant = 'overview', compact = false }) {
         </div>
         <div className="sa-privacy-content">
           <div className="sa-privacy-title-row">
-            <span className="sa-privacy-title">TENANT PRIVACY BOUNDARY ACTIVE</span>
+            <span className="sa-privacy-title">PHẠM VI QUẢN TRỊ NỀN TẢNG</span>
             <span className="sa-privacy-badge dark">ZERO PII POLICY</span>
           </div>
           <p className="sa-privacy-desc">
-            Employee count reflects aggregated tenant seat quota. Individual employee identities, profiles, directory rosters, and workspace marketing strategies remain strictly inaccessible to System Admin console accounts.{' '}
+            Số thành viên là tổng hợp membership, không phải quota. Màn hình quản trị không cung cấp danh sách nhân viên hoặc nội dung chiến dịch.{' '}
             <span className="sa-privacy-note">
-              *(Demonstration sandbox note: Architecture isolates tenant data; cryptographic enclave claims represent planned production specification.)*
+              Quota và thông số hạ tầng chỉ xuất hiện khi có nguồn dữ liệu được cấu hình.
             </span>
           </p>
         </div>
@@ -108,15 +108,13 @@ export function TenantPrivacyNotice({ variant = 'overview', compact = false }) {
       </div>
       <div className="sa-privacy-content">
         <div className="sa-privacy-title-row">
-          <span className="sa-privacy-title">Tenant Privacy Boundary Enforced</span>
-          <span className="sa-privacy-badge">ZERO-KNOWLEDGE GUARD</span>
+          <span className="sa-privacy-title">Phạm vi quản trị doanh nghiệp</span>
+          <span className="sa-privacy-badge">METADATA & AGGREGATE</span>
         </div>
         <p className="sa-privacy-desc">
-          System Admin role possesses tenant-level operational oversight only. Access to company-internal employee rosters,
-          personal identifiable information (PII), workgroups, and private AI campaign outputs is strictly isolated by
-          cryptographic zero-knowledge tenant partitions.{' '}
+          System Admin quản trị thông tin doanh nghiệp và số liệu tổng hợp; không có quyền truy cập nội dung chiến dịch hay danh sách nhân viên qua màn hình này.{' '}
           <span className="sa-privacy-note">
-            *(Demonstration sandbox note: Architecture isolates tenant data; cryptographic enclave claims represent planned production specification.)*
+            Chưa cấu hình nguồn đo uptime, storage hoặc xác minh DNS.
           </span>
         </p>
       </div>

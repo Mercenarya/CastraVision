@@ -108,7 +108,7 @@ export function SystemAdminSidebar({ activeTab, onNavigate, isDrawer = false, on
             <span className="sa-privacy-badge-title">Strict Tenant Privacy</span>
           </div>
           <div className="sa-privacy-badge-subtext">
-            Zero Employee PII Exposure active across all tenant clusters.
+            Quản trị metadata và số liệu tổng hợp; không cung cấp danh sách nhân viên.
           </div>
         </div>
       </div>

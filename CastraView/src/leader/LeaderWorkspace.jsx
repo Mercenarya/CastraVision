@@ -31,7 +31,7 @@ export default function LeaderWorkspace({ logout }) {
     {(page === 'overview' || page === 'performance') && <WorkflowPerformance key={`${page}:${campaignId}`} initialCampaign={campaignId} overview={page === 'overview'} setPage={navigate} revision={revision} onCreated={id => { changed(); select(id) }} />}
     {(page === 'approvals' || page === 'my-proposals') && <LeaderApprovalQueue key={page} mine={page === 'my-proposals'} revision={revision} onSelect={select} />}
     {page === 'campaigns' && <LeaderCampaigns context={value} revision={revision} onChanged={changed} setPage={navigate} />}
-    {(page === 'strategy' || page === 'content') && <WorkflowComposer key={page} kind={page} revision={revision} onCreated={id => { changed(); select(id) }} />}
+    {(page === 'strategy' || page === 'content') && <WorkflowComposer context={value} key={page} kind={page} revision={revision} onCreated={id => { changed(); select(id) }} />}
     {page === 'profile' && <WorkflowAccount context={value} onChanged={changed} />}
     {page === 'import' && <WorkflowImport revision={revision} onChanged={changed} />}
     {page === 'notifications' && <WorkflowNotifications revision={revision} onChanged={changed} onSelect={select} />}

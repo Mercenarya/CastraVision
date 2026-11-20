@@ -16,9 +16,13 @@ export function readAuthorization(payload, expectedUserId, storedWorkspaceId = n
       (payload.platform_role && memberships.length)) throw new Error('Phân quyền xung đột.')
   const selected = memberships.find(x => x.workspaceId === storedWorkspaceId) ||
     (memberships.length === 1 ? memberships[0] : null)
+  const suspendedWorkspaces = Array.isArray(payload.suspended_workspaces) ? payload.suspended_workspaces.map(item => {
+    if (!uuid.test(item.id) || item.status!=='Inactive') throw new Error('Trạng thái doanh nghiệp không hợp lệ.')
+    return {id:item.id,name:typeof item.name==='string'?item.name:'Doanh nghiệp',status:'Inactive'}
+  }) : []
   return {
-    user: { id: payload.user.id, email: payload.user.email || '', full_name: payload.user.full_name || '' },
-    platformRole: payload.platform_role, memberships, workspaceId: selected?.workspaceId || null,
+    user: { id: payload.user.id, email: payload.user.email || '', full_name: payload.user.full_name || '', job_title: typeof payload.user.job_title === 'string' ? payload.user.job_title : '' },
+    platformRole: payload.platform_role, memberships, workspaceId: selected?.workspaceId || null, suspendedWorkspaces,
     passwordSetupRequired: payload.onboarding?.passwordSetupRequired === true,
   }
 }

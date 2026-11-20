@@ -1,0 +1,412 @@
+{
+  "scope": "Production SystemAdminLayout/components mounted in isolated browser harness. Not an authenticated UI session. Real Auth/Django session verified separately.",
+  "results": [
+    {
+      "id": "dashboard-search",
+      "result": "AC\nAcme Corp\nacme.tenant.castra.internal\n\tadmin@acmecorp.com\t\nActive\t142\tOct 12, 2026\tView Overview"
+    },
+    {
+      "id": "header-search-dashboard",
+      "result": "AC\nAcme Corp\nacme.tenant.castra.internal\n\tadmin@acmecorp.com\t\nActive\t142\tOct 12, 2026\tView Overview"
+    },
+    {
+      "id": "refresh",
+      "result": [
+        "Platform state refreshed (local simulation)."
+      ]
+    },
+    {
+      "id": "navigation-management",
+      "result": "Company Management"
+    },
+    {
+      "id": "management-buttons",
+      "result": [
+        "Dashboard",
+        "Company Management",
+        "",
+        "",
+        "AUAudit UIRoot Platform Role",
+        "Refresh",
+        "+ Create Company",
+        "All Companies (15)",
+        "Active (11)",
+        "Inactive (4)",
+        "View Overview →",
+        "View Overview →",
+        "View Overview →",
+        "View Overview →",
+        "View Overview →",
+        "View Overview →",
+        "View Overview →",
+        "View Overview →",
+        "‹",
+        "1",
+        "2",
+        "›"
+      ]
+    },
+    {
+      "id": "status-filter",
+      "result": "V\nVelocity Lab\nID: cv-org-7718\n\tlead@velocitylab.tech\t\nInactive\t\n14\nroster members\n\tSep 28, 2026\tView Overview →\n\nH\nHorizon Retail\nID: cv-org-6490\n\taccounts@horizonretail.com\t\nInactive\t\n3\nroster members\n\tSep 04, 2026\tView Overview →\n\nC\nCyberdyne Systems\nID: c7\n\tsys@cyberdyne.net\t\nInactive\t\n18\nroster members\n\tMar 25, 2024\tView Overview →\n\nS\nSoylent Technologies\nID: c3\n\tops@soylent.net\t\nInactive\t\n64\nroster members\n\tJan 09, 2024\tView Overview →"
+    },
+    {
+      "id": "sort-name-asc",
+      "result": [
+        "A\nAcme Corp\nID: cv-org-9041",
+        "C\nCyberdyne Systems\nID: c7",
+        "G\nGlobex Industries\nID: c2",
+        "H\nHorizon Retail\nID: cv-org-6490",
+        "I\nInitech Dynamics\nID: c4",
+        "L\nLumina Media\nID: cv-org-7110",
+        "M\nMassive Dynamic\nID: c6",
+        "N\nNovus Retail\nID: cv-org-8832"
+      ]
+    },
+    {
+      "id": "search-empty",
+      "result": true
+    },
+    {
+      "id": "management-search",
+      "result": "A\nAcme Corp\nID: cv-org-9041\n\tops@acmecorp.com\t\nActive\t\n142\nroster members\n\tOct 12, 2026\tView Overview →"
+    },
+    {
+      "id": "management-open-error",
+      "result": [
+        "Uncaught ReferenceError: setActiveTab is not defined"
+      ]
+    },
+    {
+      "id": "create-form",
+      "result": [
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "id": "",
+          "placeholder": "Search registered tenants...",
+          "value": "zzzz-no-company"
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "id": "_r_0_",
+          "placeholder": "Apex Logistics Global",
+          "value": ""
+        },
+        {
+          "tag": "INPUT",
+          "type": "email",
+          "id": "_r_1_",
+          "placeholder": "admin@apexlogistics.io",
+          "value": ""
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "id": "_r_2_",
+          "placeholder": "apexlogistics.io",
+          "value": ""
+        },
+        {
+          "tag": "INPUT",
+          "type": "text",
+          "id": "_r_3_",
+          "placeholder": "apex-logistics",
+          "value": ""
+        },
+        {
+          "tag": "TEXTAREA",
+          "type": "textarea",
+          "id": "_r_4_",
+          "placeholder": "Initial enterprise pilot provisioning.",
+          "value": ""
+        }
+      ]
+    },
+    {
+      "id": "create-autofill",
+      "result": [
+        "Audit Tenant 20261120",
+        "owner@example.test",
+        "example.test",
+        "audit-tenant-20261120"
+      ]
+    },
+    {
+      "id": "create-local",
+      "result": true
+    },
+    {
+      "id": "create-notice",
+      "result": [
+        "Company \"Audit Tenant 20261120\" added to the local demo session. No backend tenant was provisioned."
+      ]
+    },
+    {
+      "id": "api-requests-after-create",
+      "result": []
+    },
+    {
+      "id": "remount-created-tenant",
+      "result": false
+    },
+    {
+      "id": "overview-edit-inputs",
+      "result": [
+        {
+          "tag": "INPUT",
+          "value": "Acme Corp",
+          "type": "text"
+        },
+        {
+          "tag": "INPUT",
+          "value": "ops@acmecorp.com",
+          "type": "email"
+        },
+        {
+          "tag": "INPUT",
+          "value": "acmecorp.com",
+          "type": "text"
+        },
+        {
+          "tag": "SELECT",
+          "value": "Active",
+          "type": "select-one"
+        },
+        {
+          "tag": "TEXTAREA",
+          "value": "Primary enterprise marketing tenant.",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "id": "save-local",
+      "result": true
+    },
+    {
+      "id": "refresh-local",
+      "result": true
+    },
+    {
+      "id": "cancel-edit",
+      "result": true
+    },
+    {
+      "id": "edit-lost-after-remount",
+      "result": true
+    },
+    {
+      "id": "header-search-subpage-error",
+      "result": [
+        "Uncaught ReferenceError: setActiveTab is not defined"
+      ]
+    },
+    {
+      "id": "telemetry-button",
+      "result": 0
+    },
+    {
+      "id": "settings-headings",
+      "result": [
+        "Settings",
+        "Personal Account Profile",
+        "Account Security & Password"
+      ]
+    },
+    {
+      "id": "preference-controls",
+      "result": [
+        {
+          "text": "Account & Security",
+          "role": null,
+          "aria-checked": null
+        },
+        {
+          "text": "Notification Preferences",
+          "role": null,
+          "aria-checked": null
+        },
+        {
+          "text": "Reset",
+          "role": null,
+          "aria-checked": null
+        },
+        {
+          "text": "Save Preferences",
+          "role": null,
+          "aria-checked": null
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "true"
+        },
+        {
+          "text": "",
+          "role": "switch",
+          "aria-checked": "false"
+        },
+        {
+          "text": "Đặt lại",
+          "role": null,
+          "aria-checked": null
+        },
+        {
+          "text": "Lưu tùy chọn",
+          "role": null,
+          "aria-checked": null
+        }
+      ]
+    },
+    {
+      "id": "settings-tabs",
+      "result": [
+        "Account & Security",
+        "Notification Preferences"
+      ]
+    },
+    {
+      "id": "preferences-persist-local",
+      "result": {
+        "before": "true",
+        "after": "false",
+        "saved": []
+      }
+    },
+    {
+      "id": "preferences-reset",
+      "result": "true"
+    },
+    {
+      "id": "profile-menu",
+      "result": "Audit UI\naudit@example.test\nPLATFORM SYSTEM ADMIN\n🛡 Tenant isolation active: No employee PII accessible.\nAccount Settings\nLanguage\nEN\nSign Out"
+    },
+    {
+      "id": "language-options",
+      "result": [
+        "English",
+        "Tiếng Việt"
+      ]
+    },
+    {
+      "id": "language-vi",
+      "result": [
+        "Bảng điều khiển",
+        "Quản lý công ty"
+      ]
+    },
+    {
+      "id": "language-retained",
+      "result": [
+        "Bảng điều khiển",
+        "Quản lý công ty"
+      ]
+    },
+    {
+      "id": "empty-submit",
+      "result": [
+        "Please enter a Company Name."
+      ]
+    },
+    {
+      "id": "duplicate-warning",
+      "result": true
+    },
+    {
+      "id": "duplicate-domain-accepted",
+      "result": true
+    },
+    {
+      "id": "form-reset",
+      "result": true
+    },
+    {
+      "id": "cancel-create",
+      "result": "Company Management"
+    },
+    {
+      "id": "management-page2-rows",
+      "result": 8
+    },
+    {
+      "id": "management-page1-rows",
+      "result": 8
+    },
+    {
+      "id": "management-page1-first",
+      "result": "A\nAudit Unique Duplicate Domain\nID: cv-org-2071\n\towner@acmecorp.com\t\nActive\t\n0\nroster members\n\tNov 20, 2026\tView Overview →"
+    },
+    {
+      "id": "management-page2-first",
+      "result": "P\nPulse Commerce\nID: cv-org-5932\n\tdevops@pulsecom.io\t\nActive\t\n19\nroster members\n\tAug 29, 2026\tView Overview →"
+    },
+    {
+      "id": "status-local-saved",
+      "result": true
+    },
+    {
+      "id": "status-reverted",
+      "result": true
+    },
+    {
+      "id": "bell-no-effect",
+      "result": true
+    },
+    {
+      "id": "status-select-after-remount",
+      "result": "Active"
+    }
+  ],
+  "errors": [
+    "Uncaught ReferenceError: setActiveTab is not defined",
+    "Uncaught ReferenceError: setActiveTab is not defined",
+    "Uncaught ReferenceError: setActiveTab is not defined"
+  ],
+  "notices": [
+    "Platform state refreshed (local simulation).",
+    "Company \"Audit Tenant 20261120\" added to the local demo session. No backend tenant was provisioned.",
+    "Organization details for \"Acme Corp\" updated.",
+    "Tùy chọn thông báo đã được lưu thành công trên trình duyệt này.",
+    "Đã khôi phục tùy chọn thông báo về trạng thái mặc định.",
+    "Company \"Audit Unique Duplicate Domain\" added to the local demo session. No backend tenant was provisioned.",
+    "Organization details for \"Acme Corp\" updated."
+  ],
+  "requests": []
+}

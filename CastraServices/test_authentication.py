@@ -25,15 +25,11 @@ class BearerTokenTests(SimpleTestCase):
         self.assertEqual(caught.exception.code, "AUTH_REQUIRED")
 
         with self.assertRaises(AuthenticationError) as caught:
-            _bearer_token(
-                self.factory.get("/api/test", HTTP_AUTHORIZATION="Basic value")
-            )
+            _bearer_token(self.factory.get("/api/test", HTTP_AUTHORIZATION="Basic value"))
         self.assertEqual(caught.exception.code, "AUTH_REQUIRED")
 
     def test_extracts_token_without_logging_or_decoding_it(self):
-        request = self.factory.get(
-            "/api/test", HTTP_AUTHORIZATION="Bearer signed-token"
-        )
+        request = self.factory.get("/api/test", HTTP_AUTHORIZATION="Bearer signed-token")
         self.assertEqual(_bearer_token(request), "signed-token")
 
 
@@ -45,12 +41,11 @@ class ActiveWorkspaceTests(SimpleTestCase):
 
     @patch("CastraServices.authentication.user_client")
     @patch("CastraServices.identity.verified_identity")
-    def test_verifies_the_explicit_active_workspace(
-        self, verified_subject, user_client
-    ):
+    def test_verifies_the_explicit_active_workspace(self, verified_subject, user_client):
         verified_subject.return_value = ("signed-token", {"id": str(self.user_id)})
-        user_client.return_value.workspace_membership.return_value = (
-            WorkspaceMembership(workspace_id=self.workspace_id, role="admin")
+        user_client.return_value.rpc.return_value = {"member": True, "active": True}
+        user_client.return_value.workspace_membership.return_value = WorkspaceMembership(
+            workspace_id=self.workspace_id, role="admin"
         )
         request = self.factory.get(
             "/api/test",
@@ -67,14 +62,23 @@ class ActiveWorkspaceTests(SimpleTestCase):
 
     @patch("CastraServices.authentication.user_client")
     @patch("CastraServices.identity.verified_identity")
+    def test_old_token_cannot_select_a_suspended_workspace(self, identity, client):
+        identity.return_value = ("transport-fixture", {"id": str(self.user_id)})
+        client.return_value.rpc.return_value = {"member": True, "active": False}
+        request = self.factory.get("/api/test", HTTP_X_WORKSPACE_ID=str(self.workspace_id))
+        with self.assertRaises(WorkspaceAuthorizationError) as caught:
+            authenticate_request(request)
+        self.assertEqual(caught.exception.code, "WORKSPACE_INACTIVE")
+        client.return_value.workspace_membership.assert_not_called()
+
+    @patch("CastraServices.authentication.user_client")
+    @patch("CastraServices.identity.verified_identity")
     def test_requires_a_membership_when_no_workspace_header(self, verified_subject, user_client):
         verified_subject.return_value = ("signed-token", {"id": str(self.user_id)})
         user_client.return_value.single_workspace_membership.side_effect = MembershipNotFound(
             "missing"
         )
-        request = self.factory.get(
-            "/api/test", HTTP_AUTHORIZATION="Bearer signed-token"
-        )
+        request = self.factory.get("/api/test", HTTP_AUTHORIZATION="Bearer signed-token")
 
         with self.assertRaises(WorkspaceAuthorizationError) as caught:
             authenticate_request(request)
@@ -96,9 +100,7 @@ class JWTVerificationTests(SimpleTestCase):
         self, jwk_client, get_header, decode
     ):
         get_header.return_value = {"alg": "ES256"}
-        jwk_client.return_value.get_signing_key_from_jwt.return_value = Mock(
-            key="public-key"
-        )
+        jwk_client.return_value.get_signing_key_from_jwt.return_value = Mock(key="public-key")
         expected = UUID("11111111-1111-1111-1111-111111111111")
         decode.return_value = {"sub": str(expected)}
 
@@ -123,8 +125,8 @@ class JWTVerificationTests(SimpleTestCase):
     @patch("CastraServices.authentication._jwk_client")
     def test_sanitizes_signature_failures(self, jwk_client, get_header):
         get_header.return_value = {"alg": "ES256"}
-        jwk_client.return_value.get_signing_key_from_jwt.side_effect = (
-            jwt.PyJWKClientError("sensitive upstream details")
+        jwk_client.return_value.get_signing_key_from_jwt.side_effect = jwt.PyJWKClientError(
+            "sensitive upstream details"
         )
         with self.assertRaises(AuthenticationError) as caught:
             _verified_subject("bad-token")
@@ -140,11 +142,12 @@ class JWTVerificationTests(SimpleTestCase):
         expected = UUID("11111111-1111-1111-1111-111111111111")
         get.return_value.status_code = 200
         get.return_value.json.return_value = {
-            "id": str(expected), "email_confirmed_at": "2026-01-01"
+            "id": str(expected),
+            "email_confirmed_at": "2026-01-01",
         }
 
-        request = RequestFactory().get('/api/test', HTTP_AUTHORIZATION='Bearer legacy-signed-token')
-        self.assertEqual(verified_identity(request)[1]['id'], str(expected))
+        request = RequestFactory().get("/api/test", HTTP_AUTHORIZATION="Bearer legacy-signed-token")
+        self.assertEqual(verified_identity(request)[1]["id"], str(expected))
         get.assert_called_once_with(
             "https://example.supabase.co/auth/v1/user",
             headers={
@@ -165,6 +168,6 @@ class JWTVerificationTests(SimpleTestCase):
 
         with self.assertRaises(AuthenticationError) as caught:
             verified_identity(
-                RequestFactory().get('/api/test', HTTP_AUTHORIZATION='Bearer rejected-token')
+                RequestFactory().get("/api/test", HTTP_AUTHORIZATION="Bearer rejected-token")
             )
         self.assertEqual(caught.exception.code, "INVALID_TOKEN")

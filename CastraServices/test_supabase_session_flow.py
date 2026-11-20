@@ -17,6 +17,7 @@ class SupabaseSessionFlowTests(TestCase):
     def setUp(self):
         self.client = Client(enforce_csrf_checks=True)
         self.role = "admin"
+        self.suspended = False
         self.auth_user = {
             "id": USER,
             "email": "fixture@example.test",
@@ -45,10 +46,15 @@ class SupabaseSessionFlowTests(TestCase):
         self.assertEqual(kwargs["headers"]["Authorization"], "Bearer fixture-user-token")
         self.assertEqual(kwargs["headers"]["apikey"], "fixture-public")
         resource = url.rsplit("/", 1)[-1]
-        if method != "GET" and resource != "membership_onboarding_state":
+        if method != "GET" and resource not in (
+            "membership_onboarding_state",
+            "platform_workspace_access",
+        ):
             self.writes.append((resource, kwargs))
         if resource == "membership_onboarding_state":
             data = {"passwordSetupRequired": False}
+        elif resource == "platform_workspace_access":
+            data = {"member": kwargs["json"]["p_id"] == WS, "active": not self.suspended}
         elif resource == "workspace_members":
             data = [{"workspace_id": WS, "role": self.role, "workspaces": {"name": "Fixture"}}]
         elif resource == "workspaces":
@@ -96,6 +102,12 @@ class SupabaseSessionFlowTests(TestCase):
         response = self.client.get("/api/auth/session/", **self.headers)
         self.assertIsNone(response.json()["platform_role"])
 
+    def test_personal_job_title_is_returned_without_becoming_authority(self):
+        self.auth_user["user_metadata"]["job_title"] = "Local Operator"
+        response = self.client.get("/api/auth/session/", **self.headers)
+        self.assertEqual(response.json()["user"].get("job_title"), "Local Operator")
+        self.assertIsNone(response.json()["platform_role"])
+
     def test_operator_role_revocation_is_observed_on_next_request(self):
         self.auth_user["app_metadata"] = {"platform_role": "system_admin"}
         self.assertEqual(
@@ -123,6 +135,12 @@ class SupabaseSessionFlowTests(TestCase):
         response = self.client.get("/api/business-profile/", **self.headers)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["profile"]["business_name"], "Fixture")
+
+    def test_suspended_tenant_rejects_the_existing_bearer(self):
+        self.suspended = True
+        response = self.client.get("/api/business-profile/", **self.headers)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.json()["error"]["code"], "WORKSPACE_INACTIVE")
 
     def test_csv_preview_and_commit_use_user_jwt_without_django_session(self):
         content = (

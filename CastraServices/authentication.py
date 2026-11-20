@@ -100,6 +100,15 @@ def authenticate_request(request: HttpRequest) -> RequestAuthContext:
                 raise WorkspaceAuthorizationError(
                     "WORKSPACE_REQUIRED", "Select a valid Workspace."
                 ) from exc
+            access = user_client(token).rpc(
+                "platform_workspace_access", {"p_id": str(workspace_id)}
+            )
+            if not isinstance(access, dict) or type(access.get("active")) is not bool:
+                raise SupabaseAPIError("Workspace status response is invalid.")
+            if access.get("member") and not access["active"]:
+                raise WorkspaceAuthorizationError(
+                    "WORKSPACE_INACTIVE", "Doanh nghiệp đang bị tạm khóa."
+                )
             membership = user_client(token).workspace_membership(user_id, workspace_id)
         else:
             membership = user_client(token).single_workspace_membership(user_id)

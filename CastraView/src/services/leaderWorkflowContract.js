@@ -1,6 +1,6 @@
-export function money(value, currency = 'VND') {
+export function money(value, currency = 'VND', locale = 'vi-VN') {
   if (value === null || value === undefined || value === '' || !Number.isFinite(Number(value)) || !['USD', 'VND'].includes(currency)) return '—'
-  return new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(Number(value))
+  return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(Number(value))
 }
 
 export function budgetExceedsLimit(allocations = []) {

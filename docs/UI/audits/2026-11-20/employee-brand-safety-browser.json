@@ -1,0 +1,19 @@
+{
+  "environment": "local only",
+  "browser": "Chrome isolated context",
+  "checks": {
+    "manager_save_readback": true,
+    "manager_reload_persistence": true,
+    "employee_saved_rules_four_finding_types": true,
+    "finding_result_does_not_echo_detected_email": true,
+    "language_switch_keeps_draft": true,
+    "clean_content_recheck_no_findings": true,
+    "vietnamese_result_disclaimer": true,
+    "console_errors_warnings_at_final_check": 0
+  },
+  "limits": [
+    "Not a legal compliance certification",
+    "No hosted verification",
+    "Not a complete application localization audit"
+  ]
+}

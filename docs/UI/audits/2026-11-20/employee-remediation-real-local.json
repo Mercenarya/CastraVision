@@ -1,0 +1,231 @@
+{
+  "checks": [
+    {
+      "case": "Employee verified session/membership",
+      "pass": true
+    },
+    {
+      "case": "Employee context",
+      "pass": true
+    },
+    {
+      "case": "Employee campaign read",
+      "pass": true
+    },
+    {
+      "case": "Employee campaign create denied",
+      "pass": true
+    },
+    {
+      "case": "Draft persisted",
+      "pass": true
+    },
+    {
+      "case": "Edit persisted",
+      "pass": true
+    },
+    {
+      "case": "Submit persisted",
+      "pass": true
+    },
+    {
+      "case": "Employee approve denied",
+      "pass": true
+    },
+    {
+      "case": "Feedback and history readable",
+      "pass": true
+    },
+    {
+      "case": "Resubmit persisted",
+      "pass": true
+    },
+    {
+      "case": "Employee approved status readable",
+      "pass": true
+    },
+    {
+      "case": "Proposal search/status filter",
+      "pass": true
+    },
+    {
+      "case": "Employee real notifications",
+      "pass": true
+    },
+    {
+      "case": "Notification read persisted",
+      "pass": true
+    },
+    {
+      "case": "Strategy generate persisted",
+      "pass": true
+    },
+    {
+      "case": "Strategy provider is explicit",
+      "pass": true
+    },
+    {
+      "case": "Unapproved strategy cannot be used as a template",
+      "pass": true
+    },
+    {
+      "case": "Approved strategy template persists its source reference",
+      "pass": true
+    },
+    {
+      "case": "Duplicate Employee draft request is idempotent",
+      "pass": true
+    },
+    {
+      "case": "Stale Employee draft revision is rejected",
+      "pass": true
+    },
+    {
+      "case": "Other-Team campaign detail denied",
+      "pass": true
+    },
+    {
+      "case": "Other-Team campaign hidden by direct REST RLS",
+      "pass": true
+    },
+    {
+      "case": "Role injection rejected",
+      "pass": true
+    },
+    {
+      "case": "Old Employee JWT loses campaign access after Team removal",
+      "pass": true
+    },
+    {
+      "case": "Employee business profile write denied",
+      "pass": true
+    },
+    {
+      "case": "Employee personnel management denied",
+      "pass": true
+    },
+    {
+      "case": "Employee report export denied",
+      "pass": true
+    },
+    {
+      "case": "Leader assignment persisted with real assignee and optional deadline",
+      "pass": true
+    },
+    {
+      "case": "Duplicate task create is idempotent",
+      "pass": true
+    },
+    {
+      "case": "Employee cannot self-assign tasks",
+      "pass": true
+    },
+    {
+      "case": "Employee cannot enumerate task assignees",
+      "pass": true
+    },
+    {
+      "case": "Task payload cannot override actor",
+      "pass": true
+    },
+    {
+      "case": "Employee task search and status use actual rows",
+      "pass": true
+    },
+    {
+      "case": "Employee links own same-campaign proposal",
+      "pass": true
+    },
+    {
+      "case": "Stale task version denied by real API",
+      "pass": true
+    },
+    {
+      "case": "Operational completion does not approve proposal",
+      "pass": true
+    },
+    {
+      "case": "Same-Team coworker cannot read task through API",
+      "pass": true
+    },
+    {
+      "case": "Same-Team coworker direct REST task RLS is empty",
+      "pass": true
+    },
+    {
+      "case": "Leader cannot access another Team task",
+      "pass": true
+    },
+    {
+      "case": "Leader cannot create in another Team",
+      "pass": true
+    },
+    {
+      "case": "Task candidates expose only scoped names and IDs",
+      "pass": true
+    },
+    {
+      "case": "Old JWT loses task access after Team removal",
+      "pass": true
+    },
+    {
+      "case": "Old JWT task API blocked while tenant Inactive",
+      "pass": true
+    },
+    {
+      "case": "Old JWT task REST blocked while tenant Inactive",
+      "pass": true
+    },
+    {
+      "case": "MM rules persist and server revision advances",
+      "pass": true
+    },
+    {
+      "case": "Stale rules update rejected",
+      "pass": true
+    },
+    {
+      "case": "employee cannot write brand rules",
+      "pass": true
+    },
+    {
+      "case": "leader cannot write brand rules",
+      "pass": true
+    },
+    {
+      "case": "Employee reads actual MM configuration without edit rights",
+      "pass": true
+    },
+    {
+      "case": "Real provider detects custom phrase, missing phrase, claims and personal data",
+      "pass": true
+    },
+    {
+      "case": "Provider response does not echo detected personal data or approve content",
+      "pass": true
+    },
+    {
+      "case": "Stale rule revision cannot produce a current result",
+      "pass": true
+    },
+    {
+      "case": "Clean content has no findings without claiming legal safety",
+      "pass": true
+    },
+    {
+      "case": "Employee cannot read rules of an unassigned workspace",
+      "pass": true
+    },
+    {
+      "case": "Old JWT cannot use brand check on Inactive tenant",
+      "pass": true
+    },
+    {
+      "case": "Employee production UI integration suite",
+      "pass": true
+    }
+  ],
+  "workspace": "2a540857-a8ba-4621-adce-3678d29a60bf",
+  "campaign": "865564af-5930-4759-8c0e-57dd56301fde",
+  "cancelledConnections": 0
+}

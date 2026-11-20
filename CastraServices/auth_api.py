@@ -18,6 +18,9 @@ def session(request):
         platform = platform_role(user)
         client = user_client(token)
         memberships = [] if platform else client.workspace_memberships(UUID(user["id"]))
+        suspended = [] if platform else client.rpc("platform_my_workspace_states", {})
+        if not isinstance(suspended, list):
+            raise SupabaseAPIError("Workspace state response is invalid.")
         onboarding = (
             {"passwordSetupRequired": False}
             if platform
@@ -46,6 +49,9 @@ def session(request):
     full_name = metadata.get("full_name", "") if isinstance(metadata, dict) else ""
     if not isinstance(full_name, str):
         full_name = ""
+    job_title = metadata.get("job_title", "") if isinstance(metadata, dict) else ""
+    if not isinstance(job_title, str):
+        job_title = ""
     return JsonResponse(
         {
             "version": 1,
@@ -53,9 +59,11 @@ def session(request):
                 "id": user["id"],
                 "email": user.get("email", ""),
                 "full_name": full_name[:120],
+                "job_title": job_title[:120],
             },
             "platform_role": platform,
             "memberships": memberships,
+            "suspended_workspaces": suspended,
             "onboarding": onboarding,
         }
     )

@@ -1,3 +1,4 @@
+import { LanguageProvider } from './contexts/LanguageContext'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -87,7 +88,8 @@ describe('ImportScreen', () => {
     const onImported = vi.fn().mockResolvedValue(undefined)
     const notify = vi.fn()
     const user = userEvent.setup()
-    const { container } = render(<ImportScreen imports={[]} onImported={onImported} notify={notify} />)
+    localStorage.setItem('castravision_language', 'vi')
+    const { container } = render(<LanguageProvider><ImportScreen imports={[]} onImported={onImported} notify={notify} /></LanguageProvider>)
     await user.selectOptions(await screen.findByRole('combobox', { name: 'Chiến dịch' }), 'qa-campaign')
 
     await user.upload(container.querySelector('input[type=file]'), new File(['channel,period\nMeta,2026-09'], 'campaign.csv', { type: 'text/csv' }))

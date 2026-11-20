@@ -1,0 +1,110 @@
+[
+  {
+    "case": "Dashboard removes fake Alex and sample campaigns",
+    "pass": true
+  },
+  {
+    "case": "Dashboard binds actual team",
+    "pass": true
+  },
+  {
+    "case": "Employee task detail hides assignment controls",
+    "pass": true
+  },
+  {
+    "case": "Task completion survives server read-back",
+    "pass": true
+  },
+  {
+    "case": "Task opens exact linked proposal",
+    "pass": true
+  },
+  {
+    "case": "Dashboard opens exact proposal detail",
+    "pass": true
+  },
+  {
+    "case": "Employee campaign list/detail read persisted data without create/export",
+    "pass": true
+  },
+  {
+    "case": "Employee template uses actual approved strategy",
+    "pass": true
+  },
+  {
+    "case": "Employee rule review uses server-saved company rules",
+    "pass": true
+  },
+  {
+    "case": "Editing content immediately invalidates the previous rule result",
+    "pass": true
+  },
+  {
+    "case": "Rechecking current content reads real no-findings result",
+    "pass": true
+  },
+  {
+    "case": "Content form still persists and reads draft",
+    "pass": true
+  },
+  {
+    "case": "My Submissions still reads actual proposal and hides export",
+    "pass": true
+  },
+  {
+    "case": "Strategy Reference reads approved strategy without generation form",
+    "pass": true
+  },
+  {
+    "case": "Employee notification read updates the actual unread total",
+    "pass": true
+  },
+  {
+    "case": "Employee personal profile persists in Auth and public profiles",
+    "pass": true
+  },
+  {
+    "case": "Same-user update keeps Settings mounted",
+    "pass": true
+  },
+  {
+    "case": "Employee preference saves per-user on this browser",
+    "pass": true
+  },
+  {
+    "case": "Employee preference survives tab remount",
+    "pass": true
+  },
+  {
+    "case": "Employee preference reset removes stored overrides",
+    "pass": true
+  },
+  {
+    "case": "Wrong Employee current password denied",
+    "pass": true
+  },
+  {
+    "case": "Employee password change rejects old and accepts new password",
+    "pass": true
+  },
+  {
+    "case": "Employee UI logout removes private layout",
+    "pass": true
+  },
+  {
+    "case": "Leader assignment form persists real task",
+    "pass": true
+  },
+  {
+    "case": "Employee receives Leader UI assignment without assign permission",
+    "pass": true
+  },
+  {
+    "case": "Employee links and opens own persisted draft through task UI",
+    "pass": true
+  },
+  {
+    "case": "Task form switches EN/VI while preserving the real task filter",
+    "pass": true
+  }
+]

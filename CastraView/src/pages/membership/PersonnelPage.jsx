@@ -12,11 +12,13 @@ import MembershipInviteDialog from './MembershipInviteDialog'
 import MemberAssignmentDialog from './MemberAssignmentDialog'
 import RecruitmentSettingsPanel from './RecruitmentSettingsPanel'
 import MutationDialog from './MutationDialog'
+import TaskBoard from '../../member/TaskBoard'
 
 const tabs = [{ id: 'members', label: 'Thành viên', icon: Users }, { id: 'requests', label: 'Chờ duyệt', icon: UserCheck }, { id: 'invitations', label: 'Lời mời', icon: MailPlus }]
 const date = value => value ? new Date(value).toLocaleString('vi-VN') : '—'
 
 export default function PersonnelPage({ workspaceId, userId, service = membershipService, notify, openInvite = false, onInviteClose = () => {}, initialTab = 'members', initialSearch = '' }) {
+  const [showTasks, setShowTasks] = useState(false)
   const [tab, setTab] = useState(initialTab)
   const [search, setSearch] = useState(initialSearch)
   const [role, setRole] = useState('')
@@ -74,6 +76,7 @@ export default function PersonnelPage({ workspaceId, userId, service = membershi
         <footer className="flex items-center justify-between gap-3 p-4 text-sm"><span className="text-muted-foreground">{data.personnel.total} bản ghi · Trang {Math.floor(offset / 20) + 1}</span><div className="flex gap-2"><Button variant="outline" disabled={!offset} onClick={() => setOffset(x => Math.max(0, x - 20))}>Trước</Button><Button variant="outline" disabled={offset + 20 >= data.personnel.total} onClick={() => setOffset(x => x + 20)}>Sau</Button></div></footer>
       </div>
       <div className="grid items-start gap-5 lg:grid-cols-2"><RecruitmentSettingsPanel key={JSON.stringify(data.recruitment)} settings={data.recruitment} service={service} onSaved={saved} /><div className="rounded-xl border border-border bg-card p-5"><h2 className="font-semibold">Nhóm làm việc</h2><p className="my-3 text-sm text-muted-foreground">{data.teams.length ? data.teams.map(x => x.name).join(' · ') : 'Chưa có nhóm. Bạn vẫn có thể duyệt ở cấp Workspace.'}</p><Button variant="outline" onClick={() => { setTeamName(''); setAction({ kind: 'team' }) }}>Tạo nhóm</Button></div></div>
+      <div className="space-y-4"><Button variant="outline" onClick={() => setShowTasks(value => !value)}>{showTasks ? 'Đóng giao việc' : 'Giao nhiệm vụ theo chiến dịch'}</Button>{showTasks && <TaskBoard operator />}</div>
       {(openInvite || action?.kind === 'invite') && <MembershipInviteDialog teams={data.teams} service={service} onClose={close} onSaved={saved} />}
       {action?.kind === 'review' && <JoinRequestReviewDialog request={action.item} decision={action.decision} teams={data.teams} service={service} onClose={close} onSaved={saved} />}
       {['assign', 'remove'].includes(action?.kind) && <MemberAssignmentDialog member={action.item} remove={action.kind === 'remove'} teams={data.teams} service={service} onClose={close} onSaved={saved} />}

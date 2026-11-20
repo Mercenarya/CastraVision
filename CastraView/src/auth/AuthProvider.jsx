@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { AuthContext } from './AuthContext'
 import { requireSupabase, supabaseConfigurationError } from '../lib/supabase'
 import { api, onApiUnauthorized } from '../services/api'
@@ -11,6 +11,7 @@ export function AuthProvider({ children }) {
   const [authorization, setAuthorization] = useState(null)
   const [ready, setReady] = useState(Boolean(supabaseConfigurationError))
   const [error, setError] = useState(supabaseConfigurationError)
+  const sessionUser = useRef(null)
 
   useEffect(() => {
     if (supabaseConfigurationError) return undefined
@@ -20,6 +21,7 @@ export function AuthProvider({ children }) {
     client.auth.getSession().then(({ data, error: failure }) => {
       if (!active || eventReceived) return
       if (failure) { setError('Không thể khôi phục phiên Supabase.'); setReady(true); return }
+      sessionUser.current = data.session?.user.id || null
       setSession(data.session)
       if (!data.session) setReady(true)
     }).catch(() => { if (active) { setError('Không thể khôi phục phiên Supabase.'); setReady(true) } })
@@ -27,10 +29,12 @@ export function AuthProvider({ children }) {
     const { data: listener } = client.auth.onAuthStateChange((_event, next) => {
       if (!active) return
       eventReceived = true
+      const sameUser = Boolean(next && sessionUser.current === next.user.id)
+      sessionUser.current = next?.user.id || null
       setAuthorization(current => current?.user.id === next?.user.id ? current : null)
       setSession(next)
       setError('')
-      setReady(!next)
+      setReady(current => !next || (current && sameUser))
     })
     const removeHandler = onApiUnauthorized(() => {
       setAuthorization(null)
@@ -64,6 +68,7 @@ export function AuthProvider({ children }) {
     user: authorization ? { ...authorization.user, role: membership?.role || null } : null,
     membership,
     memberships: authorization?.memberships || [],
+    suspendedWorkspaces: authorization?.suspendedWorkspaces || [],
     role: membership?.role || null,
     workspaceId: membership?.workspaceId || null,
     platformRole: authorization?.platformRole || null,

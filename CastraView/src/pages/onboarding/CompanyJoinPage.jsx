@@ -7,6 +7,7 @@ import { NativeSelect } from '@/components/ui/native-select'
 import { membershipService } from '@/services/membership'
 import { STATUS_NAMES, ROLE_NAMES } from '@/services/membershipContract'
 import MembershipNotifications from '@/pages/membership/MembershipNotifications'
+import ManagerInvitationPanel from './ManagerInvitationPanel'
 
 export default function CompanyJoinPage({ auth, service = membershipService, onBack }) {
   const [search, setSearch] = useState('')
@@ -47,6 +48,8 @@ export default function CompanyJoinPage({ auth, service = membershipService, onB
   return <main className="min-h-screen bg-background p-4 text-foreground md:p-8"><div className="mx-auto max-w-5xl space-y-6">
     <header className="flex flex-wrap items-center justify-between gap-4"><div><p className="text-xs font-semibold tracking-widest text-info">CASTRAVISION · GIA NHẬP DOANH NGHIỆP</p><h1 className="mt-2 text-2xl font-bold">Chọn công ty bạn muốn làm việc</h1><p className="mt-2 text-sm text-muted-foreground">{auth.user.email} · Chờ quản lý duyệt trước khi truy cập dữ liệu doanh nghiệp.</p></div><div className="flex gap-2"><MembershipNotifications userId={auth.user.id} service={service} onOpenResource={() => refresh()} /><Button variant="outline" onClick={() => auth.signOut()}>Đăng xuất</Button></div></header>
     {onBack && <Button variant="outline" onClick={onBack}>Quay lại Workspace</Button>}
+    <ManagerInvitationPanel auth={auth} />
+    {auth.suspendedWorkspaces?.length>0 && <p role="status" className="rounded-lg border border-warning p-4">Doanh nghiệp đang bị tạm khóa: {auth.suspendedWorkspaces.map(item=>item.name).join(', ')}. Bạn không cần đăng ký lại; liên hệ người vận hành để được hỗ trợ.</p>}
     {error && <p role="alert" className="rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">{error}</p>}
     {notice && <p role="status" className="rounded-xl border border-success/30 bg-success/10 p-4 text-sm">{notice}</p>}
     {!data ? <p role="status" className="py-8 text-center text-muted-foreground">Đang tải công ty và yêu cầu của bạn…</p> : <>

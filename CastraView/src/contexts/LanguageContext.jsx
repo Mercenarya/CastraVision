@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { LanguageContext } from './languageContextValue'
 import {
@@ -12,6 +12,7 @@ import {
 
 export function LanguageProvider({ children }) {
   const [language, setLanguageState] = useState(() => getStoredLanguage())
+  useEffect(() => { document.documentElement.lang = language }, [language])
 
   const setLanguage = useCallback((nextLang) => {
     if (!SUPPORTED_LANGUAGES.includes(nextLang)) {

@@ -30,8 +30,10 @@ export async function consumeAuthCallback(auth, address) {
   const url = new URL(address)
   const fragment = new URLSearchParams(url.hash.slice(1))
   const invitationId = url.searchParams.get('invitationId')
+  const platformInvitationId = url.searchParams.get('platformInvitationId')
   const clean = new URL('/auth/complete', url.origin)
   if (invitationId && uuid.test(invitationId)) clean.searchParams.set('invitationId', invitationId)
+  if (platformInvitationId && uuid.test(platformInvitationId)) clean.searchParams.set('platformInvitationId', platformInvitationId)
   const errorCode = fragment.get('error_code') || url.searchParams.get('error_code') || (fragment.has('error') || url.searchParams.has('error') ? 'invalid_link' : null)
   if (errorCode) return { cleanPath: clean.pathname + clean.search, session: null, errorCode }
   // The singleton SDK consumes implicit/PKCE callbacks during initialize; do not exchange twice.

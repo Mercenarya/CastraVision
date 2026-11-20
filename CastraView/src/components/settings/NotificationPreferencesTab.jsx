@@ -97,7 +97,7 @@ export function NotificationPreferencesTab({ user, notify }) {
   const handleSave = () => {
     if (!storageKey || typeof window === 'undefined') {
       setFeedback({
-        text: 'Không thể xác định danh tính người dùng để lưu tùy chọn thông báo.',
+        text: t('employeeSettings.prefsNoIdentity'),
         type: 'error',
       })
       return
@@ -106,12 +106,12 @@ export function NotificationPreferencesTab({ user, notify }) {
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(preferences))
       setCommittedPreferences(preferences)
-      const successMsg = 'Tùy chọn thông báo đã được lưu thành công trên trình duyệt này.'
+      const successMsg = t('employeeSettings.prefsSaved')
       setFeedback({ text: successMsg, type: 'success' })
       if (notify) notify(successMsg)
     } catch {
       setFeedback({
-        text: 'Lỗi khi lưu tùy chọn thông báo vào bộ nhớ cục bộ.',
+        text: t('employeeSettings.prefsSaveError'),
         type: 'error',
       })
     }
@@ -119,16 +119,17 @@ export function NotificationPreferencesTab({ user, notify }) {
 
   // Reset to Defaults
   const handleReset = () => {
-    setPreferences(DEFAULT_PREFERENCES)
     if (storageKey && typeof window !== 'undefined') {
       try {
         window.localStorage.removeItem(storageKey)
       } catch {
-        // Ignore
+        setFeedback({ text: t('employeeSettings.prefsResetError'), type: 'error' })
+        return
       }
     }
+    setPreferences(DEFAULT_PREFERENCES)
     setCommittedPreferences(DEFAULT_PREFERENCES)
-    const resetMsg = 'Đã khôi phục tùy chọn thông báo về trạng thái mặc định.'
+    const resetMsg = t('employeeSettings.prefsReset')
     setFeedback({ text: resetMsg, type: 'info' })
     if (notify) notify(resetMsg)
   }
@@ -143,9 +144,7 @@ export function NotificationPreferencesTab({ user, notify }) {
               {t('settings.notificationPreferences.title')}
             </h2>
             {hasUnsavedChanges && (
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#ffb4ab]/15 text-[#ffb4ab] border border-[#ffb4ab]/30">
-                Chưa lưu
-              </span>
+              <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#ffb4ab]/15 text-[#ffb4ab] border border-[#ffb4ab]/30">{t('employeeSettings.unsaved')}</span>
             )}
           </div>
           <p className="text-xs text-[#c7c4d7] mt-0.5">
@@ -179,9 +178,7 @@ export function NotificationPreferencesTab({ user, notify }) {
       {!userId && (
         <div className="mx-6 mt-6 p-4 rounded-lg bg-[#ffb4ab]/10 border border-[#ffb4ab]/30 text-[#ffb4ab] text-xs flex items-center gap-3">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>
-            Không thể xác định danh tính người dùng. Vui lòng đăng nhập với tài khoản hợp lệ để lưu tùy chọn thông báo.
-          </span>
+          <span>{t('employeeSettings.prefsLogin')}</span>
         </div>
       )}
 
@@ -211,21 +208,15 @@ export function NotificationPreferencesTab({ user, notify }) {
         <div className="pt-0 space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-[#464554]/40">
             <Megaphone className="w-4 h-4 text-[#8083ff]" />
-            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">
-              Thông báo Chiến dịch (Campaign Notifications)
-            </h3>
+            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">{t('employeeSettings.campaignNotifications')}</h3>
           </div>
 
           <div className="space-y-3">
             {/* Toggle 1.1 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Cập nhật hiệu suất chiến dịch
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Báo cáo định kỳ và chỉ số ROAS quan trọng cho các chiến dịch đang chạy.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.campaignPerformance')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.campaignPerformanceDescription')}</p>
               </div>
               <button
                 type="button"
@@ -251,12 +242,8 @@ export function NotificationPreferencesTab({ user, notify }) {
             {/* Toggle 1.2 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Thay đổi trạng thái chiến dịch
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Cảnh báo tức thì khi chiến dịch khởi chạy, tạm dừng hoặc hoàn tất.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.campaignStatus')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.campaignStatusDescription')}</p>
               </div>
               <button
                 type="button"
@@ -285,21 +272,15 @@ export function NotificationPreferencesTab({ user, notify }) {
         <div className="pt-6 space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-[#464554]/40">
             <CheckSquare className="w-4 h-4 text-[#4cd7f6]" />
-            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">
-              Thông báo Phê duyệt (Approval Notifications)
-            </h3>
+            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">{t('employeeSettings.approvalNotifications')}</h3>
           </div>
 
           <div className="space-y-3">
             {/* Toggle 2.1 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Nội dung chờ phê duyệt
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Thông báo khi có nội dung sáng tạo mới đang chờ xem xét duyệt xuất bản.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.pendingContent')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.pendingContentDescription')}</p>
               </div>
               <button
                 type="button"
@@ -325,12 +306,8 @@ export function NotificationPreferencesTab({ user, notify }) {
             {/* Toggle 2.2 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Yêu cầu chỉnh sửa nội dung
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Thông báo tức thì khi người kiểm duyệt để lại phản hồi hoặc yêu cầu sửa đổi.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.revisionContent')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.revisionContentDescription')}</p>
               </div>
               <button
                 type="button"
@@ -356,12 +333,8 @@ export function NotificationPreferencesTab({ user, notify }) {
             {/* Toggle 2.3 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Kết quả phê duyệt
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Xác nhận khi nội dung được chấp thuận hoặc từ chối chính thức.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.approvalResult')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.approvalResultDescription')}</p>
               </div>
               <button
                 type="button"
@@ -390,21 +363,15 @@ export function NotificationPreferencesTab({ user, notify }) {
         <div className="pt-6 space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-[#464554]/40">
             <TrendingUp className="w-4 h-4 text-[#8083ff]" />
-            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">
-              Thông báo Ngân sách (Budget Notifications)
-            </h3>
+            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">{t('employeeSettings.budgetNotifications')}</h3>
           </div>
 
           <div className="space-y-3">
             {/* Toggle 3.1 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Cảnh báo lệch ngân sách
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Cảnh báo theo thời gian thực khi chi tiêu quảng cáo vượt ngưỡng dự kiến.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.budgetDeviation')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.budgetDeviationDescription')}</p>
               </div>
               <button
                 type="button"
@@ -430,12 +397,8 @@ export function NotificationPreferencesTab({ user, notify }) {
             {/* Toggle 3.2 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Cập nhật mức sử dụng ngân sách
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Thông báo cột mốc khi chi tiêu đạt 50%, 75% và 90% ngân sách kế hoạch.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.budgetUsage')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.budgetUsageDescription')}</p>
               </div>
               <button
                 type="button"
@@ -464,21 +427,15 @@ export function NotificationPreferencesTab({ user, notify }) {
         <div className="pt-6 space-y-4">
           <div className="flex items-center gap-2 pb-2 border-b border-[#464554]/40">
             <Bell className="w-4 h-4 text-[#4cd7f6]" />
-            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">
-              Thông báo Chung (General Notifications)
-            </h3>
+            <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">{t('employeeSettings.generalNotifications')}</h3>
           </div>
 
           <div className="space-y-3">
             {/* Toggle 4.1 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Thông báo chung của Workspace
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Bản tin thông báo toàn công ty và cập nhật chính sách từ quản trị viên.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.workspaceAnnouncements')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.workspaceAnnouncementsDescription')}</p>
               </div>
               <button
                 type="button"
@@ -504,12 +461,8 @@ export function NotificationPreferencesTab({ user, notify }) {
             {/* Toggle 4.2 */}
             <div className="flex items-center justify-between p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60">
               <div className="space-y-0.5 pr-4">
-                <p className="text-sm font-medium text-[#dfe2f1]">
-                  Cập nhật sản phẩm & Tính năng mới
-                </p>
-                <p className="text-xs text-[#c7c4d7]">
-                  Thông báo cải tiến công cụ AI, tính năng mới và các bản vá phát hành.
-                </p>
+                <p className="text-sm font-medium text-[#dfe2f1]">{t('employeeSettings.productUpdates')}</p>
+                <p className="text-xs text-[#c7c4d7]">{t('employeeSettings.productUpdatesDescription')}</p>
               </div>
               <button
                 type="button"
@@ -539,9 +492,7 @@ export function NotificationPreferencesTab({ user, notify }) {
       <div className="px-6 py-4 bg-[#171b26]/60 border-t border-[#464554] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-xs text-[#908fa0]">
           <Info className="w-3.5 h-3.5 text-[#8083ff] flex-shrink-0" />
-          <span>
-            Tùy chọn được lưu trữ cục bộ trên thiết bị và trình duyệt này theo mã định danh tài khoản.
-          </span>
+          <span>{t('employeeSettings.prefsScope')}</span>
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
@@ -560,7 +511,7 @@ export function NotificationPreferencesTab({ user, notify }) {
             className="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
           >
             <Save className="w-3.5 h-3.5" />
-            <span>Lưu tùy chọn</span>
+            <span>{t('employeeSettings.savePrefs')}</span>
           </button>
         </div>
       </div>

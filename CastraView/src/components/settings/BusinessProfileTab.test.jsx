@@ -1,10 +1,11 @@
+import { translate } from '../../i18n'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, it, expect, vi } from 'vitest'
 import BusinessProfileTab from './BusinessProfileTab'
 import { getBusinessProfile } from '../../services/businessProfileService'
 
-vi.mock('../../hooks/useLanguage', () => ({ useLanguage: () => ({ t: key => key }) }))
+vi.mock('../../hooks/useLanguage', () => ({ useLanguage: () => ({ t: (key, params) => key === 'common.save' ? key : translate('vi', key, params) }) }))
 vi.mock('../../services/businessProfileService', () => ({ getBusinessProfile: vi.fn(), saveBusinessProfile: vi.fn() }))
 const profile = { business_name: 'Test business', industry: 'Retail', business_size: 'Small', target_customers: 'Adults', preferred_channels: [] }
 const membership = { workspaceId: 'a', workspaceName: 'Test business', role: 'admin' }

@@ -1,3 +1,4 @@
+import { useWorkflowError } from '@/hooks/useWorkflowError'
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useLanguage } from '@/hooks/useLanguage'
@@ -28,6 +29,7 @@ export function AccountSecurityTab({
   onUserUpdate,
 }) {
   const { t } = useLanguage()
+  const formatError = useWorkflowError()
 
   // ─── 1. Personal Information State ──────────────────────────────────────────
   const initialFullName =
@@ -37,14 +39,7 @@ export function AccountSecurityTab({
     (user?.email ? user.email.split('@')[0] : 'User')
 
   const initialJobTitle =
-    user?.user_metadata?.job_title ||
-    (role === 'manager'
-      ? 'Senior Marketing Director'
-      : role === 'leader'
-      ? 'Growth Marketing Lead'
-      : role === 'system_admin'
-      ? 'Root System Administrator'
-      : 'Senior Content Specialist')
+    user?.job_title ?? user?.user_metadata?.job_title ?? ''
 
   const [fullName, setFullName] = useState(initialFullName)
   const [jobTitle, setJobTitle] = useState(initialJobTitle)
@@ -129,7 +124,7 @@ export function AccountSecurityTab({
   const handleResetPersonal = () => {
     setFullName(initialFullName)
     setJobTitle(initialJobTitle)
-    setPersonalMsg({ text: 'Đã hoàn tác các thay đổi chưa lưu.', type: 'info' })
+    setPersonalMsg({ text: t('employeeSettings.personalReset'), type: 'info' })
     setTimeout(() => setPersonalMsg({ text: '', type: '' }), 3000)
   }
 
@@ -139,7 +134,7 @@ export function AccountSecurityTab({
     const cleanJobTitle = jobTitle.trim()
 
     if (!cleanFullName) {
-      setPersonalMsg({ text: 'Họ và tên không được để trống.', type: 'error' })
+      setPersonalMsg({ text: t('employeeSettings.nameRequired'), type: 'error' })
       return
     }
 
@@ -160,7 +155,7 @@ export function AccountSecurityTab({
         if (authError) {
           // Operation A failed: preserve existing profile data, report error, do not proceed to Operation B
           setPersonalMsg({
-            text: `Lỗi cập nhật tài khoản: ${authError.message || 'Không thể lưu Auth metadata'}.`,
+            text: t('employeeSettings.accountError', {message: authError.message || t('employeeSettings.authSaveError')}),
             type: 'error',
           })
           return
@@ -183,11 +178,9 @@ export function AccountSecurityTab({
             .eq('id', user.id)
             .select('id')
             .maybeSingle()
-            .select('id')
-            .single()
 
           if (pErr || !savedProfile) {
-            profileSyncError = pErr || new Error('Chưa có bản ghi hồ sơ để cập nhật.')
+            profileSyncError = pErr || new Error(t('employeeSettings.profileMissing'))
           }
         } catch (syncEx) {
           profileSyncError = syncEx
@@ -196,14 +189,14 @@ export function AccountSecurityTab({
         // --- Evaluate persistence results ---
         if (!profileSyncError) {
           // Both operations succeeded
-          const fullSuccessMsg = 'Cập nhật thông tin cá nhân và đồng bộ hồ sơ công khai thành công.'
+          const fullSuccessMsg = t('employeeSettings.personalSaved')
           setPersonalMsg({ text: fullSuccessMsg, type: 'success' })
           if (notify) notify(fullSuccessMsg)
         } else {
           // Partial Failure: Auth succeeded, but public.profiles failed
-          const partialMsg = `Thông tin tài khoản đã được lưu, nhưng đồng bộ hồ sơ công khai (public.profiles) chưa hoàn tất: ${profileSyncError.message || 'Lỗi quyền RLS'}.`
+          const partialMsg = t('employeeSettings.partialError', {message: profileSyncError.message || t('employeeSettings.rlsError')})
           setPersonalMsg({ text: partialMsg, type: 'warning' })
-          if (notify) notify('Đã lưu thông tin xác thực (đồng bộ hồ sơ công khai thất bại).')
+          if (notify) notify(t('employeeSettings.partialNotice'))
         }
       } else {
         // Fallback for demo or local session
@@ -217,13 +210,13 @@ export function AccountSecurityTab({
             },
           })
         }
-        const demoMsg = 'Đã cập nhật thông tin cá nhân (chế độ Demo).'
+        const demoMsg = t('employeeSettings.demoPersonalSaved')
         setPersonalMsg({ text: demoMsg, type: 'success' })
         if (notify) notify(demoMsg)
       }
     } catch (err) {
       setPersonalMsg({
-        text: err.message || 'Không thể cập nhật thông tin cá nhân.',
+        text: err.message || t('employeeSettings.personalSaveError'),
         type: 'error',
       })
     } finally {
@@ -238,26 +231,26 @@ export function AccountSecurityTab({
 
     // 1. Validation check
     if (!currentPassword) {
-      setPasswordError('Vui lòng nhập mật khẩu hiện tại.')
+      setPasswordError(t('employeeSettings.currentPasswordRequired'))
       return
     }
     if (!allRulesPassed) {
-      setPasswordError('Mật khẩu mới chưa thỏa mãn đủ tiêu chuẩn bảo mật.')
+      setPasswordError(t('employeeSettings.passwordRulesError'))
       return
     }
     if (!passwordsMatch) {
-      setPasswordError('Mật khẩu xác nhận không khớp với mật khẩu mới.')
+      setPasswordError(t('employeeSettings.passwordMismatchError'))
       return
     }
     if (newPassword === currentPassword) {
-      setPasswordError('Mật khẩu mới không được trùng với mật khẩu hiện tại.')
+      setPasswordError(t('employeeSettings.samePasswordError'))
       return
     }
 
     // 2. Demo mode check: strictly DO NOT simulate password updates
     if (!supabase || isDemoUser || !user?.id) {
       setPasswordError(
-        'Tính năng đổi mật khẩu yêu cầu tài khoản Supabase thực và không khả dụng trong chế độ Demo.'
+        t('employeeSettings.demoPasswordError')
       )
       return
     }
@@ -268,13 +261,13 @@ export function AccountSecurityTab({
       await changeAccountPassword(user.id, currentPassword, newPassword)
 
       // 5. Success confirmation
-      setPasswordSuccess('Mật khẩu đã được cập nhật thành công.')
+      setPasswordSuccess(t('employeeSettings.passwordSaved'))
       setCurrentPassword('')
       setNewPassword('')
       setConfirmPassword('')
-      if (notify) notify('Đổi mật khẩu thành công.')
+      if (notify) notify(t('employeeSettings.passwordSuccess'))
     } catch (err) {
-      setPasswordError(err.message || 'Lỗi hệ thống khi cập nhật mật khẩu.')
+      setPasswordError(formatError(err) || t('employeeSettings.passwordSaveError'))
     } finally {
       setUpdatingPassword(false)
     }
@@ -358,18 +351,17 @@ export function AccountSecurityTab({
                 <label
                   htmlFor="input-fullname"
                   className="text-xs font-medium text-[#c7c4d7]"
-                >
-                  Họ và tên
-                </label>
+                >{t('employeeSettings.fullName')}</label>
                 <div className="relative">
                   <input
                     id="input-fullname"
+                    maxLength={120}
                     type="text"
                     required
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all"
-                    placeholder="Nhập họ và tên..."
+                    placeholder={t('employeeSettings.fullNamePlaceholder')}
                   />
                 </div>
               </div>
@@ -379,18 +371,16 @@ export function AccountSecurityTab({
                 <label
                   htmlFor="input-jobtitle"
                   className="text-xs font-medium text-[#c7c4d7]"
-                >
-                  Chức danh
-                </label>
+                >{t('employeeSettings.jobTitle')}</label>
                 <div className="relative">
                   <input
                     id="input-jobtitle"
                     type="text"
-                    required
+                    maxLength={120}
                     value={jobTitle}
                     onChange={(e) => setJobTitle(e.target.value)}
                     className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all"
-                    placeholder="Nhập chức danh..."
+                    placeholder={t('employeeSettings.jobTitlePlaceholder')}
                   />
                 </div>
               </div>
@@ -402,7 +392,7 @@ export function AccountSecurityTab({
                   className="text-xs font-medium text-[#908fa0] flex items-center gap-1.5"
                 >
                   <Lock className="w-3.5 h-3.5 text-[#908fa0]" />
-                  <span>Địa chỉ Email</span>
+                  <span>{t('employeeSettings.emailAddress')}</span>
                 </label>
                 <div className="relative">
                   <input
@@ -424,7 +414,7 @@ export function AccountSecurityTab({
                   className="text-xs font-medium text-[#908fa0] flex items-center gap-1.5"
                 >
                   <Lock className="w-3.5 h-3.5 text-[#908fa0]" />
-                  <span>Vai trò hiện tại</span>
+                  <span>{t('employeeSettings.currentRole')}</span>
                 </label>
                 <div className="relative">
                   <input
@@ -504,9 +494,7 @@ export function AccountSecurityTab({
               <label
                 htmlFor="pwd-current"
                 className="text-xs font-medium text-[#c7c4d7]"
-              >
-                Mật khẩu hiện tại
-              </label>
+              >{t('employeeSettings.currentPassword')}</label>
               <div className="relative">
                 <input
                   id="pwd-current"
@@ -514,7 +502,7 @@ export function AccountSecurityTab({
                   required
                   value={currentPassword}
                   onChange={(e) => setCurrentPassword(e.target.value)}
-                  placeholder="Nhập mật khẩu hiện tại..."
+                  placeholder={t('employeeSettings.currentPasswordPlaceholder')}
                   className="w-full h-11 pl-3.5 pr-10 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all"
                 />
                 <button
@@ -536,9 +524,7 @@ export function AccountSecurityTab({
               <label
                 htmlFor="pwd-new"
                 className="text-xs font-medium text-[#c7c4d7]"
-              >
-                Mật khẩu mới
-              </label>
+              >{t('employeeSettings.newPassword')}</label>
               <div className="relative">
                 <input
                   id="pwd-new"
@@ -546,7 +532,7 @@ export function AccountSecurityTab({
                   required
                   value={newPassword}
                   onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Nhập mật khẩu mới..."
+                  placeholder={t('employeeSettings.newPasswordPlaceholder')}
                   className="w-full h-11 pl-3.5 pr-10 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all"
                 />
                 <button
@@ -568,9 +554,7 @@ export function AccountSecurityTab({
               <label
                 htmlFor="pwd-confirm"
                 className="text-xs font-medium text-[#c7c4d7]"
-              >
-                Xác nhận mật khẩu mới
-              </label>
+              >{t('employeeSettings.confirmPassword')}</label>
               <div className="relative">
                 <input
                   id="pwd-confirm"
@@ -578,7 +562,7 @@ export function AccountSecurityTab({
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Xác nhận lại mật khẩu..."
+                  placeholder={t('employeeSettings.confirmPasswordPlaceholder')}
                   className="w-full h-11 pl-3.5 pr-10 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all"
                 />
                 <button
@@ -596,16 +580,14 @@ export function AccountSecurityTab({
               {showMismatch && (
                 <p className="text-[#ffb4ab] text-xs flex items-center gap-1 mt-1">
                   <AlertCircle className="w-3.5 h-3.5" />
-                  <span>Mật khẩu xác nhận không khớp</span>
+                  <span>{t('employeeSettings.passwordMismatch')}</span>
                 </p>
               )}
             </div>
 
             {/* Password Requirements Checklist */}
             <div className="p-3.5 rounded-lg bg-[#0a0e18] border border-[#464554]/60 space-y-2">
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#908fa0] font-semibold">
-                Tiêu chuẩn mật khẩu
-              </span>
+              <span className="text-[11px] font-mono uppercase tracking-wider text-[#908fa0] font-semibold">{t('employeeSettings.passwordRequirements')}</span>
               <ul className="space-y-1.5 text-xs">
                 <li
                   className={`flex items-center gap-2 ${
@@ -617,7 +599,7 @@ export function AccountSecurityTab({
                   ) : (
                     <Circle className="w-3.5 h-3.5 text-[#908fa0]" />
                   )}
-                  <span>Tối thiểu 8 ký tự</span>
+                  <span>{t('employeeSettings.passwordLength')}</span>
                 </li>
                 <li
                   className={`flex items-center gap-2 ${
@@ -629,7 +611,7 @@ export function AccountSecurityTab({
                   ) : (
                     <Circle className="w-3.5 h-3.5 text-[#908fa0]" />
                   )}
-                  <span>Chứa ít nhất một chữ in hoa (A-Z)</span>
+                  <span>{t('employeeSettings.passwordUpper')}</span>
                 </li>
                 <li
                   className={`flex items-center gap-2 ${
@@ -641,7 +623,7 @@ export function AccountSecurityTab({
                   ) : (
                     <Circle className="w-3.5 h-3.5 text-[#908fa0]" />
                   )}
-                  <span>Chứa số (0-9) hoặc ký tự đặc biệt (!@#$…)</span>
+                  <span>{t('employeeSettings.passwordNumber')}</span>
                 </li>
               </ul>
             </div>

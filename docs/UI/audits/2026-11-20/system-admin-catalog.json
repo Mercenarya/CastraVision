@@ -1,0 +1,915 @@
+{
+  "scopedTables": [
+    {
+      "rls": true,
+      "table": "ad_contents",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "approvals",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "audit_logs",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "budget_proposals",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "business_profiles",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "campaign_performance",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "campaigns",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "competitor_insights",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "membership_notifications",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "notifications",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "proposal_revisions",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "reports",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "strategies",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "strategy_context_embeddings",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspace_invitations",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspace_join_requests",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspace_members",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspace_recruitment_settings",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspace_team_members",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspace_teams",
+      "writeGuard": true,
+      "activePolicy": true
+    },
+    {
+      "rls": true,
+      "table": "workspaces",
+      "writeGuard": true,
+      "activePolicy": true
+    }
+  ],
+  "storagePolicies": null,
+  "definerFunctions": [
+    {
+      "schema": "membership_private",
+      "function": "actor",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "audit",
+      "arguments": "p_ws uuid, p_entity text, p_id uuid, p_action text, p_before jsonb, p_after jsonb",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "check_team",
+      "arguments": "p_workspace_id uuid, p_team_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "invitation_json",
+      "arguments": "i workspace_invitations",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "is_manager",
+      "arguments": "p_workspace_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "membership_private",
+      "function": "member_json",
+      "arguments": "m workspace_members",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "notify",
+      "arguments": "p_ws uuid, p_user uuid, p_event text, p_request uuid, p_invite uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "own_email",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "membership_private",
+      "function": "request_json",
+      "arguments": "r workspace_join_requests",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "require_manager",
+      "arguments": "p_workspace_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "require_password",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "track_auth_password",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "membership_private",
+      "function": "valid_actor",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "platform_private",
+      "function": "actor",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "platform_private",
+      "function": "business_actor",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "platform_private",
+      "function": "company_json",
+      "arguments": "p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "platform_private",
+      "function": "guard_business_write",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "platform_private",
+      "function": "register_workspace",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "platform_private",
+      "function": "require_active",
+      "arguments": "p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "platform_private",
+      "function": "workspace_active",
+      "arguments": "p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "admin_workspace_overview",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": true,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "attach_audit_trigger",
+      "arguments": "target regclass",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "public",
+      "function": "audit_row_change",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "public",
+      "function": "create_workspace_with_admin",
+      "arguments": "workspace_name text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "public",
+      "function": "handle_new_auth_user",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": true,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "has_workspace_role",
+      "arguments": "ws_id uuid, allowed_roles workspace_role[]",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "is_workspace_member",
+      "arguments": "ws_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "leader_workflow",
+      "arguments": "p_workspace_id uuid, p_command text, p_data jsonb",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "match_strategy_context",
+      "arguments": "query_embedding vector, match_count integer",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": true,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_accept_invitation",
+      "arguments": "p_invitation_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_cancel_request",
+      "arguments": "p_request_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_claim_delivery",
+      "arguments": "p_workspace_id uuid, p_invitation_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_company_directory",
+      "arguments": "p_search text, p_limit integer, p_offset integer",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_create_team",
+      "arguments": "p_workspace_id uuid, p_name text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_get_recruitment",
+      "arguments": "p_workspace_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_invite",
+      "arguments": "p_workspace_id uuid, p_email text, p_role text, p_team_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_list_notifications",
+      "arguments": "p_unread_only boolean, p_limit integer, p_offset integer",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_my_invitations",
+      "arguments": "p_limit integer, p_offset integer",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_my_requests",
+      "arguments": "p_limit integer, p_offset integer",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_onboarding_state",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_personnel",
+      "arguments": "p_workspace_id uuid, p_tab text, p_search text, p_role text, p_status text, p_team_id uuid, p_sort text, p_limit integer, p_offset integer",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_read_notification",
+      "arguments": "p_notification_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_record_delivery",
+      "arguments": "p_invitation_id uuid, p_attempt_id uuid, p_succeeded boolean",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "public",
+      "function": "membership_remove_member",
+      "arguments": "p_workspace_id uuid, p_user_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_request_join",
+      "arguments": "p_workspace_id uuid, p_message text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_review_request",
+      "arguments": "p_workspace_id uuid, p_request_id uuid, p_decision text, p_team_id uuid, p_reason text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_revoke_invitation",
+      "arguments": "p_workspace_id uuid, p_invitation_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_set_recruitment",
+      "arguments": "p_workspace_id uuid, p_accepting boolean, p_description text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_teams",
+      "arguments": "p_workspace_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "membership_update_member",
+      "arguments": "p_workspace_id uuid, p_user_id uuid, p_role text, p_team_ids uuid[]",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_accept_manager_invitation",
+      "arguments": "p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_company",
+      "arguments": "p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_create",
+      "arguments": "p_data jsonb",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_directory",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_invitation_action",
+      "arguments": "p_id uuid, p_action text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_issue_manager_invitation",
+      "arguments": "p_workspace_id uuid, p_email text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_my_manager_invitations",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_my_workspace_states",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_notifications",
+      "arguments": "p_read_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_record_delivery",
+      "arguments": "p_id uuid, p_attempt uuid, p_succeeded boolean",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "public",
+      "function": "platform_update",
+      "arguments": "p_id uuid, p_version integer, p_data jsonb",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "platform_workspace_access",
+      "arguments": "p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "prevent_audit_log_mutation",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "public",
+      "function": "protect_workspace_admin",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": true,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "validate_workspace_reference",
+      "arguments": "",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": true,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "public",
+      "function": "workspace_role",
+      "arguments": "ws_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "workflow_private",
+      "function": "actor_role",
+      "arguments": "p_ws uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "workflow_private",
+      "function": "can_read_target",
+      "arguments": "p_ws uuid, p_kind text, p_id uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "workflow_private",
+      "function": "can_team",
+      "arguments": "p_ws uuid, p_team uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": true
+    },
+    {
+      "schema": "workflow_private",
+      "function": "notify",
+      "arguments": "p_approval approvals, p_event text",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": false,
+      "authenticatedExecute": false
+    },
+    {
+      "schema": "workflow_private",
+      "function": "require_team",
+      "arguments": "p_ws uuid, p_team uuid",
+      "searchPath": [
+        "search_path=\"\""
+      ],
+      "anonExecute": false,
+      "activeReference": true,
+      "authenticatedExecute": false
+    }
+  ],
+  "missingScopedTableGuards": []
+}

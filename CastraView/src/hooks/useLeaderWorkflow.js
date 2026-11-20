@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { workflow } from '../services/leaderWorkflow'
+import { useWorkflowError } from './useWorkflowError'
 
 export function useWorkflowQuery(command, params = {}, revision = 0) {
+  const formatError = useWorkflowError()
   const key = JSON.stringify(params)
   const [state, setState] = useState({ data: null, loading: true, error: '' })
   const [retry, setRetry] = useState(0)
@@ -17,7 +19,7 @@ export function useWorkflowQuery(command, params = {}, revision = 0) {
         if (!active || settled) return
         settled = true
         controller.abort()
-        setState(current => ({ ...current, loading: false, error: 'Yêu cầu mất quá lâu. Vui lòng thử lại.' }))
+        setState(current => ({ ...current, loading: false, error: { code: 'TIMEOUT' } }))
       }, 30_000)
       return workflow(command, JSON.parse(key), { signal: controller.signal })
     }).then(data => {
@@ -28,17 +30,18 @@ export function useWorkflowQuery(command, params = {}, revision = 0) {
     }).catch(cause => {
       if (active && !settled) {
         settled = true
-        setState({ data: null, loading: false, error: cause.message })
+        setState({ data: null, loading: false, error: cause })
       }
     }).finally(() => {
       clearTimeout(timeout)
     })
     return () => { active = false; clearTimeout(timeout); controller.abort() }
   }, [command, key, revision, retry])
-  return { ...state, reload: () => setRetry(n => n + 1) }
+  return { ...state, error: formatError(state.error), reload: () => setRetry(n => n + 1) }
 }
 
 export function useWorkflowAction(onSuccess) {
+  const formatError = useWorkflowError()
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const running = useRef(false)
@@ -52,12 +55,12 @@ export function useWorkflowAction(onSuccess) {
       await onSuccess?.(result)
       return result
     } catch (cause) {
-      setError(cause.message)
+      setError(cause)
       return null
     } finally {
       running.current = false
       setBusy(false)
     }
   }, [onSuccess])
-  return { busy, error, run, clearError: () => setError('') }
+  return { busy, error: formatError(error), run, clearError: () => setError('') }
 }

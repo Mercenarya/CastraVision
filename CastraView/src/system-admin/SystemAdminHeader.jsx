@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useLanguage } from '@/hooks/useLanguage'
 import { LanguageDropdownSubmenu } from '@/components/LanguageDropdownSubmenu'
+import { PlatformNotifications } from './PlatformNotifications'
 
 /**
  * SystemAdminHeader
@@ -15,6 +16,7 @@ export function SystemAdminHeader({
   searchTerm = '',
   onSearchChange,
   onOpenMobileMenu,
+  service,
 }) {
   const { t } = useLanguage()
   const [showProfileMenu, setShowProfileMenu] = useState(false)
@@ -71,7 +73,7 @@ export function SystemAdminHeader({
   }
 
   const breadcrumbs = getBreadcrumbs()
-  const displayName = user?.fullName || user?.username || 'System Administrator'
+  const displayName = user?.full_name || user?.fullName || user?.username || 'System Administrator'
   const userInitials = displayName
     .split(' ')
     .map((n) => n[0])
@@ -124,7 +126,7 @@ export function SystemAdminHeader({
         {/* Platform Node Status */}
         <div className="sa-node-status">
           <span className="sa-node-pulse-dot" />
-          <span className="sa-node-status-text">All platform nodes nominal</span>
+          <span className="sa-node-status-text">Telemetry: chưa cấu hình</span>
         </div>
 
         {/* Global Company Search */}
@@ -153,18 +155,7 @@ export function SystemAdminHeader({
         </div>
 
         {/* Notification Icon */}
-        <button
-          type="button"
-          className="sa-icon-btn"
-          title={t('header.telemetryAlerts')}
-          aria-label={t('header.telemetryAlerts')}
-        >
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          <span className="sa-notify-dot" />
-        </button>
+        <PlatformNotifications service={service} />
 
         {/* User Profile */}
         <div className="sa-user-profile-wrapper">

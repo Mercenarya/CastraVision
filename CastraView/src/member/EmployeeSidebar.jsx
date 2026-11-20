@@ -20,8 +20,10 @@ export default function EmployeeSidebar({
   onNavigate,
   isDrawer = false,
   onClose,
-  companyName = 'Acme Corp Enterprise',
-  companyCode = 'acme-corp-prod-01',
+  companyName = 'Workspace',
+  companyCode = '',
+  unreadCount,
+  taskCount,
 }) {
   // Map internal/subpage navigation keys to active sidebar item
   const resolveActiveKey = (key) => {
@@ -32,7 +34,7 @@ export default function EmployeeSidebar({
 
   return (
     <RoleSidebar
-      navItems={EMPLOYEE_NAV_ITEMS}
+      navItems={EMPLOYEE_NAV_ITEMS.map(item => item.key === 'notifications' && Number.isInteger(unreadCount) ? { ...item, badge: unreadCount } : item.key === 'tasks' && Number.isInteger(taskCount) ? { ...item, badge: taskCount } : item)}
       activeKey={resolveActiveKey(activeKey)}
       onNavigate={onNavigate}
       sectionTitle="WORKSPACE NAVIGATION"
@@ -53,4 +55,6 @@ EmployeeSidebar.propTypes = {
   onClose: PropTypes.func,
   companyName: PropTypes.string,
   companyCode: PropTypes.string,
+  unreadCount: PropTypes.number,
+  taskCount: PropTypes.number,
 }

@@ -111,7 +111,7 @@ export default function RoleSidebar({
             {navItems.map((item) => {
               const isActive = activeKey === item.key
               const Icon = item.icon
-              const translatedLabel = KEY_TO_I18N[item.key] ? t(KEY_TO_I18N[item.key]) : item.label
+              const translatedLabel = item.translationKey ? t(item.translationKey) : KEY_TO_I18N[item.key] ? t(KEY_TO_I18N[item.key]) : item.label
               return (
                 <button
                   key={item.key}

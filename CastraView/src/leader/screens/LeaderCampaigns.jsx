@@ -5,6 +5,7 @@ import WorkflowPanel from '../components/WorkflowPanel'
 import { useWorkflowAction, useWorkflowQuery } from '../../hooks/useLeaderWorkflow'
 import { workflow, downloadCsv } from '../../services/leaderWorkflow'
 import { money } from '../../services/leaderWorkflowContract'
+import TaskBoard from '../../member/TaskBoard'
 
 const field = 'w-full rounded-lg border border-border bg-background px-3 py-2 text-sm'
 
@@ -14,6 +15,8 @@ export default function LeaderCampaigns({ context, revision = 0, onChanged, setP
   const [page, setPageNumber] = useState(0)
   const [creating, setCreating] = useState(false)
   const [selected, setSelected] = useState(null)
+  const [showTasks, setShowTasks] = useState(false)
+  const [taskCampaign, setTaskCampaign] = useState('')
   const [draft, setDraft] = useState({ name: '', budget: '', currency: 'VND', channels: ['Meta'], teamId: context.teams[0]?.id || '' })
   const [requestId, setRequestId] = useState(() => crypto.randomUUID())
   const query = useWorkflowQuery('campaigns', { search, status, limit: 10, offset: page * 10 }, revision)
@@ -37,6 +40,8 @@ export default function LeaderCampaigns({ context, revision = 0, onChanged, setP
     })
   }
   return <div className="space-y-6 p-6">
+    <Button variant="outline" onClick={() => setShowTasks(value => !value)}>{showTasks ? 'Đóng giao việc' : 'Giao nhiệm vụ trong Team'}</Button>
+    {showTasks && <TaskBoard key={taskCampaign || 'all-team-tasks'} operator campaignId={taskCampaign} />}
     <header className="flex flex-wrap items-center justify-between gap-3"><div><h1 className="text-2xl font-bold">Campaign Management</h1><p className="text-sm text-muted-foreground">Chiến dịch thuộc các nhóm được giao.</p></div><Button onClick={() => setCreating(true)} disabled={!context.teams.length}>Create Campaign</Button></header>
     <WorkflowPanel title="All Squad Campaigns" query={query} action={action}>
       <div className="flex flex-wrap gap-3"><input aria-label="Tìm chiến dịch" placeholder="Search campaigns..." className={cn(field, 'max-w-sm')} value={search} onChange={e => { setSearch(e.target.value); setPageNumber(0) }} /><select aria-label="Trạng thái chiến dịch" className={cn(field, 'max-w-xs')} value={status} onChange={e => { setStatus(e.target.value); setPageNumber(0) }}><option value="">Tất cả trạng thái</option>{['draft', 'active', 'paused', 'completed'].map(s => <option key={s} value={s}>{s}</option>)}</select><Button variant="outline" disabled={exporter.busy} onClick={exportRows}>Export CSV</Button></div>
@@ -55,6 +60,6 @@ export default function LeaderCampaigns({ context, revision = 0, onChanged, setP
       {action.error && <p role="alert" className="text-destructive">{action.error}</p>}
       <div className="flex justify-end gap-2"><Button type="button" variant="outline" disabled={action.busy} onClick={() => setCreating(false)}>Cancel</Button><Button disabled={action.busy || !draft.channels.length}>Save Draft</Button></div>
     </form></div>}
-    {selected && <div role="dialog" aria-modal="true" aria-label="Campaign Details" className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 p-4"><WorkflowPanel title={selected.name}><p>Nhóm: {selected.team_name}</p><p>Ngân sách: {money(selected.budget, selected.currency)}</p><p>Trạng thái: {selected.status}</p><p>Kênh: {selected.channels.join(', ')}</p><div className="flex gap-2"><Button onClick={() => { setPage?.('performance', selected.id); setSelected(null) }}>View Analytics</Button><Button variant="outline" onClick={() => setSelected(null)}>Đóng</Button></div></WorkflowPanel></div>}
+    {selected && <div role="dialog" aria-modal="true" aria-label="Campaign Details" className="fixed inset-0 z-50 flex items-center justify-center bg-background/90 p-4"><WorkflowPanel title={selected.name}><p>Nhóm: {selected.team_name}</p><p>Ngân sách: {money(selected.budget, selected.currency)}</p><p>Trạng thái: {selected.status}</p><p>Kênh: {selected.channels.join(', ')}</p><div className="flex gap-2"><Button onClick={() => { setPage?.('performance', selected.id); setSelected(null) }}>View Analytics</Button><Button variant="outline" onClick={() => { setTaskCampaign(selected.id); setShowTasks(true); setSelected(null) }}>Giao việc cho chiến dịch</Button><Button variant="outline" onClick={() => setSelected(null)}>Đóng</Button></div></WorkflowPanel></div>}
   </div>
 }

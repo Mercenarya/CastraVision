@@ -1,0 +1,35 @@
+begin;
+create extension if not exists pgtap with schema extensions;
+set search_path=public,extensions;
+select plan(11);
+insert into auth.users(id,email,email_confirmed_at,raw_app_meta_data) values
+('f1300000-0000-4000-8000-000000000001','suspend-platform@example.test',now(),'{"platform_role":"system_admin"}'),
+('f1300000-0000-4000-8000-000000000002','suspend-business@example.test',now(),'{}');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select set_config('test.platform_ws',(public.platform_create('{"requestId":"f1300000-0000-4000-8000-000000000010","name":"Suspend Test","slug":"suspend-test","accountEmail":"operator@gmail.com"}')->>'id'),true);
+reset role;
+insert into public.workspace_members(workspace_id,user_id,role) values(current_setting('test.platform_ws')::uuid,'f1300000-0000-4000-8000-000000000002','admin');
+insert into public.business_profiles(workspace_id) values(current_setting('test.platform_ws')::uuid);
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select count(*)::int from public.business_profiles where workspace_id=current_setting('test.platform_ws')::uuid),1,'active tenant readable');
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select lives_ok($$select public.platform_update(current_setting('test.platform_ws')::uuid,1,'{"status":"Inactive"}')$$,'platform suspends company');
+select throws_ok($$select public.platform_update(current_setting('test.platform_ws')::uuid,1,'{"status":"Active"}')$$,'P0001','STALE_VERSION','optimistic version conflict');
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select count(*)::int from public.business_profiles where workspace_id=current_setting('test.platform_ws')::uuid),0,'old claims cannot read suspended data');
+select ok(not public.is_workspace_member(current_setting('test.platform_ws')::uuid),'shared member helper honors suspension');
+select throws_ok($$select public.leader_workflow(current_setting('test.platform_ws')::uuid,'summary','{}')$$,'P0001','WORKSPACE_INACTIVE','definer workflow is blocked');
+select throws_ok($$select public.membership_personnel(current_setting('test.platform_ws')::uuid)$$,'P0001','WORKSPACE_INACTIVE','definer personnel is blocked');
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select lives_ok($$select public.platform_update(current_setting('test.platform_ws')::uuid,2,'{"status":"Active"}')$$,'platform can reactivate');
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select count(*)::int from public.business_profiles where workspace_id=current_setting('test.platform_ws')::uuid),1,'reactivation restores existing access');
+reset role;
+insert into public.workspace_members(workspace_id,user_id,role) values(current_setting('test.platform_ws')::uuid,'f1300000-0000-4000-8000-000000000001','admin');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"f1300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is((select count(*)::int from public.business_profiles where workspace_id=current_setting('test.platform_ws')::uuid),0,'legacy membership never grants platform user business data');
+select ok(not public.is_workspace_member(current_setting('test.platform_ws')::uuid),'platform legacy membership helper denied');
+select * from finish();rollback;

@@ -3,10 +3,12 @@ from django.urls import path
 from . import (
     auth_api,
     campaign_api,
+    employee_api,
     leader_workflow_api,
     manager_tools_api,
     membership_api,
     membership_notifications_api,
+    platform_api,
     views,
     workspace_api,
 )
@@ -14,10 +16,20 @@ from . import (
 app_name = "castra_services"
 
 urlpatterns = [
+    path('platform/companies/', platform_api.companies),
+    path('platform/companies/<uuid:id>/', platform_api.company),
+    path('platform/companies/<uuid:id>/invitations/', platform_api.issue_invitation),
+    path('platform/invitations/<uuid:id>/<str:action>/', platform_api.invitation_action),
+    path('platform/notifications/', platform_api.notifications),
+    path('onboarding/manager-invitations/', platform_api.my_invitations),
+    path('onboarding/manager-invitations/<uuid:id>/accept/', platform_api.accept_invitation),
     path("manager/reports/", manager_tools_api.reports),
     path("manager/reports/<uuid:report_id>/", manager_tools_api.reports),
     path("manager/competitors/", manager_tools_api.competitors),
     path("leader/<str:command>/", leader_workflow_api.workflow),
+    path("employee/brand-safety-rules/", employee_api.brand_rules),
+    path("employee/brand-safety/", employee_api.brand_check),
+    path("employee/<str:command>/", employee_api.tasks),
     path("onboarding/state/", membership_api.onboarding_state),
     path("onboarding/companies/", membership_api.companies),
     path("onboarding/requests/", membership_api.requests),

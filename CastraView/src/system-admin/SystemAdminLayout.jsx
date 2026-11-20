@@ -5,24 +5,44 @@ import { PlatformOverviewScreen } from './screens/PlatformOverviewScreen'
 import { CompanyManagementScreen } from './screens/CompanyManagementScreen'
 import { CompanyOverviewScreen } from './screens/CompanyOverviewScreen'
 import { CreateCompanyScreen } from './screens/CreateCompanyScreen'
-import { INITIAL_COMPANIES } from './mockData'
+import { platformService } from '../services/platform'
+import { usePlatformCompanies } from '../hooks/usePlatformCompanies'
 import SettingsPage from '@/pages/SettingsPage'
 import './system-admin.css'
 
 /**
  * SystemAdminLayout — Master layout container for System Admin operations
  */
-export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut, notify, onUserUpdate }) {
-  const [internalTab, setInternalTab] = useState(page || 'sa-dashboard')
-  const activeTab = page === 'profile' ? 'profile' : internalTab
+export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut, notify, onUserUpdate, service = platformService }) {
+  const [internalTab, setInternalTab] = useState(page || (new URLSearchParams(window.location.search).has('company') ? 'sa-company-overview' : 'sa-dashboard'))
+  const [previousPage, setPreviousPage] = useState(page)
+  if (page !== previousPage) {
+    setPreviousPage(page)
+    if (page) setInternalTab(page)
+  }
+  const activeTab = internalTab
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [companies, setCompanies] = useState(INITIAL_COMPANIES)
-  const [selectedCompanyId, setSelectedCompanyId] = useState(
-    INITIAL_COMPANIES[0]?.id || 'cv-org-9041'
-  )
+  const { companies, loading, error, refresh } = usePlatformCompanies(service, user?.id)
+  const [selectedCompanyId, setSelectedCompanyId] = useState(() => new URLSearchParams(window.location.search).get('company'))
+  const [detail, setDetail] = useState(null)
+  const detailGeneration = React.useRef(0)
+  const [detailError, setDetailError] = useState('')
+  const [detailRefresh, setDetailRefresh] = useState(0)
   const [globalSearch, setGlobalSearch] = useState('')
 
   const handleSignOut = onLogout || onSignOut
+
+  useEffect(() => {
+    if (!selectedCompanyId) return undefined
+    const controller = new AbortController()
+    const generation = ++detailGeneration.current
+    service.company(selectedCompanyId, controller.signal).then(record => {
+      if (!controller.signal.aborted && generation === detailGeneration.current) setDetail(record)
+    }).catch(failure => {
+      if (!controller.signal.aborted && generation === detailGeneration.current) setDetailError(failure.message)
+    })
+    return () => controller.abort()
+  }, [selectedCompanyId, service, user?.id, detailRefresh])
 
   // Close drawer on Escape key and prevent body scroll when drawer is open
   useEffect(() => {
@@ -83,7 +103,7 @@ export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut,
 
   // Get currently selected company record
   const selectedCompany = useMemo(() => {
-    return companies.find((c) => c.id === selectedCompanyId) || companies[0]
+    return companies.find((c) => c.id === selectedCompanyId) || (selectedCompanyId ? null : companies[0])
   }, [companies, selectedCompanyId])
 
   // Navigation handler
@@ -97,35 +117,41 @@ export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut,
   // Company selection handler
   const handleSelectCompany = (company) => {
     setSelectedCompanyId(company.id)
-    setActiveTab('sa-company-overview')
-    setMobileMenuOpen(false)
+    const url = new URL(window.location.href)
+    url.searchParams.set('company', company.id)
+    window.history.replaceState({}, '', url)
+    setDetail(null)
+    setDetailError('')
+    setDetailRefresh(value => value + 1)
+    handleNavigate('sa-company-overview')
   }
 
   // Create company handler
-  const handleCreateCompany = (newCompany) => {
-    setCompanies((prev) => [newCompany, ...prev])
-    setSelectedCompanyId(newCompany.id)
-    if (notify) notify(`Company "${newCompany.name}" added to the local demo session. No backend tenant was provisioned.`)
+  const handleCreateCompany = async (data) => {
+    const saved = await service.create(data)
+    await refresh()
+    handleSelectCompany(saved)
+    notify?.('Đã lưu doanh nghiệp. Lời mời Marketing Manager đang chờ gửi; gửi tại trang chi tiết.')
+    return saved
   }
 
   // Update company handler
-  const handleUpdateCompany = (updatedCompany) => {
-    setCompanies((prev) =>
-      prev.map((c) => (c.id === updatedCompany.id ? updatedCompany : c))
-    )
-    if (notify) notify(`Organization details for "${updatedCompany.name}" updated.`)
+  const handleUpdateCompany = async (id, data) => {
+    const saved = await service.update(id, data)
+    setDetail(await service.company(saved.id))
+    await refresh()
+    notify?.('Đã lưu và đọc lại thông tin doanh nghiệp.')
+    return saved
   }
 
   // Refresh handler
-  const handleRefresh = () => {
-    if (notify) notify('Platform state refreshed (local simulation).')
-  }
+  const handleRefresh = () => refresh().catch(() => {})
 
   // Global search from top header
   const handleHeaderSearch = (val) => {
     setGlobalSearch(val)
     if (activeTab !== 'sa-company-mgmt' && activeTab !== 'sa-dashboard') {
-      setActiveTab('sa-company-mgmt')
+      handleNavigate('sa-company-mgmt')
     }
   }
 
@@ -164,12 +190,17 @@ export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut,
           searchTerm={globalSearch}
           onSearchChange={handleHeaderSearch}
           onOpenMobileMenu={() => setMobileMenuOpen(true)}
+          service={service}
         />
 
         {/* Screen Routing */}
         <main className="sa-body-area">
+          {loading && <p role="status">Đang tải dữ liệu nền tảng…</p>}
+          {error && <div role="alert">{error}<button type="button" onClick={handleRefresh}>Thử lại</button></div>}
+          {!loading && !error && <>
           {activeTab === 'sa-dashboard' && (
             <PlatformOverviewScreen
+              externalSearch={globalSearch}
               companies={companies}
               metrics={metrics}
               onNavigate={handleNavigate}
@@ -180,6 +211,7 @@ export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut,
 
           {activeTab === 'sa-company-mgmt' && (
             <CompanyManagementScreen
+              externalSearch={globalSearch}
               companies={companies}
               metrics={metrics}
               onNavigate={handleNavigate}
@@ -191,7 +223,12 @@ export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut,
           {activeTab === 'sa-company-overview' && (
             <CompanyOverviewScreen
               key={selectedCompany?.id || 'default'}
-              company={selectedCompany}
+              company={detail?.id === selectedCompanyId ? detail : null}
+              error={detailError}
+              onRefresh={() => selectedCompany && handleSelectCompany(selectedCompany)}
+              onSendInvitation={id => service.sendInvitation(id).then(async result => { handleSelectCompany(selectedCompany); return result })}
+              onRevokeInvitation={id => service.revokeInvitation(id).then(() => handleSelectCompany(selectedCompany))}
+              onIssueInvitation={email => service.issueInvitation(selectedCompanyId,email).then(() => handleSelectCompany(selectedCompany))}
               onNavigate={handleNavigate}
               onUpdateCompany={handleUpdateCompany}
             />
@@ -215,6 +252,7 @@ export function SystemAdminLayout({ user, page, onNavigate, onLogout, onSignOut,
               />
             </div>
           )}
+          </>}
         </main>
       </div>
     </div>

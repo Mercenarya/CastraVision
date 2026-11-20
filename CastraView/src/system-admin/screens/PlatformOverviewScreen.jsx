@@ -17,10 +17,19 @@ export function PlatformOverviewScreen({
   onNavigate,
   onSelectCompany,
   onRefresh,
+  externalSearch = '',
 }) {
   const { t } = useLanguage()
   const [searchTerm, setSearchTerm] = useState('')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [pagination, setPagination] = useState({ search: externalSearch, page: 1 })
+  if (pagination.search !== externalSearch) {
+    setPagination({ search: externalSearch, page: 1 })
+  }
+  const currentPage = pagination.search === externalSearch ? pagination.page : 1
+  const setCurrentPage = next => setPagination(previous => ({
+    search: externalSearch,
+    page: typeof next === 'function' ? next(previous.search === externalSearch ? previous.page : 1) : next,
+  }))
   const [isRefreshing, setIsRefreshing] = useState(false)
   const pageSize = 5
 
@@ -32,18 +41,16 @@ export function PlatformOverviewScreen({
 
   // Filter companies by search query
   const filteredCompanies = useMemo(() => {
-    if (!searchTerm.trim()) return companies
-    const term = searchTerm.toLowerCase()
-    return companies.filter(
-      (c) =>
+    const terms = [externalSearch, searchTerm].map(term => term.trim().toLowerCase()).filter(Boolean)
+    return companies.filter(c => terms.every(term => (
         c.name.toLowerCase().includes(term) ||
         (c.accountEmail && c.accountEmail.toLowerCase().includes(term)) ||
         (c.adminEmail && c.adminEmail.toLowerCase().includes(term)) ||
         (c.id && c.id.toLowerCase().includes(term)) ||
         (c.domain && c.domain.toLowerCase().includes(term)) ||
         (c.internalDomain && c.internalDomain.toLowerCase().includes(term))
-    )
-  }, [companies, searchTerm])
+    )))
+  }, [companies, searchTerm, externalSearch])
 
   // Pagination calculation
   const totalRecords = filteredCompanies.length
@@ -122,8 +129,8 @@ export function PlatformOverviewScreen({
         <MetricCard
           label="TOTAL REGISTERED"
           value={metrics.totalRegistered}
-          subtext="Total active & pending tenant namespaces"
-          badge="+12 this month (demo)"
+          subtext="Tổng doanh nghiệp Active và Inactive"
+          badge="Danh bạ nền tảng"
           badgeType="green"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
@@ -135,7 +142,7 @@ export function PlatformOverviewScreen({
         <MetricCard
           label="ACTIVE TENANTS"
           value={metrics.activeTenants}
-          subtext="Engaged in real-time model orchestration"
+          subtext="Doanh nghiệp được phép sử dụng hệ thống"
           badge={`● ${operationalRate}% OPERATIONAL`}
           badgeType="green-solid"
           icon={
@@ -146,10 +153,10 @@ export function PlatformOverviewScreen({
           }
         />
         <MetricCard
-          label="INACTIVE / ONBOARDING"
+          label="INACTIVE"
           value={metrics.inactiveTenants}
-          subtext="Pending workspace bootstrap or zero run-rate"
-          badge="DORMANT / SETUP"
+          subtext="Quyền sử dụng doanh nghiệp đang bị khóa"
+          badge="LOCKED"
           badgeType="dark"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
@@ -161,7 +168,7 @@ export function PlatformOverviewScreen({
         <MetricCard
           label="AGGREGATE ROSTER HEADCOUNT"
           value={metrics.aggregateHeadcount.toLocaleString()}
-          subtext="Zero employee PII accessible across tenant boundaries"
+          subtext="Tổng số membership; không tải danh sách nhân viên"
           badge="AGGREGATE"
           badgeType="blue"
           highlight={true}
@@ -261,7 +268,7 @@ export function PlatformOverviewScreen({
                         <div className="sa-company-cell-info">
                           <span className="sa-company-name">{c.name}</span>
                           <span className="sa-company-subdomain">
-                            {c.internalDomain || `${c.id}.internal (simulated)`}
+                            {c.domain || c.slug || 'Chưa có domain'}
                           </span>
                         </div>
                       </div>

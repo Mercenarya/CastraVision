@@ -1,0 +1,26 @@
+{
+  "mode": "isolated browser; real UI components, no authenticated DB proof",
+  "errors": [],
+  "results": [
+    {
+      "case": "dashboard opens selected company",
+      "pass": true
+    },
+    {
+      "case": "header from details routes and filters",
+      "pass": true
+    },
+    {
+      "case": "management opens matching company",
+      "pass": true
+    },
+    {
+      "case": "empty search",
+      "pass": true
+    },
+    {
+      "case": "clear restores results",
+      "pass": true
+    }
+  ]
+}

@@ -16,11 +16,20 @@ export function CompanyManagementScreen({
   onNavigate,
   onSelectCompany,
   onRefresh,
+  externalSearch = '',
 }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('ALL') // 'ALL' | 'ACTIVE' | 'INACTIVE'
   const [sortBy, setSortBy] = useState('newest') // 'newest' | 'oldest' | 'name-asc' | 'name-desc' | 'emp-desc'
-  const [currentPage, setCurrentPage] = useState(1)
+  const [pagination, setPagination] = useState({ search: externalSearch, page: 1 })
+  if (pagination.search !== externalSearch) {
+    setPagination({ search: externalSearch, page: 1 })
+  }
+  const currentPage = pagination.search === externalSearch ? pagination.page : 1
+  const setCurrentPage = next => setPagination(previous => ({
+    search: externalSearch,
+    page: typeof next === 'function' ? next(previous.search === externalSearch ? previous.page : 1) : next,
+  }))
   const [isRefreshing, setIsRefreshing] = useState(false)
   const pageSize = 8
 
@@ -47,8 +56,7 @@ export function CompanyManagementScreen({
     }
 
     // Search filter
-    if (searchTerm.trim()) {
-      const term = searchTerm.toLowerCase()
+    for (const term of [externalSearch, searchTerm].map(value => value.trim().toLowerCase()).filter(Boolean)) {
       result = result.filter(
         (c) =>
           c.name.toLowerCase().includes(term) ||
@@ -66,14 +74,14 @@ export function CompanyManagementScreen({
       if (sortBy === 'name-desc') return b.name.localeCompare(a.name)
       if (sortBy === 'emp-desc') return (b.employeeCount || 0) - (a.employeeCount || 0)
       if (sortBy === 'oldest') {
-        return new Date(a.provisionedOn || 0) - new Date(b.provisionedOn || 0)
+        return new Date(a.createdAt || a.provisionedOn || 0) - new Date(b.createdAt || b.provisionedOn || 0)
       }
       // default: newest
-      return new Date(b.provisionedOn || 0) - new Date(a.provisionedOn || 0)
+      return new Date(b.createdAt || b.provisionedOn || 0) - new Date(a.createdAt || a.provisionedOn || 0)
     })
 
     return result
-  }, [companies, statusFilter, searchTerm, sortBy])
+  }, [companies, statusFilter, searchTerm, sortBy, externalSearch])
 
   // Pagination
   const totalFiltered = processedCompanies.length
@@ -155,7 +163,7 @@ export function CompanyManagementScreen({
           label="TOTAL REGISTERED TENANTS"
           value={metrics.totalRegistered}
           unit="organizations"
-          subtext="100% tenant cluster coverage (simulated)"
+          subtext="Doanh nghiệp trong danh bạ nền tảng"
           dotColor="cyan"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
@@ -171,7 +179,7 @@ export function CompanyManagementScreen({
           value={metrics.activeTenants}
           badge={`${operationalRate}% operational`}
           badgeType="green-solid"
-          subtext="Traffic routing nominal (simulated)"
+          subtext="Doanh nghiệp đang được phép hoạt động"
           dotColor="green"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2">
@@ -186,7 +194,7 @@ export function CompanyManagementScreen({
           label="INACTIVE / SUSPENDED"
           value={metrics.inactiveTenants}
           unit="non-emitting nodes"
-          subtext="Awaiting reactivations (simulated)"
+          subtext="Doanh nghiệp đang bị tạm khóa"
           dotColor="slate"
           icon={
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2">
@@ -205,7 +213,7 @@ export function CompanyManagementScreen({
           }
           unit={
             metrics.allocatedSeats !== null && metrics.allocatedSeats !== undefined
-              ? `demo seats${metrics.isPartialSeats ? ' (partial)' : ''}`
+              ? `seats${metrics.isPartialSeats ? ' (partial)' : ''}`
               : ''
           }
           subtext={

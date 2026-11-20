@@ -20,7 +20,7 @@ export function createApiClient({ getSession, getWorkspaceId, fetchImpl = fetch,
       response = await fetchImpl(`${baseUrl.replace(/\/$/, '')}/api/${path}`, { ...options, headers, credentials: 'omit' })
     } catch (cause) {
       if (cause.name === 'AbortError') throw cause
-      throw new Error('Không kết nối được backend. Kiểm tra dịch vụ ở cổng 8000.')
+      throw Object.assign(new Error('Không kết nối được backend. Kiểm tra dịch vụ ở cổng 8000.'), { code: 'NETWORK_ERROR' })
     }
     const payload = await response.json().catch(() => ({}))
     if (!response.ok) {

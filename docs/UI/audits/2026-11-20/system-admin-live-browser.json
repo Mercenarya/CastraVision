@@ -1,0 +1,16 @@
+{
+  "checks": [
+    {
+      "case": "real UI login",
+      "pass": true
+    },
+    {
+      "case": "UI create persisted/readback",
+      "pass": true
+    },
+    {
+      "case": "actual local mail received",
+      "pass": true
+    }
+  ]
+}

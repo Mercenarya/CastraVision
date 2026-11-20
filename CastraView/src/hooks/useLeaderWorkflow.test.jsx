@@ -1,12 +1,13 @@
 import { StrictMode } from 'react'
 import { act, renderHook, waitFor } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useWorkflowQuery } from './useLeaderWorkflow'
 import { workflow } from '../services/leaderWorkflow'
 
 vi.mock('../services/leaderWorkflow', () => ({ workflow: vi.fn() }))
 
 afterEach(() => { vi.useRealTimers(); vi.resetAllMocks() })
+beforeEach(() => localStorage.setItem('castravision_language', 'vi'))
 
 describe('workflow loading lifecycle', () => {
   it('does not send the abandoned StrictMode request', async () => {

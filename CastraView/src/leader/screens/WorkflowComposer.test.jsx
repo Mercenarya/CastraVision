@@ -1,3 +1,4 @@
+import { LanguageProvider } from '../../contexts/LanguageContext'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -7,6 +8,21 @@ import { workflow } from '../../services/leaderWorkflow'
 vi.mock('../../services/leaderWorkflow', () => ({ workflow: vi.fn() }))
 
 describe('live content composer', () => {
+  it('reports rejected clipboard permission without claiming persistence', async () => {
+    workflow.mockClear()
+    workflow.mockResolvedValue({ items: [], total: 0 })
+    const user = userEvent.setup()
+    const clipboard = vi.spyOn(navigator.clipboard, 'writeText').mockRejectedValue(new DOMException('Clipboard permission denied', 'NotAllowedError'))
+    const onCreated = vi.fn()
+    try {
+      localStorage.setItem('castravision_language', 'vi')
+      render(<LanguageProvider><WorkflowComposer kind="content" onCreated={onCreated} /></LanguageProvider>)
+      await user.click(screen.getByRole('button', { name: 'Sao chép nội dung' }))
+      expect(await screen.findByRole('alert')).toHaveTextContent('Clipboard permission denied')
+      expect(onCreated).not.toHaveBeenCalled()
+      expect(workflow.mock.calls.some(([command]) => command === 'submit')).toBe(false)
+    } finally { clipboard.mockRestore() }
+  })
   it('does not claim a save or navigate when the server rejects persistence; retries preserve the request ID', async () => {
     const attempts = []
     workflow.mockImplementation(async (command, data) => {
@@ -18,18 +34,19 @@ describe('live content composer', () => {
     })
     const onCreated = vi.fn()
     const user = userEvent.setup()
-    render(<WorkflowComposer kind="content" onCreated={onCreated} />)
+    localStorage.setItem('castravision_language', 'vi')
+      render(<LanguageProvider><WorkflowComposer kind="content" onCreated={onCreated} /></LanguageProvider>)
     await screen.findByRole('option', { name: 'Assigned A (USD)' })
     await user.selectOptions(screen.getByRole('combobox', { name: 'Chiến dịch' }), 'campaign-a')
     await user.type(screen.getByRole('textbox', { name: 'Tên đề xuất' }), 'Persist my draft')
     await user.type(screen.getByRole('textbox', { name: /Hook/ }), 'A valid hook for the campaign')
-    await user.type(screen.getByRole('textbox', { name: /Headline/ }), 'Headline')
-    await user.type(screen.getByRole('textbox', { name: /Body Copy/ }), 'Actual body copy')
-    await user.type(screen.getByRole('textbox', { name: /CTA/ }), 'Learn more')
+    await user.type(screen.getByRole('textbox', { name: /Tiêu đề quảng cáo/ }), 'Headline')
+    await user.type(screen.getByRole('textbox', { name: /Nội dung quảng cáo/ }), 'Actual body copy')
+    await user.type(screen.getByRole('textbox', { name: /Lời kêu gọi hành động/ }), 'Learn more')
     await user.click(screen.getByRole('button', { name: 'Lưu bản nháp' }))
     expect(await screen.findByRole('alert')).toHaveTextContent('Database unavailable')
     expect(onCreated).not.toHaveBeenCalled()
-    expect(screen.getByRole('textbox', { name: /Headline/ })).toHaveValue('Headline')
+    expect(screen.getByRole('textbox', { name: /Tiêu đề quảng cáo/ })).toHaveValue('Headline')
     await user.click(screen.getByRole('button', { name: 'Lưu bản nháp' }))
     await waitFor(() => expect(onCreated).toHaveBeenCalledWith('saved-proposal'))
     expect(attempts[0].requestId).toBe(attempts[1].requestId)

@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-20",
+  "environment": "Chrome DevTools MCP, isolated employee-local-audit browser context; loopback UI 61400/API 61480/Supabase 61321",
+  "credentials": "Disposable local fixtures; loaded directly into browser memory through Origin-checked loopback bridge, never recorded here",
+  "checks": [
+    {"case": "Employee login form restores correct workspace and own task KPI", "pass": true},
+    {"case": "Task UI saves completed; production service reads completed from server", "pass": true},
+    {"case": "Linked task opens exact Approved Strategy Template draft detail", "pass": true},
+    {"case": "Copy button followed by native Ctrl+V pastes exactly hook/headline/body/CTA", "pass": true},
+    {"case": "Content form creates Employee Browser Draft and opens persisted draft detail", "pass": true},
+    {"case": "375px mobile reload retains session, saved draft and completed task KPI", "pass": true},
+    {"case": "375px dashboard document width equals viewport; navigation drawer opens and Escape closes it", "pass": true},
+    {"case": "EN to VI menu changes dashboard; locale persists after reload and another account login", "pass": true},
+    {"case": "UI logout removes session; history back/forward and reload do not restore private draft", "pass": true},
+    {"case": "Coworker login shows own Other Team task and excludes prior Employee task/draft", "pass": true},
+    {"case": "Employee page console error/warning query after mobile navigation returned none", "pass": true},
+    {"case": "Marketing Manager Personnel assignment form creates Browser MM Assigned Task for Employee; detail and API read-back match, nullable deadline preserved", "pass": true}
+  ],
+  "limitations": [
+    "No screenshots baseline, full axe/manual accessibility audit or Core Web Vitals measurement; not a visual/accessibility certification",
+    "Clipboard success used real browser/native paste; permission-denied handling verified separately with mocked rejection in component test, not OS permission denial",
+    "Desktop and 375px paths sampled; not exhaustive all-screen responsive verification",
+    "Browser tested local only; no hosted rollout or production user account used"
+  ],
+  "cleanup": "Local browser Auth session signed out, isolated tab closed, only owned audit/Vite processes terminated; Docker fixtures retained"
+}

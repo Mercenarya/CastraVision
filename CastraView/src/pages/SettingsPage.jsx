@@ -1,3 +1,4 @@
+import BrandSafetyRules from '@/components/BrandSafetyRules'
 import React, { useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Building2, ShieldCheck, Bell } from 'lucide-react'
@@ -104,7 +105,7 @@ export function SettingsPage({
       <main className="w-full">
         {/* TAB 1: Business Profile (Workspace actors only; strictly forbidden for System Admin) */}
         {activeTab === 'business' && normalizedRole !== 'system_admin' && (
-          <BusinessProfileTab
+          <> <BusinessProfileTab
             user={user}
             actorRole={normalizedRole}
             membership={membership}
@@ -114,7 +115,7 @@ export function SettingsPage({
             error={error}
             notify={notify}
             onProfileUpdated={onProfileUpdated}
-          />
+          /><BrandSafetyRules key={String(user?.id) + ':' + membership?.workspaceId} scopeKey={/^[0-9a-f-]{36}$/i.test(user?.id || '') && /^[0-9a-f-]{36}$/i.test(membership?.workspaceId || '') ? user.id + ':' + membership.workspaceId : ''} allowEdit={normalizedRole === 'manager'} /></>
         )}
 
         {/* TAB 2: Account & Security (All 4 roles) */}

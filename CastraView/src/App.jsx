@@ -8,17 +8,10 @@ import AuthCompletePage from './pages/onboarding/AuthCompletePage'
 import EmailLinkSentPage from './pages/onboarding/EmailLinkSentPage'
 import { SystemAdminLayout } from './system-admin/SystemAdminLayout'
 import MarketingManagerLayout from './company-admin/MarketingManagerLayout'
-import LeaderLayout from './leader/LeaderLayout'
 import LeaderWorkspace from './leader/LeaderWorkspace'
 import WorkflowCampaignSelect from './leader/components/WorkflowCampaignSelect'
 import WorkflowStudio from './leader/WorkflowStudio'
-import WorkflowInbox from './leader/WorkflowInbox'
-import MemberLayout from './member/MemberLayout'
-import MemberDashboard from './member/screens/MemberDashboard'
-import {
-  BudgetOptimizationPage,
-  CompetitorInsightsPage,
-} from './actor-ui/ActorPages'
+import EmployeeWorkspace from './member/EmployeeWorkspace'
 import DashboardPreviewPage from './preview/DashboardPreviewPage'
 import { AuthProvider } from './auth/AuthProvider'
 import { useAuth } from './auth/AuthContext'
@@ -59,44 +52,6 @@ function Heading({ eyebrow, title, subtitle, children }) {
   )
 }
 function Notice({ kind = 'error', children }) { return <div className={`notice ${kind}`} role={kind === 'error' ? 'alert' : 'status'}>{children}</div> }
-function Toast({ message, clear }) { return message && <div className="toast" role="status"><b>✓</b>{message}<button onClick={clear} aria-label="Dismiss notification">×</button></div> }
-
-
-function Shell({ user, role, profile, page, setPage, logout, children }) {
-  const isLeader = role === 'leader' || user?.role === 'manager' || user?.role === 'leader'
-  const isEmployee = role === 'member' || user?.role === 'member'
-
-  if (isLeader) {
-    return (
-      <LeaderLayout
-        user={user}
-        profile={profile}
-        page={page}
-        setPage={setPage}
-        logout={logout}
-      >
-        {children}
-      </LeaderLayout>
-    )
-  }
-
-  if (isEmployee) {
-    return (
-      <MemberLayout
-        user={user}
-        profile={profile}
-        page={page}
-        setPage={setPage}
-        logout={logout}
-      >
-        {children}
-      </MemberLayout>
-    )
-  }
-
-  return <div className="shell">{children}</div>
-}
-
 function ChannelPicker({ channels, toggle }) { return <div className="channel-grid">{CHANNELS.map((channel) => <button type="button" key={channel} className={`channel-card ${channels.includes(channel) ? 'selected' : ''}`} onClick={() => toggle(channel)}><span className="channel-glyph">{channel === 'Meta' ? '∞' : channel === 'TikTok' ? '♪' : 'G'}</span><strong>{channel}</strong><span className="check-box">{channels.includes(channel) ? '✓' : ''}</span></button>)}</div> }
 
 export function ImportScreen({ imports, onImported, notify }) {
@@ -663,7 +618,6 @@ function WorkspaceApp() {
   const [page, setPage] = useState(() => window.location.hash === '#personnel-requests' ? 'members' : 'overview')
   const [imports, setImports] = useState([])
   const [, setLatestRows] = useState([])
-  const [strategy] = useState(null)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [toast, setToast] = useState('')
@@ -852,100 +806,17 @@ function WorkspaceApp() {
 
   // ─── 3. LEADER: Vào giao diện leader ──────────────────────────────────────
 
-  // ─── 4. MEMBER: Vào giao diện member ──────────────────────────────────────
-  return (
-    <Shell
-      user={user}
-      role="member"
-      profile={profile}
-      page={page}
-      setPage={setPage}
-      logout={logout}
-    >
-      {backendError && <Notice>{backendError}</Notice>}
-      {page === 'overview' && (
-        <MemberDashboard
-          profile={profile}
-          imports={imports}
-          strategy={strategy}
-          setPage={setPage}
-          notify={setToast}
-        />
-      )}
-      {(page === 'tasks' || page === 'emp-tasks') && (
-        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-            <Heading
-              eyebrow="CREATIVE DELIVERABLES"
-              title="My Tasks"
-              subtitle="Content generation and creative review tasks assigned to you."
-            />
-            <div className="card p-6">
-              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
-                You have active tasks waiting for review and copywriting execution.
-              </p>
-              <div className="flex gap-3 mt-4">
-                <button className="button primary" onClick={() => setPage('content')}>
-                  Go to Content Studio →
-                </button>
-                <button className="button subtle" onClick={() => setPage('overview')}>
-                  ← Back to Dashboard
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-      {(page === 'submissions' || page === 'reports') && <WorkflowInbox mine />}
-      {page === 'assigned-campaigns' && (
-        <div className="flex-1 bg-[#0f131d] overflow-y-auto p-6 md:p-8 min-h-[calc(100vh-64px)] text-[#dfe2f1] font-sans">
-          <div className="max-w-[1360px] w-full mx-auto space-y-6 pb-12">
-            <Heading
-              eyebrow="SQUAD INVOLVEMENT"
-              title="Assigned Campaigns"
-              subtitle="Active campaigns where you are contributing creative and copy assets."
-            />
-            <div className="card p-6">
-              <p className="text-xs md:text-sm text-[#c7c4d7] m-0">
-                Track campaigns linked to your marketing squad.
-              </p>
-              <button className="button primary mt-4" onClick={() => setPage('overview')}>
-                ← Back to Dashboard
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-      {page === 'notifications' && <WorkflowInbox mine mode="notifications" />}
-      {page === 'budget' && <BudgetOptimizationPage notify={setToast} />}
-      {page === 'insights' && <CompetitorInsightsPage notify={setToast} />}
-      {page === 'import' && (
-        <ImportScreen imports={imports} onImported={onImported} notify={setToast} />
-      )}
-      {page === 'strategy' && (
-        <WorkflowStudio kind="strategy" />
-      )}
-      {page === 'content' && (
-        <WorkflowStudio kind="content" />
-      )}
-      {page === 'profile' && (
-        <SettingsPage
-          user={user}
-          actorRole="member"
-          membership={membership}
-          profile={profile}
-          notify={setToast}
-        />
-      )}
-      <Toast message={toast} clear={() => setToast('')} />
-    </Shell>
-  )
+  return <EmployeeWorkspace key={user.id + workspaceId} user={user} profile={profile} page={page} setPage={setPage} logout={logout} />
+
 }
 
 function WorkspaceEntry() {
   const auth = useAuth()
   const [joinUser, setJoinUser] = useState(null)
-  const [invitationCallback, setInvitationCallback] = useState(() => new URLSearchParams(window.location.search).has('invitationId'))
+  const [invitationCallback, setInvitationCallback] = useState(() => {
+    const query=new URLSearchParams(window.location.search)
+    return query.has('invitationId') || query.has('platformInvitationId')
+  })
   if (auth.user && !auth.platformRole && !auth.passwordSetupRequired && auth.memberships.length > 0 && (joinUser === auth.user.id || invitationCallback)) {
     return <CompanyJoinPage auth={auth} onBack={() => { window.history.replaceState({}, '', '/'); setInvitationCallback(false); setJoinUser(null) }} />
   }

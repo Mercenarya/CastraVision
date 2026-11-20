@@ -1,0 +1,54 @@
+[
+  {
+    "case": "Actual Employee layout loads after real Auth/API",
+    "pass": true
+  },
+  {
+    "case": "Dashboard incorrectly uses hardcoded Alex identity",
+    "pass": true
+  },
+  {
+    "case": "Dashboard displays unrelated mock task",
+    "pass": true
+  },
+  {
+    "case": "Task search filters UI fixture",
+    "pass": true
+  },
+  {
+    "case": "Dashboard Edit & Resubmit button does nothing",
+    "pass": true
+  },
+  {
+    "case": "Brand safety reports not connected",
+    "pass": true
+  },
+  {
+    "case": "My Tasks page is only placeholder",
+    "pass": true
+  },
+  {
+    "case": "Assigned Campaigns page omits actual campaign",
+    "pass": true
+  },
+  {
+    "case": "Content form loads real campaign option",
+    "pass": true
+  },
+  {
+    "case": "Content generation explicitly manual rather than AI",
+    "pass": true
+  },
+  {
+    "case": "Content UI creates and reads actual draft",
+    "pass": true
+  },
+  {
+    "case": "My Submissions reads actual persisted proposal",
+    "pass": true
+  },
+  {
+    "case": "Employee export queue is hidden",
+    "pass": true
+  }
+]

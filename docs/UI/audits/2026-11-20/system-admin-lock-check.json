@@ -1,0 +1,6 @@
+{
+  "case": "suspension waits for existing business writer",
+  "passed": true,
+  "waitSeconds": 2.018,
+  "bothTransactionsRolledBack": true
+}

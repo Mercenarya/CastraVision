@@ -5,16 +5,16 @@ import { LanguageDropdownSubmenu } from '@/components/LanguageDropdownSubmenu'
 import EmployeeSidebar from './EmployeeSidebar'
 
 const MEMBER_PAGE_TITLES = {
-  overview: 'My Dashboard',
-  tasks: 'My Tasks',
-  'emp-tasks': 'My Tasks',
-  content: 'Content Studio',
-  'assigned-campaigns': 'Assigned Campaigns',
-  campaigns: 'Assigned Campaigns',
-  submissions: 'My Submissions',
-  strategy: 'Strategy Reference',
-  notifications: 'Notifications',
-  profile: 'My Profile',
+  overview: 'navigation.overview',
+  tasks: 'navigation.myTasks',
+  'emp-tasks': 'navigation.myTasks',
+  content: 'navigation.contentGen',
+  'assigned-campaigns': 'navigation.assignedCampaigns',
+  campaigns: 'navigation.assignedCampaigns',
+  submissions: 'navigation.mySubmissions',
+  strategy: 'navigation.strategyReference',
+  notifications: 'navigation.notifications',
+  profile: 'navigation.settings',
 }
 
 /**
@@ -30,6 +30,9 @@ const MEMBER_PAGE_TITLES = {
 export default function MemberLayout({
   user,
   profile,
+  workspaceId,
+  unreadCount,
+  taskCount,
   page = 'overview',
   setPage,
   logout,
@@ -39,10 +42,10 @@ export default function MemberLayout({
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  const userName = user?.full_name || 'Alex Mercer'
-  const userEmail = user?.email || 'alex.mercer@acmecorp.com'
-  const companyName = profile?.business_name || 'Acme Corp Enterprise'
-  const companyCode = 'acme-corp-prod-01'
+  const userName = user?.full_name || user?.email || 'Người dùng'
+  const userEmail = user?.email || ''
+  const companyName = profile?.business_name || 'Workspace'
+  const companyCode = workspaceId || ''
 
   const userInitials = userName
     ? userName
@@ -79,6 +82,8 @@ export default function MemberLayout({
         onNavigate={setPage}
         companyName={companyName}
         companyCode={companyCode}
+        unreadCount={unreadCount}
+        taskCount={taskCount}
       />
 
       {/* Mobile Drawer Backdrop & Sidebar */}
@@ -101,6 +106,8 @@ export default function MemberLayout({
               onClose={() => setMobileMenuOpen(false)}
               companyName={companyName}
               companyCode={companyCode}
+              unreadCount={unreadCount}
+              taskCount={taskCount}
             />
           </div>
         </div>
@@ -154,7 +161,7 @@ export default function MemberLayout({
                 <polyline points="9 18 15 12 9 6" />
               </svg>
               <span className="text-[#dfe2f1] font-semibold truncate">
-                {MEMBER_PAGE_TITLES[page] || t('navigation.dashboard')}
+                {t(MEMBER_PAGE_TITLES[page] || 'navigation.overview')}
               </span>
             </div>
           </div>
@@ -163,12 +170,8 @@ export default function MemberLayout({
           <div className="flex items-center gap-3 sm:gap-5 flex-shrink-0">
             {/* System Status Widget */}
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#0a0e18] border border-[#464554]/60">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#28A745] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#28A745]" />
-              </span>
               <span className="text-[12px] font-medium text-[#c7c4d7]">
-                {t('header.allSystemsNominal')}
+                {t('employeeLive.monitoringUnavailable')}
               </span>
             </div>
 
@@ -193,9 +196,7 @@ export default function MemberLayout({
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
                 <path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
-              <span className="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-[#ffb4ab] text-[#690005] text-[10px] font-extrabold flex items-center justify-center leading-none ring-2 ring-[#171b26]">
-                2
-              </span>
+              {Number.isInteger(unreadCount) && unreadCount > 0 && <span className="absolute right-0 top-0 rounded-full bg-info px-1 text-xs text-info-foreground">{unreadCount}</span>}
             </button>
 
             <div className="h-5 w-px bg-[#464554]" />
@@ -264,7 +265,7 @@ export default function MemberLayout({
                     {t('navigation.myTasks')}
                   </button>
                   <div className="my-1 border-t border-[#464554]/60" />
-                  <LanguageDropdownSubmenu />
+                  <LanguageDropdownSubmenu onLanguageChange={() => setProfileDropdownOpen(false)} />
                   <div className="my-1 border-t border-[#464554]/60" />
                   <button
                     type="button"
@@ -299,6 +300,9 @@ MemberLayout.propTypes = {
     role: PropTypes.string,
   }),
   profile: PropTypes.object,
+  workspaceId: PropTypes.string,
+  unreadCount: PropTypes.number,
+  taskCount: PropTypes.number,
   page: PropTypes.string,
   setPage: PropTypes.func,
   logout: PropTypes.func,

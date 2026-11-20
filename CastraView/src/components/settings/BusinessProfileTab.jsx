@@ -93,19 +93,19 @@ export function BusinessProfileTab({
       setLocalSuccess('')
       setValidationError('')
       setFetchError('')
-      if (!workspaceId) { setLoading(false); setFetchError('Chưa chọn doanh nghiệp.'); return }
+      if (!workspaceId) { setLoading(false); setFetchError({ key: 'noWorkspace' }); return }
       setLoading(true)
       try {
         const result = await getBusinessProfile(workspaceId, name)
         if (!active) return
-        if (!result?.profile) throw new Error('Không thể tải hồ sơ doanh nghiệp.')
+        if (!result?.profile) throw new Error('PROFILE_UNAVAILABLE')
         setDraft(result.profile)
         setOriginalData(result.profile)
         setIsExistingProfile(result.exists)
         setHasChanges(false)
         context.current.onProfileUpdated?.(result.profile)
       } catch (err) {
-        if (active) setFetchError(err.message || 'Không thể tải hồ sơ doanh nghiệp.')
+        if (active) setFetchError(err.message && err.message !== 'PROFILE_UNAVAILABLE' ? { message: err.message } : { key: 'businessLoadError' })
       } finally {
         if (active) setLoading(false)
       }
@@ -140,14 +140,14 @@ export function BusinessProfileTab({
     setHasChanges(false)
     setValidationError('')
     setLocalSuccess('')
-    if (notify) notify('Đã hoàn tác thay đổi hồ sơ doanh nghiệp.')
+    if (notify) notify(t('employeeSettings.businessReset'))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (isSaving || busy || loading || fetchError) return
     if (!canEdit) {
-      setValidationError('Tài khoản của bạn chỉ có quyền xem hồ sơ doanh nghiệp.')
+      setValidationError(t('employeeSettings.businessReadOnlyError'))
       return
     }
 
@@ -156,25 +156,25 @@ export function BusinessProfileTab({
 
     // Client-side validations
     if (!draft.business_name?.trim()) {
-      setValidationError('Tên doanh nghiệp là bắt buộc.')
+      setValidationError(t('employeeSettings.businessNameRequired'))
       return
     }
     if (!draft.industry?.trim()) {
-      setValidationError('Ngành hàng là bắt buộc.')
+      setValidationError(t('employeeSettings.industryRequired'))
       return
     }
     if (!draft.business_size) {
-      setValidationError('Vui lòng chọn quy mô doanh nghiệp.')
+      setValidationError(t('employeeSettings.sizeRequired'))
       return
     }
     if (!draft.target_customers?.trim()) {
-      setValidationError('Vui lòng mô tả khách hàng mục tiêu.')
+      setValidationError(t('employeeSettings.customerRequired'))
       return
     }
 
     const budgetNum = Number(draft.monthly_budget || 0)
     if (budgetNum < 0 || budgetNum > 1000000000) {
-      setValidationError('Ngân sách hàng tháng phải từ 0 đến 1.000.000.000 (1 tỷ VND).')
+      setValidationError(t('employeeSettings.budgetRange'))
       return
     }
 
@@ -185,7 +185,7 @@ export function BusinessProfileTab({
       if (saveProfile) {
         // Parent-provided save handler
         savedResult = await saveProfile(draft)
-        if (!savedResult) throw new Error('Máy chủ chưa xác nhận lưu hồ sơ.')
+        if (!savedResult) throw new Error(t('employeeSettings.saveUnconfirmed'))
       } else {
         // Direct Supabase service call
         savedResult = await persistBusinessProfile(workspaceId, draft, canEdit)
@@ -196,11 +196,11 @@ export function BusinessProfileTab({
       setDraft(savedResult || draft)
       setHasChanges(false)
       setIsExistingProfile(true)
-      setLocalSuccess('Đã lưu hồ sơ doanh nghiệp vào Supabase thành công.')
-      if (notify) notify('Lưu hồ sơ doanh nghiệp thành công.')
+      setLocalSuccess(t('employeeSettings.businessSaved'))
+      if (notify) notify(t('employeeSettings.businessSuccess'))
       if (onProfileUpdated) onProfileUpdated(savedResult || draft)
     } catch (saveErr) {
-      if (context.current.workspaceId === savingWorkspace) setValidationError(saveErr.message || 'Không thể lưu hồ sơ doanh nghiệp.')
+      if (context.current.workspaceId === savingWorkspace) setValidationError(saveErr.message || t('employeeSettings.businessSaveError'))
     } finally {
       setIsSaving(false)
     }
@@ -234,8 +234,8 @@ export function BusinessProfileTab({
             </div>
             <p className="text-xs text-[#c7c4d7] mt-0.5">
               {canEdit
-                ? t('settings.businessProfile.subtitle', 'Cấu hình thông tin nhận diện thương hiệu, khách hàng mục tiêu và ngân sách tiếp thị.')
-                : t('settings.businessProfile.readOnlySubtitle', 'Xem thông tin nhận diện thương hiệu và ngân sách tiếp thị của không gian làm việc.')}
+                ? t('employeeSettings.profileSubtitle')
+                : t('employeeSettings.profileReadOnlySubtitle')}
             </p>
           </div>
         </div>
@@ -265,7 +265,7 @@ export function BusinessProfileTab({
         ) : (
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#262a35] border border-[#464554] text-xs text-[#c7c4d7]">
             <Lock className="w-3.5 h-3.5 text-[#ffb4ab]" />
-            <span>Quyền xem: {membership?.role?.toUpperCase() || actorRole?.toUpperCase()}</span>
+            <span>{t('employeeSettings.viewPermission', {role: membership?.role?.toUpperCase() || actorRole?.toUpperCase()})}</span>
           </div>
         )}
       </div>
@@ -274,12 +274,7 @@ export function BusinessProfileTab({
       <div className="mx-6 mt-6 p-3.5 rounded-lg bg-[#262a35] border border-[#464554] text-xs text-[#dfe2f1] flex items-start gap-3">
         <Info className="w-4 h-4 text-[#4cd7f6] flex-shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <p className="font-semibold text-[#4cd7f6]">Dữ liệu không gian làm việc Supabase (RLS Scoped)</p>
-          <p className="text-[#c7c4d7]">
-            Hồ sơ doanh nghiệp được lưu trữ trong bảng <code className="text-[#8083ff] font-mono">public.business_profiles</code>,
-            gắn trực tiếp với Không gian làm việc (<code className="text-[#8083ff] font-mono">{workspaceName}</code>) và bảo vệ bằng Row Level Security.
-            {!canEdit && ' Tài khoản của bạn không có quyền cập nhật hồ sơ này.'}
-          </p>
+          <p>{t('employeeSettings.profileScope')}</p>
         </div>
       </div>
 
@@ -288,10 +283,8 @@ export function BusinessProfileTab({
         <div className="mx-6 mt-4 p-3.5 rounded-lg bg-[#4cd7f6]/10 border border-[#4cd7f6]/30 text-xs text-[#dfe2f1] flex items-start gap-2.5">
           <Eye className="w-4 h-4 text-[#4cd7f6] flex-shrink-0 mt-0.5" />
           <div>
-            <span className="font-semibold text-[#4cd7f6]">Chế độ chỉ xem: </span>
-            <span className="text-[#c7c4d7]">
-              Bạn đang xem hồ sơ doanh nghiệp dùng chung của toàn bộ Không gian làm việc. Chỉ tài khoản Marketing Manager (quản trị viên) mới có quyền chỉnh sửa và lưu thay đổi.
-            </span>
+            <span className="font-semibold text-[#4cd7f6]">{t('employeeSettings.readOnlyMode')}</span>
+            <span className="text-[#c7c4d7]">{t('employeeSettings.profileReadOnlyNotice')}</span>
           </div>
         </div>
       )}
@@ -301,11 +294,11 @@ export function BusinessProfileTab({
         <div className="mx-6 mt-4 p-3.5 rounded-lg bg-[#ffb4ab]/10 border border-[#ffb4ab]/30 text-xs text-[#dfe2f1] flex items-start gap-2.5">
           <AlertCircle className="w-4 h-4 text-[#ffb4ab] flex-shrink-0 mt-0.5" />
           <div>
-            <span className="font-semibold text-[#ffb4ab]">Hồ sơ chưa khởi tạo: </span>
+            <span className="font-semibold text-[#ffb4ab]">{t('employeeSettings.profileUninitialized')}</span>
             <span className="text-[#c7c4d7]">
               {canEdit
-                ? 'Không gian làm việc này chưa có hồ sơ doanh nghiệp. Vui lòng điền thông tin và bấm "Khởi tạo hồ sơ" để lưu bản ghi đầu tiên.'
-                : 'Không gian làm việc chưa được thiết lập hồ sơ doanh nghiệp. Vui lòng liên hệ Marketing Manager để hoàn tất thiết lập.'}
+                ? t('employeeSettings.profileInitializeHelp')
+                : t('employeeSettings.profileContactHelp')}
             </span>
           </div>
         </div>
@@ -323,8 +316,8 @@ export function BusinessProfileTab({
       {(validationError || fetchError || error) && (
         <div className="mx-6 mt-4 p-3 rounded-lg text-xs flex items-center gap-2 bg-[#ffb4ab]/15 text-[#ffb4ab] border border-[#ffb4ab]/30">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
-          <span>{validationError || fetchError || error}</span>
-          {fetchError && <button type="button" onClick={() => setLoadRevision(n => n + 1)}>Thử lại</button>}
+          <span>{validationError || (fetchError && (fetchError.key ? t('employeeSettings.' + fetchError.key) : fetchError.message)) || error}</span>
+          {fetchError && <button type="button" onClick={() => setLoadRevision(n => n + 1)}>{t('employeeFlow.retry')}</button>}
         </div>
       )}
 
@@ -332,7 +325,7 @@ export function BusinessProfileTab({
       {loading ? (
         <div className="p-12 flex flex-col items-center justify-center gap-3 text-[#c7c4d7]">
           <Loader2 className="w-6 h-6 animate-spin text-[#8083ff]" />
-          <span className="text-sm">Đang tải hồ sơ doanh nghiệp từ Supabase…</span>
+          <span className="text-sm">{t('employeeSettings.profileLoading')}</span>
         </div>
       ) : (
         /* Form Content */
@@ -341,16 +334,13 @@ export function BusinessProfileTab({
           <div className="space-y-4">
             <div className="flex items-center gap-2 pb-2 border-b border-[#464554]/40">
               <Building2 className="w-4 h-4 text-[#8083ff]" />
-              <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">
-                1. Thông tin doanh nghiệp
-              </h3>
+              <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">{t('employeeSettings.businessSection')}</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Tên doanh nghiệp */}
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="biz-name" className="text-xs font-medium text-[#c7c4d7]">
-                  Tên doanh nghiệp / Workspace <span className="text-[#ffb4ab]">*</span>
+                <label htmlFor="biz-name" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.companyName')}<span className="text-[#ffb4ab]">*</span>
                 </label>
                 <input
                   id="biz-name"
@@ -361,15 +351,14 @@ export function BusinessProfileTab({
                   maxLength={120}
                   value={draft.business_name || ''}
                   onChange={(e) => setField('business_name', e.target.value)}
-                  placeholder="Ví dụ: SneakerX Việt Nam hoặc Acme Corp"
+                  placeholder={t('employeeSettings.companyNamePlaceholder')}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
 
               {/* Ngành hàng */}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="biz-industry" className="text-xs font-medium text-[#c7c4d7]">
-                  Ngành hàng <span className="text-[#ffb4ab]">*</span>
+                <label htmlFor="biz-industry" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.industry')}<span className="text-[#ffb4ab]">*</span>
                 </label>
                 <input
                   id="biz-industry"
@@ -380,15 +369,14 @@ export function BusinessProfileTab({
                   maxLength={120}
                   value={draft.industry || ''}
                   onChange={(e) => setField('industry', e.target.value)}
-                  placeholder="Ví dụ: Thời trang, F&B, Bán lẻ…"
+                  placeholder={t('employeeSettings.industryPlaceholder')}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
 
               {/* Quy mô doanh nghiệp */}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="biz-size" className="text-xs font-medium text-[#c7c4d7]">
-                  Quy mô doanh nghiệp <span className="text-[#ffb4ab]">*</span>
+                <label htmlFor="biz-size" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.companySize')}<span className="text-[#ffb4ab]">*</span>
                 </label>
                 <select
                   id="biz-size"
@@ -398,10 +386,10 @@ export function BusinessProfileTab({
                   onChange={(e) => setField('business_size', e.target.value)}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <option value="">Chọn quy mô nhân sự...</option>
-                  {Object.entries(SIZES).map(([val, label]) => (
+                  <option value="">{t('employeeSettings.chooseSize')}</option>
+                  {Object.keys(SIZES).map(val => (
                     <option key={val} value={val}>
-                      {val} ({label})
+                      {t('employeeSettings.size.' + val)}
                     </option>
                   ))}
                 </select>
@@ -409,8 +397,7 @@ export function BusinessProfileTab({
 
               {/* Khách hàng mục tiêu */}
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="biz-target" className="text-xs font-medium text-[#c7c4d7]">
-                  Khách hàng mục tiêu <span className="text-[#ffb4ab]">*</span>
+                <label htmlFor="biz-target" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.customers')}<span className="text-[#ffb4ab]">*</span>
                 </label>
                 <textarea
                   id="biz-target"
@@ -421,7 +408,7 @@ export function BusinessProfileTab({
                   rows={3}
                   value={draft.target_customers || ''}
                   onChange={(e) => setField('target_customers', e.target.value)}
-                  placeholder="Mô tả nhóm tuổi, hành vi, sở thích, phân khúc khách hàng..."
+                  placeholder={t('employeeSettings.customersPlaceholder')}
                   className="w-full p-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
@@ -432,17 +419,13 @@ export function BusinessProfileTab({
           <div className="space-y-4 pt-4 border-t border-[#464554]/50">
             <div className="flex items-center gap-2 pb-2 border-b border-[#464554]/40">
               <DollarSign className="w-4 h-4 text-[#4cd7f6]" />
-              <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">
-                2. Mục tiêu & Ngân sách tiếp thị
-              </h3>
+              <h3 className="text-xs font-bold text-[#dfe2f1] uppercase font-mono tracking-wider">{t('employeeSettings.goalsSection')}</h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Sản phẩm / Dịch vụ */}
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="biz-product" className="text-xs font-medium text-[#c7c4d7]">
-                  Sản phẩm / dịch vụ chính
-                </label>
+                <label htmlFor="biz-product" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.product')}</label>
                 <input
                   id="biz-product"
                   type="text"
@@ -450,16 +433,14 @@ export function BusinessProfileTab({
                   maxLength={500}
                   value={draft.product_service || ''}
                   onChange={(e) => setField('product_service', e.target.value)}
-                  placeholder="Sản phẩm hoặc dịch vụ trọng tâm sẽ quảng bá..."
+                  placeholder={t('employeeSettings.productPlaceholder')}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
 
               {/* Mục tiêu chính */}
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <label htmlFor="biz-goal" className="text-xs font-medium text-[#c7c4d7]">
-                  Mục tiêu tiếp thị chính
-                </label>
+                <label htmlFor="biz-goal" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.goal')}</label>
                 <input
                   id="biz-goal"
                   type="text"
@@ -467,16 +448,14 @@ export function BusinessProfileTab({
                   maxLength={300}
                   value={draft.primary_goal || ''}
                   onChange={(e) => setField('primary_goal', e.target.value)}
-                  placeholder="Ví dụ: Tăng trưởng doanh thu đa kênh, tối ưu ROAS..."
+                  placeholder={t('employeeSettings.goalPlaceholder')}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
 
               {/* Ngân sách hàng tháng */}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="biz-budget" className="text-xs font-medium text-[#c7c4d7]">
-                  Ngân sách mỗi tháng
-                </label>
+                <label htmlFor="biz-budget" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.monthlyBudget')}</label>
                 <input
                   id="biz-budget"
                   type="number"
@@ -485,16 +464,14 @@ export function BusinessProfileTab({
                   max="1000000000"
                   value={draft.monthly_budget || ''}
                   onChange={(e) => setField('monthly_budget', e.target.value)}
-                  placeholder="Ví dụ: 50000000"
+                  placeholder={t('employeeSettings.budgetPlaceholder')}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] placeholder:text-[#908fa0] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all font-mono disabled:opacity-60 disabled:cursor-not-allowed"
                 />
               </div>
 
               {/* Đơn vị tiền */}
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="biz-currency" className="text-xs font-medium text-[#c7c4d7]">
-                  Đơn vị tiền tệ
-                </label>
+                <label htmlFor="biz-currency" className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.currency')}</label>
                 <select
                   id="biz-currency"
                   disabled={!canEdit || isSaving}
@@ -502,8 +479,8 @@ export function BusinessProfileTab({
                   onChange={(e) => setField('currency', e.target.value)}
                   className="w-full h-11 px-3.5 bg-[#0a0e18] text-[#dfe2f1] rounded-lg text-sm border border-[#464554] focus:outline-none focus:border-[#8083ff] transition-all font-mono disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  <option value="VND">VND (Việt Nam Đồng)</option>
-                  <option value="USD">USD (Đô la Mỹ)</option>
+                  <option value="VND">{t('employeeSettings.vnd')}</option>
+                  <option value="USD">{t('employeeSettings.usd')}</option>
                 </select>
               </div>
 
@@ -511,11 +488,9 @@ export function BusinessProfileTab({
               <div className="sm:col-span-2 pt-2">
                 <div className="flex items-center gap-2 mb-2">
                   <Layers className="w-4 h-4 text-[#8083ff]" />
-                  <span className="text-xs font-medium text-[#c7c4d7]">
-                    Kênh tiếp thị ưu tiên
-                  </span>
+                  <span className="text-xs font-medium text-[#c7c4d7]">{t('employeeSettings.preferredChannels')}</span>
                   {!canEdit && (
-                    <span className="text-[10px] text-[#908fa0] italic">(Chỉ xem)</span>
+                    <span className="text-[10px] text-[#908fa0] italic">{t('employeeSettings.readOnly')}</span>
                   )}
                 </div>
                 <div className={!canEdit ? 'pointer-events-none opacity-85' : ''}>
@@ -536,16 +511,14 @@ export function BusinessProfileTab({
                 onClick={handleReset}
                 disabled={!hasChanges || isActionBusy}
                 className="px-4 py-2 rounded-lg border border-[#464554] hover:bg-[#262a35] text-[#dfe2f1] text-sm font-medium transition-colors disabled:opacity-50"
-              >
-                Hủy thay đổi
-              </button>
+              >{t('employeeSettings.cancelChanges')}</button>
               <button
                 type="submit"
                 disabled={isActionBusy}
                 className="px-5 py-2 rounded-lg bg-[#28a745] hover:bg-[#218838] text-white text-sm font-semibold flex items-center gap-1.5 transition-colors shadow-sm disabled:opacity-50"
               >
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                <span>{isSaving ? 'Đang lưu…' : isExistingProfile ? 'Lưu hồ sơ ✓' : 'Khởi tạo hồ sơ ✓'}</span>
+                <span>{isSaving ? t('employeeSettings.saving') : isExistingProfile ? t('employeeSettings.saveProfile') : t('employeeSettings.initProfile')}</span>
               </button>
             </div>
           )}

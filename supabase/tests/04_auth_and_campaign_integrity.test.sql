@@ -72,7 +72,8 @@ select policies_are(
     'campaign_performance_operator_update',
     'workflow_team_scope',
     'workflow_rpc_update',
-    'workflow_rpc_delete'
+    'workflow_rpc_delete',
+    'platform_active_tenant'
   ],
   'campaign performance has the complete least-privilege policy set'
 );
